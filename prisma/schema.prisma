@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GarmentType {
+  TSHIRT
+  SHIRT
+  JACKET
+  COAT
+  SWEATER
+  HOODIE
+  PANTS
+  JEANS
+  SHORTS
+  SKIRT
+  DRESS
+  SHOES
+  ACCESSORY
+}
+
+enum FitTag {
+  GOOD
+  TIGHT
+  LOOSE
+}
+
+enum EventType {
+  CASUAL
+  GYM
+  BUSINESS
+  FORMAL
+  OUTDOOR
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  wardrobeItems WardrobeItem[]
+  savedOutfits  SavedOutfit[]
+
+  @@map("users")
+}
+
+model WardrobeItem {
+  id            String      @id @default(uuid())
+  userId        String      @map("user_id")
+  type          GarmentType
+  dominantColor String      @map("dominant_color")
+  fitTag        FitTag      @map("fit_tag")
+  imageUrl      String      @map("image_url")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  outfitItems OutfitItem[]
+
+  @@index([userId])
+  @@map("wardrobe_items")
+}
+
+model SavedOutfit {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  name      String
+  eventType EventType @map("event_type")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items OutfitItem[]
+
+  @@index([userId])
+  @@map("saved_outfits")
+}
+
+model OutfitItem {
+  outfitId String @map("outfit_id")
+  itemId   String @map("item_id")
+
+  outfit SavedOutfit  @relation(fields: [outfitId], references: [id], onDelete: Cascade)
+  item   WardrobeItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@id([outfitId, itemId])
+  @@map("outfit_items")
+}
