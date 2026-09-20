@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.env.local
+next-env.d.ts
+
+# Turbopack dev-time transpiled artifacts written next to sources
+app/**/*.js
+app/**/*.js.map
+app/**/*.d.ts
+lib/**/*.js
+lib/**/*.js.map
+lib/**/*.d.ts

@@ -1,0 +1,110 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #0f1115;
+  color: #e6e6e6;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 360px;
+  background: #171a21;
+  border: 1px solid #262a33;
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.card h1 {
+  margin: 0 0 24px;
+  font-size: 20px;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #9aa1ac;
+}
+
+.field input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #2c313c;
+  background: #0f1115;
+  color: #e6e6e6;
+  font-size: 14px;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #5b8cff;
+}
+
+button.primary {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #5b8cff;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+button.primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+button.secondary {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #2c313c;
+  background: transparent;
+  color: #e6e6e6;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.error {
+  background: #3a1d1d;
+  border: 1px solid #6b2b2b;
+  color: #ff9b9b;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.switch {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #9aa1ac;
+  text-align: center;
+}
+
+.switch a {
+  color: #5b8cff;
+  text-decoration: none;
+}
