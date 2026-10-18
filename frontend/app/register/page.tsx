@@ -22,7 +22,7 @@ export default function RegisterPage() {
       saveToken(accessToken);
       router.push('/');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Не удалось зарегистрироваться');
+      setError(err instanceof Error ? err.message : 'Sign up failed');
     } finally {
       setLoading(false);
     }
@@ -31,7 +31,8 @@ export default function RegisterPage() {
   return (
     <div className="container">
       <div className="card">
-        <h1>Регистрация</h1>
+        <span className="fig-label fig-label-left">FORM_002</span>
+        <h1>Sign up</h1>
         {error && <div className="error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="field">
@@ -45,7 +46,7 @@ export default function RegisterPage() {
             />
           </div>
           <div className="field">
-            <label htmlFor="password">Пароль (минимум 8 символов)</label>
+            <label htmlFor="password">Password (at least 8 characters)</label>
             <input
               id="password"
               type="password"
@@ -56,11 +57,11 @@ export default function RegisterPage() {
             />
           </div>
           <button className="primary" type="submit" disabled={loading}>
-            {loading ? 'Создаём...' : 'Зарегистрироваться'}
+            {loading ? 'Creating account...' : 'Sign up'}
           </button>
         </form>
         <div className="switch">
-          Уже есть аккаунт? <Link href="/login">Войти</Link>
+          Already have an account? <Link href="/login">Log in</Link>
         </div>
       </div>
     </div>
