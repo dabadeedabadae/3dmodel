@@ -4,6 +4,8 @@
   "private": true,
   "description": "FitCast NestJS backend (auth, users, wardrobe, outfits)",
   "scripts": {
+    "admin:set": "node --env-file=.env scripts/set-admin.cjs",
+    "test:admin": "npm run build && node --env-file=.env --test test/admin.e2e.cjs",
     "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",

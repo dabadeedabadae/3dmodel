@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { AuthUser, clearToken, getProfile, getToken } from '../lib/api';
 import Landing from './components/Landing';
 
@@ -36,6 +37,7 @@ export default function HomePage() {
         ) : (
           <>
             <p>Logged in as {user!.email}</p>
+            {user?.isAdmin && <p><Link href="/admin">Open administration →</Link></p>}
             <button className="secondary" onClick={handleLogout}>
               Log out
             </button>

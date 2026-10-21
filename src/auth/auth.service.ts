@@ -14,8 +14,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private toPublicUser(user: { id: string; email: string; createdAt: Date }) {
-    return { id: user.id, email: user.email, createdAt: user.createdAt };
+  private toPublicUser(user: { id: string; email: string; createdAt: Date; isAdmin: boolean }) {
+    return { id: user.id, email: user.email, createdAt: user.createdAt, isAdmin: user.isAdmin };
   }
 
   private signToken(userId: string, email: string) {

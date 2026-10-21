@@ -5,7 +5,50 @@ export interface AuthUser {
   id: string;
   email: string;
   createdAt: string;
+  isAdmin: boolean;
 }
+
+export interface AdminOverview {
+  users: number;
+  wardrobeItems: number;
+  savedOutfits: number;
+}
+
+export interface AdminUser extends AuthUser {
+  isAdmin: boolean;
+  _count: { wardrobeItems: number; savedOutfits: number };
+}
+
+export class ApiError extends Error {
+  constructor(public readonly status: number, message: string) { super(message); }
+}
+
+async function adminGet<T>(path: string, signal?: AbortSignal): Promise<T> {
+  const token = getToken();
+  if (!token) throw new ApiError(401, 'Please log in to continue.');
+  const response = await fetch(`${API_URL}/admin/${path}`, {
+    headers: { Authorization: `Bearer ${token}` }, cache: 'no-store', signal,
+  });
+  if (!response.ok) {
+    throw new ApiError(response.status, response.status === 403
+      ? 'Administrator access required.' : response.status === 401
+      ? 'Your session has expired. Please log in again.' : 'Could not load administration data.');
+  }
+  return response.json();
+}
+
+export const getAdminOverview = (signal?: AbortSignal) => adminGet<AdminOverview>('overview', signal);
+export const getAdminUsers = (signal?: AbortSignal) => adminGet<AdminUser[]>('users', signal);
+export interface AdminGarment {
+  id: string; type: string; dominantColor: string; fitTag: string; createdAt: string;
+  user: { email: string };
+}
+export interface AdminOutfit {
+  id: string; name: string; eventType: string; createdAt: string;
+  user: { email: string }; _count: { items: number };
+}
+export const getAdminWardrobe = (signal?: AbortSignal) => adminGet<AdminGarment[]>('wardrobe', signal);
+export const getAdminOutfits = (signal?: AbortSignal) => adminGet<AdminOutfit[]>('outfits', signal);
 
 export interface AuthResponse {
   accessToken: string;

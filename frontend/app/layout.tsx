@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { IBM_Plex_Mono, Source_Serif_4, VT323 } from 'next/font/google';
-import SiteHeader from './components/SiteHeader';
+import AppShell from './components/AppShell';
 import './globals.css';
 
 const pixel = VT323({
@@ -29,10 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${pixel.variable} ${mono.variable} ${serif.variable}`}>
       <body>
-        <div className="site">
-          <SiteHeader />
-          {children}
-        </div>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );
