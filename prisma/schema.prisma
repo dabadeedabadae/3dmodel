@@ -40,7 +40,11 @@ enum EventType {
 model User {
   id           String   @id @default(uuid())
   email        String   @unique
+  name         String?  @db.VarChar(80)
+  city         String?  @db.VarChar(100)
+  bio          String?  @db.VarChar(300)
   isAdmin      Boolean  @default(false) @map("is_admin")
+  sessionVersion Int @default(0) @map("session_version")
   passwordHash String   @map("password_hash")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")

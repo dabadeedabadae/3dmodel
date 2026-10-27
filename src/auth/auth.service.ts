@@ -18,8 +18,8 @@ export class AuthService {
     return { id: user.id, email: user.email, createdAt: user.createdAt, isAdmin: user.isAdmin };
   }
 
-  private signToken(userId: string, email: string) {
-    return this.jwtService.sign({ sub: userId, email });
+  private signToken(userId: string, email: string, sessionVersion: number) {
+    return this.jwtService.sign({ sub: userId, email, sessionVersion });
   }
 
   async register(dto: RegisterDto) {
@@ -34,7 +34,7 @@ export class AuthService {
     });
 
     return {
-      accessToken: this.signToken(user.id, user.email),
+      accessToken: this.signToken(user.id, user.email, user.sessionVersion),
       user: this.toPublicUser(user),
     };
   }
@@ -51,7 +51,7 @@ export class AuthService {
     }
 
     return {
-      accessToken: this.signToken(user.id, user.email),
+      accessToken: this.signToken(user.id, user.email, user.sessionVersion),
       user: this.toPublicUser(user),
     };
   }

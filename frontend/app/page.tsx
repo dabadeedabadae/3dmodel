@@ -1,49 +1,30 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { AuthUser, clearToken, getProfile, getToken } from '../lib/api';
+import { useRouter } from 'next/navigation';
+import { ApiError, clearToken, getProfile, getToken } from '../lib/api';
 import Landing from './components/Landing';
 
 export default function HomePage() {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [loading, setLoading] = useState(true);
-
+  const router = useRouter();
+  const [guest, setGuest] = useState(false);
+  const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   useEffect(() => {
-    if (!getToken()) {
-      setLoading(false);
-      return;
-    }
-
-    getProfile()
-      .then(setUser)
-      .catch(() => clearToken())
-      .finally(() => setLoading(false));
-  }, []);
-
-  function handleLogout() {
-    clearToken();
-    setUser(null);
-  }
-
-  if (!loading && !user) return <Landing />;
-
-  return (
-    <div className="container">
-      <div className="card">
-        <h1>FitCast</h1>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <>
-            <p>Logged in as {user!.email}</p>
-            {user?.isAdmin && <p><Link href="/admin">Open administration →</Link></p>}
-            <button className="secondary" onClick={handleLogout}>
-              Log out
-            </button>
-          </>
-        )}
-      </div>
-    </div>
-  );
+    let active = true;
+    if (!getToken()) { setGuest(true); return; }
+    setError(false);
+    getProfile().then((profile) => {
+      if (active) router.replace(profile.isAdmin ? '/admin' : '/profile');
+    }).catch((err: unknown) => {
+      if (!active) return;
+      if (err instanceof ApiError && err.status === 401) { clearToken(); setGuest(true); }
+      else setError(true);
+    });
+    return () => { active = false; };
+  }, [router, attempt]);
+  if (guest) return <Landing />;
+  return <div className="container"><div className="card"><h1>FitCast</h1>
+    {error ? <><p role="alert">Не удалось подключиться к серверу.</p><button className="secondary" onClick={() => setAttempt((value) => value + 1)}>Повторить</button></> : <p role="status">Загрузка…</p>}
+  </div></div>;
 }

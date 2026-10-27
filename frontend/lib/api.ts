@@ -80,6 +80,7 @@ export function login(email: string, password: string) {
 
 export function saveToken(token: string) {
   localStorage.setItem(TOKEN_KEY, token);
+  window.dispatchEvent(new Event('fitcast-profile-updated'));
 }
 
 export function getToken(): string | null {
@@ -89,19 +90,55 @@ export function getToken(): string | null {
 
 export function clearToken() {
   localStorage.removeItem(TOKEN_KEY);
+  window.dispatchEvent(new Event('fitcast-profile-updated'));
 }
 
-export async function getProfile(): Promise<AuthUser> {
+export async function getProfile(): Promise<UserProfile> {
   const token = getToken();
-  if (!token) throw new Error('Not authenticated');
+  if (!token) throw new ApiError(401, 'Войдите в аккаунт.');
 
   const res = await fetch(`${API_URL}/users/me`, {
+    cache: 'no-store',
     headers: { Authorization: `Bearer ${token}` },
   });
 
   if (!res.ok) {
-    throw new Error('Failed to load profile');
+    throw new ApiError(res.status, res.status === 401 ? 'Сессия истекла. Войдите снова.' : 'Не удалось загрузить профиль.');
   }
 
   return res.json();
+}
+
+export interface UserProfile extends AuthUser {
+  name: string | null; city: string | null; bio: string | null; updatedAt: string;
+  _count?: { wardrobeItems: number; savedOutfits: number };
+}
+export interface ProfileChanges { name: string; city: string; bio: string }
+export async function updateProfile(changes: ProfileChanges): Promise<UserProfile> {
+  const token = getToken();
+  if (!token) throw new ApiError(401, 'Войдите в аккаунт.');
+  const response = await fetch(API_URL + '/users/me', {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+    body: JSON.stringify(changes),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    const message = Array.isArray(data?.message) ? data.message.join('. ') : data?.message;
+    throw new ApiError(response.status, message || 'Не удалось сохранить профиль.');
+  }
+  return response.json();
+}
+
+export async function changePassword(currentPassword: string, newPassword: string): Promise<void> {
+  const token = getToken();
+  if (!token) throw new ApiError(401, 'Войдите в аккаунт.');
+  const response = await fetch(API_URL + '/users/me/password', {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    const message = Array.isArray(data?.message) ? data.message.join('. ') : data?.message;
+    throw new ApiError(response.status, message || 'Не удалось изменить пароль.');
+  }
 }

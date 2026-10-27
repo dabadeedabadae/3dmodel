@@ -20,7 +20,7 @@ export default function RegisterPage() {
     try {
       const { accessToken } = await register(email, password);
       saveToken(accessToken);
-      router.push('/');
+      router.replace('/profile');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed');
     } finally {

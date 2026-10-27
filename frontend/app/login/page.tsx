@@ -18,9 +18,9 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const { accessToken } = await login(email, password);
+      const { accessToken, user } = await login(email, password);
       saveToken(accessToken);
-      router.push('/');
+      router.replace(user.isAdmin ? '/admin' : '/profile');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Log in failed');
     } finally {
