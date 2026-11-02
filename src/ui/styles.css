@@ -1,0 +1,28 @@
+:root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+html, body { margin: 0; height: 100%; background: #f4f5f7; color: #1b1e26; }
+#app { display: grid; grid-template-columns: 1fr 360px; height: 100vh; }
+#app.pg-uv-mode { grid-template-columns: 1fr; }
+#app.pg-uv-mode .pg-viewport, #app.pg-uv-mode .pg-panel { display: none; }
+#app.pg-uv-mode .pg-uv { display: block; width: min(100vh, 100vw); height: min(100vh, 100vw); margin: 0 auto; }
+.pg-viewport { position: relative; min-width: 0; min-height: 0; }
+.pg-viewport canvas { display: block; width: 100%; height: 100%; }
+.pg-panel { overflow-y: auto; padding: 12px 14px 32px; border-left: 1px solid #d9dce3; background: #fbfbfc; font-size: 13px; }
+.pg-panel h1 { font-size: 15px; margin: 4px 0 2px; }
+.pg-panel h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #5a6070; margin: 16px 0 6px; }
+.pg-muted { color: #6b7080; margin: 0 0 8px; }
+.pg-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.pg-row button, .pg-panel > button { padding: 5px 9px; border: 1px solid #c7cbd4; border-radius: 6px; background: #fff; cursor: pointer; font-size: 12px; }
+.pg-row button:hover, .pg-panel > button:hover { background: #eef0f4; }
+.pg-toggle { display: inline-flex; align-items: center; gap: 4px; padding: 3px 6px; border: 1px solid #e1e4ea; border-radius: 6px; background: #fff; }
+.pg-slider { display: grid; grid-template-columns: 1fr 120px 48px; align-items: center; gap: 6px; margin: 3px 0; }
+.pg-slider output { font-variant-numeric: tabular-nums; text-align: right; color: #3b4150; }
+.pg-report { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; line-height: 1.45; }
+.pg-ok { color: #0d7a3f; font-weight: 600; margin-bottom: 4px; }
+.pg-fail { color: #b3261e; font-weight: 600; margin-bottom: 4px; }
+.pg-line-ok { color: #3b4150; }
+.pg-line-warn { color: #8a5a00; }
+.pg-line-fail { color: #b3261e; }
+.pg-uv { display: none; }
+#pg-error { position: fixed; top: 0; left: 0; right: 0; z-index: 10; padding: 8px 12px; background: #b3261e; color: #fff; font-size: 13px; }
+.pg-nowebgl { padding: 32px; max-width: 520px; }
+.pg-clamp { margin-top: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: #8a5a00; }

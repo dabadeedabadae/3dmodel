@@ -1,0 +1,1521 @@
+{
+  "generatedAt": "2026-10-29T10:46:05.157Z",
+  "node": "v22.23.4",
+  "runtime": "onnxruntime-web (wasm) in node",
+  "models": {
+    "category": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1",
+    "segmentation": "u2netp.onnx@sha256:309c8469…4ddd8;post-v1"
+  },
+  "loadMs": 652,
+  "photos": 26,
+  "failures": 0,
+  "top1": {
+    "tshirt": "11/14",
+    "nonTshirtRejected": "11/12",
+    "all": "20/26"
+  },
+  "masks": {
+    "ok": 19,
+    "suspicious": 7,
+    "empty": 0
+  },
+  "note": "Accuracy on an uncurated 26-photo CC0 sample; scores are uncalibrated. Masks judged automatically by coverage/border heuristics only; see the contact sheet for the real picture.",
+  "rows": [
+    {
+      "file": "dress_6b779a54.jpg",
+      "width": 400,
+      "height": 533,
+      "expected": "other",
+      "top1": "other",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "other",
+          "score": 0.9433
+        },
+        {
+          "category": "skirt",
+          "score": 0.0565
+        },
+        {
+          "category": "pants",
+          "score": 0.0001
+        },
+        {
+          "category": "tshirt",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "gown",
+          "score": 0.5415
+        },
+        {
+          "label": "academic gown, academic robe, judge's robe",
+          "score": 0.128
+        },
+        {
+          "label": "velvet",
+          "score": 0.0749
+        },
+        {
+          "label": "overskirt",
+          "score": 0.0553
+        },
+        {
+          "label": "abaya",
+          "score": 0.0438
+        }
+      ],
+      "categoryMs": 38,
+      "mask": {
+        "quality": "suspicious",
+        "coverage": 0.437,
+        "components": 5,
+        "touchesBorder": false,
+        "warnings": [
+          "5 separate regions found; only the largest was kept"
+        ],
+        "ms": 1034
+      }
+    },
+    {
+      "file": "dress_b2279dec.jpg",
+      "width": 400,
+      "height": 534,
+      "expected": "other",
+      "top1": "tshirt",
+      "top1Correct": false,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.6603
+        },
+        {
+          "category": "other",
+          "score": 0.3335
+        },
+        {
+          "category": "skirt",
+          "score": 0.0062
+        },
+        {
+          "category": "pants",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.6603
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.2335
+        },
+        {
+          "label": "velvet",
+          "score": 0.0358
+        },
+        {
+          "label": "trench coat",
+          "score": 0.0342
+        },
+        {
+          "label": "cloak",
+          "score": 0.0091
+        }
+      ],
+      "categoryMs": 25,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.481,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 950
+      }
+    },
+    {
+      "file": "longsleeve_107dd572.jpg",
+      "width": 400,
+      "height": 534,
+      "expected": "other",
+      "top1": "other",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "other",
+          "score": 0.6922
+        },
+        {
+          "category": "tshirt",
+          "score": 0.3076
+        },
+        {
+          "category": "skirt",
+          "score": 0.0002
+        },
+        {
+          "category": "pants",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "sweatshirt",
+          "score": 0.6478
+        },
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.3076
+        },
+        {
+          "label": "poncho",
+          "score": 0.0238
+        },
+        {
+          "label": "abaya",
+          "score": 0.0053
+        },
+        {
+          "label": "cloak",
+          "score": 0.0035
+        }
+      ],
+      "categoryMs": 21,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.622,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 766
+      }
+    },
+    {
+      "file": "longsleeve_582f7f10.jpg",
+      "width": 533,
+      "height": 400,
+      "expected": "other",
+      "top1": "other",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "other",
+          "score": 0.9807
+        },
+        {
+          "category": "tshirt",
+          "score": 0.0176
+        },
+        {
+          "category": "pants",
+          "score": 0.0015
+        },
+        {
+          "category": "skirt",
+          "score": 0.0002
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "sweatshirt",
+          "score": 0.515
+        },
+        {
+          "label": "cardigan",
+          "score": 0.2264
+        },
+        {
+          "label": "wool, woolen, woollen",
+          "score": 0.1319
+        },
+        {
+          "label": "poncho",
+          "score": 0.0445
+        },
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.0176
+        }
+      ],
+      "categoryMs": 21,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.469,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 765
+      }
+    },
+    {
+      "file": "pants_4cc4e673.jpg",
+      "width": 400,
+      "height": 534,
+      "expected": "pants",
+      "top1": "pants",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "pants",
+          "score": 0.9995
+        },
+        {
+          "category": "other",
+          "score": 0.0005
+        },
+        {
+          "category": "skirt",
+          "score": 0
+        },
+        {
+          "category": "tshirt",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jean, blue jean, denim",
+          "score": 0.9995
+        },
+        {
+          "label": "pajama, pyjama, pj's, jammies",
+          "score": 0.0001
+        },
+        {
+          "label": "suit, suit of clothes",
+          "score": 0.0001
+        },
+        {
+          "label": "velvet",
+          "score": 0
+        },
+        {
+          "label": "cardigan",
+          "score": 0
+        }
+      ],
+      "categoryMs": 15,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.522,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 652
+      }
+    },
+    {
+      "file": "pants_9cb9ae19.jpg",
+      "width": 400,
+      "height": 534,
+      "expected": "pants",
+      "top1": "pants",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "pants",
+          "score": 0.8119
+        },
+        {
+          "category": "other",
+          "score": 0.1854
+        },
+        {
+          "category": "skirt",
+          "score": 0.0026
+        },
+        {
+          "category": "tshirt",
+          "score": 0.0001
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jean, blue jean, denim",
+          "score": 0.8119
+        },
+        {
+          "label": "suit, suit of clothes",
+          "score": 0.1009
+        },
+        {
+          "label": "trench coat",
+          "score": 0.0205
+        },
+        {
+          "label": "cloak",
+          "score": 0.0178
+        },
+        {
+          "label": "velvet",
+          "score": 0.0177
+        }
+      ],
+      "categoryMs": 15,
+      "mask": {
+        "quality": "suspicious",
+        "coverage": 0.639,
+        "components": 2,
+        "touchesBorder": false,
+        "warnings": [
+          "2 separate regions found; only the largest was kept"
+        ],
+        "ms": 685
+      }
+    },
+    {
+      "file": "pants_e0dc1f06.jpg",
+      "width": 400,
+      "height": 533,
+      "expected": "pants",
+      "top1": "other",
+      "top1Correct": false,
+      "suggestions": [
+        {
+          "category": "other",
+          "score": 0.7408
+        },
+        {
+          "category": "pants",
+          "score": 0.2122
+        },
+        {
+          "category": "skirt",
+          "score": 0.0466
+        },
+        {
+          "category": "tshirt",
+          "score": 0.0004
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jean, blue jean, denim",
+          "score": 0.2122
+        },
+        {
+          "label": "sarong",
+          "score": 0.1593
+        },
+        {
+          "label": "pajama, pyjama, pj's, jammies",
+          "score": 0.0982
+        },
+        {
+          "label": "sleeping bag",
+          "score": 0.0898
+        },
+        {
+          "label": "velvet",
+          "score": 0.0563
+        }
+      ],
+      "categoryMs": 18,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.323,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 613
+      }
+    },
+    {
+      "file": "shoes_bf583ce5.jpg",
+      "width": 400,
+      "height": 534,
+      "expected": "other",
+      "top1": "other",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "other",
+          "score": 0.9993
+        },
+        {
+          "category": "pants",
+          "score": 0.0005
+        },
+        {
+          "category": "skirt",
+          "score": 0.0002
+        },
+        {
+          "category": "tshirt",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "sandal",
+          "score": 0.4458
+        },
+        {
+          "label": "Loafer",
+          "score": 0.4374
+        },
+        {
+          "label": "clog, geta, patten, sabot",
+          "score": 0.0396
+        },
+        {
+          "label": "running shoe",
+          "score": 0.0267
+        },
+        {
+          "label": "gondola",
+          "score": 0.0163
+        }
+      ],
+      "categoryMs": 15,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.155,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 640
+      }
+    },
+    {
+      "file": "shoes_c8582c70.jpg",
+      "width": 400,
+      "height": 533,
+      "expected": "other",
+      "top1": "other",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "other",
+          "score": 0.9998
+        },
+        {
+          "category": "skirt",
+          "score": 0.0001
+        },
+        {
+          "category": "tshirt",
+          "score": 0.0001
+        },
+        {
+          "category": "pants",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "clog, geta, patten, sabot",
+          "score": 0.7116
+        },
+        {
+          "label": "sandal",
+          "score": 0.0614
+        },
+        {
+          "label": "sock",
+          "score": 0.0414
+        },
+        {
+          "label": "cowboy boot",
+          "score": 0.0332
+        },
+        {
+          "label": "Loafer",
+          "score": 0.0307
+        }
+      ],
+      "categoryMs": 15,
+      "mask": {
+        "quality": "suspicious",
+        "coverage": 0.33,
+        "components": 2,
+        "touchesBorder": false,
+        "warnings": [
+          "2 separate regions found; only the largest was kept"
+        ],
+        "ms": 607
+      }
+    },
+    {
+      "file": "skirt_26921ddb.jpg",
+      "width": 717,
+      "height": 400,
+      "expected": "skirt",
+      "top1": "skirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "skirt",
+          "score": 0.9828
+        },
+        {
+          "category": "other",
+          "score": 0.0172
+        },
+        {
+          "category": "tshirt",
+          "score": 0
+        },
+        {
+          "category": "pants",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "hoopskirt, crinoline",
+          "score": 0.8195
+        },
+        {
+          "label": "overskirt",
+          "score": 0.1537
+        },
+        {
+          "label": "gown",
+          "score": 0.0132
+        },
+        {
+          "label": "miniskirt, mini",
+          "score": 0.0095
+        },
+        {
+          "label": "bassinet",
+          "score": 0.0018
+        }
+      ],
+      "categoryMs": 15,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.488,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 606
+      }
+    },
+    {
+      "file": "skirt_4d4f6900.jpg",
+      "width": 400,
+      "height": 533,
+      "expected": "skirt",
+      "top1": "pants",
+      "top1Correct": false,
+      "suggestions": [
+        {
+          "category": "pants",
+          "score": 0.9715
+        },
+        {
+          "category": "other",
+          "score": 0.0248
+        },
+        {
+          "category": "skirt",
+          "score": 0.0037
+        },
+        {
+          "category": "tshirt",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jean, blue jean, denim",
+          "score": 0.9715
+        },
+        {
+          "label": "handkerchief, hankie, hanky, hankey",
+          "score": 0.0154
+        },
+        {
+          "label": "wallet, billfold, notecase, pocketbook",
+          "score": 0.0043
+        },
+        {
+          "label": "miniskirt, mini",
+          "score": 0.0037
+        },
+        {
+          "label": "swimming trunks, bathing trunks",
+          "score": 0.0027
+        }
+      ],
+      "categoryMs": 17,
+      "mask": {
+        "quality": "suspicious",
+        "coverage": 0.316,
+        "components": 2,
+        "touchesBorder": false,
+        "warnings": [
+          "2 separate regions found; only the largest was kept"
+        ],
+        "ms": 627
+      }
+    },
+    {
+      "file": "skirt_910268c2.jpg",
+      "width": 533,
+      "height": 400,
+      "expected": "skirt",
+      "top1": "skirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "skirt",
+          "score": 0.947
+        },
+        {
+          "category": "other",
+          "score": 0.053
+        },
+        {
+          "category": "tshirt",
+          "score": 0
+        },
+        {
+          "category": "pants",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "hoopskirt, crinoline",
+          "score": 0.8019
+        },
+        {
+          "label": "overskirt",
+          "score": 0.0984
+        },
+        {
+          "label": "miniskirt, mini",
+          "score": 0.0468
+        },
+        {
+          "label": "apron",
+          "score": 0.0328
+        },
+        {
+          "label": "swimming trunks, bathing trunks",
+          "score": 0.0084
+        }
+      ],
+      "categoryMs": 21,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.515,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 875
+      }
+    },
+    {
+      "file": "tshirt_0fc3fbae.jpg",
+      "width": 400,
+      "height": 533,
+      "expected": "tshirt",
+      "top1": "tshirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.9998
+        },
+        {
+          "category": "other",
+          "score": 0.0002
+        },
+        {
+          "category": "skirt",
+          "score": 0
+        },
+        {
+          "category": "pants",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.9998
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.0002
+        },
+        {
+          "label": "plastic bag",
+          "score": 0
+        },
+        {
+          "label": "maillot",
+          "score": 0
+        },
+        {
+          "label": "lab coat, laboratory coat",
+          "score": 0
+        }
+      ],
+      "categoryMs": 20,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.503,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 942
+      }
+    },
+    {
+      "file": "tshirt_29d44695.jpg",
+      "width": 400,
+      "height": 450,
+      "expected": "tshirt",
+      "top1": "tshirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.9908
+        },
+        {
+          "category": "other",
+          "score": 0.0092
+        },
+        {
+          "category": "skirt",
+          "score": 0
+        },
+        {
+          "category": "pants",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.9908
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.0091
+        },
+        {
+          "label": "envelope",
+          "score": 0
+        },
+        {
+          "label": "bulletproof vest",
+          "score": 0
+        },
+        {
+          "label": "pillow",
+          "score": 0
+        }
+      ],
+      "categoryMs": 27,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.558,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 691
+      }
+    },
+    {
+      "file": "tshirt_2aff1c58.jpg",
+      "width": 400,
+      "height": 533,
+      "expected": "tshirt",
+      "top1": "tshirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.9994
+        },
+        {
+          "category": "other",
+          "score": 0.0006
+        },
+        {
+          "category": "pants",
+          "score": 0
+        },
+        {
+          "category": "skirt",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.9994
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.0005
+        },
+        {
+          "label": "velvet",
+          "score": 0.0001
+        },
+        {
+          "label": "vestment",
+          "score": 0.0001
+        },
+        {
+          "label": "wool, woolen, woollen",
+          "score": 0
+        }
+      ],
+      "categoryMs": 16,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.434,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 630
+      }
+    },
+    {
+      "file": "tshirt_2df565b9.jpg",
+      "width": 400,
+      "height": 533,
+      "expected": "tshirt",
+      "top1": "other",
+      "top1Correct": false,
+      "suggestions": [
+        {
+          "category": "other",
+          "score": 0.8033
+        },
+        {
+          "category": "skirt",
+          "score": 0.1077
+        },
+        {
+          "category": "tshirt",
+          "score": 0.0873
+        },
+        {
+          "category": "pants",
+          "score": 0.0017
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "sarong",
+          "score": 0.1106
+        },
+        {
+          "label": "shower curtain",
+          "score": 0.1074
+        },
+        {
+          "label": "swimming trunks, bathing trunks",
+          "score": 0.104
+        },
+        {
+          "label": "apron",
+          "score": 0.0969
+        },
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.0873
+        }
+      ],
+      "categoryMs": 15,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.487,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 673
+      }
+    },
+    {
+      "file": "tshirt_58e51574.jpg",
+      "width": 400,
+      "height": 668,
+      "expected": "tshirt",
+      "top1": "other",
+      "top1Correct": false,
+      "suggestions": [
+        {
+          "category": "other",
+          "score": 0.9111
+        },
+        {
+          "category": "skirt",
+          "score": 0.081
+        },
+        {
+          "category": "pants",
+          "score": 0.0063
+        },
+        {
+          "category": "tshirt",
+          "score": 0.0016
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "sleeping bag",
+          "score": 0.4471
+        },
+        {
+          "label": "gown",
+          "score": 0.2563
+        },
+        {
+          "label": "sarong",
+          "score": 0.0815
+        },
+        {
+          "label": "overskirt",
+          "score": 0.0738
+        },
+        {
+          "label": "velvet",
+          "score": 0.014
+        }
+      ],
+      "categoryMs": 18,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.648,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 627
+      }
+    },
+    {
+      "file": "tshirt_5aee6e35.jpg",
+      "width": 400,
+      "height": 534,
+      "expected": "tshirt",
+      "top1": "tshirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.9855
+        },
+        {
+          "category": "other",
+          "score": 0.0142
+        },
+        {
+          "category": "pants",
+          "score": 0.0002
+        },
+        {
+          "category": "skirt",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.9855
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.0042
+        },
+        {
+          "label": "packet",
+          "score": 0.0016
+        },
+        {
+          "label": "sleeping bag",
+          "score": 0.0014
+        },
+        {
+          "label": "swimming trunks, bathing trunks",
+          "score": 0.001
+        }
+      ],
+      "categoryMs": 19,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.404,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 651
+      }
+    },
+    {
+      "file": "tshirt_5d9384e4.jpg",
+      "width": 533,
+      "height": 400,
+      "expected": "tshirt",
+      "top1": "tshirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.9967
+        },
+        {
+          "category": "other",
+          "score": 0.0033
+        },
+        {
+          "category": "pants",
+          "score": 0
+        },
+        {
+          "category": "skirt",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.9967
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.0032
+        },
+        {
+          "label": "diaper, nappy, napkin",
+          "score": 0
+        },
+        {
+          "label": "pillow",
+          "score": 0
+        },
+        {
+          "label": "quilt, comforter, comfort, puff",
+          "score": 0
+        }
+      ],
+      "categoryMs": 17,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.508,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 624
+      }
+    },
+    {
+      "file": "tshirt_8f0cd82c.jpg",
+      "width": 400,
+      "height": 471,
+      "expected": "tshirt",
+      "top1": "pants",
+      "top1Correct": false,
+      "suggestions": [
+        {
+          "category": "pants",
+          "score": 0.5316
+        },
+        {
+          "category": "other",
+          "score": 0.4472
+        },
+        {
+          "category": "skirt",
+          "score": 0.02
+        },
+        {
+          "category": "tshirt",
+          "score": 0.0012
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jean, blue jean, denim",
+          "score": 0.5316
+        },
+        {
+          "label": "buckle",
+          "score": 0.0544
+        },
+        {
+          "label": "diaper, nappy, napkin",
+          "score": 0.0401
+        },
+        {
+          "label": "wool, woolen, woollen",
+          "score": 0.0361
+        },
+        {
+          "label": "mailbag, postbag",
+          "score": 0.0287
+        }
+      ],
+      "categoryMs": 15,
+      "mask": {
+        "quality": "suspicious",
+        "coverage": 0.514,
+        "components": 2,
+        "touchesBorder": false,
+        "warnings": [
+          "2 separate regions found; only the largest was kept"
+        ],
+        "ms": 638
+      }
+    },
+    {
+      "file": "tshirt_91ebc326.jpg",
+      "width": 400,
+      "height": 533,
+      "expected": "tshirt",
+      "top1": "tshirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.8964
+        },
+        {
+          "category": "other",
+          "score": 0.0716
+        },
+        {
+          "category": "pants",
+          "score": 0.0262
+        },
+        {
+          "category": "skirt",
+          "score": 0.0057
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.8964
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.0408
+        },
+        {
+          "label": "jean, blue jean, denim",
+          "score": 0.0262
+        },
+        {
+          "label": "bulletproof vest",
+          "score": 0.01
+        },
+        {
+          "label": "miniskirt, mini",
+          "score": 0.0056
+        }
+      ],
+      "categoryMs": 15,
+      "mask": {
+        "quality": "suspicious",
+        "coverage": 0.373,
+        "components": 8,
+        "touchesBorder": false,
+        "warnings": [
+          "8 separate regions found; only the largest was kept"
+        ],
+        "ms": 613
+      }
+    },
+    {
+      "file": "tshirt_99fdccb7.jpg",
+      "width": 400,
+      "height": 410,
+      "expected": "tshirt",
+      "top1": "tshirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.7013
+        },
+        {
+          "category": "other",
+          "score": 0.2939
+        },
+        {
+          "category": "pants",
+          "score": 0.0046
+        },
+        {
+          "category": "skirt",
+          "score": 0.0002
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.7013
+        },
+        {
+          "label": "plastic bag",
+          "score": 0.0736
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.0554
+        },
+        {
+          "label": "sleeping bag",
+          "score": 0.0554
+        },
+        {
+          "label": "quilt, comforter, comfort, puff",
+          "score": 0.0214
+        }
+      ],
+      "categoryMs": 15,
+      "mask": {
+        "quality": "suspicious",
+        "coverage": 0.628,
+        "components": 2,
+        "touchesBorder": false,
+        "warnings": [
+          "2 separate regions found; only the largest was kept"
+        ],
+        "ms": 714
+      }
+    },
+    {
+      "file": "tshirt_b40637fa.jpg",
+      "width": 400,
+      "height": 476,
+      "expected": "tshirt",
+      "top1": "tshirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.9437
+        },
+        {
+          "category": "other",
+          "score": 0.0561
+        },
+        {
+          "category": "skirt",
+          "score": 0.0002
+        },
+        {
+          "category": "pants",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.9437
+        },
+        {
+          "label": "bulletproof vest",
+          "score": 0.0367
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.0075
+        },
+        {
+          "label": "maillot",
+          "score": 0.0038
+        },
+        {
+          "label": "carpenter's kit, tool kit",
+          "score": 0.0026
+        }
+      ],
+      "categoryMs": 18,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.515,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 609
+      }
+    },
+    {
+      "file": "tshirt_bb140894.jpg",
+      "width": 400,
+      "height": 475,
+      "expected": "tshirt",
+      "top1": "tshirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.9225
+        },
+        {
+          "category": "other",
+          "score": 0.0759
+        },
+        {
+          "category": "pants",
+          "score": 0.0013
+        },
+        {
+          "category": "skirt",
+          "score": 0.0003
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.9225
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.0405
+        },
+        {
+          "label": "sleeping bag",
+          "score": 0.0066
+        },
+        {
+          "label": "quilt, comforter, comfort, puff",
+          "score": 0.006
+        },
+        {
+          "label": "pillow",
+          "score": 0.0057
+        }
+      ],
+      "categoryMs": 16,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.436,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 713
+      }
+    },
+    {
+      "file": "tshirt_e330e5fa.jpg",
+      "width": 400,
+      "height": 533,
+      "expected": "tshirt",
+      "top1": "tshirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.9876
+        },
+        {
+          "category": "other",
+          "score": 0.0124
+        },
+        {
+          "category": "skirt",
+          "score": 0
+        },
+        {
+          "category": "pants",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.9876
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.0034
+        },
+        {
+          "label": "tray",
+          "score": 0.0028
+        },
+        {
+          "label": "packet",
+          "score": 0.0006
+        },
+        {
+          "label": "kimono",
+          "score": 0.0005
+        }
+      ],
+      "categoryMs": 32,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.419,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 628
+      }
+    },
+    {
+      "file": "tshirt_fbb96cbf.jpg",
+      "width": 400,
+      "height": 533,
+      "expected": "tshirt",
+      "top1": "tshirt",
+      "top1Correct": true,
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.9989
+        },
+        {
+          "category": "other",
+          "score": 0.0011
+        },
+        {
+          "category": "pants",
+          "score": 0
+        },
+        {
+          "category": "skirt",
+          "score": 0
+        }
+      ],
+      "rawTop": [
+        {
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.9989
+        },
+        {
+          "label": "sweatshirt",
+          "score": 0.0011
+        },
+        {
+          "label": "maillot",
+          "score": 0
+        },
+        {
+          "label": "pajama, pyjama, pj's, jammies",
+          "score": 0
+        },
+        {
+          "label": "cardigan",
+          "score": 0
+        }
+      ],
+      "categoryMs": 15,
+      "mask": {
+        "quality": "ok",
+        "coverage": 0.479,
+        "components": 1,
+        "touchesBorder": false,
+        "warnings": [],
+        "ms": 721
+      }
+    }
+  ]
+}

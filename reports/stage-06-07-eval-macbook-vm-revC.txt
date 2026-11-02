@@ -1,0 +1,54 @@
+
+> fitcast-photo-garments@0.1.0 eval:fixtures
+> node --import tsx scripts/eval-fixtures.ts
+
+dress_6b779a54         expected other  top1 other  OK  raw=gown mask=ok cov=44%
+dress_b2279dec         expected other  top1 tshirt MISS raw=jersey mask=ok cov=48%
+longsleeve_107dd572    expected other  top1 other  OK  raw=sweatshirt mask=ok cov=62%
+longsleeve_582f7f10    expected other  top1 other  OK  raw=sweatshirt mask=ok cov=47%
+pants_4cc4e673         expected pants  top1 pants  OK  raw=jean mask=ok cov=52%
+pants_9cb9ae19         expected pants  top1 pants  OK  raw=jean mask=ok cov=64%
+pants_e0dc1f06         expected pants  top1 other  MISS raw=jean mask=ok cov=32%
+shoes_bf583ce5         expected other  top1 other  OK  raw=sandal mask=ok cov=16%
+shoes_c8582c70         expected other  top1 other  OK  raw=clog mask=suspicious cov=33%
+skirt_26921ddb         expected skirt  top1 skirt  OK  raw=hoopskirt mask=ok cov=49%
+skirt_4d4f6900         expected skirt  top1 pants  MISS raw=jean mask=ok cov=32%
+skirt_910268c2         expected skirt  top1 skirt  OK  raw=hoopskirt mask=ok cov=52%
+tshirt_0fc3fbae        expected tshirt top1 tshirt OK  raw=jersey mask=ok cov=50%
+tshirt_29d44695        expected tshirt top1 tshirt OK  raw=jersey mask=ok cov=56%
+tshirt_2aff1c58        expected tshirt top1 tshirt OK  raw=jersey mask=ok cov=43%
+tshirt_2df565b9        expected tshirt top1 other  MISS raw=sarong mask=ok cov=49%
+tshirt_58e51574        expected tshirt top1 other  MISS raw=sleeping bag mask=ok cov=65%
+tshirt_5aee6e35        expected tshirt top1 tshirt OK  raw=jersey mask=ok cov=40%
+tshirt_5d9384e4        expected tshirt top1 tshirt OK  raw=jersey mask=ok cov=51%
+tshirt_8f0cd82c        expected tshirt top1 pants  MISS raw=jean mask=ok cov=51%
+tshirt_91ebc326        expected tshirt top1 tshirt OK  raw=jersey mask=ok cov=37%
+tshirt_99fdccb7        expected tshirt top1 tshirt OK  raw=jersey mask=ok cov=63%
+tshirt_b40637fa        expected tshirt top1 tshirt OK  raw=jersey mask=ok cov=51%
+tshirt_bb140894        expected tshirt top1 tshirt OK  raw=jersey mask=ok cov=44%
+tshirt_e330e5fa        expected tshirt top1 tshirt OK  raw=jersey mask=ok cov=42%
+tshirt_fbb96cbf        expected tshirt top1 tshirt OK  raw=jersey mask=ok cov=48%
+{
+  "generatedAt": "2026-10-29T11:41:47.810Z",
+  "node": "v22.23.4",
+  "runtime": "onnxruntime-web (wasm) in node",
+  "models": {
+    "category": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1",
+    "segmentation": "u2netp.onnx@sha256:309c8469…4ddd8;post-v2"
+  },
+  "loadMs": 440,
+  "photos": 26,
+  "failures": 0,
+  "top1": {
+    "tshirt": "11/14",
+    "nonTshirtRejected": "11/12",
+    "all": "20/26"
+  },
+  "masks": {
+    "heuristic_ok": 25,
+    "heuristic_suspicious": 1,
+    "heuristic_empty": 0
+  },
+  "note": "Category top-1 on an uncurated 26-photo CC0 sample; scores are uncalibrated. Mask statuses ok/suspicious/empty are HEURISTIC (coverage, border, fragments, holes) — no ground-truth masks exist, so no mask accuracy is claimed; see the contact sheet."
+}
+exit=0

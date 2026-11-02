@@ -1,0 +1,87 @@
+# npm run verify — 2026-10-29T10:31:44Z — Linux 6.18.44-fc-v185 x86_64 — node v22.23.4 — cloud Linux container — revision B
+
+> fitcast-photo-garments@0.1.0 verify
+> npm run typecheck && npm run test && npm run check:tshirt && npm run build
+
+
+> fitcast-photo-garments@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> fitcast-photo-garments@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.12 /home/claude/photo-garments
+
+
+ Test Files  6 passed (6)
+      Tests  37 passed (37)
+   Start at  15:31:49
+   Duration  2.30s (transform 409ms, setup 0ms, import 726ms, tests 610ms, environment 1ms)
+
+
+> fitcast-photo-garments@0.1.0 check:tshirt
+> vitest run tests/tshirt.geometry.test.ts && node --import tsx scripts/check-tshirt.ts
+
+
+ RUN  v4.1.12 /home/claude/photo-garments
+
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  15:31:51
+   Duration  587ms (transform 199ms, setup 0ms, import 283ms, tests 158ms, environment 0ms)
+
+tshirt-basic 1.1.0 (tshirt-basic-topo-1): 210 verts / 158 logical / 272 tris
+PASS  finite_values — 0 non-finite values
+PASS  no_degenerate_triangles — 0 degenerate of 272
+PASS  seam_duplicates_coincide — 0 seam duplicates with differing positions
+PASS  manifold_edges — 0 edges with >2 faces
+PASS  consistent_orientation — 0 edges with inconsistent winding
+PASS  boundary_edges_present — 48 boundary edges (openings are expected)
+PASS  boundary_loops — found loops [8,8,16,16], expected [8,8,16,16] (hem, collar, 2 cuffs)
+PASS  openings_match_named_rings — 4/4 named openings found as boundary loops
+PASS  single_connected_surface — 1 connected component(s)
+PASS  no_unused_logical_vertices — 2 logical vertices unused (2 expected: armhole centres row 4 cols 4/12)
+PASS  no_unused_geometry_vertices — 0 geometry vertices unreferenced
+PASS  uv_in_unit_square — 0 uv components outside [0,1]
+PASS  uv_islands_inside_rects — 0 islands leave their reserved rect
+PASS  uv_islands_disjoint_with_gutter — 0 island pairs closer than 0.01 uv
+PASS  uv_not_mirrored — 0 triangles with negative UV orientation
+PASS  uv_no_degenerate_triangles — 0 degenerate UV triangles
+WARN  uv_stretch_spread — linear stretch ratio (uv/3d relative to uvScale) min 0.79 / median 1.00 / max 2.48 (tolerance x1.5)
+PASS  mirror_symmetry_x — 0 vertices without an X-mirrored partner
+PASS  faces_point_outward — all faces point away from their part axis
+PASS  sleeves_do_not_rise — cuff centres at or below armhole centres
+PASS  bounds_sane — bbox y [-0.720, 0.015], x [-0.683, 0.683]
+PASS  fixed_topology_and_uv_across_params — 0/10 random parameter sets changed index/logical/uv buffers
+random parameter sets: 20/20 ok
+report: reports/stage-03-checks.json
+RESULT: PASS
+
+> fitcast-photo-garments@0.1.0 build
+> tsc -p tsconfig.json --noEmit && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 28 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                             0.49 kB │ gzip:     0.30 kB
+dist/garment.html                                           0.61 kB │ gzip:     0.36 kB
+dist/assets/ort-wasm-simd-threaded-DN_1uOdW.mjs            24.74 kB
+dist/assets/worker-CMKjncrF.js                            423.02 kB
+dist/assets/ort-wasm-simd-threaded-qh98TCA_.wasm       14,848.85 kB │ gzip: 3,836.89 kB
+dist/assets/ort-wasm-simd-threaded.jsep-Dt5UNR3U.wasm  29,520.97 kB │ gzip: 6,983.99 kB
+dist/assets/params-BJWYGnrv.css                             1.99 kB │ gzip:     0.85 kB
+dist/assets/garment-Cb7Gozdq.css                            2.47 kB │ gzip:     0.96 kB
+dist/assets/params-DyfmbIVd.js                              4.41 kB │ gzip:     1.86 kB │ map:    17.89 kB
+dist/assets/garment-BjJ4sHdh.js                            29.06 kB │ gzip:     9.94 kB │ map:   100.26 kB
+dist/assets/index-Bj6IN_jd.js                             575.48 kB │ gzip:   148.85 kB │ map: 3,062.74 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 5.42s

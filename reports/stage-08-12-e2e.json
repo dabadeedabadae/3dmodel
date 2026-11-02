@@ -1,0 +1,1175 @@
+{
+  "generatedAt": "2026-10-29T11:27:56.424Z",
+  "cases": [
+    {
+      "file": "tshirt_fbb96cbf.jpg",
+      "label": "puma-print",
+      "hard": false,
+      "categoryTop1": "tshirt",
+      "maskVerdict": "Маска подтверждена пользователем (автоматическая, без правок). Эвристический статус подтверждённой маски: ok.",
+      "maskHeuristic": {
+        "status": "ok",
+        "coverage": 0.47924484052532834,
+        "touchesBorder": false,
+        "components": 1,
+        "openHoles": 0,
+        "openHoleArea": 0,
+        "warnings": []
+      },
+      "landmarks": {
+        "status": "ok",
+        "checks": [
+          {
+            "name": "neck_sides_found",
+            "pass": true,
+            "detail": "ширина горловины 0.26 ширины вещи — ЗНАЧЕНИЕ ПО УМОЛЧАНИЮ (края воротника не видны на силуэте), проверьте точки"
+          },
+          {
+            "name": "neck_bottom_measured",
+            "pass": false,
+            "detail": "низ выреза не виден на силуэте (воротник сзади выше) — поставлено значение по умолчанию, проверьте точку"
+          },
+          {
+            "name": "armpits_found",
+            "pass": true,
+            "detail": "подмышки на y=272,270"
+          },
+          {
+            "name": "armpits_below_shoulders",
+            "pass": true,
+            "detail": "подмышки ниже плеч"
+          },
+          {
+            "name": "armpits_above_hem",
+            "pass": true,
+            "detail": "подмышки заметно выше подола"
+          },
+          {
+            "name": "armpits_symmetric",
+            "pass": true,
+            "detail": "разница высоты подмышек 0.5 % высоты"
+          },
+          {
+            "name": "sleeves_similar",
+            "pass": true,
+            "detail": "длины рукавов 75 / 87 px"
+          },
+          {
+            "name": "cuffs_outside_body",
+            "pass": true,
+            "detail": "манжеты снаружи от подмышек"
+          }
+        ],
+        "points": {
+          "neck_left": {
+            "name": "neck_left",
+            "x": 158,
+            "y": 142,
+            "source": "default",
+            "status": "uncertain"
+          },
+          "neck_bottom": {
+            "name": "neck_bottom",
+            "x": 207,
+            "y": 191,
+            "source": "default",
+            "status": "uncertain"
+          },
+          "neck_right": {
+            "name": "neck_right",
+            "x": 255,
+            "y": 143,
+            "source": "default",
+            "status": "uncertain"
+          },
+          "shoulder_left": {
+            "name": "shoulder_left",
+            "x": 91,
+            "y": 167,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "shoulder_right": {
+            "name": "shoulder_right",
+            "x": 322,
+            "y": 171,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "armpit_left": {
+            "name": "armpit_left",
+            "x": 88,
+            "y": 272,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "armpit_right": {
+            "name": "armpit_right",
+            "x": 325,
+            "y": 270,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_left_top": {
+            "name": "cuff_left_top",
+            "x": 37,
+            "y": 190,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_left_bottom": {
+            "name": "cuff_left_bottom",
+            "x": 45,
+            "y": 252,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_right_top": {
+            "name": "cuff_right_top",
+            "x": 374,
+            "y": 204,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_right_bottom": {
+            "name": "cuff_right_bottom",
+            "x": 374,
+            "y": 255,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "hem_left": {
+            "name": "hem_left",
+            "x": 60,
+            "y": 514,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "hem_right": {
+            "name": "hem_right",
+            "x": 291,
+            "y": 515,
+            "source": "estimated",
+            "status": "ok"
+          }
+        }
+      },
+      "paramLayers": {
+        "estimated": {
+          "chestHalfWidth": 0.44,
+          "length": 1.282823521847139,
+          "hemHalfWidth": 0.4288495082604487,
+          "shoulderHalfWidth": 0.428909778589786,
+          "armholeDepth": 0.37872069241218,
+          "sleeveLength": 0.18531119387320177,
+          "cuffRadius": 0.10536789236464493,
+          "sleeveAngle": 0.1036420675833573,
+          "neckHalfWidth": 0.1800875454932946,
+          "neckFrontDrop": 0.18007797629402675
+        },
+        "applied": {
+          "length": 1.282823521847139,
+          "chestHalfWidth": 0.44,
+          "hemHalfWidth": 0.4288495082604487,
+          "shoulderHalfWidth": 0.428909778589786,
+          "depthRatio": 0.8,
+          "armholeDepth": 0.37872069241218,
+          "sleeveLength": 0.18531119387320177,
+          "cuffRadius": 0.10536789236464493,
+          "sleeveAngle": 0.1036420675833573,
+          "neckHalfWidth": 0.1800875454932946,
+          "neckFrontDrop": 0.18007797629402675,
+          "neckBackDrop": 0.02,
+          "collarWidth": 0.025,
+          "shoulderSlope": 0.06
+        },
+        "clamped": [],
+        "user": {},
+        "resolved": {
+          "length": 1.282823521847139,
+          "chestHalfWidth": 0.44,
+          "hemHalfWidth": 0.4288495082604487,
+          "shoulderHalfWidth": 0.428909778589786,
+          "depthRatio": 0.8,
+          "armholeDepth": 0.37872069241218,
+          "sleeveLength": 0.18531119387320177,
+          "cuffRadius": 0.10536789236464493,
+          "sleeveAngle": 0.1036420675833573,
+          "neckHalfWidth": 0.1800875454932946,
+          "neckFrontDrop": 0.18007797629402675,
+          "neckBackDrop": 0.02,
+          "collarWidth": 0.025,
+          "shoulderSlope": 0.06
+        },
+        "ratios": {
+          "torsoWidthPx": 237.00843866833097,
+          "length": 1.4577540020990216,
+          "hemWidth": 0.9746579733192016,
+          "shoulderWidth": 0.9747949513404227,
+          "armholeDepth": 0.4303644231956591,
+          "sleeveLength": 0.21058090212863836,
+          "cuffWidth": 0.2394724826469203,
+          "sleeveAngle": 0.1036420675833573,
+          "neckWidth": 0.40928987612112405,
+          "neckDepth": 0.20463406397048495
+        },
+        "note": "Относительные единицы шаблона (ширина груди = 0.88); масштаба нет — это не сантиметры. Не видны на фронтальном фото и взяты из шаблона: depthRatio=0.8, neckBackDrop=0.02, collarWidth=0.025, shoulderSlope=0.06."
+      },
+      "texture": {
+        "coverage": {
+          "front": 0.997651133922532,
+          "sleeve_left": 0.9901143906227934,
+          "sleeve_right": 0.8862609432363739
+        },
+        "outsideMaskTexels": 2067,
+        "visible": [
+          "front",
+          "sleeve_left",
+          "sleeve_right"
+        ]
+      },
+      "baseColor": {
+        "value": "#cc2840",
+        "source": "estimated",
+        "note": "медиана по 85971 пикселям внутри маски (эрозия, без 5 % самых тёмных и светлых)"
+      },
+      "orientation": {
+        "front": {
+          "ux": 0.9824366421369517,
+          "uy": 0.0017674322947625054,
+          "vx": 0.12427833129676547,
+          "vy": -0.9740175122888048
+        },
+        "sleeve_left": {
+          "ux": 0.027744339589066087,
+          "uy": 0.9461749331395993,
+          "vx": 0.9992626027374687,
+          "vy": 0.12146712483532798
+        },
+        "sleeve_right": {
+          "ux": 0.04793746240728496,
+          "uy": 0.9639916833824783,
+          "vx": -0.9949083015669808,
+          "vy": 0.018526106174622352
+        }
+      },
+      "notMirrored": true,
+      "sleeveOrientationOk": true,
+      "pixel": {
+        "pixel": {
+          "size": 256,
+          "colors": 16,
+          "dither": false,
+          "strength": 1
+        },
+        "palette": 16
+      },
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "success",
+        "shape_confirmed": "success",
+        "texture_ready": "success",
+        "preview_ready": "success",
+        "saved": "success"
+      }
+    },
+    {
+      "file": "tshirt_8f0cd82c.jpg",
+      "label": "striped",
+      "hard": false,
+      "categoryTop1": "pants",
+      "maskVerdict": "Маска подтверждена пользователем (автоматическая, без правок). Эвристический статус подтверждённой маски: ok.",
+      "maskHeuristic": {
+        "status": "ok",
+        "coverage": 0.5142197452229299,
+        "touchesBorder": false,
+        "components": 1,
+        "openHoles": 0,
+        "openHoleArea": 0,
+        "warnings": []
+      },
+      "landmarks": {
+        "status": "ok",
+        "checks": [
+          {
+            "name": "neck_sides_found",
+            "pass": true,
+            "detail": "ширина горловины 0.29 ширины вещи — ЗНАЧЕНИЕ ПО УМОЛЧАНИЮ (края воротника не видны на силуэте), проверьте точки"
+          },
+          {
+            "name": "neck_bottom_measured",
+            "pass": false,
+            "detail": "низ выреза не виден на силуэте (воротник сзади выше) — поставлено значение по умолчанию, проверьте точку"
+          },
+          {
+            "name": "armpits_found",
+            "pass": true,
+            "detail": "подмышки на y=176,185"
+          },
+          {
+            "name": "armpits_below_shoulders",
+            "pass": true,
+            "detail": "подмышки ниже плеч"
+          },
+          {
+            "name": "armpits_above_hem",
+            "pass": true,
+            "detail": "подмышки заметно выше подола"
+          },
+          {
+            "name": "armpits_symmetric",
+            "pass": true,
+            "detail": "разница высоты подмышек 2.8 % высоты"
+          },
+          {
+            "name": "sleeves_similar",
+            "pass": true,
+            "detail": "длины рукавов 64 / 65 px"
+          },
+          {
+            "name": "cuffs_outside_body",
+            "pass": true,
+            "detail": "манжеты снаружи от подмышек"
+          }
+        ],
+        "points": {
+          "neck_left": {
+            "name": "neck_left",
+            "x": 146,
+            "y": 92,
+            "source": "default",
+            "status": "uncertain"
+          },
+          "neck_bottom": {
+            "name": "neck_bottom",
+            "x": 203,
+            "y": 148,
+            "source": "default",
+            "status": "uncertain"
+          },
+          "neck_right": {
+            "name": "neck_right",
+            "x": 259,
+            "y": 91,
+            "source": "default",
+            "status": "uncertain"
+          },
+          "shoulder_left": {
+            "name": "shoulder_left",
+            "x": 69,
+            "y": 104,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "shoulder_right": {
+            "name": "shoulder_right",
+            "x": 336,
+            "y": 102,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "armpit_left": {
+            "name": "armpit_left",
+            "x": 69,
+            "y": 176,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "armpit_right": {
+            "name": "armpit_right",
+            "x": 339,
+            "y": 185,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_left_top": {
+            "name": "cuff_left_top",
+            "x": 33,
+            "y": 111,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_left_bottom": {
+            "name": "cuff_left_bottom",
+            "x": 32,
+            "y": 168,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_right_top": {
+            "name": "cuff_right_top",
+            "x": 376,
+            "y": 112,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_right_bottom": {
+            "name": "cuff_right_bottom",
+            "x": 387,
+            "y": 174,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "hem_left": {
+            "name": "hem_left",
+            "x": 44,
+            "y": 402,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "hem_right": {
+            "name": "hem_right",
+            "x": 357,
+            "y": 408,
+            "source": "estimated",
+            "status": "ok"
+          }
+        }
+      },
+      "paramLayers": {
+        "estimated": {
+          "chestHalfWidth": 0.44,
+          "length": 0.9837499202917782,
+          "hemHalfWidth": 0.5098845916108576,
+          "shoulderHalfWidth": 0.43488178398642635,
+          "armholeDepth": 0.25245238020732713,
+          "sleeveLength": 0.131122569678648,
+          "cuffRadius": 0.09770478570173077,
+          "sleeveAngle": 0,
+          "neckHalfWidth": 0.1840531354031528,
+          "neckFrontDrop": 0.18404592879630946
+        },
+        "applied": {
+          "length": 0.9837499202917782,
+          "chestHalfWidth": 0.44,
+          "hemHalfWidth": 0.5098845916108576,
+          "shoulderHalfWidth": 0.44000000466667794,
+          "depthRatio": 0.8,
+          "armholeDepth": 0.25245238020732713,
+          "sleeveLength": 0.131122569678648,
+          "cuffRadius": 0.09770478570173077,
+          "sleeveAngle": 0,
+          "neckHalfWidth": 0.1840531354031528,
+          "neckFrontDrop": 0.15147142812439626,
+          "neckBackDrop": 0.02,
+          "collarWidth": 0.025,
+          "shoulderSlope": 0.06
+        },
+        "clamped": [
+          {
+            "name": "neckFrontDrop",
+            "requested": 0.18404592879630946,
+            "applied": 0.15147142812439626
+          },
+          {
+            "name": "shoulderHalfWidth",
+            "requested": 0.43488178398642635,
+            "applied": 0.44000000466667794
+          }
+        ],
+        "user": {},
+        "resolved": {
+          "length": 0.9837499202917782,
+          "chestHalfWidth": 0.44,
+          "hemHalfWidth": 0.5098845916108576,
+          "shoulderHalfWidth": 0.44000000466667794,
+          "depthRatio": 0.8,
+          "armholeDepth": 0.25245238020732713,
+          "sleeveLength": 0.131122569678648,
+          "cuffRadius": 0.09770478570173077,
+          "sleeveAngle": 0,
+          "neckHalfWidth": 0.1840531354031528,
+          "neckFrontDrop": 0.15147142812439626,
+          "neckBackDrop": 0.02,
+          "collarWidth": 0.025,
+          "shoulderSlope": 0.06
+        },
+        "ratios": {
+          "torsoWidthPx": 270.1499583564654,
+          "length": 1.1178976366952025,
+          "hemWidth": 1.1588286172974038,
+          "shoulderWidth": 0.9883676908782417,
+          "armholeDepth": 0.28687770478105357,
+          "sleeveLength": 0.14900292008937271,
+          "cuffWidth": 0.22205633114029721,
+          "sleeveAngle": 0,
+          "neckWidth": 0.41830258046171087,
+          "neckDepth": 0.20914310090489713
+        },
+        "note": "Относительные единицы шаблона (ширина груди = 0.88); масштаба нет — это не сантиметры. Не видны на фронтальном фото и взяты из шаблона: depthRatio=0.8, neckBackDrop=0.02, collarWidth=0.025, shoulderSlope=0.06."
+      },
+      "texture": {
+        "coverage": {
+          "front": 0.9863825232470843,
+          "sleeve_left": 0.8000988560937721,
+          "sleeve_right": 0.8829426715617057
+        },
+        "outsideMaskTexels": 6321,
+        "visible": [
+          "front",
+          "sleeve_left",
+          "sleeve_right"
+        ]
+      },
+      "baseColor": {
+        "value": "#697080",
+        "source": "estimated",
+        "note": "медиана по 81580 пикселям внутри маски (эрозия, без 5 % самых тёмных и светлых)"
+      },
+      "orientation": {
+        "front": {
+          "ux": 0.9932679536777672,
+          "uy": 0.00851266508833681,
+          "vx": -0.0012947661665508052,
+          "vy": -0.9517689889905271
+        },
+        "sleeve_left": {
+          "ux": 0.1466781590115945,
+          "uy": 0.9783917188268053,
+          "vx": 0.9863378084748543,
+          "vy": -0.007218564606423863
+        },
+        "sleeve_right": {
+          "ux": -0.012801972496618543,
+          "uy": 0.9807911701483117,
+          "vx": -0.9997829006645328,
+          "vy": -0.008133788977843833
+        }
+      },
+      "notMirrored": true,
+      "sleeveOrientationOk": true,
+      "pixel": {
+        "pixel": {
+          "size": 256,
+          "colors": 16,
+          "dither": false,
+          "strength": 1
+        },
+        "palette": 16
+      },
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "success",
+        "shape_confirmed": "success",
+        "texture_ready": "success",
+        "preview_ready": "success",
+        "saved": "success"
+      }
+    },
+    {
+      "file": "tshirt_bb140894.jpg",
+      "label": "plain-grey",
+      "hard": false,
+      "categoryTop1": "tshirt",
+      "maskVerdict": "Маска подтверждена пользователем (автоматическая, без правок). Эвристический статус подтверждённой маски: ok.",
+      "maskHeuristic": {
+        "status": "ok",
+        "coverage": 0.4362526315789474,
+        "touchesBorder": false,
+        "components": 1,
+        "openHoles": 0,
+        "openHoleArea": 0,
+        "warnings": []
+      },
+      "landmarks": {
+        "status": "uncertain",
+        "checks": [
+          {
+            "name": "neck_sides_found",
+            "pass": true,
+            "detail": "ширина горловины 0.38 ширины вещи — ЗНАЧЕНИЕ ПО УМОЛЧАНИЮ (края воротника не видны на силуэте), проверьте точки"
+          },
+          {
+            "name": "neck_bottom_measured",
+            "pass": false,
+            "detail": "низ выреза не виден на силуэте (воротник сзади выше) — поставлено значение по умолчанию, проверьте точку"
+          },
+          {
+            "name": "armpits_found",
+            "pass": true,
+            "detail": "подмышки на y=229,219"
+          },
+          {
+            "name": "armpits_below_shoulders",
+            "pass": true,
+            "detail": "подмышки ниже плеч"
+          },
+          {
+            "name": "armpits_above_hem",
+            "pass": true,
+            "detail": "подмышки заметно выше подола"
+          },
+          {
+            "name": "armpits_symmetric",
+            "pass": true,
+            "detail": "разница высоты подмышек 3.2 % высоты"
+          },
+          {
+            "name": "sleeves_similar",
+            "pass": true,
+            "detail": "длины рукавов 53 / 43 px"
+          },
+          {
+            "name": "cuffs_outside_body",
+            "pass": false,
+            "detail": "манжеты снаружи от подмышек"
+          }
+        ],
+        "points": {
+          "neck_left": {
+            "name": "neck_left",
+            "x": 136,
+            "y": 101,
+            "source": "default",
+            "status": "uncertain"
+          },
+          "neck_bottom": {
+            "name": "neck_bottom",
+            "x": 194,
+            "y": 156,
+            "source": "default",
+            "status": "uncertain"
+          },
+          "neck_right": {
+            "name": "neck_right",
+            "x": 252,
+            "y": 95,
+            "source": "default",
+            "status": "uncertain"
+          },
+          "shoulder_left": {
+            "name": "shoulder_left",
+            "x": 55,
+            "y": 110,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "shoulder_right": {
+            "name": "shoulder_right",
+            "x": 333,
+            "y": 112,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "armpit_left": {
+            "name": "armpit_left",
+            "x": 66,
+            "y": 229,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "armpit_right": {
+            "name": "armpit_right",
+            "x": 336,
+            "y": 219,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_left_top": {
+            "name": "cuff_left_top",
+            "x": 55,
+            "y": 110,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_left_bottom": {
+            "name": "cuff_left_bottom",
+            "x": 63,
+            "y": 397,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_right_top": {
+            "name": "cuff_right_top",
+            "x": 330,
+            "y": 112,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "cuff_right_bottom": {
+            "name": "cuff_right_bottom",
+            "x": 343,
+            "y": 393,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "hem_left": {
+            "name": "hem_left",
+            "x": 64,
+            "y": 398,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "hem_right": {
+            "name": "hem_right",
+            "x": 343,
+            "y": 393,
+            "source": "estimated",
+            "status": "ok"
+          }
+        }
+      },
+      "paramLayers": {
+        "estimated": {
+          "chestHalfWidth": 0.44,
+          "length": 0.9266239325253621,
+          "hemHalfWidth": 0.4544281006167389,
+          "shoulderHalfWidth": 0.45273834712657607,
+          "armholeDepth": 0.3680439521102493,
+          "sleeveLength": 0.27853497451779635,
+          "cuffRadius": 0.4628332059125533,
+          "sleeveAngle": 1.5503764755043945,
+          "neckHalfWidth": 0.18916004675319587,
+          "neckFrontDrop": 0.18890751524242885
+        },
+        "applied": {
+          "length": 0.9266239325253621,
+          "chestHalfWidth": 0.44,
+          "hemHalfWidth": 0.4544281006167389,
+          "shoulderHalfWidth": 0.45273834712657607,
+          "depthRatio": 0.8,
+          "armholeDepth": 0.3680439521102493,
+          "sleeveLength": 0.27853497451779635,
+          "cuffRadius": 0.3,
+          "sleeveAngle": 0.8,
+          "neckHalfWidth": 0.18916004675319587,
+          "neckFrontDrop": 0.18890751524242885,
+          "neckBackDrop": 0.02,
+          "collarWidth": 0.025,
+          "shoulderSlope": 0.06
+        },
+        "clamped": [
+          {
+            "name": "cuffRadius",
+            "requested": 0.4628332059125533,
+            "applied": 0.3
+          },
+          {
+            "name": "sleeveAngle",
+            "requested": 1.5503764755043945,
+            "applied": 0.8
+          }
+        ],
+        "user": {},
+        "resolved": {
+          "length": 0.9266239325253621,
+          "chestHalfWidth": 0.44,
+          "hemHalfWidth": 0.4544281006167389,
+          "shoulderHalfWidth": 0.45273834712657607,
+          "depthRatio": 0.8,
+          "armholeDepth": 0.3680439521102493,
+          "sleeveLength": 0.27853497451779635,
+          "cuffRadius": 0.3,
+          "sleeveAngle": 0.8,
+          "neckHalfWidth": 0.18916004675319587,
+          "neckFrontDrop": 0.18890751524242885,
+          "neckBackDrop": 0.02,
+          "collarWidth": 0.025,
+          "shoulderSlope": 0.06
+        },
+        "ratios": {
+          "torsoWidthPx": 270.1851217221259,
+          "length": 1.0529817415060934,
+          "hemWidth": 1.0327911377653156,
+          "shoulderWidth": 1.0289507889240366,
+          "armholeDepth": 0.41823176376164695,
+          "sleeveLength": 0.31651701649749586,
+          "cuffWidth": 1.0518936498012574,
+          "sleeveAngle": 1.5503764755043945,
+          "neckWidth": 0.42990919716635423,
+          "neckDepth": 0.2146676309573055
+        },
+        "note": "Относительные единицы шаблона (ширина груди = 0.88); масштаба нет — это не сантиметры. Не видны на фронтальном фото и взяты из шаблона: depthRatio=0.8, neckBackDrop=0.02, collarWidth=0.025, shoulderSlope=0.06."
+      },
+      "texture": {
+        "coverage": {
+          "front": 0.9800420714620205,
+          "sleeve_left": 0.7364778986018924,
+          "sleeve_right": 0.5629059587687094
+        },
+        "outsideMaskTexels": 12608,
+        "visible": [
+          "front",
+          "sleeve_left",
+          "sleeve_right"
+        ]
+      },
+      "baseColor": {
+        "value": "#948278",
+        "source": "estimated",
+        "note": "медиана по 70035 пикселям внутри маски (эрозия, без 5 % самых тёмных и светлых)"
+      },
+      "orientation": {
+        "front": {
+          "ux": 0.9922734142092798,
+          "uy": -0.010838437700133456,
+          "vx": -0.034982336547602286,
+          "vy": -0.9721355094494151
+        },
+        "sleeve_left": {
+          "ux": 0.8543512284366002,
+          "uy": 0.8455996012297988,
+          "vx": 0.22849800029060321,
+          "vy": 0.40568446497093896
+        },
+        "sleeve_right": {
+          "ux": 0.9641007625369993,
+          "uy": 0.8626490976153801,
+          "vx": -0.16285307471106192,
+          "vy": 0.3818769939026111
+        }
+      },
+      "notMirrored": true,
+      "sleeveOrientationOk": false,
+      "pixel": {
+        "pixel": {
+          "size": 256,
+          "colors": 16,
+          "dither": false,
+          "strength": 1
+        },
+        "palette": 16
+      },
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "success",
+        "shape_confirmed": "success",
+        "texture_ready": "success",
+        "preview_ready": "success",
+        "saved": "success"
+      }
+    },
+    {
+      "file": "tshirt_91ebc326.jpg",
+      "label": "navy-hard",
+      "hard": true,
+      "categoryTop1": "tshirt",
+      "maskVerdict": "Маска подтверждена пользователем (с ручными правками: 4 штрих(ов)). Эвристический статус подтверждённой маски: suspicious — подтверждение не делает её «чистой»; следующие этапы получат её как есть.",
+      "maskHeuristic": {
+        "status": "suspicious",
+        "coverage": 0.41067073170731705,
+        "touchesBorder": false,
+        "components": 1,
+        "openHoles": 1,
+        "openHoleArea": 379,
+        "warnings": [
+          "внутренние разрывы: 1 (0.4 % площади вещи) — настоящий вырез оставьте, остальное восстановите"
+        ]
+      },
+      "landmarks": {
+        "status": "uncertain",
+        "checks": [
+          {
+            "name": "neck_sides_found",
+            "pass": true,
+            "detail": "ширина горловины 0.41 ширины вещи"
+          },
+          {
+            "name": "neck_bottom_measured",
+            "pass": true,
+            "detail": "низ выреза виден на силуэте"
+          },
+          {
+            "name": "armpits_found",
+            "pass": true,
+            "detail": "подмышки на y=229,282"
+          },
+          {
+            "name": "armpits_below_shoulders",
+            "pass": true,
+            "detail": "подмышки ниже плеч"
+          },
+          {
+            "name": "armpits_above_hem",
+            "pass": true,
+            "detail": "подмышки заметно выше подола"
+          },
+          {
+            "name": "armpits_symmetric",
+            "pass": false,
+            "detail": "разница высоты подмышек 14.9 % высоты"
+          },
+          {
+            "name": "sleeves_similar",
+            "pass": false,
+            "detail": "длины рукавов 124 / 57 px"
+          },
+          {
+            "name": "cuffs_outside_body",
+            "pass": true,
+            "detail": "манжеты снаружи от подмышек"
+          }
+        ],
+        "points": {
+          "neck_left": {
+            "name": "neck_left",
+            "x": 175,
+            "y": 167,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "neck_bottom": {
+            "name": "neck_bottom",
+            "x": 242,
+            "y": 152,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "neck_right": {
+            "name": "neck_right",
+            "x": 318,
+            "y": 186,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "shoulder_left": {
+            "name": "shoulder_left",
+            "x": 142,
+            "y": 161,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "shoulder_right": {
+            "name": "shoulder_right",
+            "x": 321,
+            "y": 184,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "armpit_left": {
+            "name": "armpit_left",
+            "x": 139,
+            "y": 229,
+            "source": "estimated",
+            "status": "uncertain"
+          },
+          "armpit_right": {
+            "name": "armpit_right",
+            "x": 321,
+            "y": 282,
+            "source": "estimated",
+            "status": "uncertain"
+          },
+          "cuff_left_top": {
+            "name": "cuff_left_top",
+            "x": 42,
+            "y": 189,
+            "source": "estimated",
+            "status": "uncertain"
+          },
+          "cuff_left_bottom": {
+            "name": "cuff_left_bottom",
+            "x": 42,
+            "y": 221,
+            "source": "estimated",
+            "status": "uncertain"
+          },
+          "cuff_right_top": {
+            "name": "cuff_right_top",
+            "x": 358,
+            "y": 189,
+            "source": "estimated",
+            "status": "uncertain"
+          },
+          "cuff_right_bottom": {
+            "name": "cuff_right_bottom",
+            "x": 354,
+            "y": 504,
+            "source": "estimated",
+            "status": "uncertain"
+          },
+          "hem_left": {
+            "name": "hem_left",
+            "x": 66,
+            "y": 505,
+            "source": "estimated",
+            "status": "ok"
+          },
+          "hem_right": {
+            "name": "hem_right",
+            "x": 337,
+            "y": 507,
+            "source": "estimated",
+            "status": "ok"
+          }
+        }
+      },
+      "paramLayers": {
+        "estimated": {
+          "chestHalfWidth": 0.44,
+          "length": 1.548216785525671,
+          "hemHalfWidth": 0.6290527356462035,
+          "shoulderHalfWidth": 0.4189042987489038,
+          "armholeDepth": 0.3853133229344249,
+          "sleeveLength": 0.5055038243067324,
+          "cuffRadius": 0.40275153132221747,
+          "sleeveAngle": 0.6864272904604097,
+          "neckHalfWidth": 0.3348435810191924,
+          "neckFrontDrop": 0
+        },
+        "applied": {
+          "length": 1.548216785525671,
+          "chestHalfWidth": 0.44,
+          "hemHalfWidth": 0.6290527356462035,
+          "shoulderHalfWidth": 0.4189042987489038,
+          "depthRatio": 0.8,
+          "armholeDepth": 0.3853133229344249,
+          "sleeveLength": 0.5055038243067324,
+          "cuffRadius": 0.3,
+          "sleeveAngle": 0.6864272904604097,
+          "neckHalfWidth": 0.2759529411764706,
+          "neckFrontDrop": 0,
+          "neckBackDrop": 0.02,
+          "collarWidth": 0.025,
+          "shoulderSlope": 0.06
+        },
+        "clamped": [
+          {
+            "name": "cuffRadius",
+            "requested": 0.40275153132221747,
+            "applied": 0.3
+          },
+          {
+            "name": "neckHalfWidth",
+            "requested": 0.3348435810191924,
+            "applied": 0.32
+          },
+          {
+            "name": "neckHalfWidth",
+            "requested": 0.32,
+            "applied": 0.31390429874890374
+          },
+          {
+            "name": "neckHalfWidth",
+            "requested": 0.31390429874890374,
+            "applied": 0.2759529411764706
+          }
+        ],
+        "user": {},
+        "resolved": {
+          "length": 1.548216785525671,
+          "chestHalfWidth": 0.44,
+          "hemHalfWidth": 0.6290527356462035,
+          "shoulderHalfWidth": 0.4189042987489038,
+          "depthRatio": 0.8,
+          "armholeDepth": 0.3853133229344249,
+          "sleeveLength": 0.5055038243067324,
+          "cuffRadius": 0.3,
+          "sleeveAngle": 0.6864272904604097,
+          "neckHalfWidth": 0.2759529411764706,
+          "neckFrontDrop": 0,
+          "neckBackDrop": 0.02,
+          "collarWidth": 0.025,
+          "shoulderSlope": 0.06
+        },
+        "ratios": {
+          "torsoWidthPx": 189.5600168811978,
+          "length": 1.7593372562791716,
+          "hemWidth": 1.429665308286826,
+          "shoulderWidth": 0.9520552244293268,
+          "armholeDepth": 0.43785604878911916,
+          "sleeveLength": 0.5744361639849231,
+          "cuffWidth": 0.915344389368676,
+          "sleeveAngle": 0.6864272904604097,
+          "neckWidth": 0.7610081386799827,
+          "neckDepth": -0.1292466650040171
+        },
+        "note": "Относительные единицы шаблона (ширина груди = 0.88); масштаба нет — это не сантиметры. Не видны на фронтальном фото и взяты из шаблона: depthRatio=0.8, neckBackDrop=0.02, collarWidth=0.025, shoulderSlope=0.06."
+      },
+      "texture": {
+        "coverage": {
+          "front": 0.8954011283476917,
+          "sleeve_left": 0.3375229487360542,
+          "sleeve_right": 0.7199237503530076
+        },
+        "outsideMaskTexels": 27421,
+        "visible": [
+          "front",
+          "sleeve_left",
+          "sleeve_right"
+        ]
+      },
+      "baseColor": {
+        "value": "#213055",
+        "source": "estimated",
+        "note": "медиана по 71930 пикселям внутри маски (эрозия, без 5 % самых тёмных и светлых)"
+      },
+      "orientation": {
+        "front": {
+          "ux": 0.9605286324647966,
+          "uy": 0.05228495442778169,
+          "vx": 0.18563781494095657,
+          "vy": -0.9648574530865618
+        },
+        "sleeve_left": {
+          "ux": -0.053279607900184524,
+          "uy": 0.7992056522645009,
+          "vx": 0.9974837714231797,
+          "vy": 0.46993785316289965
+        },
+        "sleeve_right": {
+          "ux": -0.014231135256648755,
+          "uy": 0.9264842770036082,
+          "vx": -0.9997497302908493,
+          "vy": 0.19823217022450076
+        }
+      },
+      "notMirrored": true,
+      "sleeveOrientationOk": true,
+      "pixel": {
+        "pixel": {
+          "size": 256,
+          "colors": 16,
+          "dither": false,
+          "strength": 1
+        },
+        "palette": 16
+      },
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "success",
+        "shape_confirmed": "success",
+        "texture_ready": "success",
+        "preview_ready": "success",
+        "saved": "success"
+      }
+    }
+  ],
+  "errors": [],
+  "reentry": {
+    "before": {
+      "photo_loaded": "success",
+      "category_confirmed": "success",
+      "mask_confirmed": "success",
+      "shape_confirmed": "success",
+      "texture_ready": "success",
+      "preview_ready": "success",
+      "saved": "success"
+    },
+    "afterEdit": {
+      "photo_loaded": "success",
+      "category_confirmed": "success",
+      "mask_confirmed": "success",
+      "shape_confirmed": "idle",
+      "texture_ready": "idle",
+      "preview_ready": "idle",
+      "saved": "idle"
+    },
+    "rebuilt": {
+      "photo_loaded": "success",
+      "category_confirmed": "success",
+      "mask_confirmed": "success",
+      "shape_confirmed": "success",
+      "texture_ready": "success",
+      "preview_ready": "success",
+      "saved": "idle"
+    },
+    "userAdjusted": [
+      "hem_left"
+    ]
+  }
+}

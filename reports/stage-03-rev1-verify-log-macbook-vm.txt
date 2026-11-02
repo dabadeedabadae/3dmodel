@@ -1,0 +1,87 @@
+# npm ci (no flags, npm 10.9.9) + npm run verify — 2026-10-29T09:57:41Z — Linux 6.8.0-138-generic aarch64 — node v22.23.4 — Linux VM of the Claude desktop app on the user's MacBook (arm64); NOT native macOS, NOT Safari/Chrome — revision A-1
+npm ci: added 56 packages in 2s (no --legacy-peer-deps, no .npmrc)
+
+> fitcast-photo-garments@0.1.0 verify
+> npm run typecheck && npm run test && npm run check:tshirt && npm run build
+
+
+> fitcast-photo-garments@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> fitcast-photo-garments@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.12 /sessions/rcw-01g5fjjg4rbesvryffs8m5po/pg2
+
+ ✓ tests/pipeline.test.ts (9 tests) 8ms
+ ✓ tests/object3dBodyAdapter.test.ts (3 tests) 73ms
+ ✓ tests/tshirt.geometry.test.ts (13 tests) 90ms
+ ✓ tests/mannequin.test.ts (4 tests) 123ms
+ ✓ tests/types.test.ts (2 tests) 2ms
+ ✓ tests/sides.test.ts (6 tests) 18ms
+
+ Test Files  6 passed (6)
+      Tests  37 passed (37)
+   Start at  09:57:32
+   Duration  399ms (transform 270ms, setup 0ms, import 427ms, tests 313ms, environment 0ms)
+
+
+> fitcast-photo-garments@0.1.0 check:tshirt
+> vitest run tests/tshirt.geometry.test.ts && node --import tsx scripts/check-tshirt.ts
+
+
+ RUN  v4.1.12 /sessions/rcw-01g5fjjg4rbesvryffs8m5po/pg2
+
+ ✓ tests/tshirt.geometry.test.ts (13 tests) 68ms
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  09:57:32
+   Duration  259ms (transform 90ms, setup 0ms, import 121ms, tests 68ms, environment 0ms)
+
+tshirt-basic 1.0.0 (tshirt-basic-topo-1): 210 verts / 158 logical / 272 tris
+PASS  finite_values — 0 non-finite values
+PASS  no_degenerate_triangles — 0 degenerate of 272
+PASS  seam_duplicates_coincide — 0 seam duplicates with differing positions
+PASS  manifold_edges — 0 edges with >2 faces
+PASS  consistent_orientation — 0 edges with inconsistent winding
+PASS  boundary_edges_present — 48 boundary edges (openings are expected)
+PASS  boundary_loops — found loops [8,8,16,16], expected [8,8,16,16] (hem, collar, 2 cuffs)
+PASS  openings_match_named_rings — 4/4 named openings found as boundary loops
+PASS  single_connected_surface — 1 connected component(s)
+PASS  no_unused_logical_vertices — 2 logical vertices unused (2 expected: armhole centres row 4 cols 4/12)
+PASS  no_unused_geometry_vertices — 0 geometry vertices unreferenced
+PASS  uv_in_unit_square — 0 uv components outside [0,1]
+PASS  uv_islands_inside_rects — 0 islands leave their reserved rect
+PASS  uv_islands_disjoint_with_gutter — 0 island pairs closer than 0.01 uv
+PASS  uv_not_mirrored — 0 triangles with negative UV orientation
+PASS  uv_no_degenerate_triangles — 0 degenerate UV triangles
+PASS  uv_stretch_spread — linear stretch ratio (uv/3d relative to uvScale) min 0.87 / median 1.00 / max 1.36 (tolerance x1.5)
+PASS  mirror_symmetry_x — 0 vertices without an X-mirrored partner
+PASS  faces_point_outward — all faces point away from their part axis
+PASS  sleeves_do_not_rise — cuff centres at or below armhole centres
+PASS  bounds_sane — bbox y [-0.720, 0.015], x [-0.685, 0.685]
+PASS  fixed_topology_and_uv_across_params — 0/10 random parameter sets changed index/logical/uv buffers
+random parameter sets: 20/20 ok
+report: reports/stage-03-checks.json
+RESULT: PASS
+
+> fitcast-photo-garments@0.1.0 build
+> tsc -p tsconfig.json --noEmit && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.41 kB │ gzip:   0.28 kB
+dist/assets/index-BJWYGnrv.css    1.99 kB │ gzip:   0.85 kB
+dist/assets/index-bPfV5caQ.js   579.38 kB │ gzip: 150.08 kB │ map: 3,079.24 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 989ms

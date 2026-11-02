@@ -1,0 +1,269 @@
+{
+  "generatedAt": "2026-10-29T10:32:03.401Z",
+  "baseUrl": "http://127.0.0.1:5174/",
+  "files": [
+    "renders/stage-03-front.png",
+    "renders/stage-03-back.png",
+    "renders/stage-03-left.png",
+    "renders/stage-03-right.png",
+    "renders/stage-03-iso.png",
+    "renders/stage-03-front-checker.png",
+    "renders/stage-03-back-checker.png",
+    "renders/stage-03-left-checker.png",
+    "renders/stage-03-right-checker.png",
+    "renders/stage-03-iso-checker-wire.png",
+    "renders/stage-03-front-wire-nomannequin.png",
+    "renders/stage-03-iso-flat.png",
+    "renders/stage-03-front-params-long-wide.png",
+    "renders/stage-03-front-wings-request-after-fix.png",
+    "renders/stage-03-front-narrow-shoulder-tilted.png",
+    "renders/stage-03-front-plain.png",
+    "renders/stage-03-top-checker.png",
+    "renders/stage-03-top-wire.png",
+    "renders/stage-03-threequarter-checker.png",
+    "renders/stage-03-threequarter-wire.png",
+    "renders/stage-03-threequarter-back-wire.png",
+    "renders/stage-03-iso-plain.png",
+    "renders/stage-03-front-params-short-narrow.png",
+    "renders/stage-03-panel-clamped-request.png",
+    "renders/stage-03-page-with-panel.png",
+    "renders/stage-03-uv-layout.png",
+    "renders/stage-03-uv-checker.png",
+    "renders/stage-03-contact-sheet.png",
+    "renders/stage-03-error-no-webgl.png"
+  ],
+  "errors": [],
+  "clampedRequestText": "Clamped (derived rules, see DECISIONS D-05/D-08):\nshoulderHalfWidth: requested 0.400 → applied 0.560",
+  "inBrowserChecks": {
+    "ok": true,
+    "results": [
+      {
+        "name": "finite_values",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 non-finite values"
+      },
+      {
+        "name": "no_degenerate_triangles",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 degenerate of 272"
+      },
+      {
+        "name": "seam_duplicates_coincide",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 seam duplicates with differing positions"
+      },
+      {
+        "name": "manifold_edges",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 edges with >2 faces"
+      },
+      {
+        "name": "consistent_orientation",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 edges with inconsistent winding"
+      },
+      {
+        "name": "boundary_edges_present",
+        "pass": true,
+        "level": "fail",
+        "detail": "48 boundary edges (openings are expected)"
+      },
+      {
+        "name": "boundary_loops",
+        "pass": true,
+        "level": "fail",
+        "detail": "found loops [8,8,16,16], expected [8,8,16,16] (hem, collar, 2 cuffs)",
+        "data": {
+          "sizes": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "expected": [
+            8,
+            8,
+            16,
+            16
+          ]
+        }
+      },
+      {
+        "name": "openings_match_named_rings",
+        "pass": true,
+        "level": "fail",
+        "detail": "4/4 named openings found as boundary loops"
+      },
+      {
+        "name": "single_connected_surface",
+        "pass": true,
+        "level": "fail",
+        "detail": "1 connected component(s)"
+      },
+      {
+        "name": "no_unused_logical_vertices",
+        "pass": true,
+        "level": "warn",
+        "detail": "2 logical vertices unused (2 expected: armhole centres row 4 cols 4/12)"
+      },
+      {
+        "name": "no_unused_geometry_vertices",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 geometry vertices unreferenced"
+      },
+      {
+        "name": "uv_in_unit_square",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 uv components outside [0,1]"
+      },
+      {
+        "name": "uv_islands_inside_rects",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 islands leave their reserved rect"
+      },
+      {
+        "name": "uv_islands_disjoint_with_gutter",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 island pairs closer than 0.01 uv",
+        "data": {
+          "boxes": [
+            {
+              "name": "front",
+              "u0": 0.019999999552965164,
+              "v0": 0.5515472888946533,
+              "u1": 0.49000000953674316,
+              "v1": 0.878452718257904,
+              "rect": {
+                "u0": 0.02,
+                "v0": 0.45,
+                "u1": 0.49,
+                "v1": 0.98
+              }
+            },
+            {
+              "name": "back",
+              "u0": 0.5099999904632568,
+              "v0": 0.5515472888946533,
+              "u1": 0.9800000190734863,
+              "v1": 0.878452718257904,
+              "rect": {
+                "u0": 0.51,
+                "v0": 0.45,
+                "u1": 0.98,
+                "v1": 0.98
+              }
+            },
+            {
+              "name": "sleeve_left",
+              "u0": 0.09268639236688614,
+              "v0": 0.2789492607116699,
+              "u1": 0.4173136055469513,
+              "v1": 0.36105072498321533,
+              "rect": {
+                "u0": 0.02,
+                "v0": 0.22,
+                "u1": 0.49,
+                "v1": 0.42
+              }
+            },
+            {
+              "name": "sleeve_right",
+              "u0": 0.5826863646507263,
+              "v0": 0.2789492607116699,
+              "u1": 0.9073135852813721,
+              "v1": 0.36105072498321533,
+              "rect": {
+                "u0": 0.51,
+                "v0": 0.22,
+                "u1": 0.98,
+                "v1": 0.42
+              }
+            },
+            {
+              "name": "collar",
+              "u0": 0.3315058946609497,
+              "v0": 0.1049954742193222,
+              "u1": 0.6684941053390503,
+              "v1": 0.1150045320391655,
+              "rect": {
+                "u0": 0.02,
+                "v0": 0.04,
+                "u1": 0.98,
+                "v1": 0.18
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "uv_not_mirrored",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 triangles with negative UV orientation"
+      },
+      {
+        "name": "uv_no_degenerate_triangles",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 degenerate UV triangles"
+      },
+      {
+        "name": "uv_stretch_spread",
+        "pass": false,
+        "level": "warn",
+        "detail": "linear stretch ratio (uv/3d relative to uvScale) min 0.79 / median 1.00 / max 2.48 (tolerance x1.5)",
+        "data": {
+          "min": 0.7874297228511014,
+          "med": 0.9994899240409921,
+          "max": 2.4778302994948853
+        }
+      },
+      {
+        "name": "mirror_symmetry_x",
+        "pass": true,
+        "level": "fail",
+        "detail": "0 vertices without an X-mirrored partner"
+      },
+      {
+        "name": "faces_point_outward",
+        "pass": true,
+        "level": "fail",
+        "detail": "all faces point away from their part axis"
+      },
+      {
+        "name": "sleeves_do_not_rise",
+        "pass": true,
+        "level": "fail",
+        "detail": "cuff centres at or below armhole centres"
+      },
+      {
+        "name": "bounds_sane",
+        "pass": true,
+        "level": "fail",
+        "detail": "bbox y [-0.720, 0.015], x [-0.683, 0.683]"
+      }
+    ],
+    "summary": {
+      "vertices": 210,
+      "logicalVertices": 158,
+      "triangles": 272,
+      "boundaryLoops": [
+        8,
+        8,
+        16,
+        16
+      ]
+    }
+  },
+  "noWebglMessage": "WebGL unavailable\nWebGL is not available\n\nThe 3D preview needs WebGL. Enable hardware acceleration or try another browser. The rest of FitCast does not depend on this page.",
+  "serverLogTail": "\n  VITE v7.3.7  ready in 200 ms\n\n  ➜  Local:   http://127.0.0.1:5174/\n"
+}

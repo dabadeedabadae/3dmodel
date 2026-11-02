@@ -1,0 +1,6 @@
+# npm run dev smoke — 2026-10-29T09:33:09Z — same VM
+
+  VITE v7.3.7  ready in 89 ms
+
+  ➜  Local:   http://127.0.0.1:5174/
+curl http://127.0.0.1:5174/ -> HTTP 200; /src/main.ts -> HTTP 200

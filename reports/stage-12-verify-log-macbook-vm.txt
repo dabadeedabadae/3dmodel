@@ -1,0 +1,98 @@
+# Mac Linux-VM (arm64) run — revision C, 2026-10-29T11:41:56Z; node v22.23.4, npm 10.9.9; working copy: $HOME/pgv (copy outside the mounted folder, because npm ci cannot delete node_modules/fsevents in the mounted folder without delete permission)
+# npm ci: added 83 packages
+
+> fitcast-photo-garments@0.1.0 verify
+> npm run typecheck && npm run test && npm run check:tshirt && npm run build
+
+
+> fitcast-photo-garments@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> fitcast-photo-garments@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.12 [39m[90m/sessions/rcw-01g5fjjg4rbesvryffs8m5po/pgv[39m
+
+ [32m✓[39m tests/pipeline.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m tests/tshirt.geometry.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 101[2mms[22m[39m
+ [32m✓[39m tests/shape.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 150[2mms[22m[39m
+ [32m✓[39m tests/object3dBodyAdapter.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+ [32m✓[39m tests/maskOps.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/types.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/sides.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m tests/mannequin.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 107[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m46 passed[39m[22m[90m (46)[39m
+[2m   Start at [22m 11:41:18
+[2m   Duration [22m 660ms[2m (transform 418ms, setup 0ms, import 643ms, tests 500ms, environment 0ms)[22m
+
+
+> fitcast-photo-garments@0.1.0 check:tshirt
+> vitest run tests/tshirt.geometry.test.ts && node --import tsx scripts/check-tshirt.ts
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.12 [39m[90m/sessions/rcw-01g5fjjg4rbesvryffs8m5po/pgv[39m
+
+ [32m✓[39m tests/tshirt.geometry.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 11:41:19
+[2m   Duration [22m 231ms[2m (transform 79ms, setup 0ms, import 108ms, tests 63ms, environment 0ms)[22m
+
+tshirt-basic 1.2.0 (tshirt-basic-topo-1): 210 verts / 158 logical / 272 tris
+PASS  finite_values — 0 non-finite values
+PASS  no_degenerate_triangles — 0 degenerate of 272
+PASS  seam_duplicates_coincide — 0 seam duplicates with differing positions
+PASS  manifold_edges — 0 edges with >2 faces
+PASS  consistent_orientation — 0 edges with inconsistent winding
+PASS  boundary_edges_present — 48 boundary edges (openings are expected)
+PASS  boundary_loops — found loops [8,8,16,16], expected [8,8,16,16] (hem, collar, 2 cuffs)
+PASS  openings_match_named_rings — 4/4 named openings found as boundary loops
+PASS  single_connected_surface — 1 connected component(s)
+PASS  no_unused_logical_vertices — 2 logical vertices unused (2 expected: armhole centres row 4 cols 4/12)
+PASS  no_unused_geometry_vertices — 0 geometry vertices unreferenced
+PASS  uv_in_unit_square — 0 uv components outside [0,1]
+PASS  uv_islands_inside_rects — 0 islands leave their reserved rect
+PASS  uv_islands_disjoint_with_gutter — 0 island pairs closer than 0.01 uv
+PASS  uv_not_mirrored — 0 triangles with negative UV orientation
+PASS  uv_no_degenerate_triangles — 0 degenerate UV triangles
+WARN  uv_stretch_spread — linear stretch ratio (uv/3d relative to uvScale) min 0.79 / median 1.00 / max 2.48 (tolerance x1.5)
+PASS  mirror_symmetry_x — 0 vertices without an X-mirrored partner
+PASS  faces_point_outward — all faces point away from their part axis
+PASS  sleeves_do_not_rise — cuff centres at or below armhole centres
+PASS  bounds_sane — bbox y [-0.720, 0.015], x [-0.683, 0.683]
+PASS  fixed_topology_and_uv_across_params — 0/10 random parameter sets changed index/logical/uv buffers
+random parameter sets: 20/20 ok
+report: reports/stage-03-checks.json
+RESULT: PASS
+
+> fitcast-photo-garments@0.1.0 build
+> tsc -p tsconfig.json --noEmit && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 39 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                             0.51 kB │ gzip:     0.31 kB
+dist/garment.html                                           0.62 kB │ gzip:     0.37 kB
+dist/assets/ort-wasm-simd-threaded-DN_1uOdW.mjs            24.74 kB
+dist/assets/worker-4S4aFCEf.js                            424.80 kB
+dist/assets/ort-wasm-simd-threaded-qh98TCA_.wasm       14,848.85 kB │ gzip: 3,836.89 kB
+dist/assets/ort-wasm-simd-threaded.jsep-Dt5UNR3U.wasm  29,520.97 kB │ gzip: 6,983.99 kB
+dist/assets/OrbitControls-BJWYGnrv.css                      1.99 kB │ gzip:     0.85 kB
+dist/assets/garment-DzViu-Lg.css                            2.96 kB │ gzip:     1.08 kB
+dist/assets/index-BvAc9R5Z.js                              29.06 kB │ gzip:    11.21 kB │ map:   141.95 kB
+dist/assets/garment-2l5ZLwcr.js                           494.60 kB │ gzip:   141.30 kB │ map: 1,168.79 kB
+dist/assets/OrbitControls-6f3B4wM1.js                     550.94 kB │ gzip:   139.79 kB │ map: 2,938.20 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.02s
+exit=0

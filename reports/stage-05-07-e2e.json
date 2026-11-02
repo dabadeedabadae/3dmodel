@@ -1,0 +1,1518 @@
+{
+  "generatedAt": "2026-10-29T11:31:31.262Z",
+  "cases": [
+    {
+      "file": "tshirt_fbb96cbf.jpg",
+      "confirm": "tshirt",
+      "photo": "Сбросить",
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.9989135265350342,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "other",
+          "score": 0.0010864610721654346,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "pants",
+          "score": 1.2239938840252762e-8,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "skirt",
+          "score": 1.008244310263251e-8,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        }
+      ],
+      "rawTop": [
+        {
+          "index": 610,
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.9989135265350342
+        },
+        {
+          "index": 841,
+          "label": "sweatshirt",
+          "score": 0.0010764432372525334
+        },
+        {
+          "index": 638,
+          "label": "maillot",
+          "score": 0.000005718287866329774
+        },
+        {
+          "index": 697,
+          "label": "pajama, pyjama, pj's, jammies",
+          "score": 0.0000020691650206572376
+        },
+        {
+          "index": 474,
+          "label": "cardigan",
+          "score": 2.5989240270973823e-7
+        }
+      ],
+      "categoryError": null,
+      "photoWorking": {
+        "width": 400,
+        "height": 533
+      },
+      "verdict": "Подтверждено: Футболка — совпадает с предложением. Шаблон: tshirt-basic.",
+      "segmentation": {
+        "quality": "ok",
+        "warnings": [],
+        "stats": {
+          "threshold": 128,
+          "components": 1,
+          "coverage": 0.47924484052532834,
+          "bounds": {
+            "x0": 23,
+            "y0": 140,
+            "x1": 396,
+            "y1": 515
+          },
+          "touchesBorder": false,
+          "inferenceMs": 2688.6999999997206
+        }
+      },
+      "segmentationError": null,
+      "maskBefore": {
+        "strokes": 0,
+        "bounds": {
+          "x0": 23,
+          "y0": 140,
+          "x1": 396,
+          "y1": 515,
+          "area": 102175
+        },
+        "coverage": 0.47924484052532834
+      },
+      "threshold": {
+        "at128": 0.47924484052532834,
+        "at64": 0.4847842401500938,
+        "backTo128": 0.47924484052532834,
+        "grewAt64": true,
+        "restored": true
+      },
+      "gapsBeforeFill": null,
+      "maskLayers": {
+        "threshold": 128,
+        "model": {
+          "status": "ok",
+          "coverage": 0.47924484052532834,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "post": {
+          "status": "ok",
+          "coverage": 0.47924484052532834,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "user": {
+          "status": "ok",
+          "coverage": 0.47924484052532834,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "postInfo": {
+          "removedComponents": 0,
+          "openHoles": 0,
+          "smallHolesFilled": 0
+        }
+      },
+      "maskAfter": {
+        "strokes": 0,
+        "bounds": {
+          "x0": 23,
+          "y0": 140,
+          "x1": 396,
+          "y1": 515,
+          "area": 102175
+        },
+        "coverage": 0.47924484052532834
+      },
+      "maskVerdict": "Маска подтверждена пользователем (автоматическая, без правок). Эвристический статус подтверждённой маски: ok.",
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "success",
+        "shape_confirmed": "idle",
+        "texture_ready": "idle",
+        "preview_ready": "idle",
+        "saved": "idle"
+      },
+      "record": {
+        "category": {
+          "suggestions": [
+            {
+              "category": "tshirt",
+              "score": 0.9989135265350342,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "other",
+              "score": 0.0010864610721654346,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "pants",
+              "score": 1.2239938840252762e-8,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "skirt",
+              "score": 1.008244310263251e-8,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            }
+          ],
+          "confirmed": "tshirt",
+          "manual": false
+        },
+        "masks": [
+          {
+            "id": "mask_mvtgraik_4",
+            "photoId": "photo_mvtgqjgc_3",
+            "width": 400,
+            "height": 533,
+            "source": "estimated",
+            "confirmed": true,
+            "providerId": "u2netp",
+            "providerVersion": "u2netp.onnx@sha256:309c8469…4ddd8;post-v2"
+          }
+        ],
+        "photos": [
+          {
+            "original": {
+              "width": 400,
+              "height": 533,
+              "mimeType": "image/jpeg",
+              "byteLength": 15689,
+              "fileName": "tshirt_fbb96cbf.jpg"
+            },
+            "normalized": {
+              "width": 400,
+              "height": 533,
+              "toOriginal": [
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "file": "tshirt_5aee6e35.jpg",
+      "confirm": "tshirt",
+      "photo": "Сбросить",
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.9855465888977051,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "other",
+          "score": 0.014240357551562468,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "pants",
+          "score": 0.0001638872199691832,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "skirt",
+          "score": 0.00004918601598546957,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        }
+      ],
+      "rawTop": [
+        {
+          "index": 610,
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.9855465888977051
+        },
+        {
+          "index": 841,
+          "label": "sweatshirt",
+          "score": 0.004156571347266436
+        },
+        {
+          "index": 692,
+          "label": "packet",
+          "score": 0.0015580900944769382
+        },
+        {
+          "index": 797,
+          "label": "sleeping bag",
+          "score": 0.0013785428600385785
+        },
+        {
+          "index": 842,
+          "label": "swimming trunks, bathing trunks",
+          "score": 0.0010161278769373894
+        }
+      ],
+      "categoryError": null,
+      "photoWorking": {
+        "width": 400,
+        "height": 534
+      },
+      "verdict": "Подтверждено: Футболка — совпадает с предложением. Шаблон: tshirt-basic.",
+      "segmentation": {
+        "quality": "ok",
+        "warnings": [],
+        "stats": {
+          "threshold": 128,
+          "components": 1,
+          "coverage": 0.40356741573033705,
+          "bounds": {
+            "x0": 49,
+            "y0": 83,
+            "x1": 381,
+            "y1": 433
+          },
+          "touchesBorder": false,
+          "inferenceMs": 2180.2999999998137
+        }
+      },
+      "segmentationError": null,
+      "maskBefore": {
+        "strokes": 0,
+        "bounds": {
+          "x0": 49,
+          "y0": 83,
+          "x1": 381,
+          "y1": 433,
+          "area": 86202
+        },
+        "coverage": 0.40356741573033705
+      },
+      "thresholdAfterEdits": {
+        "confirmVisible": true,
+        "strokesKept": 1
+      },
+      "undoChangedCoverage": false,
+      "gapsBeforeFill": null,
+      "maskLayers": {
+        "threshold": 128,
+        "model": {
+          "status": "ok",
+          "coverage": 0.40356741573033705,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "post": {
+          "status": "ok",
+          "coverage": 0.40356741573033705,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "user": {
+          "status": "ok",
+          "coverage": 0.40356741573033705,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "postInfo": {
+          "removedComponents": 0,
+          "openHoles": 0,
+          "smallHolesFilled": 0
+        }
+      },
+      "maskAfter": {
+        "strokes": 2,
+        "bounds": {
+          "x0": 49,
+          "y0": 83,
+          "x1": 381,
+          "y1": 433,
+          "area": 86202
+        },
+        "coverage": 0.40356741573033705
+      },
+      "maskVerdict": "Маска подтверждена пользователем (с ручными правками: 2 штрих(ов)). Эвристический статус подтверждённой маски: ok.",
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "success",
+        "shape_confirmed": "idle",
+        "texture_ready": "idle",
+        "preview_ready": "idle",
+        "saved": "idle"
+      },
+      "record": {
+        "category": {
+          "suggestions": [
+            {
+              "category": "tshirt",
+              "score": 0.9855465888977051,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "other",
+              "score": 0.014240357551562468,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "pants",
+              "score": 0.0001638872199691832,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "skirt",
+              "score": 0.00004918601598546957,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            }
+          ],
+          "confirmed": "tshirt",
+          "manual": false
+        },
+        "masks": [
+          {
+            "id": "mask_mvtgs1gi_7",
+            "photoId": "photo_mvtgraxs_6",
+            "width": 400,
+            "height": 534,
+            "source": "user_adjusted",
+            "confirmed": true,
+            "providerId": "u2netp",
+            "providerVersion": "u2netp.onnx@sha256:309c8469…4ddd8;post-v2"
+          }
+        ],
+        "photos": [
+          {
+            "original": {
+              "width": 400,
+              "height": 534,
+              "mimeType": "image/jpeg",
+              "byteLength": 30995,
+              "fileName": "tshirt_5aee6e35.jpg"
+            },
+            "normalized": {
+              "width": 400,
+              "height": 534,
+              "toOriginal": [
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "file": "tshirt_91ebc326.jpg",
+      "confirm": "tshirt",
+      "photo": "Сбросить",
+      "suggestions": [
+        {
+          "category": "tshirt",
+          "score": 0.8964188098907471,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "other",
+          "score": 0.07163342729350533,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "pants",
+          "score": 0.0261988565325737,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "skirt",
+          "score": 0.005748908726673108,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        }
+      ],
+      "rawTop": [
+        {
+          "index": 610,
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.8964188098907471
+        },
+        {
+          "index": 841,
+          "label": "sweatshirt",
+          "score": 0.04082581400871277
+        },
+        {
+          "index": 608,
+          "label": "jean, blue jean, denim",
+          "score": 0.0261988565325737
+        },
+        {
+          "index": 465,
+          "label": "bulletproof vest",
+          "score": 0.010001962073147297
+        },
+        {
+          "index": 655,
+          "label": "miniskirt, mini",
+          "score": 0.005621587857604027
+        }
+      ],
+      "categoryError": null,
+      "photoWorking": {
+        "width": 400,
+        "height": 533
+      },
+      "verdict": "Подтверждено: Футболка — совпадает с предложением. Шаблон: tshirt-basic.",
+      "segmentation": {
+        "quality": "ok",
+        "warnings": [],
+        "stats": {
+          "threshold": 128,
+          "components": 8,
+          "coverage": 0.3725891181988743,
+          "bounds": {
+            "x0": 54,
+            "y0": 152,
+            "x1": 354,
+            "y1": 507
+          },
+          "touchesBorder": false,
+          "inferenceMs": 2033.3999999999069
+        }
+      },
+      "segmentationError": null,
+      "maskBefore": {
+        "strokes": 0,
+        "bounds": {
+          "x0": 54,
+          "y0": 152,
+          "x1": 354,
+          "y1": 507,
+          "area": 79436
+        },
+        "coverage": 0.3725891181988743
+      },
+      "thresholdAfterEdits": {
+        "confirmVisible": true,
+        "strokesKept": 3
+      },
+      "undoChangedCoverage": true,
+      "gapsBeforeFill": "⚠ внутренние разрывы: 2 (0.4 % площади вещи) — настоящий вырез оставьте, остальное восстановите",
+      "gapsAfterFill": "⚠ внутренние разрывы: 1 (0.4 % площади вещи) — настоящий вырез оставьте, остальное восстановите",
+      "maskLayers": {
+        "threshold": 128,
+        "model": {
+          "status": "suspicious",
+          "coverage": 0.3724718574108818,
+          "touchesBorder": false,
+          "components": 8,
+          "openHoles": 7,
+          "openHoleArea": 52,
+          "warnings": [
+            "8 отдельных фрагментов",
+            "внутренние разрывы: 7 (0.1 % площади вещи) — настоящий вырез оставьте, остальное восстановите"
+          ]
+        },
+        "post": {
+          "status": "ok",
+          "coverage": 0.3725891181988743,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "user": {
+          "status": "suspicious",
+          "coverage": 0.41067073170731705,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 1,
+          "openHoleArea": 379,
+          "warnings": [
+            "внутренние разрывы: 1 (0.4 % площади вещи) — настоящий вырез оставьте, остальное восстановите"
+          ]
+        },
+        "postInfo": {
+          "removedComponents": 7,
+          "openHoles": 0,
+          "smallHolesFilled": 7
+        }
+      },
+      "maskAfter": {
+        "strokes": 5,
+        "bounds": {
+          "x0": 26,
+          "y0": 152,
+          "x1": 374,
+          "y1": 507,
+          "area": 87555
+        },
+        "coverage": 0.41067073170731705
+      },
+      "maskVerdict": "Маска подтверждена пользователем (с ручными правками: 5 штрих(ов)). Эвристический статус подтверждённой маски: suspicious — подтверждение не делает её «чистой»; следующие этапы получат её как есть.",
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "success",
+        "shape_confirmed": "idle",
+        "texture_ready": "idle",
+        "preview_ready": "idle",
+        "saved": "idle"
+      },
+      "record": {
+        "category": {
+          "suggestions": [
+            {
+              "category": "tshirt",
+              "score": 0.8964188098907471,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "other",
+              "score": 0.07163342729350533,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "pants",
+              "score": 0.0261988565325737,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "skirt",
+              "score": 0.005748908726673108,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            }
+          ],
+          "confirmed": "tshirt",
+          "manual": false
+        },
+        "masks": [
+          {
+            "id": "mask_mvtgs5li_a",
+            "photoId": "photo_mvtgs1wn_9",
+            "width": 400,
+            "height": 533,
+            "source": "user_adjusted",
+            "confirmed": true,
+            "providerId": "u2netp",
+            "providerVersion": "u2netp.onnx@sha256:309c8469…4ddd8;post-v2"
+          }
+        ],
+        "photos": [
+          {
+            "original": {
+              "width": 400,
+              "height": 533,
+              "mimeType": "image/jpeg",
+              "byteLength": 25520,
+              "fileName": "tshirt_91ebc326.jpg"
+            },
+            "normalized": {
+              "width": 400,
+              "height": 533,
+              "toOriginal": [
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "file": "tshirt_8f0cd82c.jpg",
+      "confirm": "tshirt",
+      "photo": "Сбросить",
+      "suggestions": [
+        {
+          "category": "pants",
+          "score": 0.5315956473350525,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "other",
+          "score": 0.44721014697974015,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "skirt",
+          "score": 0.019976576091721654,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "tshirt",
+          "score": 0.0012176313903182745,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        }
+      ],
+      "rawTop": [
+        {
+          "index": 608,
+          "label": "jean, blue jean, denim",
+          "score": 0.5315956473350525
+        },
+        {
+          "index": 464,
+          "label": "buckle",
+          "score": 0.05439506471157074
+        },
+        {
+          "index": 529,
+          "label": "diaper, nappy, napkin",
+          "score": 0.040111083537340164
+        },
+        {
+          "index": 911,
+          "label": "wool, woolen, woollen",
+          "score": 0.0361342616379261
+        },
+        {
+          "index": 636,
+          "label": "mailbag, postbag",
+          "score": 0.028748121112585068
+        }
+      ],
+      "categoryError": null,
+      "photoWorking": {
+        "width": 400,
+        "height": 471
+      },
+      "verdict": "Подтверждено: Футболка — исправлена пользователем (отличается от предложения). Шаблон: tshirt-basic.",
+      "segmentation": {
+        "quality": "ok",
+        "warnings": [],
+        "stats": {
+          "threshold": 128,
+          "components": 2,
+          "coverage": 0.5142197452229299,
+          "bounds": {
+            "x0": 10,
+            "y0": 88,
+            "x1": 399,
+            "y1": 408
+          },
+          "touchesBorder": false,
+          "inferenceMs": 1772.7999999998137
+        }
+      },
+      "segmentationError": null,
+      "maskBefore": {
+        "strokes": 0,
+        "bounds": {
+          "x0": 10,
+          "y0": 88,
+          "x1": 399,
+          "y1": 408,
+          "area": 96879
+        },
+        "coverage": 0.5142197452229299
+      },
+      "threshold": {
+        "at128": 0.5142197452229299,
+        "at64": 0.5230891719745223,
+        "backTo128": 0.5142197452229299,
+        "grewAt64": true,
+        "restored": true
+      },
+      "gapsBeforeFill": null,
+      "maskLayers": {
+        "threshold": 128,
+        "model": {
+          "status": "suspicious",
+          "coverage": 0.5142250530785563,
+          "touchesBorder": false,
+          "components": 2,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": [
+            "2 отдельных фрагментов"
+          ]
+        },
+        "post": {
+          "status": "ok",
+          "coverage": 0.5142197452229299,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "user": {
+          "status": "ok",
+          "coverage": 0.5142197452229299,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "postInfo": {
+          "removedComponents": 1,
+          "openHoles": 0,
+          "smallHolesFilled": 0
+        }
+      },
+      "maskAfter": {
+        "strokes": 0,
+        "bounds": {
+          "x0": 10,
+          "y0": 88,
+          "x1": 399,
+          "y1": 408,
+          "area": 96879
+        },
+        "coverage": 0.5142197452229299
+      },
+      "maskVerdict": "Маска подтверждена пользователем (автоматическая, без правок). Эвристический статус подтверждённой маски: ok.",
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "success",
+        "shape_confirmed": "idle",
+        "texture_ready": "idle",
+        "preview_ready": "idle",
+        "saved": "idle"
+      },
+      "record": {
+        "category": {
+          "suggestions": [
+            {
+              "category": "pants",
+              "score": 0.5315956473350525,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "other",
+              "score": 0.44721014697974015,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "skirt",
+              "score": 0.019976576091721654,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "tshirt",
+              "score": 0.0012176313903182745,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            }
+          ],
+          "confirmed": "tshirt",
+          "manual": false
+        },
+        "masks": [
+          {
+            "id": "mask_mvtgswjd_d",
+            "photoId": "photo_mvtgs64d_c",
+            "width": 400,
+            "height": 471,
+            "source": "estimated",
+            "confirmed": true,
+            "providerId": "u2netp",
+            "providerVersion": "u2netp.onnx@sha256:309c8469…4ddd8;post-v2"
+          }
+        ],
+        "photos": [
+          {
+            "original": {
+              "width": 400,
+              "height": 471,
+              "mimeType": "image/jpeg",
+              "byteLength": 37520,
+              "fileName": "tshirt_8f0cd82c.jpg"
+            },
+            "normalized": {
+              "width": 400,
+              "height": 471,
+              "toOriginal": [
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "file": "tshirt_2df565b9.jpg",
+      "confirm": "tshirt",
+      "photo": "Сбросить",
+      "suggestions": [
+        {
+          "category": "other",
+          "score": 0.8032553695368669,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "skirt",
+          "score": 0.10767100006341934,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "tshirt",
+          "score": 0.08734221756458282,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "pants",
+          "score": 0.001731402357108891,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        }
+      ],
+      "rawTop": [
+        {
+          "index": 775,
+          "label": "sarong",
+          "score": 0.1105969175696373
+        },
+        {
+          "index": 794,
+          "label": "shower curtain",
+          "score": 0.10741586983203888
+        },
+        {
+          "index": 842,
+          "label": "swimming trunks, bathing trunks",
+          "score": 0.10400781780481339
+        },
+        {
+          "index": 411,
+          "label": "apron",
+          "score": 0.09693549573421478
+        },
+        {
+          "index": 610,
+          "label": "jersey, T-shirt, tee shirt",
+          "score": 0.08734221756458282
+        }
+      ],
+      "categoryError": null,
+      "photoWorking": {
+        "width": 400,
+        "height": 533
+      },
+      "verdict": "Подтверждено: Футболка — исправлена пользователем (отличается от предложения). Шаблон: tshirt-basic.",
+      "segmentation": {
+        "quality": "ok",
+        "warnings": [],
+        "stats": {
+          "threshold": 128,
+          "components": 1,
+          "coverage": 0.48658067542213884,
+          "bounds": {
+            "x0": 6,
+            "y0": 121,
+            "x1": 347,
+            "y1": 505
+          },
+          "touchesBorder": false,
+          "inferenceMs": 2034.0999999996275
+        }
+      },
+      "segmentationError": null,
+      "maskBefore": {
+        "strokes": 0,
+        "bounds": {
+          "x0": 6,
+          "y0": 121,
+          "x1": 347,
+          "y1": 505,
+          "area": 103739
+        },
+        "coverage": 0.48658067542213884
+      },
+      "threshold": {
+        "at128": 0.48658067542213884,
+        "at64": 0.49442776735459665,
+        "backTo128": 0.48658067542213884,
+        "grewAt64": true,
+        "restored": true
+      },
+      "gapsBeforeFill": null,
+      "maskLayers": {
+        "threshold": 128,
+        "model": {
+          "status": "ok",
+          "coverage": 0.48658067542213884,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "post": {
+          "status": "ok",
+          "coverage": 0.48658067542213884,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "user": {
+          "status": "ok",
+          "coverage": 0.48658067542213884,
+          "touchesBorder": false,
+          "components": 1,
+          "openHoles": 0,
+          "openHoleArea": 0,
+          "warnings": []
+        },
+        "postInfo": {
+          "removedComponents": 0,
+          "openHoles": 0,
+          "smallHolesFilled": 0
+        }
+      },
+      "maskAfter": {
+        "strokes": 0,
+        "bounds": {
+          "x0": 6,
+          "y0": 121,
+          "x1": 347,
+          "y1": 505,
+          "area": 103739
+        },
+        "coverage": 0.48658067542213884
+      },
+      "maskVerdict": "Маска подтверждена пользователем (автоматическая, без правок). Эвристический статус подтверждённой маски: ok.",
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "success",
+        "shape_confirmed": "idle",
+        "texture_ready": "idle",
+        "preview_ready": "idle",
+        "saved": "idle"
+      },
+      "record": {
+        "category": {
+          "suggestions": [
+            {
+              "category": "other",
+              "score": 0.8032553695368669,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "skirt",
+              "score": 0.10767100006341934,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "tshirt",
+              "score": 0.08734221756458282,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            },
+            {
+              "category": "pants",
+              "score": 0.001731402357108891,
+              "providerId": "imagenet-mobilenetv2-12",
+              "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+            }
+          ],
+          "confirmed": "tshirt",
+          "manual": false
+        },
+        "masks": [
+          {
+            "id": "mask_mvtgtnj4_g",
+            "photoId": "photo_mvtgswyn_f",
+            "width": 400,
+            "height": 533,
+            "source": "estimated",
+            "confirmed": true,
+            "providerId": "u2netp",
+            "providerVersion": "u2netp.onnx@sha256:309c8469…4ddd8;post-v2"
+          }
+        ],
+        "photos": [
+          {
+            "original": {
+              "width": 400,
+              "height": 533,
+              "mimeType": "image/jpeg",
+              "byteLength": 24848,
+              "fileName": "tshirt_2df565b9.jpg"
+            },
+            "normalized": {
+              "width": 400,
+              "height": 533,
+              "toOriginal": [
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "file": "pants_4cc4e673.jpg",
+      "confirm": "pants",
+      "photo": "Сбросить",
+      "suggestions": [
+        {
+          "category": "pants",
+          "score": 0.9994896650314331,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "other",
+          "score": 0.0004971577836742503,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "skirt",
+          "score": 0.000007834275578488814,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "tshirt",
+          "score": 0.000005369378868635977,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        }
+      ],
+      "rawTop": [
+        {
+          "index": 608,
+          "label": "jean, blue jean, denim",
+          "score": 0.9994896650314331
+        },
+        {
+          "index": 697,
+          "label": "pajama, pyjama, pj's, jammies",
+          "score": 0.00014295565779320896
+        },
+        {
+          "index": 834,
+          "label": "suit, suit of clothes",
+          "score": 0.00005649512604577467
+        },
+        {
+          "index": 885,
+          "label": "velvet",
+          "score": 0.000039169175579445437
+        },
+        {
+          "index": 474,
+          "label": "cardigan",
+          "score": 0.00003235399708501063
+        }
+      ],
+      "categoryError": null,
+      "photoWorking": {
+        "width": 400,
+        "height": 534
+      },
+      "verdict": "Подтверждено: Брюки — совпадает с предложением. ЭТА КАТЕГОРИЯ НЕ ПОДДЕРЖИВАЕТСЯ: в текущей версии 3D-шаблон есть только у футболки. Обработка остановлена, вещь не будет направлена на шаблон футболки.",
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "idle",
+        "shape_confirmed": "idle",
+        "texture_ready": "idle",
+        "preview_ready": "idle",
+        "saved": "idle"
+      }
+    },
+    {
+      "file": "skirt_26921ddb.jpg",
+      "confirm": "skirt",
+      "photo": "Сбросить",
+      "suggestions": [
+        {
+          "category": "skirt",
+          "score": 0.9827744271606207,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "other",
+          "score": 0.017218446580153604,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "tshirt",
+          "score": 0.0000066944708123628516,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "pants",
+          "score": 4.449966297670471e-7,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        }
+      ],
+      "rawTop": [
+        {
+          "index": 601,
+          "label": "hoopskirt, crinoline",
+          "score": 0.8195450901985168
+        },
+        {
+          "index": 689,
+          "label": "overskirt",
+          "score": 0.15373264253139496
+        },
+        {
+          "index": 578,
+          "label": "gown",
+          "score": 0.01319459080696106
+        },
+        {
+          "index": 655,
+          "label": "miniskirt, mini",
+          "score": 0.009496694430708885
+        },
+        {
+          "index": 431,
+          "label": "bassinet",
+          "score": 0.0017572430660948157
+        }
+      ],
+      "categoryError": null,
+      "photoWorking": {
+        "width": 717,
+        "height": 400
+      },
+      "verdict": "Подтверждено: Юбка — совпадает с предложением. ЭТА КАТЕГОРИЯ НЕ ПОДДЕРЖИВАЕТСЯ: в текущей версии 3D-шаблон есть только у футболки. Обработка остановлена, вещь не будет направлена на шаблон футболки.",
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "idle",
+        "shape_confirmed": "idle",
+        "texture_ready": "idle",
+        "preview_ready": "idle",
+        "saved": "idle"
+      }
+    },
+    {
+      "file": "shoes_bf583ce5.jpg",
+      "confirm": "other",
+      "photo": "Сбросить",
+      "suggestions": [
+        {
+          "category": "other",
+          "score": 0.9992995496511635,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "pants",
+          "score": 0.000547290313988924,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "skirt",
+          "score": 0.00015122412969503785,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        },
+        {
+          "category": "tshirt",
+          "score": 0.0000019343531221238663,
+          "providerId": "imagenet-mobilenetv2-12",
+          "providerVersion": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1"
+        }
+      ],
+      "rawTop": [
+        {
+          "index": 774,
+          "label": "sandal",
+          "score": 0.4458010196685791
+        },
+        {
+          "index": 630,
+          "label": "Loafer",
+          "score": 0.437370240688324
+        },
+        {
+          "index": 502,
+          "label": "clog, geta, patten, sabot",
+          "score": 0.039570748805999756
+        },
+        {
+          "index": 770,
+          "label": "running shoe",
+          "score": 0.026749232783913612
+        },
+        {
+          "index": 576,
+          "label": "gondola",
+          "score": 0.01629803143441677
+        }
+      ],
+      "categoryError": null,
+      "photoWorking": {
+        "width": 400,
+        "height": 534
+      },
+      "verdict": "Подтверждено: Другое / не уверен — совпадает с предложением. ЭТА КАТЕГОРИЯ НЕ ПОДДЕРЖИВАЕТСЯ: в текущей версии 3D-шаблон есть только у футболки. Обработка остановлена, вещь не будет направлена на шаблон футболки.",
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "success",
+        "mask_confirmed": "idle",
+        "shape_confirmed": "idle",
+        "texture_ready": "idle",
+        "preview_ready": "idle",
+        "saved": "idle"
+      }
+    }
+  ],
+  "errors": [],
+  "extra": {
+    "providers": {
+      "category": {
+        "id": "imagenet-mobilenetv2-12",
+        "version": "mobilenetv2-12.onnx@sha256:c0c3f76d…32ad5;map-v1",
+        "description": "MobileNetV2-12 (ONNX model zoo, ImageNet-1k, Apache-2.0) run locally with onnxruntime-web; ImageNet classes jersey/T-shirt, jean, *skirt mapped to tshirt/pants/skirt, everything else = other. Scores are softmax mass per category (uncalibrated)."
+      },
+      "segmentation": {
+        "id": "u2netp",
+        "version": "u2netp.onnx@sha256:309c8469…4ddd8;post-v2",
+        "description": "U²-Netp salient object segmentation (4.6 MB, Apache-2.0), 320×320 input, run locally with onnxruntime-web; post-processing (re-runnable without inference): threshold, largest connected component, only tiny holes (<=0.5 % of the garment) filled; larger holes and removed fragments are reported and restorable."
+      },
+      "loadMs": 933.1000000000931,
+      "backend": "wasm"
+    },
+    "special": [
+      {
+        "file": "/home/claude/photo-garments/fixtures/special/big_upright_3000x4000.jpg",
+        "storedWidth": 3000,
+        "storedHeight": 4000,
+        "exifOrientation": null,
+        "original": {
+          "width": 3000,
+          "height": 4000,
+          "mimeType": "image/jpeg",
+          "byteLength": 329243,
+          "fileName": "big_upright_3000x4000.jpg"
+        },
+        "working": {
+          "width": 768,
+          "height": 1024,
+          "scale": 3.90625
+        },
+        "maeVsNodeReference": 0.25,
+        "orientationOk": true
+      },
+      {
+        "file": "/home/claude/photo-garments/fixtures/special/big_exif6_rotated.jpg",
+        "storedWidth": 4000,
+        "storedHeight": 3000,
+        "exifOrientation": 6,
+        "original": {
+          "width": 3000,
+          "height": 4000,
+          "mimeType": "image/jpeg",
+          "byteLength": 350039,
+          "fileName": "big_exif6_rotated.jpg"
+        },
+        "working": {
+          "width": 768,
+          "height": 1024,
+          "scale": 3.90625
+        },
+        "maeVsNodeReference": 0.23,
+        "orientationOk": true
+      },
+      {
+        "file": "/home/claude/photo-garments/fixtures/special/big_exif8_rotated.jpg",
+        "storedWidth": 4000,
+        "storedHeight": 3000,
+        "exifOrientation": 8,
+        "original": {
+          "width": 3000,
+          "height": 4000,
+          "mimeType": "image/jpeg",
+          "byteLength": 348771,
+          "fileName": "big_exif8_rotated.jpg"
+        },
+        "working": {
+          "width": 768,
+          "height": 1024,
+          "scale": 3.90625
+        },
+        "maeVsNodeReference": 0.23,
+        "orientationOk": true
+      },
+      {
+        "file": "/home/claude/photo-garments/fixtures/special/big_exif3_rotated.jpg",
+        "storedWidth": 3000,
+        "storedHeight": 4000,
+        "exifOrientation": 3,
+        "original": {
+          "width": 3000,
+          "height": 4000,
+          "mimeType": "image/jpeg",
+          "byteLength": 359269,
+          "fileName": "big_exif3_rotated.jpg"
+        },
+        "working": {
+          "width": 768,
+          "height": 1024,
+          "scale": 3.90625
+        },
+        "maeVsNodeReference": 0.22,
+        "orientationOk": true
+      },
+      {
+        "file": "/home/claude/photo-garments/fixtures/special/small.png",
+        "storedWidth": 400,
+        "storedHeight": 533,
+        "exifOrientation": null,
+        "original": {
+          "width": 400,
+          "height": 533,
+          "mimeType": "image/png",
+          "byteLength": 259647,
+          "fileName": "small.png"
+        },
+        "working": {
+          "width": 400,
+          "height": 533,
+          "scale": 1
+        },
+        "maeVsNodeReference": 0,
+        "orientationOk": true
+      },
+      {
+        "file": "/home/claude/photo-garments/fixtures/special/small.webp",
+        "storedWidth": 400,
+        "storedHeight": 533,
+        "exifOrientation": null,
+        "original": {
+          "width": 400,
+          "height": 533,
+          "mimeType": "image/webp",
+          "byteLength": 10638,
+          "fileName": "small.webp"
+        },
+        "working": {
+          "width": 400,
+          "height": 533,
+          "scale": 1
+        },
+        "maeVsNodeReference": 0,
+        "orientationOk": true
+      }
+    ],
+    "unsupportedTypeMessage": "Ошибка: Неподдерживаемый тип \"text/plain\". Нужен JPEG, PNG или WebP.",
+    "heicMessage": "Ошибка: HEIC/HEIF этот браузер не декодирует. Экспортируйте фото в JPEG (на iPhone: Настройки → Камера → Форматы → «Наиболее совместимые») и загрузите снова.",
+    "replaceMidway": {
+      "stages": {
+        "photo_loaded": "success",
+        "category_confirmed": "idle",
+        "mask_confirmed": "idle",
+        "shape_confirmed": "idle",
+        "texture_ready": "idle",
+        "preview_ready": "idle",
+        "saved": "idle"
+      },
+      "photoFile": "tshirt_e330e5fa.jpg",
+      "categoryConfirmed": null,
+      "hasSegmentation": false
+    }
+  }
+}
