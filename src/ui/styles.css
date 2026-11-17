@@ -26,3 +26,9 @@ html, body { margin: 0; height: 100%; background: #f4f5f7; color: #1b1e26; }
 #pg-error { position: fixed; top: 0; left: 0; right: 0; z-index: 10; padding: 8px 12px; background: #b3261e; color: #fff; font-size: 13px; }
 .pg-nowebgl { padding: 32px; max-width: 520px; }
 .pg-clamp { margin-top: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: #8a5a00; }
+/* body page */
+.pg-slider .pg-slider-val { font-variant-numeric: tabular-nums; text-align: right; color: #3b4150; font-size: 11px; }
+.pg-slider .pg-slider-name { font-size: 12px; }
+.pg-sliders .pg-slider { grid-template-columns: 1fr 110px 64px; }
+.pg-report.pg-report-fail { color: #b3261e; }
+.pg-report { white-space: pre-wrap; }

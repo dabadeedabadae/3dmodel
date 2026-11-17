@@ -111,13 +111,13 @@ const BACK_COLS = [4, 5, 6, 7, 8, 9, 10, 11, 12];
 const COLLAR_COLS = [8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7, 8];
 /** Torso quads removed for the armholes: [row, columnSpanStart]. Span j covers columns j..j+1. */
 const REMOVED_SPANS = new Set(['3:3', '3:4', '4:3', '4:4', '3:11', '3:12', '4:11', '4:12']);
-const SLEEVE_RINGS = 3; // ring 0 = armhole, ring 2 = cuff
-const SLEEVE_N = 8;
+export const SLEEVE_RINGS = 3; // ring 0 = armhole, ring 2 = cuff
+export const SLEEVE_N = 8;
 
 /** logical id for a torso/yoke/collar grid vertex */
-const gridId = (row: number, col: number) => row * M + ((col % M) + M) % M;
+export const gridId = (row: number, col: number) => row * M + ((col % M) + M) % M;
 /** logical id for a sleeve ring vertex (rings 1..2 only; ring 0 reuses grid ids) */
-const sleeveId = (side: WearerSide, ring: number, m: number) =>
+export const sleeveId = (side: WearerSide, ring: number, m: number) =>
   (COLLAR_ROW + 1) * M + (side === 'left' ? 0 : (SLEEVE_RINGS - 1) * SLEEVE_N) + (ring - 1) * SLEEVE_N + m;
 const LOGICAL_COUNT = (COLLAR_ROW + 1) * M + 2 * (SLEEVE_RINGS - 1) * SLEEVE_N;
 

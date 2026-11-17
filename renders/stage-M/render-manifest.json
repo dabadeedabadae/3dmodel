@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-11-02T15:17:03.848Z",
+  "files": [
+    "renders/stage-M/male-m-front.png",
+    "renders/stage-M/male-m-back.png",
+    "renders/stage-M/male-m-left.png",
+    "renders/stage-M/male-m-threequarter.png",
+    "renders/stage-M/male-m-top.png",
+    "renders/stage-M/male-m-front-wire.png",
+    "renders/stage-M/male-m-threequarter-landmarks.png",
+    "renders/stage-M/female-m-front.png",
+    "renders/stage-M/female-m-back.png",
+    "renders/stage-M/female-m-left.png",
+    "renders/stage-M/female-m-threequarter.png",
+    "renders/stage-M/female-m-top.png",
+    "renders/stage-M/female-m-front-wire.png",
+    "renders/stage-M/female-m-threequarter-landmarks.png",
+    "renders/stage-M/male-s-front.png",
+    "renders/stage-M/male-l-front.png",
+    "renders/stage-M/female-s-front.png",
+    "renders/stage-M/female-l-front.png",
+    "renders/stage-M/extreme-wide-chest-front.png",
+    "renders/stage-M/extreme-tall-thin-front.png",
+    "renders/stage-M/page-female-l-panel.png"
+  ],
+  "errors": [],
+  "reports": {
+    "female-l": {
+      "ok": true,
+      "results": [
+        {
+          "name": "finite_values",
+          "pass": true,
+          "level": "fail",
+          "detail": "0 non-finite values"
+        },
+        {
+          "name": "no_degenerate_triangles",
+          "pass": true,
+          "level": "fail",
+          "detail": "0 degenerate of 732"
+        },
+        {
+          "name": "closed_manifold_parts",
+          "pass": true,
+          "level": "fail",
+          "detail": "0 open edges, 0 edges with >2 faces"
+        },
+        {
+          "name": "consistent_orientation",
+          "pass": true,
+          "level": "fail",
+          "detail": "0 inconsistent directed edges"
+        },
+        {
+          "name": "faces_point_outward",
+          "pass": true,
+          "level": "fail",
+          "detail": "all parts have positive signed volume"
+        },
+        {
+          "name": "left_right_symmetry",
+          "pass": true,
+          "level": "fail",
+          "detail": "0 vertices without a mirror twin"
+        },
+        {
+          "name": "feet_on_floor",
+          "pass": true,
+          "level": "fail",
+          "detail": "min y = 0.0014"
+        },
+        {
+          "name": "head_top_at_height",
+          "pass": true,
+          "level": "fail",
+          "detail": "max y = 1.680, height = 1.68"
+        },
+        {
+          "name": "limbs_clear_of_torso_and_each_other",
+          "pass": true,
+          "level": "fail",
+          "detail": "ok"
+        },
+        {
+          "name": "arms_do_not_cut_into_torso",
+          "pass": true,
+          "level": "fail",
+          "detail": "0 torso vertices deeper than 1 cm inside arm capsules (chest..waist rings)"
+        }
+      ],
+      "summary": {
+        "vertices": 380,
+        "logicalVertices": 380,
+        "triangles": 732,
+        "boundaryLoops": []
+      }
+    }
+  },
+  "clampText": "Анатомические ограничения применены:\nШирина плеч (акромион–акромион): 39.0 см → 40.0 см — плечи не уже грудной клетки\nОтведение рук (A-поза): 21° → 28° — рука не входит в торс на уровне «chest» (отведение увеличено)"
+}

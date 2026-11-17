@@ -12,7 +12,7 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     target: 'es2022',
-    rollupOptions: { input: { index: path.resolve(here, 'index.html'), garment: path.resolve(here, 'garment.html') } },
+    rollupOptions: { input: { index: path.resolve(here, 'index.html'), garment: path.resolve(here, 'garment.html'), body: path.resolve(here, 'body.html'), importedBody: path.resolve(here, 'imported-body/viewer/index.html') } },
   },
   optimizeDeps: { exclude: ['onnxruntime-web'] },
   worker: { format: 'es' },

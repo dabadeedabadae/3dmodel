@@ -1,0 +1,714 @@
+{
+  "generatedAt": "2026-11-17T23:01:00.080Z",
+  "asset": {
+    "id": "imported-male-lowpoly",
+    "version": "imported-1",
+    "topologyVersion": "imported-topo-1"
+  },
+  "results": [
+    {
+      "label": "base",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 72.1,
+        "hip_cm": 86.2,
+        "torso_width_cm": 37.1,
+        "bicep_cm": 35.8,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1854065957241136,
+          "bicepX": 0.28451738498223006
+        }
+      }
+    },
+    {
+      "label": "chest=-1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 81.7,
+        "waist_cm": 71.5,
+        "hip_cm": 86.2,
+        "torso_width_cm": 28,
+        "bicep_cm": 36.3,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.14010717488157917,
+          "bicepX": 0.2464658714745011
+        }
+      }
+    },
+    {
+      "label": "chest=-0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 93.1,
+        "waist_cm": 71.8,
+        "hip_cm": 86.2,
+        "torso_width_cm": 32.3,
+        "bicep_cm": 35.5,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1615540417985064,
+          "bicepX": 0.26448123968472
+        }
+      }
+    },
+    {
+      "label": "chest=0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 119.5,
+        "waist_cm": 72.4,
+        "hip_cm": 86.2,
+        "torso_width_cm": 41.9,
+        "bicep_cm": 35.3,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.2092591496497208,
+          "bicepX": 0.3045535302797401
+        }
+      }
+    },
+    {
+      "label": "chest=1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 133.9,
+        "waist_cm": 72.7,
+        "hip_cm": 86.2,
+        "torso_width_cm": 46.6,
+        "bicep_cm": 33.9,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.2331117134436065,
+          "bicepX": 0.3245896838666041
+        }
+      }
+    },
+    {
+      "label": "waist=-1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 102.7,
+        "waist_cm": 38.4,
+        "hip_cm": 83.5,
+        "torso_width_cm": 36.7,
+        "bicep_cm": 35.8,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1835895388603216,
+          "bicepX": 0.28299105721664475
+        }
+      }
+    },
+    {
+      "label": "waist=-0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 104.2,
+        "waist_cm": 55.1,
+        "hip_cm": 84.8,
+        "torso_width_cm": 36.9,
+        "bicep_cm": 35.8,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.18449806477577627,
+          "bicepX": 0.2837542189856267
+        }
+      }
+    },
+    {
+      "label": "waist=0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 107.5,
+        "waist_cm": 89.2,
+        "hip_cm": 87.8,
+        "torso_width_cm": 37.3,
+        "bicep_cm": 35.8,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.18631512667245098,
+          "bicepX": 0.2852805509788334
+        }
+      }
+    },
+    {
+      "label": "waist=1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 109.3,
+        "waist_cm": 106.4,
+        "hip_cm": 89.4,
+        "torso_width_cm": 37.4,
+        "bicep_cm": 35.8,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.18722365258790563,
+          "bicepX": 0.28604371274781537
+        }
+      }
+    },
+    {
+      "label": "hip=-1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 71.5,
+        "hip_cm": 65.1,
+        "torso_width_cm": 37.1,
+        "bicep_cm": 35.8,
+        "thigh_cm": 51,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1854065957241136,
+          "bicepX": 0.28451738498223006
+        }
+      }
+    },
+    {
+      "label": "hip=-0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 71.8,
+        "hip_cm": 75.1,
+        "torso_width_cm": 37.1,
+        "bicep_cm": 35.8,
+        "thigh_cm": 51.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1854065957241136,
+          "bicepX": 0.28451738498223006
+        }
+      }
+    },
+    {
+      "label": "hip=0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 72.4,
+        "hip_cm": 98.2,
+        "torso_width_cm": 37.1,
+        "bicep_cm": 35.8,
+        "thigh_cm": 54.1,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1854065957241136,
+          "bicepX": 0.28451738498223006
+        }
+      }
+    },
+    {
+      "label": "hip=1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 72.7,
+        "hip_cm": 110.5,
+        "torso_width_cm": 37.1,
+        "bicep_cm": 35.8,
+        "thigh_cm": 55.4,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1854065957241136,
+          "bicepX": 0.28451738498223006
+        }
+      }
+    },
+    {
+      "label": "shoulders=-1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 103.6,
+        "waist_cm": 72.1,
+        "hip_cm": 86.2,
+        "torso_width_cm": 35.2,
+        "bicep_cm": 35.5,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.17594282781390502,
+          "bicepX": 0.27305229984182966
+        }
+      }
+    },
+    {
+      "label": "shoulders=-0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 104.6,
+        "waist_cm": 72.1,
+        "hip_cm": 86.2,
+        "torso_width_cm": 36.1,
+        "bicep_cm": 35.7,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.18067471670314858,
+          "bicepX": 0.2787848513250784
+        }
+      }
+    },
+    {
+      "label": "shoulders=0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 107.1,
+        "waist_cm": 72.1,
+        "hip_cm": 86.2,
+        "torso_width_cm": 38,
+        "bicep_cm": 35.8,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.19013847474507864,
+          "bicepX": 0.29024991863938165
+        }
+      }
+    },
+    {
+      "label": "shoulders=1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 108.7,
+        "waist_cm": 72.1,
+        "hip_cm": 86.2,
+        "torso_width_cm": 39,
+        "bicep_cm": 35.9,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1948703636343222,
+          "bicepX": 0.29598247012263046
+        }
+      }
+    },
+    {
+      "label": "arms=-1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.7,
+        "waist_cm": 72.1,
+        "hip_cm": 86.2,
+        "torso_width_cm": 37.1,
+        "bicep_cm": 27.2,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.18525234712034172,
+          "bicepX": 0.28438781615506165
+        }
+      }
+    },
+    {
+      "label": "arms=-0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 72.1,
+        "hip_cm": 86.2,
+        "torso_width_cm": 37.1,
+        "bicep_cm": 31.5,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.18532908906945803,
+          "bicepX": 0.2844522793923194
+        }
+      }
+    },
+    {
+      "label": "arms=0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 72.1,
+        "hip_cm": 86.2,
+        "torso_width_cm": 34.4,
+        "bicep_cm": 39.6,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1718265287083592,
+          "bicepX": 0.2731101286889963
+        }
+      }
+    },
+    {
+      "label": "arms=1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 72.1,
+        "hip_cm": 86.2,
+        "torso_width_cm": 34.4,
+        "bicep_cm": 43.5,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.17184626845259898,
+          "bicepX": 0.2731267100741578
+        }
+      }
+    },
+    {
+      "label": "thighs=-1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 72.1,
+        "hip_cm": 85.5,
+        "torso_width_cm": 37.1,
+        "bicep_cm": 35.8,
+        "thigh_cm": 39.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1854065957241136,
+          "bicepX": 0.28451738498223006
+        }
+      }
+    },
+    {
+      "label": "thighs=-0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 72.1,
+        "hip_cm": 85.7,
+        "torso_width_cm": 37.1,
+        "bicep_cm": 35.8,
+        "thigh_cm": 46.3,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1854065957241136,
+          "bicepX": 0.28451738498223006
+        }
+      }
+    },
+    {
+      "label": "thighs=0.5",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 72.1,
+        "hip_cm": 87,
+        "torso_width_cm": 37.1,
+        "bicep_cm": 35.8,
+        "thigh_cm": 59.7,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1854065957241136,
+          "bicepX": 0.28451738498223006
+        }
+      }
+    },
+    {
+      "label": "thighs=1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 105.8,
+        "waist_cm": 72.1,
+        "hip_cm": 88.1,
+        "torso_width_cm": 37.1,
+        "bicep_cm": 35.8,
+        "thigh_cm": 66.6,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.1854065957241136,
+          "bicepX": 0.28451738498223006
+        }
+      }
+    },
+    {
+      "label": "all+1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 138.6,
+        "waist_cm": 107.5,
+        "hip_cm": 113.8,
+        "torso_width_cm": 45.2,
+        "bicep_cm": 44.9,
+        "thigh_cm": 68.6,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.22585856371386345,
+          "bicepX": 0.3220125581894451
+        }
+      }
+    },
+    {
+      "label": "all-1",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 74.1,
+        "waist_cm": 36.8,
+        "hip_cm": 58.8,
+        "torso_width_cm": 26,
+        "bicep_cm": 28.9,
+        "thigh_cm": 37.3,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.13023740741194462,
+          "bicepX": 0.2346597467041829
+        }
+      }
+    },
+    {
+      "label": "athletic",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 128.5,
+        "waist_cm": 52.2,
+        "hip_cm": 80.4,
+        "torso_width_cm": 41.8,
+        "bicep_cm": 42.1,
+        "thigh_cm": 57.9,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.20924429337874836,
+          "bicepX": 0.30805657110794843
+        }
+      }
+    },
+    {
+      "label": "round",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 165,
+        "chest_cm": 119.2,
+        "waist_cm": 107,
+        "hip_cm": 108.6,
+        "torso_width_cm": 40.7,
+        "bicep_cm": 37.1,
+        "thigh_cm": 62.7,
+        "levels_m": {
+          "chest": 1.2457499819993971,
+          "waist": 1.0642499846220015,
+          "hip": 0.8744999873638152,
+          "armMidY": 1.3050073196670167,
+          "armholeX": 0.20348727562817465,
+          "bicepX": 0.2986504972118708
+        }
+      }
+    },
+    {
+      "label": "height 150 keep",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 150,
+        "chest_cm": 105.7,
+        "waist_cm": 72.1,
+        "hip_cm": 86.2,
+        "torso_width_cm": 36.9,
+        "bicep_cm": 34.4,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.1325,
+          "waist": 0.9675,
+          "hip": 0.7949999999999999,
+          "armMidY": 1.186370307748968,
+          "armholeX": 0.1845906993695944,
+          "bicepX": 0.2838320320444339
+        }
+      }
+    },
+    {
+      "label": "height 195 keep",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 195,
+        "chest_cm": 105.9,
+        "waist_cm": 72.1,
+        "hip_cm": 86.2,
+        "torso_width_cm": 37.3,
+        "bicep_cm": 38.8,
+        "thigh_cm": 52.9,
+        "levels_m": {
+          "chest": 1.472249945998192,
+          "waist": 1.2577499538660049,
+          "hip": 1.0334999620914458,
+          "armMidY": 1.542281343503114,
+          "armholeX": 0.18666195617890388,
+          "bicepX": 0.28557188776425385
+        }
+      }
+    },
+    {
+      "label": "height 195 proportional",
+      "ok": true,
+      "failed": [],
+      "m": {
+        "height_cm": 195,
+        "chest_cm": 125.1,
+        "waist_cm": 85.2,
+        "hip_cm": 101.9,
+        "torso_width_cm": 44.1,
+        "bicep_cm": 42.3,
+        "thigh_cm": 62.5,
+        "levels_m": {
+          "chest": 1.472249945998192,
+          "waist": 1.2577499538660049,
+          "hip": 1.0334999620914458,
+          "armMidY": 1.542281343503114,
+          "armholeX": 0.22060049022479125,
+          "bicepX": 0.3374940480192934
+        }
+      }
+    }
+  ]
+}

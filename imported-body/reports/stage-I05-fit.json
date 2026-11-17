@@ -1,0 +1,363 @@
+{
+  "generatedAt": "2026-11-17T23:01:02.099Z",
+  "config": {
+    "note": "Пороги зафиксированы ДО прогона тестовых случаев. Их нельзя поднимать, чтобы превратить FAIL в PASS.",
+    "tolerance_ok_cm": 1,
+    "tolerance_approx_cm": 3,
+    "max_iterations": 14,
+    "damping": 0.001,
+    "step_limit": 0.5,
+    "jacobian_step": 0.08
+  },
+  "cases": [
+    {
+      "id": "canon-base",
+      "req": {
+        "targets": {
+          "chest": 105.8,
+          "waist": 72.1,
+          "hip": 86.2
+        }
+      },
+      "expect": [
+        "ok"
+      ],
+      "result": {
+        "weights": {
+          "chest": 0,
+          "waist": 0,
+          "hip": 0,
+          "shoulders": 0,
+          "arms": 0,
+          "thighs": 0
+        },
+        "height_cm": 165,
+        "status": "ok",
+        "iterations": 1,
+        "achieved": {
+          "chest": 105.8,
+          "waist": 72.1,
+          "hip": 86.2,
+          "thigh": 52.9,
+          "bicep": 35.8,
+          "height": 165
+        },
+        "residual_cm": {
+          "chest": 0,
+          "waist": 0,
+          "hip": 0
+        },
+        "limiting": []
+      },
+      "geometry": []
+    },
+    {
+      "id": "slim-male",
+      "req": {
+        "height_cm": 178,
+        "targets": {
+          "chest": 94,
+          "waist": 78,
+          "hip": 92
+        }
+      },
+      "expect": [
+        "ok",
+        "approximate"
+      ],
+      "result": {
+        "weights": {
+          "chest": -0.4744966397488384,
+          "waist": 0.17481463185854199,
+          "hip": 0.2166078320084516,
+          "shoulders": 0,
+          "arms": 0,
+          "thighs": 0
+        },
+        "height_cm": 178,
+        "status": "ok",
+        "iterations": 2,
+        "achieved": {
+          "chest": 94.5,
+          "waist": 77.9,
+          "hip": 91.8,
+          "thigh": 53.4,
+          "bicep": 36.8,
+          "height": 178
+        },
+        "residual_cm": {
+          "chest": -0.5,
+          "waist": 0.1,
+          "hip": 0.2
+        },
+        "limiting": []
+      },
+      "geometry": []
+    },
+    {
+      "id": "athletic",
+      "req": {
+        "height_cm": 183,
+        "targets": {
+          "chest": 110,
+          "waist": 82,
+          "hip": 96,
+          "bicep": 34
+        }
+      },
+      "expect": [
+        "ok",
+        "approximate"
+      ],
+      "result": {
+        "weights": {
+          "chest": 0.11272722561711741,
+          "waist": 0.293333133324088,
+          "hip": 0.3663151716310744,
+          "shoulders": 0,
+          "arms": -0.39531951869772086,
+          "thighs": 0
+        },
+        "height_cm": 183,
+        "status": "ok",
+        "iterations": 2,
+        "achieved": {
+          "chest": 109.8,
+          "waist": 82.4,
+          "hip": 95.7,
+          "thigh": 53.8,
+          "bicep": 33.8,
+          "height": 183
+        },
+        "residual_cm": {
+          "chest": 0.2,
+          "waist": -0.4,
+          "hip": 0.3,
+          "bicep": 0.2
+        },
+        "limiting": []
+      },
+      "geometry": []
+    },
+    {
+      "id": "round",
+      "req": {
+        "height_cm": 172,
+        "targets": {
+          "chest": 112,
+          "waist": 104,
+          "hip": 108
+        }
+      },
+      "expect": [
+        "ok",
+        "approximate"
+      ],
+      "result": {
+        "weights": {
+          "chest": 0.11536723685025604,
+          "waist": 0.9025094099922033,
+          "hip": 0.8155247893471175,
+          "shoulders": 0,
+          "arms": 0,
+          "thighs": 0
+        },
+        "height_cm": 172,
+        "status": "ok",
+        "iterations": 3,
+        "achieved": {
+          "chest": 111.9,
+          "waist": 103.5,
+          "hip": 108.2,
+          "thigh": 54.9,
+          "bicep": 36.4,
+          "height": 172
+        },
+        "residual_cm": {
+          "chest": 0.1,
+          "waist": 0.5,
+          "hip": -0.2
+        },
+        "limiting": []
+      },
+      "geometry": []
+    },
+    {
+      "id": "held-out-1",
+      "req": {
+        "height_cm": 165,
+        "targets": {
+          "chest": 98,
+          "waist": 84,
+          "hip": 98,
+          "thigh": 56
+        }
+      },
+      "expect": [
+        "ok",
+        "approximate"
+      ],
+      "result": {
+        "weights": {
+          "chest": -0.33072259734778375,
+          "waist": 0.35259231173417493,
+          "hip": 0.4255820261904376,
+          "shoulders": 0,
+          "arms": 0,
+          "thighs": 0.1480754383191048
+        },
+        "height_cm": 165,
+        "status": "ok",
+        "iterations": 2,
+        "achieved": {
+          "chest": 98.6,
+          "waist": 84.2,
+          "hip": 97.4,
+          "thigh": 55.9,
+          "bicep": 35.6,
+          "height": 165
+        },
+        "residual_cm": {
+          "chest": -0.6,
+          "waist": -0.2,
+          "hip": 0.6,
+          "thigh": 0.1
+        },
+        "limiting": []
+      },
+      "geometry": []
+    },
+    {
+      "id": "held-out-2",
+      "req": {
+        "height_cm": 190,
+        "targets": {
+          "chest": 102,
+          "waist": 80,
+          "hip": 95
+        }
+      },
+      "expect": [
+        "ok",
+        "approximate"
+      ],
+      "result": {
+        "weights": {
+          "chest": -0.17086393303700076,
+          "waist": 0.23407390052939867,
+          "hip": 0.3335666874990164,
+          "shoulders": 0,
+          "arms": 0,
+          "thighs": 0
+        },
+        "height_cm": 190,
+        "status": "ok",
+        "iterations": 2,
+        "achieved": {
+          "chest": 102.2,
+          "waist": 80.2,
+          "hip": 94.8,
+          "thigh": 53.7,
+          "bicep": 38.1,
+          "height": 190
+        },
+        "residual_cm": {
+          "chest": -0.2,
+          "waist": -0.2,
+          "hip": 0.2
+        },
+        "limiting": []
+      },
+      "geometry": []
+    },
+    {
+      "id": "impossible-huge",
+      "req": {
+        "targets": {
+          "chest": 170,
+          "waist": 160,
+          "hip": 165
+        }
+      },
+      "expect": [
+        "out_of_range"
+      ],
+      "result": {
+        "weights": {
+          "chest": 1,
+          "waist": 1,
+          "hip": 1,
+          "shoulders": 0,
+          "arms": 0,
+          "thighs": 0
+        },
+        "height_cm": 165,
+        "status": "out_of_range",
+        "iterations": 3,
+        "achieved": {
+          "chest": 136.6,
+          "waist": 107.5,
+          "hip": 112.9,
+          "thigh": 55.4,
+          "bicep": 33.8,
+          "height": 165
+        },
+        "residual_cm": {
+          "chest": 33.4,
+          "waist": 52.5,
+          "hip": 52.1
+        },
+        "limiting": [
+          "chest",
+          "waist",
+          "hip"
+        ]
+      },
+      "geometry": []
+    },
+    {
+      "id": "impossible-tiny",
+      "req": {
+        "targets": {
+          "chest": 55,
+          "waist": 40,
+          "hip": 50
+        }
+      },
+      "expect": [
+        "out_of_range"
+      ],
+      "result": {
+        "weights": {
+          "chest": -1,
+          "waist": -0.9045121697490601,
+          "hip": -1,
+          "shoulders": 0,
+          "arms": 0,
+          "thighs": 0
+        },
+        "height_cm": 165,
+        "status": "out_of_range",
+        "iterations": 5,
+        "achieved": {
+          "chest": 77.8,
+          "waist": 40,
+          "hip": 61.5,
+          "thigh": 51,
+          "bicep": 36.6,
+          "height": 165
+        },
+        "residual_cm": {
+          "chest": -22.8,
+          "waist": 0,
+          "hip": -11.5
+        },
+        "limiting": [
+          "chest",
+          "hip"
+        ]
+      },
+      "geometry": []
+    }
+  ]
+}

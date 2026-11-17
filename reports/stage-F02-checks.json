@@ -1,0 +1,1506 @@
+{
+  "generatedAt": "2026-11-17T21:43:49.169Z",
+  "shirts": [
+    "canonical-tee",
+    "puma-print",
+    "striped",
+    "plain-grey",
+    "navy-hard"
+  ],
+  "presets": [
+    "male-m",
+    "male-s",
+    "male-l",
+    "female-m",
+    "female-s",
+    "female-l"
+  ],
+  "results": [
+    {
+      "preset": "male-m",
+      "shirt": "canonical-tee",
+      "scale": 0.4776522194164832,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "chestHalfWidth",
+          "from": 0.44,
+          "to": 0.4626459415400461,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.35,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 90,
+      "maxPush": 0.04822308365489571,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:loose",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-m",
+      "shirt": "puma-print",
+      "scale": 0.4776522194164832,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "cuffRadius",
+          "from": 0.10536789236464493,
+          "to": 0.13469639571042957,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.1036420675833573,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 126,
+      "maxPush": 0.04731859641900228,
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:free",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:loose",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-m",
+      "shirt": "striped",
+      "scale": 0.4776522194164832,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "chestHalfWidth",
+          "from": 0.44,
+          "to": 0.46846293277583234,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "cuffRadius",
+          "from": 0.09770478570173077,
+          "to": 0.13469639571042957,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 106,
+      "maxPush": 0.04565075826842972,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:loose",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-m",
+      "shirt": "plain-grey",
+      "scale": 0.4776522194164832,
+      "status": "ok",
+      "fitAdjust": [],
+      "pushedVertices": 94,
+      "maxPush": 0.0476231075947901,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:loose",
+          "cuff_left:ok",
+          "cuff_right:ok"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "PASS arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-m",
+      "shirt": "navy-hard",
+      "scale": 0.4776522194164832,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "sleeveAngle",
+          "from": 0.6864272904604097,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 64,
+      "maxPush": 0.08708127810435497,
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:free",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:ok",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "PASS arm_inside_sleeve",
+          "PASS neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-s",
+      "shirt": "canonical-tee",
+      "scale": 0.43586952541294594,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "chestHalfWidth",
+          "from": 0.44,
+          "to": 0.4751513191921095,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.35,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 99,
+      "maxPush": 0.04908299461811098,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:tight",
+          "shoulder:loose",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-s",
+      "shirt": "puma-print",
+      "scale": 0.43586952541294594,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "cuffRadius",
+          "from": 0.10536789236464493,
+          "to": 0.13300272502393648,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.1036420675833573,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 126,
+      "maxPush": 0.04536478562966819,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:ok",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-s",
+      "shirt": "striped",
+      "scale": 0.43586952541294594,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "chestHalfWidth",
+          "from": 0.44,
+          "to": 0.4805729303458088,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "cuffRadius",
+          "from": 0.09770478570173077,
+          "to": 0.13300272502393648,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 110,
+      "maxPush": 0.04555677964588903,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:tight",
+          "shoulder:ok",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-s",
+      "shirt": "plain-grey",
+      "scale": 0.43586952541294594,
+      "status": "ok",
+      "fitAdjust": [],
+      "pushedVertices": 92,
+      "maxPush": 0.045796074656267484,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:loose",
+          "cuff_left:ok",
+          "cuff_right:ok"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "PASS arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-s",
+      "shirt": "navy-hard",
+      "scale": 0.43586952541294594,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "sleeveAngle",
+          "from": 0.6864272904604097,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 64,
+      "maxPush": 0.07658003224650378,
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:free",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:ok",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "PASS arm_inside_sleeve",
+          "PASS neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-l",
+      "shirt": "canonical-tee",
+      "scale": 0.5361479910214354,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "chestHalfWidth",
+          "from": 0.44,
+          "to": 0.4449546116456292,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.35,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 88,
+      "maxPush": 0.044207369727377495,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:ok",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-l",
+      "shirt": "puma-print",
+      "scale": 0.5361479910214354,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "cuffRadius",
+          "from": 0.10536789236464493,
+          "to": 0.13484295516122136,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.1036420675833573,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 126,
+      "maxPush": 0.05517228999852525,
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:free",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:ok",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-l",
+      "shirt": "striped",
+      "scale": 0.5361479910214354,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "chestHalfWidth",
+          "from": 0.44,
+          "to": 0.4508065458884256,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "cuffRadius",
+          "from": 0.09770478570173077,
+          "to": 0.13484295516122136,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 98,
+      "maxPush": 0.0432331227363803,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:ok",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-l",
+      "shirt": "plain-grey",
+      "scale": 0.5361479910214354,
+      "status": "ok",
+      "fitAdjust": [],
+      "pushedVertices": 87,
+      "maxPush": 0.05463325902713251,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:loose",
+        "cuff_right:loose"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:ok",
+          "cuff_left:ok",
+          "cuff_right:ok"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "PASS arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "male-l",
+      "shirt": "navy-hard",
+      "scale": 0.5361479910214354,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "sleeveAngle",
+          "from": 0.6864272904604097,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 52,
+      "maxPush": 0.1018418312320592,
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:loose",
+        "cuff_right:loose"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:free",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:ok",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "PASS neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-m",
+      "shirt": "canonical-tee",
+      "scale": 0.43976541025551813,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "chestHalfWidth",
+          "from": 0.44,
+          "to": 0.45654429226933213,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.8725237714944563,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.35,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 68,
+      "maxPush": 0.04879172696343606,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:loose",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-m",
+      "shirt": "puma-print",
+      "scale": 0.43976541025551813,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.8974342807939825,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "cuffRadius",
+          "from": 0.10536789236464493,
+          "to": 0.13182445295351494,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.1036420675833573,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 110,
+      "maxPush": 0.03682350484275486,
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:free",
+          "waist:ok",
+          "chest:ok",
+          "armpit:tight",
+          "shoulder:loose",
+          "cuff_left:ok",
+          "cuff_right:ok"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-m",
+      "shirt": "striped",
+      "scale": 0.43976541025551813,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "chestHalfWidth",
+          "from": 0.44,
+          "to": 0.4610178635122592,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.9143688627027914,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "cuffRadius",
+          "from": 0.09770478570173077,
+          "to": 0.13182445295351494,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 88,
+      "maxPush": 0.046206314784252855,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:tight",
+          "armpit:ok",
+          "shoulder:loose",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-m",
+      "shirt": "plain-grey",
+      "scale": 0.43976541025551813,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.8822543419923072,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 73,
+      "maxPush": 0.0371904620973219,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:tight",
+          "shoulder:loose",
+          "cuff_left:ok",
+          "cuff_right:ok"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "PASS arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-m",
+      "shirt": "navy-hard",
+      "scale": 0.43976541025551813,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.9220852932469119,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.6864272904604097,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 48,
+      "maxPush": 0.08844110083368122,
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:free",
+          "waist:ok",
+          "chest:ok",
+          "armpit:tight",
+          "shoulder:ok",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "PASS neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-s",
+      "shirt": "canonical-tee",
+      "scale": 0.40598508370336356,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "chestHalfWidth",
+          "from": 0.44,
+          "to": 0.4736796794016555,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.8206279220559962,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.35,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 96,
+      "maxPush": 0.052839012369312974,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:loose",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-s",
+      "shirt": "puma-print",
+      "scale": 0.40598508370336356,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.8395829207895575,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "cuffRadius",
+          "from": 0.10536789236464493,
+          "to": 0.14279301620147541,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.1036420675833573,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 114,
+      "maxPush": 0.03345157756929357,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:ok",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-s",
+      "shirt": "striped",
+      "scale": 0.40598508370336356,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "chestHalfWidth",
+          "from": 0.44,
+          "to": 0.4788364346136597,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.8770339503942174,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "cuffRadius",
+          "from": 0.09770478570173077,
+          "to": 0.14279301620147541,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 96,
+      "maxPush": 0.048996956771001035,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:tight",
+          "shoulder:loose",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-s",
+      "shirt": "plain-grey",
+      "scale": 0.40598508370336356,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.8370786828946499,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 84,
+      "maxPush": 0.03331515554046868,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:loose",
+          "cuff_left:ok",
+          "cuff_right:ok"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "PASS arm_inside_sleeve",
+          "FAIL neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-s",
+      "shirt": "navy-hard",
+      "scale": 0.40598508370336356,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.8683525188175898,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.6864272904604097,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 48,
+      "maxPush": 0.07918149936100666,
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:free",
+          "waist:ok",
+          "chest:ok",
+          "armpit:ok",
+          "shoulder:ok",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "PASS neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-l",
+      "shirt": "canonical-tee",
+      "scale": 0.4988809817217886,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.9663191248536684,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.35,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 48,
+      "maxPush": 0.05107365762671782,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:tight",
+          "armpit:ok",
+          "shoulder:loose",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "PASS neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-l",
+      "shirt": "puma-print",
+      "scale": 0.4988809817217886,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.9507213808502125,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "cuffRadius",
+          "from": 0.10536789236464493,
+          "to": 0.13215493114582894,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.1036420675833573,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 95,
+      "maxPush": 0.04741476746044553,
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:free",
+          "waist:tight",
+          "chest:ok",
+          "armpit:tight",
+          "shoulder:loose",
+          "cuff_left:ok",
+          "cuff_right:ok"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "PASS neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-l",
+      "shirt": "striped",
+      "scale": 0.4988809817217886,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "chestHalfWidth",
+          "from": 0.44,
+          "to": 0.440555784319212,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.9121954065986189,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "cuffRadius",
+          "from": 0.09770478570173077,
+          "to": 0.13215493114582894,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 81,
+      "maxPush": 0.047358899848222946,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:tight",
+          "armpit:ok",
+          "shoulder:loose",
+          "cuff_left:ok",
+          "cuff_right:ok"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "PASS neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-l",
+      "shirt": "plain-grey",
+      "scale": 0.4988809817217886,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "hemHalfWidth",
+          "from": 0.4544281006167389,
+          "to": 0.4785989735329105,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.9626036953157271,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 51,
+      "maxPush": 0.05006723868360262,
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:loose",
+        "cuff_right:loose"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:ok",
+          "waist:ok",
+          "chest:ok",
+          "armpit:tight",
+          "shoulder:loose",
+          "cuff_left:ok",
+          "cuff_right:ok"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "PASS arm_inside_sleeve",
+          "PASS neck_opening_clears_neck"
+        ]
+      }
+    },
+    {
+      "preset": "female-l",
+      "shirt": "navy-hard",
+      "scale": 0.4988809817217886,
+      "status": "ok",
+      "fitAdjust": [
+        {
+          "name": "depthRatio",
+          "from": 0.8,
+          "to": 0.9211260184648011,
+          "reason": "подгонка по телу (ease)"
+        },
+        {
+          "name": "sleeveAngle",
+          "from": 0.6864272904604097,
+          "to": 0.8,
+          "reason": "подгонка по телу (ease)"
+        }
+      ],
+      "pushedVertices": 46,
+      "maxPush": 0.10820803633275705,
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:loose",
+        "cuff_right:loose"
+      ],
+      "failed": [],
+      "asPhotographed": {
+        "status": "intersects",
+        "rings": [
+          "hem:free",
+          "waist:ok",
+          "chest:ok",
+          "armpit:tight",
+          "shoulder:loose",
+          "cuff_left:tight",
+          "cuff_right:tight"
+        ],
+        "checks": [
+          "FAIL no_vertex_inside_body",
+          "FAIL arm_inside_sleeve",
+          "PASS neck_opening_clears_neck"
+        ]
+      }
+    }
+  ],
+  "ok": true
+}

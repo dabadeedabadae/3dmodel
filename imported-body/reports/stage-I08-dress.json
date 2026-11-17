@@ -1,0 +1,789 @@
+{
+  "generatedAt": "2026-11-17T23:01:02.892Z",
+  "shirts": [
+    "canonical-tee",
+    "realistic-tee",
+    "puma-print",
+    "striped",
+    "plain-grey",
+    "navy-hard"
+  ],
+  "results": [
+    {
+      "shape": "base",
+      "shirt": "canonical-tee",
+      "status": "ok",
+      "scale": 0.4667809127426323,
+      "pushed": 60,
+      "maxPush": 0.1605674809450346,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "base",
+      "shirt": "realistic-tee",
+      "status": "ok",
+      "scale": 0.4667809127426323,
+      "pushed": 68,
+      "maxPush": 0.2010272172284476,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "base",
+      "shirt": "puma-print",
+      "status": "ok",
+      "scale": 0.4667809127426323,
+      "pushed": 85,
+      "maxPush": 0.10565817987637424,
+      "fitAdjust": [
+        "chestHalfWidth",
+        "cuffRadius"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "base",
+      "shirt": "striped",
+      "status": "ok",
+      "scale": 0.4667809127426323,
+      "pushed": 64,
+      "maxPush": 0.1335658920953039,
+      "fitAdjust": [
+        "chestHalfWidth",
+        "cuffRadius"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "base",
+      "shirt": "plain-grey",
+      "status": "ok",
+      "scale": 0.4667809127426323,
+      "pushed": 65,
+      "maxPush": 0.06726216742746464,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "base",
+      "shirt": "navy-hard",
+      "status": "ok",
+      "scale": 0.4667809127426323,
+      "pushed": 58,
+      "maxPush": 0.11405199719355408,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "athletic",
+      "shirt": "canonical-tee",
+      "status": "ok",
+      "scale": 0.5369990212345678,
+      "pushed": 64,
+      "maxPush": 0.17822629830976822,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "athletic",
+      "shirt": "realistic-tee",
+      "status": "ok",
+      "scale": 0.5369990212345678,
+      "pushed": 64,
+      "maxPush": 0.22364228981932413,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "athletic",
+      "shirt": "puma-print",
+      "status": "ok",
+      "scale": 0.5369990212345678,
+      "pushed": 86,
+      "maxPush": 0.1029919740318378,
+      "fitAdjust": [
+        "cuffRadius"
+      ],
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "athletic",
+      "shirt": "striped",
+      "status": "ok",
+      "scale": 0.5369990212345678,
+      "pushed": 64,
+      "maxPush": 0.14972684426475408,
+      "fitAdjust": [
+        "chestHalfWidth",
+        "cuffRadius"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "athletic",
+      "shirt": "plain-grey",
+      "status": "ok",
+      "scale": 0.5369990212345678,
+      "pushed": 62,
+      "maxPush": 0.0652843777656721,
+      "fitAdjust": [],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "athletic",
+      "shirt": "navy-hard",
+      "status": "ok",
+      "scale": 0.5369990212345678,
+      "pushed": 50,
+      "maxPush": 0.11532053057770199,
+      "fitAdjust": [],
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "round",
+      "shirt": "canonical-tee",
+      "status": "ok",
+      "scale": 0.5187531507108488,
+      "pushed": 67,
+      "maxPush": 0.17132840406588834,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "round",
+      "shirt": "realistic-tee",
+      "status": "ok",
+      "scale": 0.5187531507108488,
+      "pushed": 60,
+      "maxPush": 0.21651177534831917,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "round",
+      "shirt": "puma-print",
+      "status": "ok",
+      "scale": 0.5187531507108488,
+      "pushed": 106,
+      "maxPush": 0.10063068869793895,
+      "fitAdjust": [
+        "cuffRadius"
+      ],
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "round",
+      "shirt": "striped",
+      "status": "ok",
+      "scale": 0.5187531507108488,
+      "pushed": 68,
+      "maxPush": 0.14500860846872368,
+      "fitAdjust": [
+        "chestHalfWidth",
+        "cuffRadius"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "round",
+      "shirt": "plain-grey",
+      "status": "ok",
+      "scale": 0.5187531507108488,
+      "pushed": 85,
+      "maxPush": 0.056368430329515405,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:loose",
+        "cuff_right:loose"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "round",
+      "shirt": "navy-hard",
+      "status": "ok",
+      "scale": 0.5187531507108488,
+      "pushed": 61,
+      "maxPush": 0.11765699288552638,
+      "fitAdjust": [],
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "slim",
+      "shirt": "canonical-tee",
+      "status": "ok",
+      "scale": 0.4354471665950995,
+      "pushed": 50,
+      "maxPush": 0.18876907788469727,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "shin_left.r",
+        "foot_left.r",
+        "shin_right.r",
+        "foot_right.r",
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "slim",
+      "shirt": "realistic-tee",
+      "status": "ok",
+      "scale": 0.4354471665950995,
+      "pushed": 52,
+      "maxPush": 0.2226127906066566,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "shin_left.r",
+        "foot_left.r",
+        "shin_right.r",
+        "foot_right.r",
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "slim",
+      "shirt": "puma-print",
+      "status": "ok",
+      "scale": 0.4354471665950995,
+      "pushed": 76,
+      "maxPush": 0.1586813893039645,
+      "fitAdjust": [
+        "chestHalfWidth",
+        "cuffRadius"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "shin_left.r",
+        "foot_left.r",
+        "shin_right.r",
+        "foot_right.r",
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "slim",
+      "shirt": "striped",
+      "status": "ok",
+      "scale": 0.4354471665950995,
+      "pushed": 65,
+      "maxPush": 0.1645351410713624,
+      "fitAdjust": [
+        "chestHalfWidth",
+        "cuffRadius"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "shin_left.r",
+        "foot_left.r",
+        "shin_right.r",
+        "foot_right.r",
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "slim",
+      "shirt": "plain-grey",
+      "status": "ok",
+      "scale": 0.4354471665950995,
+      "pushed": 61,
+      "maxPush": 0.13382407605777305,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "shin_left.r",
+        "foot_left.r",
+        "shin_right.r",
+        "foot_right.r",
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "slim",
+      "shirt": "navy-hard",
+      "status": "ok",
+      "scale": 0.4354471665950995,
+      "pushed": 52,
+      "maxPush": 0.18682820439400588,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "shin_left.r",
+        "foot_left.r",
+        "shin_right.r",
+        "foot_right.r",
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "tall",
+      "shirt": "canonical-tee",
+      "status": "ok",
+      "scale": 0.52850583661956,
+      "pushed": 58,
+      "maxPush": 0.17611404851150828,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "tall",
+      "shirt": "realistic-tee",
+      "status": "ok",
+      "scale": 0.52850583661956,
+      "pushed": 64,
+      "maxPush": 0.22211570727563398,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "tall",
+      "shirt": "puma-print",
+      "status": "ok",
+      "scale": 0.52850583661956,
+      "pushed": 87,
+      "maxPush": 0.12295275369172276,
+      "fitAdjust": [
+        "chestHalfWidth",
+        "cuffRadius"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "tall",
+      "shirt": "striped",
+      "status": "ok",
+      "scale": 0.52850583661956,
+      "pushed": 64,
+      "maxPush": 0.1457386183365008,
+      "fitAdjust": [
+        "chestHalfWidth",
+        "cuffRadius"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "tall",
+      "shirt": "plain-grey",
+      "status": "ok",
+      "scale": 0.52850583661956,
+      "pushed": 65,
+      "maxPush": 0.08381490320239074,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:ok",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:ok",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    },
+    {
+      "shape": "tall",
+      "shirt": "navy-hard",
+      "status": "ok",
+      "scale": 0.52850583661956,
+      "pushed": 54,
+      "maxPush": 0.13730822284610647,
+      "fitAdjust": [
+        "chestHalfWidth"
+      ],
+      "rings": [
+        "hem:free",
+        "waist:ok",
+        "chest:ok",
+        "armpit:ok",
+        "shoulder:loose",
+        "cuff_left:ok",
+        "cuff_right:ok"
+      ],
+      "failed": [],
+      "assumed": [
+        "params (reference only — the imported body is not parameterised by BodyParams)",
+        "hand/foot box (proportional, not measured)"
+      ]
+    }
+  ]
+}

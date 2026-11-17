@@ -30,6 +30,10 @@ npm run verify       # всё выше по порядку
 npm run render       # renders/stage-03-*.png + render-manifest.json
 npm run eval:fixtures  # реальные модели на fixtures/photos (node) → reports/stage-06-07-eval.json
 npm run e2e:pipeline   # сквозной прогон garment.html до маски (+ EXIF/большие файлы) → reports/stage-05-07-e2e.json
+npm run check:body     # блокирующая проверка процедурного манекена (300 случайных фигур)
+npm run check:fit      # блокирующая проверка посадки футболки на пресеты манекена
+npm run e2e:fit        # футболки на манекене в Chromium → reports/stage-F04-e2e.json, renders/stage-F/
+npm run render:body    # рендеры body.html → renders/stage-M/
 npm run e2e:chain      # полная цепочка до 3D на 4 футболках → reports/stage-08-12-e2e.json, renders/stage-08-12/
 ```
 

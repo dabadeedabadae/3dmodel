@@ -5,3 +5,15 @@ dist/
 renders/*.tmp
 .scratch/
 _transfer/
+*.tgz
+.DS_Store
+
+# Сгенерированные модели: лицензия на использование результата не проверена (AUDIT §6.3).
+# Исходные FBX и производные от них меши не коммитятся до решения пользователя.
+imported-body/assets/*.fbx
+imported-body/assets/*.glb
+imported-body/assets/*.obj
+imported-body/out/
+
+# Архив старых манекенов: лежит в проекте, в git не попадает (решение пользователя 2026-11-18)
+archive/

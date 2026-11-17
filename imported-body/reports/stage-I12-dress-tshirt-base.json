@@ -1,0 +1,89 @@
+{
+  "garment": "tshirt",
+  "shape": "base",
+  "method": "shrink-dress",
+  "ms": 49217,
+  "phases": {
+    "standoff": 0.004,
+    "shrinkFrames": 420,
+    "settleFrames": 240,
+    "pinnedVertices": 0
+  },
+  "grade": {
+    "scaleXZ": 0.7524,
+    "scaleY": 0.7382,
+    "offsetY": 0.6864,
+    "easeChest_cm": 10,
+    "bodyChest_cm": 105.8,
+    "garmentChestGirth_cm": 153.9,
+    "hemTarget_y": 0.686,
+    "shoulderTarget_y": 1.357,
+    "armholeTarget_y": 1.233,
+    "verticesInsideAtStart": 1,
+    "shaping": {
+      "easeCirc_cm": 0,
+      "verticesShaped": 0
+    },
+    "collar": {
+      "before_cm": 21.3,
+      "after_cm": 17,
+      "neck_cm": 11.7,
+      "factor": 0.796,
+      "verticesMoved": 3292
+    }
+  },
+  "settled": {
+    "hem_y": 0.7,
+    "collar_y": 1.39,
+    "hem_vs_hip_cm": -17.5,
+    "hem_vs_target_cm": 1.3,
+    "stretch_mean_pct": 9.23,
+    "stretch_max_pct": 411.3,
+    "edges_over_10pct": 2358,
+    "stretch_max_abs_mm": 71.4,
+    "shortEdgesExcluded": 846
+  },
+  "fit": {
+    "ease": [
+      {
+        "zone": "грудь (по градировке)",
+        "y": 1.037,
+        "body_cm": 105.8,
+        "garment_cm": 115.8,
+        "ease_cm": 10,
+        "verdict": "graded"
+      },
+      {
+        "zone": "талия",
+        "y": 1.064,
+        "body_cm": 72.1,
+        "garment_cm": 116,
+        "ease_cm": 44,
+        "verdict": "loose"
+      },
+      {
+        "zone": "бёдра",
+        "y": 0.874,
+        "body_cm": 86.2,
+        "garment_cm": 114.7,
+        "ease_cm": 28.4,
+        "verdict": "loose"
+      }
+    ],
+    "clearance_mm": {
+      "min": -1.5,
+      "mean": 13.7,
+      "max": 116.3
+    }
+  },
+  "checks": {
+    "nonFinite": 0,
+    "projectedOntoSkin": 20,
+    "verticesInsideBodyMesh": 20,
+    "insideShare_pct": 0.38,
+    "deepestPenetration_mm": 25.2,
+    "insideColliderApprox": 466,
+    "slipDuringFreeSettle_m": 0.0043,
+    "heldWithoutPins": true
+  }
+}

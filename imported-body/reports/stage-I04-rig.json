@@ -1,0 +1,167 @@
+{
+  "generatedAt": "2026-11-17T23:01:00.826Z",
+  "bones": [
+    {
+      "name": "hips",
+      "parent": null,
+      "head": [
+        0,
+        0.8208749881386757,
+        0
+      ]
+    },
+    {
+      "name": "spine",
+      "parent": "hips",
+      "head": [
+        0,
+        1.0642499846220015,
+        0
+      ]
+    },
+    {
+      "name": "chest",
+      "parent": "spine",
+      "head": [
+        0,
+        1.2457499819993971,
+        0
+      ]
+    },
+    {
+      "name": "neck",
+      "parent": "chest",
+      "head": [
+        0,
+        1.3565950197654053,
+        0
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "neck",
+      "head": [
+        0,
+        1.4299462588635894,
+        0
+      ]
+    },
+    {
+      "name": "upper_arm_left",
+      "parent": "chest",
+      "head": [
+        0.1854065957241136,
+        1.3050073196670167,
+        0
+      ]
+    },
+    {
+      "name": "forearm_left",
+      "parent": "upper_arm_left",
+      "head": [
+        0.44557241752666926,
+        1.3050073196670167,
+        0
+      ]
+    },
+    {
+      "name": "hand_left",
+      "parent": "forearm_left",
+      "head": [
+        0.6809605420146958,
+        1.3050073196670167,
+        0
+      ]
+    },
+    {
+      "name": "thigh_left",
+      "parent": "hips",
+      "head": [
+        0.11042985878884792,
+        0.8208749881386757,
+        0
+      ]
+    },
+    {
+      "name": "shin_left",
+      "parent": "thigh_left",
+      "head": [
+        0.11042985878884792,
+        0.42685499383211134,
+        0
+      ]
+    },
+    {
+      "name": "foot_left",
+      "parent": "shin_left",
+      "head": [
+        0.11042985878884792,
+        0.06566999905109405,
+        0
+      ]
+    },
+    {
+      "name": "upper_arm_right",
+      "parent": "chest",
+      "head": [
+        -0.1854065957241136,
+        1.3050073196670167,
+        0
+      ]
+    },
+    {
+      "name": "forearm_right",
+      "parent": "upper_arm_right",
+      "head": [
+        -0.44557241752666926,
+        1.3050073196670167,
+        0
+      ]
+    },
+    {
+      "name": "hand_right",
+      "parent": "forearm_right",
+      "head": [
+        -0.6809605420146958,
+        1.3050073196670167,
+        0
+      ]
+    },
+    {
+      "name": "thigh_right",
+      "parent": "hips",
+      "head": [
+        -0.11042985878884792,
+        0.8208749881386757,
+        0
+      ]
+    },
+    {
+      "name": "shin_right",
+      "parent": "thigh_right",
+      "head": [
+        -0.11042985878884792,
+        0.42685499383211134,
+        0
+      ]
+    },
+    {
+      "name": "foot_right",
+      "parent": "shin_right",
+      "head": [
+        -0.11042985878884792,
+        0.06566999905109405,
+        0
+      ]
+    }
+  ],
+  "restPoseMaxDiff": 1.4901161193847656e-8,
+  "verifiedShoulderDegrees": {
+    "base": 62,
+    "athletic": 60,
+    "round": 62,
+    "all+1": 57,
+    "all-1": 62
+  },
+  "fails": []
+}

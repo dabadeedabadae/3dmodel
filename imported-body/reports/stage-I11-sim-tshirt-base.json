@@ -1,0 +1,47 @@
+{
+  "garment": "tshirt",
+  "shape": "base",
+  "frames": 180,
+  "ms": 13850,
+  "alignment": {
+    "scale": 0.7097,
+    "offsetY": 0.6673,
+    "ease": 0.025,
+    "preResolvedVertices": 1026,
+    "insideAfterAlign": 1033
+  },
+  "cloth": {
+    "vertices": 5208,
+    "triangles": 10423,
+    "distanceConstraints": 15636,
+    "bendingConstraints": 15633,
+    "params": {
+      "gravity": -9.81,
+      "stretchCompliance": 0.000002,
+      "bendCompliance": 0.005,
+      "damping": 0.02,
+      "friction": 0.35,
+      "thickness": 0.0006,
+      "substeps": 5,
+      "iterations": 6
+    }
+  },
+  "settled": {
+    "hem_y": -1.54,
+    "collar_y": -0.766,
+    "stretch_mean_pct": 0.66,
+    "stretch_max_pct": 105.4,
+    "edges_over_10pct": 46
+  },
+  "phases": {
+    "pinnedVertices": 303,
+    "pinBand": 0.045,
+    "framesPinned": 108,
+    "slipAfterRelease_m": 2.6556
+  },
+  "checks": {
+    "nonFinite": 0,
+    "verticesInsideBody": 0,
+    "heldWithoutPins": false
+  }
+}

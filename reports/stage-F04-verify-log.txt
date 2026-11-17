@@ -1,0 +1,152 @@
+
+> fitcast-photo-garments@0.1.0 verify
+> npm run typecheck && npm run test && npm run check:tshirt && npm run check:body && npm run check:fit && npm run build
+
+
+> fitcast-photo-garments@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+
+> fitcast-photo-garments@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.12 /home/claude/photo-garments
+
+
+ Test Files  10 passed (10)
+      Tests  64 passed (64)
+   Start at  20:27:57
+   Duration  3.15s (transform 527ms, setup 0ms, import 1.03s, tests 880ms, environment 1ms)
+
+
+> fitcast-photo-garments@0.1.0 check:tshirt
+> vitest run tests/tshirt.geometry.test.ts && node --import tsx scripts/check-tshirt.ts
+
+
+ RUN  v4.1.12 /home/claude/photo-garments
+
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  20:28:00
+   Duration  485ms (transform 172ms, setup 0ms, import 227ms, tests 139ms, environment 0ms)
+
+tshirt-basic 1.2.0 (tshirt-basic-topo-1): 210 verts / 158 logical / 272 tris
+PASS  finite_values — 0 non-finite values
+PASS  no_degenerate_triangles — 0 degenerate of 272
+PASS  seam_duplicates_coincide — 0 seam duplicates with differing positions
+PASS  manifold_edges — 0 edges with >2 faces
+PASS  consistent_orientation — 0 edges with inconsistent winding
+PASS  boundary_edges_present — 48 boundary edges (openings are expected)
+PASS  boundary_loops — found loops [8,8,16,16], expected [8,8,16,16] (hem, collar, 2 cuffs)
+PASS  openings_match_named_rings — 4/4 named openings found as boundary loops
+PASS  single_connected_surface — 1 connected component(s)
+PASS  no_unused_logical_vertices — 2 logical vertices unused (2 expected: armhole centres row 4 cols 4/12)
+PASS  no_unused_geometry_vertices — 0 geometry vertices unreferenced
+PASS  uv_in_unit_square — 0 uv components outside [0,1]
+PASS  uv_islands_inside_rects — 0 islands leave their reserved rect
+PASS  uv_islands_disjoint_with_gutter — 0 island pairs closer than 0.01 uv
+PASS  uv_not_mirrored — 0 triangles with negative UV orientation
+PASS  uv_no_degenerate_triangles — 0 degenerate UV triangles
+WARN  uv_stretch_spread — linear stretch ratio (uv/3d relative to uvScale) min 0.79 / median 1.00 / max 2.48 (tolerance x1.5)
+PASS  mirror_symmetry_x — 0 vertices without an X-mirrored partner
+PASS  faces_point_outward — all faces point away from their part axis
+PASS  sleeves_do_not_rise — cuff centres at or below armhole centres
+PASS  bounds_sane — bbox y [-0.720, 0.015], x [-0.683, 0.683]
+PASS  fixed_topology_and_uv_across_params — 0/10 random parameter sets changed index/logical/uv buffers
+random parameter sets: 20/20 ok
+report: reports/stage-03-checks.json
+RESULT: PASS
+
+> fitcast-photo-garments@0.1.0 check:body
+> node --import tsx scripts/check-body.ts 300
+
+body-basic 0.1.0 (body-basic-topo-1): 380 verts / 732 tris
+PASS  finite_values — 0 non-finite values
+PASS  no_degenerate_triangles — 0 degenerate of 732
+PASS  closed_manifold_parts — 0 open edges, 0 edges with >2 faces
+PASS  consistent_orientation — 0 inconsistent directed edges
+PASS  faces_point_outward — all parts have positive signed volume
+PASS  left_right_symmetry — 0 vertices without a mirror twin
+PASS  feet_on_floor — min y = 0.0014
+PASS  head_top_at_height — max y = 1.750, height = 1.75
+PASS  limbs_clear_of_torso_and_each_other — ok
+PASS  arms_do_not_cut_into_torso — 0 torso vertices deeper than 1 cm inside arm capsules (chest..waist rings)
+PASS  fixed_topology — index buffer identical across 6 parameter sets
+PASS  preset male-m
+PASS  preset male-s
+PASS  preset male-l
+PASS  preset female-m
+PASS  preset female-s
+PASS  preset female-l (clamped: shoulderWidth,armAbduction)
+random parameter sets: 300/300 ok (295 needed anatomical clamps)
+report: reports/stage-M02-checks.json
+RESULT: PASS
+
+> fitcast-photo-garments@0.1.0 check:fit
+> node --import tsx scripts/check-fit.ts
+
+PASS  male-m    canonical-tee fit:ok         photo:intersects adj:chestHalfWidth,sleeveAngle push:90/4.8cm
+PASS  male-m    puma-print    fit:ok         photo:intersects adj:cuffRadius,sleeveAngle push:126/4.7cm
+PASS  male-m    striped       fit:ok         photo:intersects adj:chestHalfWidth,cuffRadius,sleeveAngle push:106/4.6cm
+PASS  male-m    plain-grey    fit:ok         photo:intersects adj:— push:94/4.8cm
+PASS  male-m    navy-hard     fit:ok         photo:intersects adj:sleeveAngle push:64/8.7cm
+PASS  male-s    canonical-tee fit:ok         photo:intersects adj:chestHalfWidth,sleeveAngle push:99/4.9cm
+PASS  male-s    puma-print    fit:ok         photo:intersects adj:cuffRadius,sleeveAngle push:126/4.5cm
+PASS  male-s    striped       fit:ok         photo:intersects adj:chestHalfWidth,cuffRadius,sleeveAngle push:110/4.6cm
+PASS  male-s    plain-grey    fit:ok         photo:intersects adj:— push:92/4.6cm
+PASS  male-s    navy-hard     fit:ok         photo:intersects adj:sleeveAngle push:64/7.7cm
+PASS  male-l    canonical-tee fit:ok         photo:intersects adj:chestHalfWidth,sleeveAngle push:88/4.4cm
+PASS  male-l    puma-print    fit:ok         photo:intersects adj:cuffRadius,sleeveAngle push:126/5.5cm
+PASS  male-l    striped       fit:ok         photo:intersects adj:chestHalfWidth,cuffRadius,sleeveAngle push:98/4.3cm
+PASS  male-l    plain-grey    fit:ok         photo:intersects adj:— push:87/5.5cm
+PASS  male-l    navy-hard     fit:ok         photo:intersects adj:sleeveAngle push:52/10.2cm
+PASS  female-m  canonical-tee fit:ok         photo:intersects adj:chestHalfWidth,depthRatio,sleeveAngle push:68/4.9cm
+PASS  female-m  puma-print    fit:ok         photo:intersects adj:depthRatio,cuffRadius,sleeveAngle push:110/3.7cm
+PASS  female-m  striped       fit:ok         photo:intersects adj:chestHalfWidth,depthRatio,cuffRadius,sleeveAngle push:88/4.6cm
+PASS  female-m  plain-grey    fit:ok         photo:intersects adj:depthRatio push:73/3.7cm
+PASS  female-m  navy-hard     fit:ok         photo:intersects adj:depthRatio,sleeveAngle push:48/8.8cm
+PASS  female-s  canonical-tee fit:ok         photo:intersects adj:chestHalfWidth,depthRatio,sleeveAngle push:96/5.3cm
+PASS  female-s  puma-print    fit:ok         photo:intersects adj:depthRatio,cuffRadius,sleeveAngle push:114/3.3cm
+PASS  female-s  striped       fit:ok         photo:intersects adj:chestHalfWidth,depthRatio,cuffRadius,sleeveAngle push:96/4.9cm
+PASS  female-s  plain-grey    fit:ok         photo:intersects adj:depthRatio push:84/3.3cm
+PASS  female-s  navy-hard     fit:ok         photo:intersects adj:depthRatio,sleeveAngle push:48/7.9cm
+PASS  female-l  canonical-tee fit:ok         photo:intersects adj:depthRatio,sleeveAngle push:48/5.1cm
+PASS  female-l  puma-print    fit:ok         photo:intersects adj:depthRatio,cuffRadius,sleeveAngle push:95/4.7cm
+PASS  female-l  striped       fit:ok         photo:intersects adj:chestHalfWidth,depthRatio,cuffRadius,sleeveAngle push:81/4.7cm
+PASS  female-l  plain-grey    fit:ok         photo:intersects adj:hemHalfWidth,depthRatio push:51/5.0cm
+PASS  female-l  navy-hard     fit:ok         photo:intersects adj:depthRatio,sleeveAngle push:46/10.8cm
+report: reports/stage-F02-checks.json
+RESULT: PASS
+
+> fitcast-photo-garments@0.1.0 build
+> tsc -p tsconfig.json --noEmit && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 51 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                             0.58 kB │ gzip:     0.33 kB
+dist/body.html                                              0.59 kB │ gzip:     0.34 kB
+dist/garment.html                                           0.78 kB │ gzip:     0.40 kB
+dist/assets/ort-wasm-simd-threaded-DN_1uOdW.mjs            24.74 kB
+dist/assets/worker-4S4aFCEf.js                            424.80 kB
+dist/assets/ort-wasm-simd-threaded-qh98TCA_.wasm       14,848.85 kB │ gzip: 3,836.89 kB
+dist/assets/ort-wasm-simd-threaded.jsep-Dt5UNR3U.wasm  29,520.97 kB │ gzip: 6,983.99 kB
+dist/assets/versions-D2n-ZuNi.css                           2.27 kB │ gzip:     0.91 kB
+dist/assets/garment-DlWWBfwG.css                            3.08 kB │ gzip:     1.11 kB
+dist/assets/AvatarAdapter-ebXetWYu.js                      11.71 kB │ gzip:     4.69 kB │ map:    61.32 kB
+dist/assets/body-Cnxb1A30.js                               12.33 kB │ gzip:     5.74 kB │ map:    43.40 kB
+dist/assets/landmarks-YjMbJydk.js                          21.28 kB │ gzip:     7.92 kB │ map:    82.78 kB
+dist/assets/index-BlezTJp_.js                              28.99 kB │ gzip:    11.15 kB │ map:   137.73 kB
+dist/assets/garment-BcXVOw6D.js                           513.42 kB │ gzip:   148.03 kB │ map: 1,238.86 kB
+dist/assets/versions-OgDe2xn5.js                          544.63 kB │ gzip:   136.70 kB │ map: 2,887.24 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 5.90s
+exit=0

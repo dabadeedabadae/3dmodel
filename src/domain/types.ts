@@ -220,6 +220,25 @@ export interface GarmentRecord {
 
   processingVersion: number;
   avatar: AvatarCompatibility | null;
+  /** F-stages: last fit onto a body — alignment, ease adjustments and statuses, separate from the photo-derived params */
+  fit?: FitRecord | null;
+}
+
+export interface FitRecord {
+  bodyId: string;
+  bodyVersion: string;
+  bodyPreset: string | null;
+  anchor: 'chest' | 'shoulder';
+  /** metres per template unit */
+  scale: number;
+  offset: [number, number, number];
+  fitToBody: boolean;
+  /** template params widened for the body (name: from → to); empty when shown as photographed */
+  fitAdjust: { name: string; from: number; to: number; reason: string }[];
+  rings: { ring: string; status: 'tight' | 'ok' | 'loose' | 'free'; clearance: number | null }[];
+  status: 'ok' | 'tight' | 'intersects';
+  pushedVertices: number;
+  checksPassed: boolean;
 }
 
 export function createEmptyGarmentRecord(id: string, now: Date = new Date()): GarmentRecord {

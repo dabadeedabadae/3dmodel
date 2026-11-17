@@ -1,0 +1,106 @@
+{
+  "id": "outfit01",
+  "source": "imported-body/assets/outfit-01.fbx",
+  "statureGiven_cm": 175,
+  "weld": {
+    "before": 5763,
+    "after": 993,
+    "triangles": 1921,
+    "seamSnapped": 17,
+    "mirrorPaired": 979
+  },
+  "symmetry_mm": {
+    "mean": 0.25,
+    "max": 8.11
+  },
+  "parts": [
+    {
+      "kind": "shoe_right",
+      "vertices": 90,
+      "triangles": 176,
+      "y_cm": [
+        0,
+        13.3
+      ]
+    },
+    {
+      "kind": "bottom",
+      "vertices": 190,
+      "triangles": 365,
+      "y_cm": [
+        7.7,
+        99.9
+      ]
+    },
+    {
+      "kind": "arm_right",
+      "vertices": 141,
+      "triangles": 270,
+      "y_cm": [
+        132.5,
+        143.3
+      ]
+    },
+    {
+      "kind": "top",
+      "vertices": 209,
+      "triangles": 414,
+      "y_cm": [
+        91.3,
+        149.2
+      ]
+    },
+    {
+      "kind": "head",
+      "vertices": 133,
+      "triangles": 250,
+      "y_cm": [
+        141.7,
+        175
+      ]
+    },
+    {
+      "kind": "shoe_left",
+      "vertices": 92,
+      "triangles": 180,
+      "y_cm": [
+        0,
+        13.3
+      ]
+    },
+    {
+      "kind": "arm_left",
+      "vertices": 138,
+      "triangles": 266,
+      "y_cm": [
+        132.4,
+        142.9
+      ]
+    }
+  ],
+  "landmarks_cm": {
+    "height": 175,
+    "ankle": 13.3,
+    "crotch": 77.3,
+    "waistband": 99.9,
+    "hip": 83,
+    "chest": 128,
+    "armpit": 132.4,
+    "shoulder": 143.3,
+    "neck_base": 141.7,
+    "topHem": 91.3
+  },
+  "fractions_of_H": {
+    "height": 1,
+    "ankle": 0.076,
+    "crotch": 0.442,
+    "waistband": 0.571,
+    "hip": 0.474,
+    "chest": 0.731,
+    "armpit": 0.756,
+    "shoulder": 0.819,
+    "neck_base": 0.81,
+    "topHem": 0.522
+  },
+  "note": "Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: она сгенерирована одетой."
+}

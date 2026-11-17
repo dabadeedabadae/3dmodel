@@ -28,6 +28,9 @@ import { buildTShirt } from '../templates/tshirt/buildTShirt';
 import { bleedEdges, fillBase, imageCorrespondence, transferToUV, type Correspondence, type TransferResult } from '../image/uvTransfer';
 import { estimateBaseColor, flattenLighting, type BaseColorResult } from '../image/color';
 import { pixelate, type PixelateOptions, type PixelateResult } from '../image/pixelate';
+import { ProceduralBodyAdapter } from '../body/ProceduralBodyAdapter';
+import { BODY_PRESETS, BODY_TEMPLATE_VERSION, defaultBodyParams } from '../body/params';
+import { DEFAULT_EASE, fitTShirtToBody, type FitAnchor, type FitResult } from '../fitting/fitTShirt';
 import { MaskEditor } from './maskEditor';
 import { PHOTO_GUIDE, PhotoLoadError, loadPhoto, type LoadedPhoto } from './photo';
 
@@ -76,6 +79,10 @@ export class GarmentApp {
   pixelOpts: PixelateOptions = { size: 256, colors: 16, dither: false, strength: 1 };
   pixel: PixelateResult | null = null;
   viewer: GarmentViewer | null = null;
+  // F04: garment on the procedural mannequin (optional view; the chain itself never needs a body)
+  fitOpts: { enabled: boolean; preset: string; anchor: FitAnchor; fitToBody: boolean; easeScale: number } = { enabled: false, preset: 'male-m', anchor: 'chest', fitToBody: true, easeScale: 1 };
+  body: ProceduralBodyAdapter | null = null;
+  fit: FitResult | null = null;
 
   constructor(private root: HTMLElement) {
     this.record = createEmptyGarmentRecord(this.newId('garment'));
@@ -262,6 +269,9 @@ export class GarmentApp {
     this.pixel = null;
     this.viewer?.dispose();
     this.viewer = null;
+    this.body?.dispose();
+    this.body = null;
+    this.fit = null;
     this.record.landmarks = [];
     this.record.params = {};
     this.record.textures = [];
@@ -897,9 +907,152 @@ export class GarmentApp {
       this.viewer = new GarmentViewer(this.layers.resolved);
     } else this.viewer.setParams(this.layers.resolved);
     this.viewer.setTextures({ data: src.data, size: src.size }, { data: this.pixel.data, size: this.pixel.size });
+    this.runFit();
     this.store.setResult('preview_ready', { pixel: this.pixelOpts, palette: this.pixel.palette.length });
     this.record.textures = this.record.textures.filter((t) => t.kind !== 'uv_pixelated');
     this.record.textures.push({ id: this.newId('tex'), kind: 'uv_pixelated', width: this.pixel.size, height: this.pixel.size, coveredIslands: this.corr?.visibleIslands ?? [], conditionalIslands: ['back', 'collar'], processingVersion: PROCESSING_VERSION });
+    this.renderPreview();
+  }
+
+  /** F01–F04: place the garment on the mannequin (or take it off). Photo-derived params are never modified. */
+  runFit(): FitResult | null {
+    if (!this.viewer || !this.layers) return null;
+    if (!this.fitOpts.enabled) {
+      this.body?.dispose();
+      this.body = null;
+      this.fit = null;
+      this.viewer.setBody(null);
+      this.viewer.applyFit(null);
+      this.record.fit = null;
+      return null;
+    }
+    const preset = BODY_PRESETS.find((p) => p.id === this.fitOpts.preset) ?? BODY_PRESETS[0]!;
+    const params = { ...defaultBodyParams(preset.sex), ...preset.params };
+    if (!this.body) this.body = new ProceduralBodyAdapter(params);
+    else this.body.setBodyParams(params);
+    const k = this.fitOpts.easeScale;
+    const ease = { chest: DEFAULT_EASE.chest * k, waist: DEFAULT_EASE.waist * k, hem: DEFAULT_EASE.hem * k, shoulder: DEFAULT_EASE.shoulder * k, sleeve: DEFAULT_EASE.sleeve * k };
+    this.fit = fitTShirtToBody(this.layers.resolved, this.body.getFrame(), this.body.id, { anchor: this.fitOpts.anchor, fitToBody: this.fitOpts.fitToBody, ease });
+    this.viewer.setBody(this.body);
+    this.viewer.applyFit(this.fit);
+    this.viewer.setView('front');
+    this.record.fit = {
+      bodyId: this.body.id,
+      bodyVersion: BODY_TEMPLATE_VERSION,
+      bodyPreset: preset.id,
+      anchor: this.fit.anchor,
+      scale: this.fit.scale,
+      offset: this.fit.offset,
+      fitToBody: this.fitOpts.fitToBody,
+      fitAdjust: this.fit.fitAdjust.map((a) => ({ ...a })),
+      rings: this.fit.rings.map((r) => ({ ring: r.ring, status: r.status, clearance: r.clearance })),
+      status: this.fit.status,
+      pushedVertices: this.fit.pushedVertices,
+      checksPassed: this.fit.ok,
+    };
+    this.record.avatar = { avatarId: this.body.id, avatarVersion: BODY_TEMPLATE_VERSION, avatarKind: 'production', fit: this.fit.status === 'intersects' ? 'incompatible' : this.fit.status === 'tight' ? 'out_of_range' : 'ok' };
+    return this.fit;
+  }
+
+  private renderFitControls(): HTMLElement {
+    const box = el('div', 'pgp-fit');
+    const on = document.createElement('input');
+    on.type = 'checkbox';
+    on.id = 'pgp-fit-enabled';
+    on.checked = this.fitOpts.enabled;
+    on.addEventListener('change', () => {
+      this.fitOpts.enabled = on.checked;
+      this.runFit();
+      this.renderPreview();
+    });
+    const preset = document.createElement('select');
+    preset.id = 'pgp-fit-preset';
+    for (const p of BODY_PRESETS) {
+      const o = document.createElement('option');
+      o.value = p.id;
+      o.textContent = p.label;
+      if (p.id === this.fitOpts.preset) o.selected = true;
+      preset.appendChild(o);
+    }
+    preset.addEventListener('change', () => {
+      this.fitOpts.preset = preset.value;
+      this.runFit();
+      this.renderPreview();
+    });
+    const anchor = document.createElement('select');
+    anchor.id = 'pgp-fit-anchor';
+    for (const [v, l] of [
+      ['chest', 'по груди'],
+      ['shoulder', 'по плечам'],
+    ] as const) {
+      const o = document.createElement('option');
+      o.value = v;
+      o.textContent = l;
+      if (v === this.fitOpts.anchor) o.selected = true;
+      anchor.appendChild(o);
+    }
+    anchor.addEventListener('change', () => {
+      this.fitOpts.anchor = anchor.value as FitAnchor;
+      this.runFit();
+      this.renderPreview();
+    });
+    const toBody = document.createElement('input');
+    toBody.type = 'checkbox';
+    toBody.id = 'pgp-fit-tobody';
+    toBody.checked = this.fitOpts.fitToBody;
+    toBody.addEventListener('change', () => {
+      this.fitOpts.fitToBody = toBody.checked;
+      this.runFit();
+      this.renderPreview();
+    });
+    const easeIn = document.createElement('input');
+    easeIn.type = 'range';
+    easeIn.min = '0.5';
+    easeIn.max = '2';
+    easeIn.step = '0.1';
+    easeIn.value = String(this.fitOpts.easeScale);
+    easeIn.id = 'pgp-fit-ease';
+    easeIn.addEventListener('change', () => {
+      this.fitOpts.easeScale = Number(easeIn.value);
+      this.runFit();
+      this.renderPreview();
+    });
+    const r1 = el('div', 'pg-row');
+    r1.append(el('label', '', 'На манекене '), on, el('span', 'pg-muted', 'пропорции:'), preset, el('span', 'pg-muted', 'масштаб:'), anchor, el('label', '', 'подогнать по телу '), toBody, el('span', 'pg-muted', 'свобода ×'), easeIn);
+    box.appendChild(r1);
+    if (this.fitOpts.enabled && this.fit) {
+      const f = this.fit;
+      const st = el('div', `pgp-note ${f.status === 'ok' ? 'is-ok' : f.status === 'tight' ? 'is-warn' : 'is-err'}`);
+      st.id = 'pgp-fit-status';
+      st.textContent = `Посадка: ${f.status === 'ok' ? 'без пересечений' : f.status === 'tight' ? 'в натяг (есть кольца tight)' : 'ПЕРЕСЕЧЕНИЯ с телом'} · масштаб ${f.scale.toFixed(3)} м/ед (${f.anchor === 'chest' ? 'по груди' : 'по плечам'})`;
+      box.appendChild(st);
+      const tbl = el('table', 'pgp-params');
+      tbl.id = 'pgp-fit-rings';
+      const thead = el('tr');
+      for (const h of ['кольцо', 'зазор до тела', 'нужно (ease)', 'статус']) thead.appendChild(el('th', '', h));
+      tbl.appendChild(thead);
+      for (const r of f.rings) {
+        const tr = el('tr', `is-${r.status}`);
+        tr.append(el('td', '', r.ring), el('td', '', r.clearance === null ? '— (тела нет на этой высоте)' : `${(r.clearance * 100).toFixed(1)} см`), el('td', '', `${(r.ease * 100).toFixed(1)} см`), el('td', '', r.status === 'tight' ? 'в натяг' : r.status === 'loose' ? 'свободно' : r.status === 'free' ? 'свисает' : 'ok'));
+        tbl.appendChild(tr);
+      }
+      box.appendChild(tbl);
+      if (f.fitAdjust.length) {
+        const adj = el('div', 'pg-muted');
+        adj.id = 'pgp-fit-adjust';
+        adj.textContent = 'Подгонка по телу изменила параметры шаблона (оценка по фото не тронута): ' + f.fitAdjust.map((a) => `${a.name} ${a.from.toFixed(2)} → ${a.to.toFixed(2)}`).join(', ');
+        box.appendChild(adj);
+      } else if (this.fitOpts.fitToBody) box.appendChild(el('div', 'pg-muted', 'Параметры шаблона менять не пришлось; выталкивание вершин: ' + f.pushedVertices + ` (макс. ${(f.maxPush * 100).toFixed(1)} см).`));
+      else box.appendChild(el('div', 'pg-muted', 'Показано как на фото: без подгонки; пересечения и натяг показаны честно.'));
+      const ch = el('div', 'pg-muted');
+      ch.textContent = f.checks.map((c) => `${c.pass ? 'PASS' : c.level === 'warn' ? 'WARN' : 'FAIL'} ${c.name} — ${c.detail}`).join(' · ');
+      box.appendChild(ch);
+    }
+    return box;
+  }
+
+  /** re-render step 8 (used by e2e after programmatic fit changes) */
+  refreshPreview(): void {
     this.renderPreview();
   }
 
@@ -982,7 +1135,8 @@ export class GarmentApp {
       vrow.appendChild(b);
     }
     box.appendChild(vrow);
-    box.appendChild(el('div', 'pg-muted', 'Вращение — мышью, зум — колесом. Футболка показана отдельно, без тела (этапы 04/13 отложены). Спинка и воротник — условные, залиты основным цветом.'));
+    box.appendChild(el('div', 'pg-muted', 'Вращение — мышью, зум — колесом. Спинка и воротник — условные, залиты основным цветом. Манекен — процедурный (пропорции, не мерки); посадка — выравнивание + зазор + выталкивание, не физика ткани.'));
+    box.appendChild(this.renderFitControls());
     box.appendChild(keepViewer ?? this.viewer.root);
     const exp = button('Сохранить пакет C (JSON + UV + пиксельная + маска)', () => this.exportC());
     exp.id = 'pgp-export-c';

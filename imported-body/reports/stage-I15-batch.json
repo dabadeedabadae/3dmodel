@@ -1,0 +1,157 @@
+{
+  "generatedAt": "2026-11-17T23:00:33.494Z",
+  "stature_cm": 175,
+  "figures": [
+    {
+      "file": "outfit-01.fbx",
+      "id": "outfit01",
+      "status": "PASS",
+      "notes": [],
+      "parts": {
+        "shoe_right": 90,
+        "bottom": 190,
+        "arm_right": 141,
+        "top": 209,
+        "head": 133,
+        "shoe_left": 92,
+        "arm_left": 138
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 13.3,
+        "crotch": 77.3,
+        "waistband": 99.9,
+        "hip": 83,
+        "chest": 128,
+        "armpit": 132.4,
+        "shoulder": 143.3,
+        "neck_base": 141.7,
+        "topHem": 91.3
+      },
+      "symmetry_mm": {
+        "mean": 0.25,
+        "max": 8.11
+      },
+      "weld": {
+        "before": 5763,
+        "after": 993,
+        "triangles": 1921,
+        "seamSnapped": 17,
+        "mirrorPaired": 979
+      },
+      "sliderRange": "chest ±0.4, waist ±0.7, hip ±1, shoulders ±0.1, arms ±1, thighs ±0.7"
+    },
+    {
+      "file": "outfit-02.fbx",
+      "id": "outfit02",
+      "status": "PASS",
+      "notes": [],
+      "compose": {
+        "target": "raw-outfit02",
+        "reference": "outfit01",
+        "vertices": 1881,
+        "triangles": 3415,
+        "armSpanScale": 1.121,
+        "headShift_cm": [
+          0,
+          0,
+          -6.1
+        ],
+        "cuffX_cm": {
+          "arm_left": 77.9,
+          "arm_right": 77.7
+        },
+        "verticesPulledInsideCuff": 29
+      },
+      "parts": {
+        "shoe_right": 341,
+        "bottom": 225,
+        "top": 664,
+        "shoe_left": 341,
+        "arm_right": 91,
+        "head": 133,
+        "arm_left": 86
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 13.3,
+        "crotch": 77.4,
+        "waistband": 92.2,
+        "hip": 83.6,
+        "chest": 128,
+        "armpit": 132.4,
+        "shoulder": 141.7,
+        "neck_base": 141.7,
+        "topHem": 90
+      },
+      "symmetry_mm": {
+        "mean": 0.02,
+        "max": 5.91
+      },
+      "weld": {
+        "before": 1881,
+        "after": 1881,
+        "triangles": 3415,
+        "seamSnapped": 50,
+        "mirrorPaired": 1880
+      },
+      "sliderRange": "chest ±0.9, waist ±0.9, hip ±0.9, shoulders ±0.27, arms ±0.9, thighs ±0.9"
+    },
+    {
+      "file": "outfit-03.fbx",
+      "id": "outfit03",
+      "status": "PASS",
+      "notes": [],
+      "compose": {
+        "target": "raw-outfit03",
+        "reference": "outfit01",
+        "vertices": 1998,
+        "triangles": 3610,
+        "armSpanScale": 1.129,
+        "headShift_cm": [
+          0,
+          0,
+          -7.1
+        ],
+        "cuffX_cm": {
+          "arm_left": 65.3,
+          "arm_right": 65
+        },
+        "verticesPulledInsideCuff": 19
+      },
+      "parts": {
+        "shoe_right": 364,
+        "bottom": 251,
+        "top": 660,
+        "shoe_left": 364,
+        "arm_right": 112,
+        "head": 133,
+        "arm_left": 107
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 13.3,
+        "crotch": 77.1,
+        "waistband": 100,
+        "hip": 84.3,
+        "chest": 127.3,
+        "armpit": 131.7,
+        "shoulder": 141.8,
+        "neck_base": 141.7,
+        "topHem": 87.3
+      },
+      "symmetry_mm": {
+        "mean": 0.04,
+        "max": 6.04
+      },
+      "weld": {
+        "before": 1998,
+        "after": 1991,
+        "triangles": 3610,
+        "seamSnapped": 39,
+        "mirrorPaired": 1990
+      },
+      "sliderRange": "chest ±0.81, waist ±0.81, hip ±0.81, shoulders ±0.08, arms ±0.81, thighs ±0.81"
+    }
+  ]
+}

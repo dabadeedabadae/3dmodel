@@ -1,0 +1,1246 @@
+{
+  "generatedAt": "2026-11-02T15:26:56.357Z",
+  "cases": [
+    {
+      "label": "puma-print",
+      "fits": [
+        {
+          "preset": "male-m",
+          "fitToBody": true,
+          "status": "ok",
+          "scale": 0.4776522194164832,
+          "fitAdjust": [
+            {
+              "name": "cuffRadius",
+              "from": 0.10536789236464493,
+              "to": 0.13469639571042957,
+              "reason": "подгонка по телу (ease)"
+            },
+            {
+              "name": "sleeveAngle",
+              "from": 0.1036420675833573,
+              "to": 0.8,
+              "reason": "подгонка по телу (ease)"
+            }
+          ],
+          "rings": [
+            "hem:free",
+            "waist:ok",
+            "chest:ok",
+            "armpit:ok",
+            "shoulder:loose",
+            "cuff_left:ok",
+            "cuff_right:ok"
+          ],
+          "checks": [
+            "PASS no_vertex_inside_body",
+            "PASS arm_inside_sleeve",
+            "PASS neck_opening_clears_neck"
+          ],
+          "pushed": 126,
+          "maxPush": 0.04731859641900228,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "male-m",
+            "anchor": "chest",
+            "scale": 0.4776522194164832,
+            "offset": [
+              0,
+              1.4295,
+              0
+            ],
+            "fitToBody": true,
+            "fitAdjust": [
+              {
+                "name": "cuffRadius",
+                "from": 0.10536789236464493,
+                "to": 0.13469639571042957,
+                "reason": "подгонка по телу (ease)"
+              },
+              {
+                "name": "sleeveAngle",
+                "from": 0.1036420675833573,
+                "to": 0.8,
+                "reason": "подгонка по телу (ease)"
+              }
+            ],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "free",
+                "clearance": null
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.03609367744923103
+              },
+              {
+                "ring": "chest",
+                "status": "ok",
+                "clearance": 0.04360360465252547
+              },
+              {
+                "ring": "armpit",
+                "status": "ok",
+                "clearance": 0.02999999981312984
+              },
+              {
+                "ring": "shoulder",
+                "status": "loose",
+                "clearance": 0.06755568656285256
+              },
+              {
+                "ring": "cuff_left",
+                "status": "ok",
+                "clearance": 0.014971352313380058
+              },
+              {
+                "ring": "cuff_right",
+                "status": "ok",
+                "clearance": 0.014971352313380058
+              }
+            ],
+            "status": "ok",
+            "pushedVertices": 126,
+            "checksPassed": true
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "ok"
+          }
+        },
+        {
+          "preset": "male-m",
+          "fitToBody": false,
+          "status": "intersects",
+          "scale": 0.4776522194164832,
+          "fitAdjust": [],
+          "rings": [
+            "hem:free",
+            "waist:ok",
+            "chest:ok",
+            "armpit:ok",
+            "shoulder:loose",
+            "cuff_left:tight",
+            "cuff_right:tight"
+          ],
+          "checks": [
+            "FAIL no_vertex_inside_body",
+            "WARN arm_inside_sleeve",
+            "WARN neck_opening_clears_neck"
+          ],
+          "pushed": 0,
+          "maxPush": 0,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "male-m",
+            "anchor": "chest",
+            "scale": 0.4776522194164832,
+            "offset": [
+              0,
+              1.4295,
+              0
+            ],
+            "fitToBody": false,
+            "fitAdjust": [],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "free",
+                "clearance": null
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.03609367744923103
+              },
+              {
+                "ring": "chest",
+                "status": "ok",
+                "clearance": 0.04360360465252547
+              },
+              {
+                "ring": "armpit",
+                "status": "ok",
+                "clearance": 0.028776153375425717
+              },
+              {
+                "ring": "shoulder",
+                "status": "loose",
+                "clearance": 0.06755568656285256
+              },
+              {
+                "ring": "cuff_left",
+                "status": "tight",
+                "clearance": -0.0018543895491262008
+              },
+              {
+                "ring": "cuff_right",
+                "status": "tight",
+                "clearance": -0.0018543895491262008
+              }
+            ],
+            "status": "intersects",
+            "pushedVertices": 0,
+            "checksPassed": false
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "incompatible"
+          }
+        },
+        {
+          "preset": "female-m",
+          "fitToBody": true,
+          "status": "ok",
+          "scale": 0.43976541025551813,
+          "fitAdjust": [
+            {
+              "name": "depthRatio",
+              "from": 0.8,
+              "to": 0.8974342807939825,
+              "reason": "подгонка по телу (ease)"
+            },
+            {
+              "name": "cuffRadius",
+              "from": 0.10536789236464493,
+              "to": 0.13182445295351494,
+              "reason": "подгонка по телу (ease)"
+            },
+            {
+              "name": "sleeveAngle",
+              "from": 0.1036420675833573,
+              "to": 0.8,
+              "reason": "подгонка по телу (ease)"
+            }
+          ],
+          "rings": [
+            "hem:free",
+            "waist:ok",
+            "chest:ok",
+            "armpit:ok",
+            "shoulder:loose",
+            "cuff_left:ok",
+            "cuff_right:ok"
+          ],
+          "checks": [
+            "PASS no_vertex_inside_body",
+            "PASS arm_inside_sleeve",
+            "PASS neck_opening_clears_neck"
+          ],
+          "pushed": 110,
+          "maxPush": 0.03682350484275486,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "female-m",
+            "anchor": "chest",
+            "scale": 0.43976541025551813,
+            "offset": [
+              0,
+              1.316,
+              0
+            ],
+            "fitToBody": true,
+            "fitAdjust": [
+              {
+                "name": "depthRatio",
+                "from": 0.8,
+                "to": 0.8974342807939825,
+                "reason": "подгонка по телу (ease)"
+              },
+              {
+                "name": "cuffRadius",
+                "from": 0.10536789236464493,
+                "to": 0.13182445295351494,
+                "reason": "подгонка по телу (ease)"
+              },
+              {
+                "name": "sleeveAngle",
+                "from": 0.1036420675833573,
+                "to": 0.8,
+                "reason": "подгонка по телу (ease)"
+              }
+            ],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "free",
+                "clearance": null
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.034999997309894254
+              },
+              {
+                "ring": "chest",
+                "status": "ok",
+                "clearance": 0.051042570860526715
+              },
+              {
+                "ring": "armpit",
+                "status": "ok",
+                "clearance": 0.030000003927662333
+              },
+              {
+                "ring": "shoulder",
+                "status": "loose",
+                "clearance": 0.06956555310106875
+              },
+              {
+                "ring": "cuff_left",
+                "status": "ok",
+                "clearance": 0.014969575083815294
+              },
+              {
+                "ring": "cuff_right",
+                "status": "ok",
+                "clearance": 0.014969575083815294
+              }
+            ],
+            "status": "ok",
+            "pushedVertices": 110,
+            "checksPassed": true
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "ok"
+          }
+        },
+        {
+          "preset": "female-m",
+          "fitToBody": false,
+          "status": "intersects",
+          "scale": 0.43976541025551813,
+          "fitAdjust": [],
+          "rings": [
+            "hem:free",
+            "waist:ok",
+            "chest:ok",
+            "armpit:tight",
+            "shoulder:loose",
+            "cuff_left:ok",
+            "cuff_right:ok"
+          ],
+          "checks": [
+            "FAIL no_vertex_inside_body",
+            "WARN arm_inside_sleeve",
+            "WARN neck_opening_clears_neck"
+          ],
+          "pushed": 0,
+          "maxPush": 0,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "female-m",
+            "anchor": "chest",
+            "scale": 0.43976541025551813,
+            "offset": [
+              0,
+              1.316,
+              0
+            ],
+            "fitToBody": false,
+            "fitAdjust": [],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "free",
+                "clearance": null
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.0257979200795683
+              },
+              {
+                "ring": "chest",
+                "status": "ok",
+                "clearance": 0.03656379871259591
+              },
+              {
+                "ring": "armpit",
+                "status": "tight",
+                "clearance": 0.011146771663143595
+              },
+              {
+                "ring": "shoulder",
+                "status": "loose",
+                "clearance": 0.06956555310106875
+              },
+              {
+                "ring": "cuff_left",
+                "status": "ok",
+                "clearance": 0.009233278633001295
+              },
+              {
+                "ring": "cuff_right",
+                "status": "ok",
+                "clearance": 0.009233278633001295
+              }
+            ],
+            "status": "intersects",
+            "pushedVertices": 0,
+            "checksPassed": false
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "incompatible"
+          }
+        },
+        {
+          "preset": "male-l",
+          "fitToBody": true,
+          "status": "ok",
+          "scale": 0.5361479910214354,
+          "fitAdjust": [
+            {
+              "name": "cuffRadius",
+              "from": 0.10536789236464493,
+              "to": 0.13484295516122136,
+              "reason": "подгонка по телу (ease)"
+            },
+            {
+              "name": "sleeveAngle",
+              "from": 0.1036420675833573,
+              "to": 0.8,
+              "reason": "подгонка по телу (ease)"
+            }
+          ],
+          "rings": [
+            "hem:free",
+            "waist:ok",
+            "chest:ok",
+            "armpit:ok",
+            "shoulder:ok",
+            "cuff_left:ok",
+            "cuff_right:ok"
+          ],
+          "checks": [
+            "PASS no_vertex_inside_body",
+            "PASS arm_inside_sleeve",
+            "PASS neck_opening_clears_neck"
+          ],
+          "pushed": 126,
+          "maxPush": 0.05517228999852525,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "male-l",
+            "anchor": "chest",
+            "scale": 0.5361479910214354,
+            "offset": [
+              0,
+              1.4862,
+              0
+            ],
+            "fitToBody": true,
+            "fitAdjust": [
+              {
+                "name": "cuffRadius",
+                "from": 0.10536789236464493,
+                "to": 0.13484295516122136,
+                "reason": "подгонка по телу (ease)"
+              },
+              {
+                "name": "sleeveAngle",
+                "from": 0.1036420675833573,
+                "to": 0.8,
+                "reason": "подгонка по телу (ease)"
+              }
+            ],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "free",
+                "clearance": null
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.03500000473085327
+              },
+              {
+                "ring": "chest",
+                "status": "ok",
+                "clearance": 0.04448940860102013
+              },
+              {
+                "ring": "armpit",
+                "status": "ok",
+                "clearance": 0.029999995871299617
+              },
+              {
+                "ring": "shoulder",
+                "status": "ok",
+                "clearance": 0.04506766257495169
+              },
+              {
+                "ring": "cuff_left",
+                "status": "ok",
+                "clearance": 0.01496920038701402
+              },
+              {
+                "ring": "cuff_right",
+                "status": "ok",
+                "clearance": 0.01496920038701402
+              }
+            ],
+            "status": "ok",
+            "pushedVertices": 126,
+            "checksPassed": true
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "ok"
+          }
+        },
+        {
+          "preset": "male-l",
+          "fitToBody": false,
+          "status": "intersects",
+          "scale": 0.5361479910214354,
+          "fitAdjust": [],
+          "rings": [
+            "hem:free",
+            "waist:ok",
+            "chest:ok",
+            "armpit:ok",
+            "shoulder:ok",
+            "cuff_left:tight",
+            "cuff_right:tight"
+          ],
+          "checks": [
+            "FAIL no_vertex_inside_body",
+            "WARN arm_inside_sleeve",
+            "WARN neck_opening_clears_neck"
+          ],
+          "pushed": 0,
+          "maxPush": 0,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "male-l",
+            "anchor": "chest",
+            "scale": 0.5361479910214354,
+            "offset": [
+              0,
+              1.4862,
+              0
+            ],
+            "fitToBody": false,
+            "fitAdjust": [],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "free",
+                "clearance": null
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.034764458552661304
+              },
+              {
+                "ring": "chest",
+                "status": "ok",
+                "clearance": 0.04448940860102013
+              },
+              {
+                "ring": "armpit",
+                "status": "ok",
+                "clearance": 0.028980278222858064
+              },
+              {
+                "ring": "shoulder",
+                "status": "ok",
+                "clearance": 0.04506766257495169
+              },
+              {
+                "ring": "cuff_left",
+                "status": "tight",
+                "clearance": 0.0003579595171220584
+              },
+              {
+                "ring": "cuff_right",
+                "status": "tight",
+                "clearance": 0.0003579595171220584
+              }
+            ],
+            "status": "intersects",
+            "pushedVertices": 0,
+            "checksPassed": false
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "incompatible"
+          }
+        }
+      ],
+      "uiOff": {
+        "enabled": false,
+        "hasBody": false
+      },
+      "uiStatus": "Посадка: без пересечений · масштаб 0.478 м/ед (по груди)",
+      "off": {
+        "fit": null,
+        "hasBody": false
+      }
+    },
+    {
+      "label": "striped",
+      "fits": [
+        {
+          "preset": "male-m",
+          "fitToBody": true,
+          "status": "ok",
+          "scale": 0.4776522194164832,
+          "fitAdjust": [
+            {
+              "name": "chestHalfWidth",
+              "from": 0.44,
+              "to": 0.46846293277583234,
+              "reason": "подгонка по телу (ease)"
+            },
+            {
+              "name": "cuffRadius",
+              "from": 0.09770478570173077,
+              "to": 0.13469639571042957,
+              "reason": "подгонка по телу (ease)"
+            },
+            {
+              "name": "sleeveAngle",
+              "from": 0,
+              "to": 0.8,
+              "reason": "подгонка по телу (ease)"
+            }
+          ],
+          "rings": [
+            "hem:ok",
+            "waist:ok",
+            "chest:ok",
+            "armpit:ok",
+            "shoulder:loose",
+            "cuff_left:ok",
+            "cuff_right:ok"
+          ],
+          "checks": [
+            "PASS no_vertex_inside_body",
+            "PASS arm_inside_sleeve",
+            "PASS neck_opening_clears_neck"
+          ],
+          "pushed": 106,
+          "maxPush": 0.04565075826842973,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "male-m",
+            "anchor": "chest",
+            "scale": 0.4776522194164832,
+            "offset": [
+              0,
+              1.4295,
+              0
+            ],
+            "fitToBody": true,
+            "fitAdjust": [
+              {
+                "name": "chestHalfWidth",
+                "from": 0.44,
+                "to": 0.46846293277583234,
+                "reason": "подгонка по телу (ease)"
+              },
+              {
+                "name": "cuffRadius",
+                "from": 0.09770478570173077,
+                "to": 0.13469639571042957,
+                "reason": "подгонка по телу (ease)"
+              },
+              {
+                "name": "sleeveAngle",
+                "from": 0,
+                "to": 0.8,
+                "reason": "подгонка по телу (ease)"
+              }
+            ],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "ok",
+                "clearance": 0.06600139240287695
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.06998050838036328
+              },
+              {
+                "ring": "chest",
+                "status": "ok",
+                "clearance": 0.04166592543343092
+              },
+              {
+                "ring": "armpit",
+                "status": "ok",
+                "clearance": 0.029999992304882428
+              },
+              {
+                "ring": "shoulder",
+                "status": "loose",
+                "clearance": 0.07145103490818638
+              },
+              {
+                "ring": "cuff_left",
+                "status": "ok",
+                "clearance": 0.014977669120792715
+              },
+              {
+                "ring": "cuff_right",
+                "status": "ok",
+                "clearance": 0.014977669120792715
+              }
+            ],
+            "status": "ok",
+            "pushedVertices": 106,
+            "checksPassed": true
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "ok"
+          }
+        },
+        {
+          "preset": "male-m",
+          "fitToBody": false,
+          "status": "intersects",
+          "scale": 0.4776522194164832,
+          "fitAdjust": [],
+          "rings": [
+            "hem:ok",
+            "waist:ok",
+            "chest:ok",
+            "armpit:ok",
+            "shoulder:loose",
+            "cuff_left:tight",
+            "cuff_right:tight"
+          ],
+          "checks": [
+            "FAIL no_vertex_inside_body",
+            "WARN arm_inside_sleeve",
+            "WARN neck_opening_clears_neck"
+          ],
+          "pushed": 0,
+          "maxPush": 0,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "male-m",
+            "anchor": "chest",
+            "scale": 0.4776522194164832,
+            "offset": [
+              0,
+              1.4295,
+              0
+            ],
+            "fitToBody": false,
+            "fitAdjust": [],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "ok",
+                "clearance": 0.06600139240287695
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.06432280393300208
+              },
+              {
+                "ring": "chest",
+                "status": "ok",
+                "clearance": 0.029354781761753962
+              },
+              {
+                "ring": "armpit",
+                "status": "ok",
+                "clearance": 0.01597775690668654
+              },
+              {
+                "ring": "shoulder",
+                "status": "loose",
+                "clearance": 0.07145103490818638
+              },
+              {
+                "ring": "cuff_left",
+                "status": "tight",
+                "clearance": -0.006211911668536324
+              },
+              {
+                "ring": "cuff_right",
+                "status": "tight",
+                "clearance": -0.006211911668536324
+              }
+            ],
+            "status": "intersects",
+            "pushedVertices": 0,
+            "checksPassed": false
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "incompatible"
+          }
+        },
+        {
+          "preset": "female-m",
+          "fitToBody": true,
+          "status": "ok",
+          "scale": 0.43976541025551813,
+          "fitAdjust": [
+            {
+              "name": "chestHalfWidth",
+              "from": 0.44,
+              "to": 0.4610178635122592,
+              "reason": "подгонка по телу (ease)"
+            },
+            {
+              "name": "depthRatio",
+              "from": 0.8,
+              "to": 0.9143688627027914,
+              "reason": "подгонка по телу (ease)"
+            },
+            {
+              "name": "cuffRadius",
+              "from": 0.09770478570173077,
+              "to": 0.13182445295351494,
+              "reason": "подгонка по телу (ease)"
+            },
+            {
+              "name": "sleeveAngle",
+              "from": 0,
+              "to": 0.8,
+              "reason": "подгонка по телу (ease)"
+            }
+          ],
+          "rings": [
+            "hem:ok",
+            "waist:ok",
+            "chest:ok",
+            "armpit:ok",
+            "shoulder:loose",
+            "cuff_left:ok",
+            "cuff_right:ok"
+          ],
+          "checks": [
+            "PASS no_vertex_inside_body",
+            "PASS arm_inside_sleeve",
+            "PASS neck_opening_clears_neck"
+          ],
+          "pushed": 88,
+          "maxPush": 0.046206314784252855,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "female-m",
+            "anchor": "chest",
+            "scale": 0.43976541025551813,
+            "offset": [
+              0,
+              1.316,
+              0
+            ],
+            "fitToBody": true,
+            "fitAdjust": [
+              {
+                "name": "chestHalfWidth",
+                "from": 0.44,
+                "to": 0.4610178635122592,
+                "reason": "подгонка по телу (ease)"
+              },
+              {
+                "name": "depthRatio",
+                "from": 0.8,
+                "to": 0.9143688627027914,
+                "reason": "подгонка по телу (ease)"
+              },
+              {
+                "name": "cuffRadius",
+                "from": 0.09770478570173077,
+                "to": 0.13182445295351494,
+                "reason": "подгонка по телу (ease)"
+              },
+              {
+                "name": "sleeveAngle",
+                "from": 0,
+                "to": 0.8,
+                "reason": "подгонка по телу (ease)"
+              }
+            ],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "ok",
+                "clearance": 0.05302135116468715
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.08318509534244065
+              },
+              {
+                "ring": "chest",
+                "status": "ok",
+                "clearance": 0.038451434176254184
+              },
+              {
+                "ring": "armpit",
+                "status": "ok",
+                "clearance": 0.03001110449230668
+              },
+              {
+                "ring": "shoulder",
+                "status": "loose",
+                "clearance": 0.07315616283348363
+              },
+              {
+                "ring": "cuff_left",
+                "status": "ok",
+                "clearance": 0.014979628351868376
+              },
+              {
+                "ring": "cuff_right",
+                "status": "ok",
+                "clearance": 0.014979628351868376
+              }
+            ],
+            "status": "ok",
+            "pushedVertices": 88,
+            "checksPassed": true
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "ok"
+          }
+        },
+        {
+          "preset": "female-m",
+          "fitToBody": false,
+          "status": "intersects",
+          "scale": 0.43976541025551813,
+          "fitAdjust": [],
+          "rings": [
+            "hem:ok",
+            "waist:ok",
+            "chest:tight",
+            "armpit:ok",
+            "shoulder:loose",
+            "cuff_left:tight",
+            "cuff_right:tight"
+          ],
+          "checks": [
+            "FAIL no_vertex_inside_body",
+            "WARN arm_inside_sleeve",
+            "WARN neck_opening_clears_neck"
+          ],
+          "pushed": 0,
+          "maxPush": 0,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "female-m",
+            "anchor": "chest",
+            "scale": 0.43976541025551813,
+            "offset": [
+              0,
+              1.316,
+              0
+            ],
+            "fitToBody": false,
+            "fitAdjust": [],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "ok",
+                "clearance": 0.050970279772241556
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.0677117030378254
+              },
+              {
+                "ring": "chest",
+                "status": "tight",
+                "clearance": 0.00786997477321616
+              },
+              {
+                "ring": "armpit",
+                "status": "ok",
+                "clearance": 0.02018752410643132
+              },
+              {
+                "ring": "shoulder",
+                "status": "loose",
+                "clearance": 0.07315616283348363
+              },
+              {
+                "ring": "cuff_left",
+                "status": "tight",
+                "clearance": 0.005219549774406328
+              },
+              {
+                "ring": "cuff_right",
+                "status": "tight",
+                "clearance": 0.005219549774406328
+              }
+            ],
+            "status": "intersects",
+            "pushedVertices": 0,
+            "checksPassed": false
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "incompatible"
+          }
+        },
+        {
+          "preset": "male-l",
+          "fitToBody": true,
+          "status": "ok",
+          "scale": 0.5361479910214354,
+          "fitAdjust": [
+            {
+              "name": "chestHalfWidth",
+              "from": 0.44,
+              "to": 0.4508065458884256,
+              "reason": "подгонка по телу (ease)"
+            },
+            {
+              "name": "cuffRadius",
+              "from": 0.09770478570173077,
+              "to": 0.13484295516122136,
+              "reason": "подгонка по телу (ease)"
+            },
+            {
+              "name": "sleeveAngle",
+              "from": 0,
+              "to": 0.8,
+              "reason": "подгонка по телу (ease)"
+            }
+          ],
+          "rings": [
+            "hem:ok",
+            "waist:ok",
+            "chest:ok",
+            "armpit:ok",
+            "shoulder:ok",
+            "cuff_left:ok",
+            "cuff_right:ok"
+          ],
+          "checks": [
+            "PASS no_vertex_inside_body",
+            "PASS arm_inside_sleeve",
+            "PASS neck_opening_clears_neck"
+          ],
+          "pushed": 98,
+          "maxPush": 0.0432331227363803,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "male-l",
+            "anchor": "chest",
+            "scale": 0.5361479910214354,
+            "offset": [
+              0,
+              1.4862,
+              0
+            ],
+            "fitToBody": true,
+            "fitAdjust": [
+              {
+                "name": "chestHalfWidth",
+                "from": 0.44,
+                "to": 0.4508065458884256,
+                "reason": "подгонка по телу (ease)"
+              },
+              {
+                "name": "cuffRadius",
+                "from": 0.09770478570173077,
+                "to": 0.13484295516122136,
+                "reason": "подгонка по телу (ease)"
+              },
+              {
+                "name": "sleeveAngle",
+                "from": 0,
+                "to": 0.8,
+                "reason": "подгонка по телу (ease)"
+              }
+            ],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "ok",
+                "clearance": 0.0694779912445008
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.06520437172003701
+              },
+              {
+                "ring": "chest",
+                "status": "ok",
+                "clearance": 0.03734449380396143
+              },
+              {
+                "ring": "armpit",
+                "status": "ok",
+                "clearance": 0.02999999791194574
+              },
+              {
+                "ring": "shoulder",
+                "status": "ok",
+                "clearance": 0.047855792583370554
+              },
+              {
+                "ring": "cuff_left",
+                "status": "ok",
+                "clearance": 0.01498391866991057
+              },
+              {
+                "ring": "cuff_right",
+                "status": "ok",
+                "clearance": 0.01498391866991057
+              }
+            ],
+            "status": "ok",
+            "pushedVertices": 98,
+            "checksPassed": true
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "ok"
+          }
+        },
+        {
+          "preset": "male-l",
+          "fitToBody": false,
+          "status": "intersects",
+          "scale": 0.5361479910214354,
+          "fitAdjust": [],
+          "rings": [
+            "hem:ok",
+            "waist:ok",
+            "chest:ok",
+            "armpit:ok",
+            "shoulder:ok",
+            "cuff_left:tight",
+            "cuff_right:tight"
+          ],
+          "checks": [
+            "FAIL no_vertex_inside_body",
+            "WARN arm_inside_sleeve",
+            "WARN neck_opening_clears_neck"
+          ],
+          "pushed": 0,
+          "maxPush": 0,
+          "record": {
+            "bodyId": "body-basic",
+            "bodyVersion": "0.1.0",
+            "bodyPreset": "male-l",
+            "anchor": "chest",
+            "scale": 0.5361479910214354,
+            "offset": [
+              0,
+              1.4862,
+              0
+            ],
+            "fitToBody": false,
+            "fitAdjust": [],
+            "rings": [
+              {
+                "ring": "hem",
+                "status": "ok",
+                "clearance": 0.0694779912445008
+              },
+              {
+                "ring": "waist",
+                "status": "ok",
+                "clearance": 0.062793242493241
+              },
+              {
+                "ring": "chest",
+                "status": "ok",
+                "clearance": 0.03209790048470407
+              },
+              {
+                "ring": "armpit",
+                "status": "ok",
+                "clearance": 0.023421670416365697
+              },
+              {
+                "ring": "shoulder",
+                "status": "ok",
+                "clearance": 0.047855792583370554
+              },
+              {
+                "ring": "cuff_left",
+                "status": "tight",
+                "clearance": -0.004526211525866228
+              },
+              {
+                "ring": "cuff_right",
+                "status": "tight",
+                "clearance": -0.004526211525866228
+              }
+            ],
+            "status": "intersects",
+            "pushedVertices": 0,
+            "checksPassed": false
+          },
+          "avatar": {
+            "avatarId": "body-basic",
+            "avatarVersion": "0.1.0",
+            "avatarKind": "production",
+            "fit": "incompatible"
+          }
+        }
+      ],
+      "uiOff": {
+        "enabled": false,
+        "hasBody": false
+      },
+      "uiStatus": "Посадка: без пересечений · масштаб 0.478 м/ед (по груди)",
+      "off": {
+        "fit": null,
+        "hasBody": false
+      }
+    }
+  ],
+  "errors": []
+}

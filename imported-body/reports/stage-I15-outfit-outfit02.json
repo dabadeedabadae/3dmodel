@@ -1,0 +1,196 @@
+{
+  "id": "outfit02",
+  "source": "imported-body/out/composed-outfit02.json",
+  "statureGiven_cm": 175,
+  "weld": {
+    "before": 1881,
+    "after": 1881,
+    "triangles": 3415,
+    "seamSnapped": 50,
+    "mirrorPaired": 1880
+  },
+  "symmetry_mm": {
+    "mean": 0.02,
+    "max": 5.91
+  },
+  "parts": [
+    {
+      "kind": "shoe_right",
+      "vertices": 198,
+      "triangles": 392,
+      "y_cm": [
+        0,
+        13.3
+      ]
+    },
+    {
+      "kind": "shoe_right",
+      "vertices": 31,
+      "triangles": 40,
+      "y_cm": [
+        6.3,
+        8.2
+      ]
+    },
+    {
+      "kind": "shoe_right",
+      "vertices": 26,
+      "triangles": 30,
+      "y_cm": [
+        7.5,
+        9.2
+      ]
+    },
+    {
+      "kind": "shoe_right",
+      "vertices": 36,
+      "triangles": 50,
+      "y_cm": [
+        8.4,
+        10.2
+      ]
+    },
+    {
+      "kind": "shoe_right",
+      "vertices": 25,
+      "triangles": 28,
+      "y_cm": [
+        9.5,
+        11.1
+      ]
+    },
+    {
+      "kind": "shoe_right",
+      "vertices": 25,
+      "triangles": 28,
+      "y_cm": [
+        10.5,
+        12.3
+      ]
+    },
+    {
+      "kind": "bottom",
+      "vertices": 225,
+      "triangles": 436,
+      "y_cm": [
+        7.7,
+        92.2
+      ]
+    },
+    {
+      "kind": "top",
+      "vertices": 664,
+      "triangles": 1262,
+      "y_cm": [
+        90,
+        151.5
+      ]
+    },
+    {
+      "kind": "shoe_left",
+      "vertices": 198,
+      "triangles": 392,
+      "y_cm": [
+        0,
+        13.3
+      ]
+    },
+    {
+      "kind": "shoe_left",
+      "vertices": 31,
+      "triangles": 40,
+      "y_cm": [
+        6.3,
+        8.2
+      ]
+    },
+    {
+      "kind": "shoe_left",
+      "vertices": 26,
+      "triangles": 30,
+      "y_cm": [
+        7.5,
+        9.2
+      ]
+    },
+    {
+      "kind": "shoe_left",
+      "vertices": 36,
+      "triangles": 50,
+      "y_cm": [
+        8.4,
+        10.2
+      ]
+    },
+    {
+      "kind": "shoe_left",
+      "vertices": 25,
+      "triangles": 28,
+      "y_cm": [
+        9.5,
+        11.1
+      ]
+    },
+    {
+      "kind": "shoe_left",
+      "vertices": 25,
+      "triangles": 28,
+      "y_cm": [
+        10.5,
+        12.3
+      ]
+    },
+    {
+      "kind": "arm_right",
+      "vertices": 91,
+      "triangles": 170,
+      "y_cm": [
+        135.7,
+        141.7
+      ]
+    },
+    {
+      "kind": "head",
+      "vertices": 133,
+      "triangles": 250,
+      "y_cm": [
+        141.7,
+        175
+      ]
+    },
+    {
+      "kind": "arm_left",
+      "vertices": 86,
+      "triangles": 161,
+      "y_cm": [
+        135.7,
+        141.7
+      ]
+    }
+  ],
+  "landmarks_cm": {
+    "height": 175,
+    "ankle": 13.3,
+    "crotch": 77.4,
+    "waistband": 92.2,
+    "hip": 83.6,
+    "chest": 128,
+    "armpit": 132.4,
+    "shoulder": 141.7,
+    "neck_base": 141.7,
+    "topHem": 90
+  },
+  "fractions_of_H": {
+    "height": 1,
+    "ankle": 0.076,
+    "crotch": 0.442,
+    "waistband": 0.527,
+    "hip": 0.478,
+    "chest": 0.731,
+    "armpit": 0.756,
+    "shoulder": 0.81,
+    "neck_base": 0.81,
+    "topHem": 0.514
+  },
+  "note": "Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: она сгенерирована одетой."
+}

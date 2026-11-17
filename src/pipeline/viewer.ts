@@ -7,6 +7,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { buildTShirt, updateTShirt, type TShirtMesh } from '../templates/tshirt/buildTShirt';
 import type { TShirtParams } from '../templates/tshirt/params';
+import type { ProceduralBodyAdapter } from '../body/ProceduralBodyAdapter';
+import type { FitResult } from '../fitting/fitTShirt';
 
 export type GarmentView = 'front' | 'back' | 'threequarter' | 'threequarter_back' | 'left' | 'right';
 
@@ -22,6 +24,9 @@ export class GarmentViewer {
   private texPixel: THREE.DataTexture | null = null;
   private mode: 'original' | 'pixel' | 'none' = 'none';
   private raf = 0;
+  private bodyObj: THREE.Object3D | null = null;
+  private params: Partial<TShirtParams>;
+  private fitted = false;
 
   constructor(params: Partial<TShirtParams>, size = { w: 520, h: 520 }) {
     this.root = document.createElement('div');
@@ -45,6 +50,7 @@ export class GarmentViewer {
     const fill = new THREE.DirectionalLight('#ffffff', 0.5);
     fill.position.set(-3, 1, -4);
     this.scene.add(fill);
+    this.params = params;
     this.shirt = buildTShirt(params);
     this.material = new THREE.MeshStandardMaterial({ color: '#d7d9de', roughness: 0.9, metalness: 0, side: THREE.DoubleSide });
     // all five island groups use the same material
@@ -60,7 +66,41 @@ export class GarmentViewer {
   }
 
   setParams(params: Partial<TShirtParams>): void {
+    this.params = params;
     updateTShirt(this.shirt, params);
+    this.fitted = false;
+  }
+
+  /** F04: show the garment on the procedural mannequin (null = alone). */
+  setBody(adapter: ProceduralBodyAdapter | null): void {
+    if (this.bodyObj) {
+      this.scene.remove(this.bodyObj);
+      this.bodyObj = null;
+    }
+    if (adapter) {
+      this.bodyObj = adapter.createDisplayObject();
+      this.scene.add(this.bodyObj);
+    }
+  }
+
+  /** Apply fitted world-space positions (same vertex order as the template) or restore the template (null). */
+  applyFit(fit: FitResult | null): void {
+    if (!fit) {
+      if (this.fitted) updateTShirt(this.shirt, this.params);
+      this.fitted = false;
+      return;
+    }
+    const pos = this.shirt.geometry.attributes.position as THREE.BufferAttribute;
+    if ((pos.array as Float32Array).length !== fit.positions.length) throw new Error('fit positions do not match the template mesh');
+    (pos.array as Float32Array).set(fit.positions);
+    pos.needsUpdate = true;
+    this.shirt.geometry.computeVertexNormals();
+    this.shirt.geometry.computeBoundingBox();
+    this.shirt.geometry.computeBoundingSphere();
+    this.fitted = true;
+  }
+  hasBody(): boolean {
+    return this.bodyObj !== null;
   }
 
   private makeTexture(data: Uint8ClampedArray, size: number, pixel: boolean): THREE.DataTexture {
@@ -96,7 +136,8 @@ export class GarmentViewer {
 
   setView(view: GarmentView): void {
     this.shirt.geometry.computeBoundingBox();
-    const bb = this.shirt.geometry.boundingBox!;
+    const bb = this.shirt.geometry.boundingBox!.clone();
+    if (this.bodyObj) bb.expandByObject(this.bodyObj);
     const c = bb.getCenter(new THREE.Vector3());
     const s = bb.getSize(new THREE.Vector3());
     const dist = Math.max(s.x, s.y, s.z) * 2.3;
@@ -128,6 +169,7 @@ export class GarmentViewer {
     this.material.dispose();
     this.texOriginal?.dispose();
     this.texPixel?.dispose();
+    this.setBody(null);
     this.renderer.dispose();
     this.root.remove();
   }

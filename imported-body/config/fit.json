@@ -1,0 +1,9 @@
+{
+  "note": "Пороги зафиксированы ДО прогона тестовых случаев. Их нельзя поднимать, чтобы превратить FAIL в PASS.",
+  "tolerance_ok_cm": 1.0,
+  "tolerance_approx_cm": 3.0,
+  "max_iterations": 14,
+  "damping": 0.001,
+  "step_limit": 0.5,
+  "jacobian_step": 0.08
+}

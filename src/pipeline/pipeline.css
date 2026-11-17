@@ -46,3 +46,7 @@ button.primary { background: #1f3ff0; color: #fff; border-color: #1f3ff0; }
 .pgp-checks { font-size: 12px; margin: 6px 0; }
 .pg-viewer canvas { border: 1px solid #c7cbd4; display: block; }
 .pgp-texcanvas { border: 1px solid #c7cbd4; }
+/* F04 fit table */
+.pgp-fit tr.is-tight td { color: #8a1d16; }
+.pgp-fit tr.is-loose td { color: #6b4a00; }
+.pgp-fit tr.is-free td { color: #6b7280; }
