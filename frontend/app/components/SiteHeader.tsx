@@ -17,7 +17,8 @@ export default function SiteHeader() {
     load(); window.addEventListener('fitcast-profile-updated', load);
     return () => { active = false; window.removeEventListener('fitcast-profile-updated', load); };
   }, [pathname]);
+  const tab = (href: string, label: string) => <Link href={href} aria-current={pathname === href || pathname.startsWith(href + '/') ? 'page' : undefined}>[ {label} ]</Link>;
   return <><header className="site-header"><Link href="/" className="site-logo">FitCast</Link><nav className="site-nav" aria-label="Навигация">
-    {user ? <><Link href="/model">[ 3D-модель ]</Link><Link href={user.isAdmin ? '/admin' : '/profile'}>{user.isAdmin ? '[ Админка ]' : '[ Профиль ]'}</Link></> : <><Link href="/login">[ Log in ]</Link><Link href="/register">[ Sign up ]</Link></>}
+    {user ? <>{tab('/fitting', '3D-модель')}{user.isAdmin ? tab('/admin', 'Админка') : tab('/profile', 'Профиль')}</> : <>{tab('/fitting', '3D-модель')}{tab('/login', 'Войти')}{tab('/register', 'Регистрация')}</>}
   </nav></header><div className="site-divider" aria-hidden /></>;
 }

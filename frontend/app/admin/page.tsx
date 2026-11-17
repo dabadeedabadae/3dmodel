@@ -3,14 +3,18 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AdminOverview, AdminUser, AdminGarment, AdminOutfit, ApiError, clearToken, getProfile, getAdminOverview, getAdminUsers, getAdminWardrobe, getAdminOutfits } from '../../lib/api';
+import { AdminOverview, AdminUser, AdminGarment, AdminOutfit, ApiError, clearToken, getProfile, getAdminOverview, getAdminUsers, getAdminWardrobe, getAdminOutfits, mediaUrl } from '../../lib/api';
+import { FIT_LABELS, GARMENT_LABELS, colorById } from '../../lib/labels';
+import type { FitTag, GarmentType } from '../../lib/api';
+import RecommendationBench from './RecommendationBench';
 
-type Section = 'overview' | 'users' | 'wardrobe' | 'outfits';
+type Section = 'overview' | 'users' | 'wardrobe' | 'outfits' | 'recommendations';
 const SECTIONS: { id: Section; label: string; description: string }[] = [
   { id: 'overview', label: 'Обзор', description: 'Основные показатели и последние регистрации' },
   { id: 'users', label: 'Пользователи', description: 'Аккаунты, роли и активность пользователей' },
   { id: 'wardrobe', label: 'Гардероб', description: 'Вещи, добавленные пользователями FitCast' },
   { id: 'outfits', label: 'Образы', description: 'Сохранённые образы и их состав' },
+  { id: 'recommendations', label: 'Тест рекомендаций', description: 'Запрос к сервису рекомендаций по гардеробу выбранного пользователя' },
 ];
 
 function Icon({ name }: { name: Section | 'logout' | 'arrow' | 'refresh' | 'search' }) {
@@ -19,6 +23,7 @@ function Icon({ name }: { name: Section | 'logout' | 'arrow' | 'refresh' | 'sear
     users: <><circle cx="9" cy="8" r="3" /><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6M21 21v-3a6 6 0 0 0-3-5" /></>,
     wardrobe: <path d="m8 3-5 3-2 5 4 2 1-3v11h12V10l1 3 4-2-2-5-5-3a4 4 0 0 1-8 0Z" />,
     outfits: <><rect x="3" y="3" width="18" height="18" rx="3" /><path d="m3 9 9 5 9-5M12 14v7" /></>,
+    recommendations: <><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3" /><path d="M7 15h10" /></>,
     logout: <><path d="M9 4H4v16h5M10 12h11m-4-4 4 4-4 4" /></>,
     arrow: <path d="M19 12H5m6-6-6 6 6 6" />,
     refresh: <><path d="M20 7v5h-5M4 17v-5h5M6 6a8 8 0 0 1 14 6M4 12a8 8 0 0 0 14 6" /></>,
@@ -60,7 +65,7 @@ export default function AdminPage() {
       if (section === 'overview') {
         const [summary, accounts] = await Promise.all([getAdminOverview(controller.signal), getAdminUsers(controller.signal)]);
         if (!controller.signal.aborted) { setOverview(summary); setUsers(accounts); }
-      } else if (section === 'users') {
+      } else if (section === 'users' || section === 'recommendations') {
         const accounts = await getAdminUsers(controller.signal);
         if (!controller.signal.aborted) setUsers(accounts);
       } else if (section === 'wardrobe') {
@@ -121,14 +126,15 @@ export default function AdminPage() {
             ['wardrobe', 'Вещи в гардеробе', overview.wardrobeItems, 'Добавлено пользователями'],
             ['outfits', 'Сохранённые образы', overview.savedOutfits, 'Собрано в приложении'],
           ] as const).map(([id, title, count, hint]) => <button key={id} className="dash-stat" onClick={() => changeSection(id)}><span className="dash-stat-top">{title}<span className={`dash-stat-icon ${id}`}><Icon name={id} /></span></span><strong>{count.toLocaleString('ru-RU')}</strong><span className="dash-stat-hint">{hint}</span></button>)}</section>}
-          <section className="dash-panel">
+          {section === 'recommendations' && <RecommendationBench users={users} />}
+          {section !== 'recommendations' && <section className="dash-panel">
             <div className="dash-panel-heading"><div><h2>{section === 'overview' ? 'Последние пользователи' : current.label}</h2><p>{section === 'overview' ? 'Последние 5 зарегистрированных аккаунтов' : 'Последние 100 записей · Режим просмотра'}</p></div>
               {section === 'overview' ? <button className="dash-text-button" onClick={() => changeSection('users')}>Все пользователи →</button> : <label className="dash-search"><Icon name="search" /><input aria-label="Поиск в текущем списке" placeholder="Поиск в списке…" value={query} onChange={(event) => setQuery(event.target.value)} /></label>}
             </div>
             {(section === 'overview' || section === 'users') && userTable(section === 'overview' ? users.slice(0, 5) : filteredUsers)}
-            {section === 'wardrobe' && <div className="dash-table-scroll"><table><caption className="dash-sr-only">Вещи пользователей</caption><thead><tr><th scope="col">Тип</th><th scope="col">Владелец</th><th scope="col">Цвет</th><th scope="col">Посадка</th><th scope="col">Добавлено</th></tr></thead><tbody>{filteredWardrobe.length ? filteredWardrobe.map((item) => <tr key={item.id}><td className="dash-capitalize">{label(item.type)}</td><td>{item.user.email}</td><td>{item.dominantColor}</td><td>{label(item.fitTag)}</td><td>{date(item.createdAt)}</td></tr>) : <tr><td colSpan={5} className="dash-empty"><Icon name="wardrobe" /><strong>{search ? 'Ничего не найдено' : 'Гардероб пока пуст'}</strong><span>{search ? 'Попробуйте другой запрос.' : 'Здесь появятся вещи, добавленные пользователями.'}</span></td></tr>}</tbody></table></div>}
+            {section === 'wardrobe' && <div className="dash-table-scroll"><table><caption className="dash-sr-only">Вещи пользователей</caption><thead><tr><th scope="col">Тип</th><th scope="col">Владелец</th><th scope="col">Цвет</th><th scope="col">Посадка</th><th scope="col">Добавлено</th></tr></thead><tbody>{filteredWardrobe.length ? filteredWardrobe.map((item) => <tr key={item.id}><td><div className="dash-person">{/* eslint-disable-next-line @next/next/no-img-element -- API upload */}<img className="dash-thumb" src={mediaUrl(item.imageUrl)} alt="" loading="lazy" /><span>{GARMENT_LABELS[item.type as GarmentType] ?? label(item.type)}</span></div></td><td>{item.user.email}</td><td><span className="dash-color"><i style={{ background: colorById(item.dominantColor)?.hex ?? '#ccc' }} aria-hidden />{colorById(item.dominantColor)?.label ?? item.dominantColor}</span></td><td>{FIT_LABELS[item.fitTag as FitTag] ?? label(item.fitTag)}</td><td>{date(item.createdAt)}</td></tr>) : <tr><td colSpan={5} className="dash-empty"><Icon name="wardrobe" /><strong>{search ? 'Ничего не найдено' : 'Гардероб пока пуст'}</strong><span>{search ? 'Попробуйте другой запрос.' : 'Здесь появятся вещи, добавленные пользователями.'}</span></td></tr>}</tbody></table></div>}
             {section === 'outfits' && <div className="dash-table-scroll"><table><caption className="dash-sr-only">Сохранённые образы</caption><thead><tr><th scope="col">Название</th><th scope="col">Владелец</th><th scope="col">Событие</th><th scope="col">Вещи</th><th scope="col">Создано</th></tr></thead><tbody>{filteredOutfits.length ? filteredOutfits.map((item) => <tr key={item.id}><td>{item.name}</td><td>{item.user.email}</td><td className="dash-capitalize">{label(item.eventType)}</td><td>{item._count.items}</td><td>{date(item.createdAt)}</td></tr>) : <tr><td colSpan={5} className="dash-empty"><Icon name="outfits" /><strong>{search ? 'Ничего не найдено' : 'Образов пока нет'}</strong><span>{search ? 'Попробуйте другой запрос.' : 'Здесь появятся сохранённые образы пользователей.'}</span></td></tr>}</tbody></table></div>}
-          </section>
+          </section>}
           <p className="dash-footnote">Данные FitCast · Доступ только для администраторов</p>
         </>}
       </main>

@@ -22,7 +22,7 @@ export default function RegisterPage() {
       saveToken(accessToken);
       router.replace('/profile');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign up failed');
+      setError(err instanceof Error ? err.message : 'Не удалось зарегистрироваться');
     } finally {
       setLoading(false);
     }
@@ -32,7 +32,7 @@ export default function RegisterPage() {
     <div className="container">
       <div className="card">
         <span className="fig-label fig-label-left">FORM_002</span>
-        <h1>Sign up</h1>
+        <h1>Регистрация</h1>
         {error && <div className="error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="field">
@@ -40,16 +40,18 @@ export default function RegisterPage() {
             <input
               id="email"
               type="email"
+              autoComplete="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="field">
-            <label htmlFor="password">Password (at least 8 characters)</label>
+            <label htmlFor="password">Пароль (не меньше 8 символов)</label>
             <input
               id="password"
               type="password"
+              autoComplete="new-password"
               required
               minLength={8}
               value={password}
@@ -57,11 +59,11 @@ export default function RegisterPage() {
             />
           </div>
           <button className="primary" type="submit" disabled={loading}>
-            {loading ? 'Creating account...' : 'Sign up'}
+            {loading ? 'Создаём аккаунт…' : 'Создать аккаунт'}
           </button>
         </form>
         <div className="switch">
-          Already have an account? <Link href="/login">Log in</Link>
+          Уже есть аккаунт? <Link href="/login">Войти</Link>
         </div>
       </div>
     </div>

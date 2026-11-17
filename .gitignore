@@ -3,3 +3,12 @@ node_modules/
 dist/
 .DS_Store
 *.tsbuildinfo
+uploads/
+.demo-accounts.local.json
+frontend/public/models/
+
+# Архив старых реализаций: в проекте, но не в git
+archive/
+frontend/public/garments/
+frontend/public/ort/
+frontend/public/ml/

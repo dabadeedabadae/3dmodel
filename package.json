@@ -14,7 +14,12 @@
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
     "studio": "prisma studio",
-    "generate": "prisma generate"
+    "generate": "prisma generate",
+    "test:wardrobe": "npm run build && node --env-file=.env --test test/wardrobe.e2e.cjs",
+    "seed:demo": "node --env-file=.env scripts/seed-demo.cjs",
+    "figure:sync": "node scripts/sync-figure.cjs",
+    "garments:sync": "node scripts/sync-garments.cjs",
+    "ml:sync": "node scripts/sync-ml.cjs"
   },
   "devDependencies": {
     "@nestjs/cli": "^12.0.3",

@@ -22,7 +22,7 @@ export default function LoginPage() {
       saveToken(accessToken);
       router.replace(user.isAdmin ? '/admin' : '/profile');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Log in failed');
+      setError(err instanceof Error ? err.message : 'Не удалось войти');
     } finally {
       setLoading(false);
     }
@@ -32,7 +32,7 @@ export default function LoginPage() {
     <div className="container">
       <div className="card">
         <span className="fig-label fig-label-left">FORM_001</span>
-        <h1>Log in</h1>
+        <h1>Вход</h1>
         {error && <div className="error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="field">
@@ -40,27 +40,29 @@ export default function LoginPage() {
             <input
               id="email"
               type="email"
+              autoComplete="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="field">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Пароль</label>
             <input
               id="password"
               type="password"
+              autoComplete="current-password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <button className="primary" type="submit" disabled={loading}>
-            {loading ? 'Logging in...' : 'Log in'}
+            {loading ? 'Входим…' : 'Войти'}
           </button>
         </form>
         <div className="switch">
-          Don't have an account? <Link href="/register">Sign up</Link>
+          Нет аккаунта? <Link href="/register">Зарегистрироваться</Link>
         </div>
       </div>
     </div>

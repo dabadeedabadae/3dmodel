@@ -1,3 +1,4 @@
+import type { GarmentPackage } from './garment/analyze';
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000';
 const TOKEN_KEY = 'fitcast_token';
 
@@ -40,7 +41,7 @@ async function adminGet<T>(path: string, signal?: AbortSignal): Promise<T> {
 export const getAdminOverview = (signal?: AbortSignal) => adminGet<AdminOverview>('overview', signal);
 export const getAdminUsers = (signal?: AbortSignal) => adminGet<AdminUser[]>('users', signal);
 export interface AdminGarment {
-  id: string; type: string; dominantColor: string; fitTag: string; createdAt: string;
+  id: string; type: string; dominantColor: string; fitTag: string; imageUrl: string; createdAt: string;
   user: { email: string };
 }
 export interface AdminOutfit {
@@ -142,3 +143,68 @@ export async function changePassword(currentPassword: string, newPassword: strin
     throw new ApiError(response.status, message || 'Не удалось изменить пароль.');
   }
 }
+
+/* ---------- Wardrobe ---------- */
+
+export type GarmentType = 'TSHIRT' | 'SHIRT' | 'JACKET' | 'COAT' | 'SWEATER' | 'HOODIE' | 'PANTS' | 'JEANS' | 'SHORTS' | 'SKIRT' | 'DRESS' | 'SHOES' | 'ACCESSORY';
+export type FitTag = 'GOOD' | 'TIGHT' | 'LOOSE';
+export type EventType = 'CASUAL' | 'GYM' | 'BUSINESS' | 'FORMAL' | 'OUTDOOR';
+export type Precipitation = 'NONE' | 'RAIN' | 'SNOW' | 'MIXED';
+
+export interface WardrobeItem {
+  id: string; type: GarmentType; dominantColor: string; fitTag: FitTag; imageUrl: string;
+  /** photo → 3D package (on-device analysis), with the texture; null when the photo was not analysed */
+  garment3d: GarmentPackage | null; textureUrl: string | null;
+  createdAt: string; updatedAt: string;
+}
+
+/** Absolute URL of a stored upload (the API serves /uploads/...). */
+export const mediaUrl = (path: string) => (path.startsWith('/uploads/') ? API_URL + path : path);
+
+async function authed<T>(path: string, init: RequestInit = {}, fallback = 'Запрос не выполнен.'): Promise<T> {
+  const token = getToken();
+  if (!token) throw new ApiError(401, 'Войдите в аккаунт.');
+  const response = await fetch(API_URL + path, {
+    ...init, cache: 'no-store', headers: { ...(init.headers ?? {}), Authorization: 'Bearer ' + token },
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    const message = Array.isArray(data?.message) ? data.message.join('. ') : data?.message;
+    throw new ApiError(response.status, response.status === 401 ? 'Сессия истекла. Войдите снова.' : message || fallback);
+  }
+  return response.json();
+}
+
+export const getWardrobe = () => authed<WardrobeItem[]>('/wardrobe', {}, 'Не удалось загрузить гардероб.');
+
+export function addWardrobeItem(image: Blob, fields: { type: GarmentType; dominantColor: string; fitTag: FitTag }, model?: { pkg: GarmentPackage; texture: Blob }) {
+  const body = new FormData();
+  body.append('type', fields.type);
+  body.append('dominantColor', fields.dominantColor);
+  body.append('fitTag', fields.fitTag);
+  body.append('image', image, 'garment');
+  if (model) { body.append('garment3d', JSON.stringify(model.pkg)); body.append('texture', model.texture, 'texture.jpg'); }
+  return authed<WardrobeItem>('/wardrobe', { method: 'POST', body }, 'Не удалось добавить вещь.');
+}
+
+export const updateWardrobeItem = (id: string, changes: Partial<Pick<WardrobeItem, 'type' | 'dominantColor' | 'fitTag'>>) =>
+  authed<WardrobeItem>('/wardrobe/' + id, {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(changes),
+  }, 'Не удалось сохранить изменения.');
+
+export const deleteWardrobeItem = (id: string) =>
+  authed<{ id: string }>('/wardrobe/' + id, { method: 'DELETE' }, 'Не удалось удалить вещь.');
+
+/* ---------- Admin: recommendation test bench ---------- */
+
+export interface RecommendationTestInput {
+  userId: string; temperatureC: number; precipitation: Precipitation; eventType: EventType; limit: number;
+}
+export interface RecommendationTestResult {
+  payload: unknown;
+  service: null | { url: string; status: number; ms: number; body: unknown };
+}
+export const runRecommendationTest = (input: RecommendationTestInput) =>
+  authed<RecommendationTestResult>('/admin/recommendations/test', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input),
+  }, 'Не удалось выполнить тест.');

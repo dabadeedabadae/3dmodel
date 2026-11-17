@@ -1,10 +1,6 @@
-import type { Metadata } from 'next';
-import ModelDemo from './ModelDemo';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'FitCast — 3D model demo',
-};
-
+// The placeholder mannequin moved to archive/ (not tracked); the 3D model lives at /fitting.
 export default function ModelPage() {
-  return <ModelDemo />;
+  redirect('/fitting');
 }
