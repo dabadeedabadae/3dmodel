@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-11-18T04:28:06.839Z",
+  "generatedAt": "2026-11-18T06:54:21.218Z",
   "asset": "outfit-outfit02",
   "shells": 17,
-  "boundaryEdges": 314,
-  "sourceAsymmetry_mm": 20.7,
+  "boundaryEdges": 316,
+  "sourceAsymmetry_mm": 12.3,
   "usableSliderRange": {
     "chest": 0.9,
     "waist": 0.9,
     "hip": 0.9,
-    "shoulders": 0.27,
+    "shoulders": 0.18,
     "arms": 0.9,
     "thighs": 0.9
   },
@@ -49,12 +49,12 @@
       "fails": []
     },
     {
-      "label": "shoulders=-0.27",
+      "label": "shoulders=-0.18",
       "ok": true,
       "fails": []
     },
     {
-      "label": "shoulders=0.27",
+      "label": "shoulders=0.18",
       "ok": true,
       "fails": []
     },

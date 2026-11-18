@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T04:28:09.729Z",
+  "generatedAt": "2026-11-18T06:54:24.688Z",
   "stature_cm": 175,
   "figures": [
     {
@@ -59,19 +59,34 @@
       "compose": {
         "target": "raw-outfit02",
         "reference": "outfit01",
-        "vertices": 1878,
-        "triangles": 3410,
-        "armSpanScale": 1.121,
+        "vertices": 1900,
+        "triangles": 3452,
+        "armSpanScale": 0.968,
+        "shoulderLift_cm": 0,
+        "collarVerticesTightened": 0,
+        "neckTuckRadius_cm": 8.6,
+        "collarFitRadius_cm": 9,
+        "cuffVerticesTightened": 42,
+        "backCover_cm": 152,
+        "neckFlareTucked": 0,
+        "necklineFront_cm": [
+          142.7,
+          144.8
+        ],
+        "headAnchor": "own-throat",
+        "headShiftZ_cm": 2.4,
+        "collarTop_cm": 152,
+        "neckLowered_cm": 0,
         "headShift_cm": [
           0,
           0,
-          -6.1
+          2.4
         ],
         "cuffX_cm": {
-          "arm_left": 77.8,
-          "arm_right": 77.8
+          "arm_left": 69.7,
+          "arm_right": 69.7
         },
-        "verticesPulledInsideCuff": 13
+        "verticesPulledInsideCuff": 10
       },
       "parts": {
         "shoe_right": 341,
@@ -79,8 +94,8 @@
         "top": 664,
         "shoe_left": 341,
         "head": 133,
-        "arm_left": 87,
-        "arm_right": 87
+        "arm_left": 98,
+        "arm_right": 98
       },
       "landmarks_cm": {
         "height": 175,
@@ -90,22 +105,22 @@
         "hip": 83.6,
         "chest": 128,
         "armpit": 132.4,
-        "shoulder": 141.7,
+        "shoulder": 142,
         "neck_base": 141.7,
         "topHem": 90
       },
       "symmetry_mm": {
         "mean": 0.11,
-        "max": 5.85
+        "max": 4.98
       },
       "weld": {
-        "before": 1878,
-        "after": 1878,
-        "triangles": 3410,
+        "before": 1900,
+        "after": 1900,
+        "triangles": 3452,
         "seamSnapped": 41,
         "mirrorPaired": 1571
       },
-      "sliderRange": "chest ±0.9, waist ±0.9, hip ±0.9, shoulders ±0.27, arms ±0.9, thighs ±0.9"
+      "sliderRange": "chest ±0.9, waist ±0.9, hip ±0.9, shoulders ±0.18, arms ±0.9, thighs ±0.9"
     },
     {
       "file": "outfit-03.fbx",
@@ -120,19 +135,34 @@
       "compose": {
         "target": "raw-outfit03",
         "reference": "outfit01",
-        "vertices": 1993,
-        "triangles": 3601,
-        "armSpanScale": 1.129,
+        "vertices": 1975,
+        "triangles": 3561,
+        "armSpanScale": 1.234,
+        "shoulderLift_cm": 4.1,
+        "collarVerticesTightened": 37,
+        "neckTuckRadius_cm": 8.6,
+        "collarFitRadius_cm": 9,
+        "cuffVerticesTightened": 0,
+        "backCover_cm": 147.1,
+        "neckFlareTucked": 8,
+        "necklineFront_cm": [
+          150.1,
+          144.8
+        ],
+        "headAnchor": "neckline",
+        "headShiftZ_cm": 0.7,
+        "collarTop_cm": 147,
+        "neckLowered_cm": 0,
         "headShift_cm": [
           0,
           0,
-          -7.1
+          0.7
         ],
         "cuffX_cm": {
-          "arm_left": 65.1,
-          "arm_right": 65.1
+          "arm_left": 69.8,
+          "arm_right": 69.8
         },
-        "verticesPulledInsideCuff": 9
+        "verticesPulledInsideCuff": 11
       },
       "parts": {
         "shoe_right": 364,
@@ -140,8 +170,8 @@
         "top": 660,
         "shoe_left": 364,
         "head": 133,
-        "arm_left": 107,
-        "arm_right": 107
+        "arm_left": 98,
+        "arm_right": 98
       },
       "landmarks_cm": {
         "height": 175,
@@ -151,18 +181,18 @@
         "hip": 84.3,
         "chest": 127.3,
         "armpit": 131.7,
-        "shoulder": 141.5,
+        "shoulder": 140.6,
         "neck_base": 141.7,
         "topHem": 87.3
       },
       "symmetry_mm": {
         "mean": 0.12,
-        "max": 5.85
+        "max": 4.98
       },
       "weld": {
-        "before": 1993,
-        "after": 1986,
-        "triangles": 3601,
+        "before": 1975,
+        "after": 1968,
+        "triangles": 3561,
         "seamSnapped": 30,
         "mirrorPaired": 1639
       },

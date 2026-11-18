@@ -274,7 +274,7 @@ writeFileSync(`imported-body/out/outfit-${id}.json`, JSON.stringify({
   ...report,
   landmarks,
   axis,
-  partsIndex: parts.map((p) => ({ kind: p.kind, vertices: p.vertices })),
+  partsIndex: parts.map((p) => ({ kind: p.kind, vertices: p.vertices, ...(p.cut ? { cut: true } : {}) })),
   base: Array.from(pos).map((v) => Number(v.toFixed(6))),
   index: Array.from(index),
 }));
