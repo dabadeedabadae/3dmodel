@@ -5,12 +5,15 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { deform, type Weights } from '../../lib/figure/deform';
 import { PART, type Figure } from '../../lib/figure/figure';
-import { mapPhotoToTop, type PhotoAnchors } from '../../lib/figure/photoMap';
+import { mapPhotoToBottom, mapPhotoToTop, type PantsAnchors, type PhotoAnchors } from '../../lib/figure/photoMap';
 
 export type View = 'front' | 'threequarter' | 'side' | 'back';
 export interface Palette { skin: string; top: string; bottom: string; shoes: string }
-/** A photographed garment for the upper shell: the photo is the texture, anchors place it (I-51). */
-export interface Print { textureUrl: string; anchors: PhotoAnchors }
+/** A photographed garment: the photo is the texture, anchors place it — a T-shirt on the top (I-51),
+ *  trousers on the bottom (I-53). */
+export type Print =
+  | { kind: 'tshirt'; textureUrl: string; anchors: PhotoAnchors }
+  | { kind: 'pants'; textureUrl: string; anchors: PantsAnchors };
 
 interface Props {
   figure: Figure;
@@ -20,7 +23,7 @@ interface Props {
   view: View;
   /** bumps when the user presses a view button, so the same view can be re-applied */
   viewNonce: number;
-  print?: Print | null;
+  prints?: Print[];
 }
 
 const VIEW_DIR: Record<View, [number, number]> = {
@@ -32,13 +35,13 @@ const VIEW_DIR: Record<View, [number, number]> = {
  * shadow-only floor, filmic tone mapping, flat-shaded faceted surface. Positions are re-derived from the
  * canonical base on every slider change; GPU resources are released on unmount.
  */
-export default function FigureViewer({ figure, weights, heightCm, palette, view, viewNonce, print }: Props) {
+export default function FigureViewer({ figure, weights, heightCm, palette, view, viewNonce, prints = [] }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const ctx = useRef<{
     renderer: THREE.WebGLRenderer; scene: THREE.Scene; camera: THREE.PerspectiveCamera;
     controls: OrbitControls; geometry: THREE.BufferGeometry; colors: THREE.BufferAttribute; render: () => void;
     positions: Float32Array;
-    photo: null | { mesh: THREE.Mesh; corners: Uint32Array; texture: THREE.Texture };
+    photos: { mesh: THREE.Mesh; corners: Uint32Array; texture: THREE.Texture }[];
   } | null>(null);
 
   // one-time scene set-up
@@ -107,13 +110,12 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     };
     const ro = new ResizeObserver(resize);
     ro.observe(el);
-    ctx.current = { renderer, scene, camera, controls, geometry, colors, render, positions: new Float32Array(figure.base), photo: null };
+    ctx.current = { renderer, scene, camera, controls, geometry, colors, render, positions: new Float32Array(figure.base), photos: [] };
     resize();
 
     return () => {
       cancelAnimationFrame(frame);
-      const ph = ctx.current?.photo;
-      if (ph) { ph.mesh.geometry.dispose(); (ph.mesh.material as THREE.Material).dispose(); ph.texture.dispose(); }
+      for (const ph of ctx.current?.photos ?? []) { ph.mesh.geometry.dispose(); (ph.mesh.material as THREE.Material).dispose(); ph.texture.dispose(); }
       ro.disconnect();
       controls.dispose();
       geometry.dispose(); material.dispose(); floorGeo.dispose(); floorMat.dispose();
@@ -133,7 +135,7 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     c.geometry.computeVertexNormals();
     c.geometry.computeBoundingSphere();
     c.positions = p;
-    if (c.photo) fillPhotoPositions(c.photo, p);
+    for (const ph of c.photos) fillPhotoPositions(ph, p);
     c.render();
   }, [figure, weights, heightCm]);
 
@@ -151,47 +153,54 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     c.render();
   }, [figure, palette]);
 
-  // photographed garment on the upper shell: photo triangles move to their own textured mesh
+  // photographed garments: their front triangles move to textured meshes, the base mesh keeps the rest
+  const printsKey = prints.map((p) => `${p.kind}:${p.textureUrl}`).join('|');
   useEffect(() => {
     const c = ctx.current;
     if (!c) return;
     let cancelled = false;
     const clear = () => {
-      if (!c.photo) return;
-      c.scene.remove(c.photo.mesh);
-      c.photo.mesh.geometry.dispose(); (c.photo.mesh.material as THREE.Material).dispose(); c.photo.texture.dispose();
-      c.photo = null;
+      for (const ph of c.photos) {
+        c.scene.remove(ph.mesh);
+        ph.mesh.geometry.dispose(); (ph.mesh.material as THREE.Material).dispose(); ph.texture.dispose();
+      }
+      c.photos = [];
       c.geometry.setIndex(new THREE.BufferAttribute(figure.index, 1));
     };
-    if (!print) { clear(); c.render(); return; }
-    const mapping = mapPhotoToTop({ base: figure.base, index: figure.index, part: figure.part, topCode: PART.top, headCode: PART.head, armpit: figure.landmarks.armpit }, print.anchors);
-    new THREE.TextureLoader().loadAsync(print.textureUrl).then((texture) => {
-      if (cancelled || !ctx.current) { texture.dispose(); return; }
+    if (!prints.length) { clear(); c.render(); return; }
+    const mappings = prints.map((pr) => (pr.kind === 'tshirt'
+      ? mapPhotoToTop({ base: figure.base, index: figure.index, part: figure.part, topCode: PART.top, headCode: PART.head, armpit: figure.landmarks.armpit }, pr.anchors)
+      : mapPhotoToBottom({ base: figure.base, index: figure.index, part: figure.part, bottomCode: PART.bottom, crotch: figure.landmarks.crotch }, pr.anchors)));
+    Promise.all(prints.map((pr) => new THREE.TextureLoader().loadAsync(pr.textureUrl))).then((textures) => {
+      if (cancelled || !ctx.current) { textures.forEach((t) => t.dispose()); return; }
       clear();
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.anisotropy = c.renderer.capabilities.getMaxAnisotropy();
-      const nT = mapping.photoTriangles.length;
-      const corners = new Uint32Array(nT * 3);
-      mapping.photoTriangles.forEach((t, j) => { for (let k = 0; k < 3; k++) corners[j * 3 + k] = figure.index[t * 3 + k]!; });
-      const g = new THREE.BufferGeometry();
-      g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(nT * 9), 3));
-      g.setAttribute('uv', new THREE.BufferAttribute(mapping.uv, 2));
-      const mesh = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ map: texture, flatShading: true, roughness: 0.75, metalness: 0 }));
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      c.photo = { mesh, corners, texture };
-      fillPhotoPositions(c.photo, c.positions);
-      // the base mesh keeps every triangle except the ones now drawn with the photo
       const drop = new Uint8Array(figure.index.length / 3);
-      for (const t of mapping.photoTriangles) drop[t] = 1;
+      textures.forEach((texture, n) => {
+        const mapping = mappings[n]!;
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.anisotropy = c.renderer.capabilities.getMaxAnisotropy();
+        const nT = mapping.photoTriangles.length;
+        const corners = new Uint32Array(nT * 3);
+        mapping.photoTriangles.forEach((t, j) => { drop[t] = 1; for (let k = 0; k < 3; k++) corners[j * 3 + k] = figure.index[t * 3 + k]!; });
+        const g = new THREE.BufferGeometry();
+        g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(nT * 9), 3));
+        g.setAttribute('uv', new THREE.BufferAttribute(mapping.uv, 2));
+        const mesh = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ map: texture, flatShading: true, roughness: 0.75, metalness: 0 }));
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        const ph = { mesh, corners, texture };
+        fillPhotoPositions(ph, c.positions);
+        c.photos.push(ph);
+        c.scene.add(mesh);
+      });
       const kept: number[] = [];
       for (let t = 0; t < drop.length; t++) if (!drop[t]) kept.push(figure.index[t * 3]!, figure.index[t * 3 + 1]!, figure.index[t * 3 + 2]!);
       c.geometry.setIndex(kept);
-      c.scene.add(mesh);
       c.render();
-    }).catch(() => { /* texture missing: the garment stays in its base colour */ });
+    }).catch(() => { /* a texture is missing: the garments stay in their base colours */ });
     return () => { cancelled = true; };
-  }, [figure, print]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [figure, printsKey]);
 
   // camera: preset views; the user can orbit freely in between
   useEffect(() => {

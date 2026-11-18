@@ -1013,3 +1013,6 @@ a.landing-secondary { font: 12px var(--font-mono), monospace; letter-spacing: .0
 @media (max-width: 640px) { .wardrobe-analysis-row { flex-direction: column; } .wardrobe-analysis-row img { width: 100%; max-width: 240px; } }
 .fit-3d { position: absolute; left: 3px; top: 3px; padding: 2px 4px; border-radius: 4px; background: var(--blue); color: #fff; font: 500 9px var(--font-mono), monospace; }
 .fit-warning { position: absolute; left: 12px; right: 12px; top: 12px; margin: 0; padding: 8px 12px; border-radius: 6px; background: #fff7ea; border: 1px solid #f1d3a8; color: #8a5a12; font-size: 13px; }
+.fit-items li button.no-model { opacity: .55; }
+.fit-nomodel { position: absolute; left: 0; right: 0; bottom: 0; padding: 2px; background: #fffd; color: var(--muted); font: 9px var(--font-mono), monospace; font-style: normal; text-align: center; }
+.fit-notice { margin: 4px 0 10px; padding: 10px 12px; border-radius: 6px; background: #fff7ea; border: 1px solid #f1d3a8; color: #8a5a12; font-size: 13px; line-height: 1.5; }

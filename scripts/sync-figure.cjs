@@ -11,6 +11,9 @@ const OUT_DIR = resolve('frontend/public/models');
 const PART_CODES = { head: 0, arm_left: 1, arm_right: 1, top: 2, bottom: 3, shoe_left: 4, shoe_right: 4, other: 0 };
 const r = (x) => Math.round(x * 1e5) / 1e5;
 
+// garment types per outfit (I-54): the site puts a wardrobe item only on the figure wearing the same kind of garment
+const MANIFEST = resolve(process.env.FIGURE_MANIFEST ?? '../3dmodel/imported-body/assets/outfits.json');
+const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8'));
 const ids = readdirSync(SRC).map((f) => f.match(/^asset-outfit(\d+)\.json$/)?.[1]).filter(Boolean).sort();
 if (!ids.length) throw new Error('no prepared figures in ' + SRC + ' (run npm run ib:outfits in 3dmodel)');
 mkdirSync(OUT_DIR, { recursive: true });
@@ -34,7 +37,9 @@ for (const num of ids) {
     landmarks: asset.landmarks, armBand: asset.armBand, axis: asset.axis, legAxis: asset.legAxis,
     usableSliderRange: asset.usableSliderRange, base: asset.base.map(r), index: asset.index, part,
   }));
-  list.push({ id, url: `/models/${id}.json`, vertices: n, triangles: asset.index.length / 3 });
+  const m = manifest[`outfit${num}`];
+  if (!m?.top || !m?.bottom) throw new Error(`figure ${num}: no garment types in ${MANIFEST}`);
+  list.push({ id, url: `/models/${id}.json`, vertices: n, triangles: asset.index.length / 3, label: m.label, garments: { top: m.top, bottom: m.bottom } });
   console.log(`${id}: ${n} vertices, ${asset.index.length / 3} triangles`);
 }
 writeFileSync(resolve(OUT_DIR, 'figures.json'), JSON.stringify(list, null, 2));

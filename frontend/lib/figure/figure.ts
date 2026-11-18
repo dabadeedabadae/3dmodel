@@ -24,7 +24,8 @@ export interface Figure extends BodyAsset {
 
 export const PART = { head: 0, arms: 1, top: 2, bottom: 3, shoes: 4 } as const;
 
-export interface FigureEntry { id: string; url: string; vertices: number; triangles: number }
+/** garment types worn by the figure (GarmentType of the API); a wardrobe item goes only onto the same type */
+export interface FigureEntry { id: string; url: string; vertices: number; triangles: number; label: string; garments: { top: string; bottom: string } }
 
 /** Figures available to the client (written by `npm run figure:sync`). */
 export async function listFigures(): Promise<FigureEntry[]> {

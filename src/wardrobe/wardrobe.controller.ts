@@ -56,7 +56,11 @@ export class WardrobeController {
     if (!file || !kind) throw new BadRequestException('Добавьте фото вещи (JPEG, PNG или WebP, до 8 МБ).');
     if (!!tex !== (garment3dRaw !== undefined)) throw new BadRequestException('Текстура и пакет 3D-вещи передаются вместе.');
     const garment3d = garment3dRaw !== undefined ? parseGarment3d(garment3dRaw) : null;
-    if (garment3d && dto.type !== 'TSHIRT') throw new BadRequestException('Перенос фото на 3D пока поддерживается только для футболок.');
+    // a package describes one kind of garment: a T-shirt package only for T-shirts, a trousers package for
+    // trousers and jeans (I-53); nothing else has a 3D photo mapping yet
+    if (garment3d && !(garment3d.category === 'tshirt' ? dto.type === 'TSHIRT' : dto.type === 'PANTS' || dto.type === 'JEANS')) {
+      throw new BadRequestException('Пакет 3D-вещи не подходит к типу вещи: фото футболки — только для футболок, фото брюк — для брюк и джинсов.');
+    }
     const texKind = tex ? sniff(tex.buffer) : null;
     if (tex && !texKind) throw new BadRequestException('Текстура должна быть JPEG, PNG или WebP.');
     // Random names, extension from the detected content type — never from the client's filename.

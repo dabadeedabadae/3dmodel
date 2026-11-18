@@ -11,7 +11,7 @@ import { resizeGray, resizeRaster, toCHWFloat, type GrayImage, type RasterImage 
 import { assessMask, postprocessSoftMask } from './maskOps';
 import { estimateTShirtLandmarks } from './landmarks';
 import { estimateBaseColor } from './color';
-import { anchorIssues, anchorsFromLandmarks, type PhotoAnchors, type PhotoPointName } from '../figure/photoMap';
+import { anchorIssues, anchorsFromLandmarks, estimatePantsLandmarks, type PantsAnchors, type PhotoAnchors, type PhotoPointName } from '../figure/photoMap';
 
 export const MASK_PROVIDER = 'u2netp.onnx@sha256:309c8469…4ddd8;post-v2';
 const N = 320;
@@ -19,10 +19,8 @@ const THRESHOLD = 128;
 /** longest side the analysis works at; larger photos are scaled down first (speed, texture size) */
 const MAX_SIDE = 1024;
 
-export interface GarmentPackage {
+interface PackageCommon {
   version: 1;
-  category: 'tshirt';
-  anchors: PhotoAnchors;
   baseColor: string;
   maskQuality: 'ok' | 'suspicious' | 'empty';
   landmarkStatus: 'ok' | 'uncertain';
@@ -31,6 +29,10 @@ export interface GarmentPackage {
   needsReview: boolean;
   provider: string;
 }
+/** photo → 3D package: a T-shirt (onto the figure's top) or trousers/jeans (onto its bottom) */
+export type GarmentPackage =
+  | (PackageCommon & { category: 'tshirt'; anchors: PhotoAnchors })
+  | (PackageCommon & { category: 'pants'; anchors: PantsAnchors });
 
 export interface Analysis {
   pkg: GarmentPackage;
@@ -84,6 +86,30 @@ async function segment(image: RasterImage) {
   return { mask: post.mask, quality: quality.status };
 }
 
+/** texture (background in the base colour) and a dimmed preview with the points drawn */
+async function renderOutputs(img: RasterImage, mask: Uint8Array, rgb: [number, number, number], points: { x: number; y: number }[]) {
+  const canvas = document.createElement('canvas');
+  canvas.width = img.width; canvas.height = img.height;
+  const ctx = canvas.getContext('2d')!;
+  const tex = ctx.createImageData(img.width, img.height);
+  const prev = ctx.createImageData(img.width, img.height);
+  for (let i = 0; i < img.width * img.height; i++) {
+    const inside = mask[i] === 1;
+    for (let k = 0; k < 3; k++) {
+      tex.data[i * 4 + k] = inside ? img.data[i * 4 + k]! : rgb[k]!;
+      prev.data[i * 4 + k] = inside ? img.data[i * 4 + k]! : img.data[i * 4 + k]! * 0.25 + 40;
+    }
+    tex.data[i * 4 + 3] = 255; prev.data[i * 4 + 3] = 255;
+  }
+  ctx.putImageData(tex, 0, 0);
+  const texture = await new Promise<Blob>((res, rej) => canvas.toBlob((b) => (b ? res(b) : rej(new Error('texture encode failed'))), 'image/jpeg', 0.88));
+  ctx.putImageData(prev, 0, 0);
+  ctx.fillStyle = '#1f3ff0';
+  const r = Math.max(3, Math.round(Math.min(img.width, img.height) * 0.012));
+  for (const p of points) { ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.fill(); }
+  return { texture, preview: canvas.toDataURL('image/jpeg', 0.8) };
+}
+
 export async function analyzeTShirtPhoto(file: Blob): Promise<Analysis> {
   const t0 = performance.now();
   const img = await toRaster(file);
@@ -93,33 +119,29 @@ export async function analyzeTShirtPhoto(file: Blob): Promise<Analysis> {
   const anchors = anchorsFromLandmarks(points, mask, img.width, img.height);
   const issues = anchorIssues(anchors);
   const color = estimateBaseColor(img, mask);
-
-  const canvas = document.createElement('canvas');
-  canvas.width = img.width; canvas.height = img.height;
-  const ctx = canvas.getContext('2d')!;
-  const tex = ctx.createImageData(img.width, img.height);
-  const prev = ctx.createImageData(img.width, img.height);
-  for (let i = 0; i < img.width * img.height; i++) {
-    const inside = mask[i] === 1;
-    for (let k = 0; k < 3; k++) {
-      tex.data[i * 4 + k] = inside ? img.data[i * 4 + k]! : color.rgb[k]!;
-      prev.data[i * 4 + k] = inside ? img.data[i * 4 + k]! : img.data[i * 4 + k]! * 0.25 + 40;
-    }
-    tex.data[i * 4 + 3] = 255; prev.data[i * 4 + 3] = 255;
-  }
-  ctx.putImageData(tex, 0, 0);
-  const texture = await new Promise<Blob>((res, rej) => canvas.toBlob((b) => (b ? res(b) : rej(new Error('texture encode failed'))), 'image/jpeg', 0.88));
-  ctx.putImageData(prev, 0, 0);
-  // landmarks over the preview, so the user sees what the print will follow
-  ctx.fillStyle = '#1f3ff0';
-  const r = Math.max(3, Math.round(Math.min(img.width, img.height) * 0.012));
-  for (const p of Object.values(points)) { ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.fill(); }
-  const preview = canvas.toDataURL('image/jpeg', 0.8);
-
+  const { texture, preview } = await renderOutputs(img, mask, color.rgb, Object.values(points));
   return {
     pkg: {
       version: 1, category: 'tshirt', anchors, baseColor: color.hex, maskQuality: quality, landmarkStatus: lm.status,
       anchorIssues: issues, needsReview: lm.status !== 'ok' || issues.length > 0 || quality !== 'ok', provider: MASK_PROVIDER,
+    },
+    texture, preview, ms: Math.round(performance.now() - t0),
+  };
+}
+
+/** Trousers / jeans photo (front view, legs apart) → package for the figure's lower garment (I-53). */
+export async function analyzePantsPhoto(file: Blob): Promise<Analysis> {
+  const t0 = performance.now();
+  const img = await toRaster(file);
+  const { mask, quality } = await segment(img);
+  const lm = estimatePantsLandmarks(mask, img.width, img.height);
+  if (!lm.anchors) throw new Error(`Не нашли штанины на фото: ${lm.reasons.join('; ')}. Сфотографируйте брюки спереди, штанины раздельно.`);
+  const color = estimateBaseColor(img, mask);
+  const { texture, preview } = await renderOutputs(img, mask, color.rgb, Object.values(lm.points));
+  return {
+    pkg: {
+      version: 1, category: 'pants', anchors: lm.anchors, baseColor: color.hex, maskQuality: quality, landmarkStatus: lm.status,
+      anchorIssues: lm.reasons, needsReview: lm.status !== 'ok' || quality !== 'ok', provider: MASK_PROVIDER,
     },
     texture, preview, ms: Math.round(performance.now() - t0),
   };

@@ -115,6 +115,27 @@ test('wardrobe CRUD is per-owner, validates input, and the admin recommendation 
     assert.equal((await post(with3d(pkg(), 'TSHIRT', null))).status, 400, 'package without texture');
     assert.equal((await post(with3d(pkg(), 'JEANS'))).status, 400, 'package only for t-shirts');
     assert.equal((await post(with3d(pkg(), 'TSHIRT', Buffer.from('nope')))).status, 400, 'texture bytes are checked');
+    // trousers package (I-53): valid for PANTS and JEANS, rejected for a T-shirt and when malformed
+    const pnames = ['waist_left', 'waist_right', 'crotch', 'hip_left', 'hip_right', 'hem_left_outer', 'hem_left_inner', 'hem_right_inner', 'hem_right_outer'];
+    const ppkg = (over = {}, anchorsOver = {}) => ({
+      version: 1, category: 'pants', baseColor: '#334455', maskQuality: 'ok', landmarkStatus: 'ok', anchorIssues: [], needsReview: false, provider: 'u2netp',
+      anchors: { width: 400, height: 500, points: Object.fromEntries(pnames.map((n, i) => [n, P(100 + i * 20, 50 + i * 40)])),
+        seat: [0, 1, 2, 3, 4].map((i) => ({ left: P(100, 200 - i * 30), right: P(300, 200 - i * 30) })),
+        legLeft: [...Array(9).keys()].map((i) => ({ outer: P(100, 200 + i * 30), inner: P(190, 200 + i * 30) })),
+        legRight: [...Array(9).keys()].map((i) => ({ inner: P(210, 200 + i * 30), outer: P(300, 200 + i * 30) })), ...anchorsOver },
+      ...over,
+    });
+    const okPants = await post(with3d(ppkg(), 'PANTS'));
+    assert.equal(okPants.status, 201, await okPants.clone().text());
+    const pantsItem = await okPants.json();
+    assert.equal(pantsItem.garment3d.category, 'pants');
+    assert.equal((await post(with3d(ppkg(), 'JEANS'))).status, 201, 'trousers package is valid for jeans');
+    assert.equal((await post(with3d(ppkg(), 'TSHIRT'))).status, 400, 'trousers package not for a T-shirt');
+    assert.equal((await post(with3d(ppkg({}, { seat: [] }), 'PANTS'))).status, 400, 'wrong number of seat rows');
+    assert.equal((await post(with3d(ppkg({}, { rows: [] }), 'PANTS'))).status, 400, 'extra anchor field');
+    const pantsRows = await (await fetch(base + '/wardrobe', { headers: auth(a) })).json();
+    for (const r of pantsRows.filter((x) => x.garment3d?.category === 'pants')) await fetch(base + '/wardrobe/' + r.id, { method: 'DELETE', headers: auth(a) });
+
     const texFile = join(process.cwd(), item3d.textureUrl);
     assert.ok(existsSync(texFile));
     assert.equal((await fetch(base + '/wardrobe/' + item3d.id, { method: 'DELETE', headers: auth(a) })).status, 200);

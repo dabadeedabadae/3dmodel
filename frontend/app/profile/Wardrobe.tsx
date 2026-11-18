@@ -9,6 +9,8 @@ import { COLORS, FIT_LABELS, GARMENT_LABELS, colorById, nearestPaletteColor, sug
 import type { Analysis } from '../../lib/garment/analyze';
 
 const MAX_BYTES = 8 * 1024 * 1024;
+/** garment types whose photo is turned into a 3D print on the figure */
+const ANALYSABLE: GarmentType[] = ['TSHIRT', 'PANTS', 'JEANS'];
 const ACCEPT = 'image/jpeg,image/png,image/webp';
 
 type Filter = 'ALL' | GarmentType;
@@ -158,13 +160,13 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
   const runId = useRef(0);
   const input = useRef<HTMLInputElement>(null);
 
-  // T-shirt photo → mask, points, base colour and texture, on this device (I-52)
+  // photo → mask, points, base colour and texture, on this device: T-shirts (I-52), trousers and jeans (I-53)
   useEffect(() => {
     const id = ++runId.current;
     setAnalysis(null); setAnalysisError('');
-    if (!file || type !== 'TSHIRT') { setAnalysing(false); return; }
+    if (!file || !ANALYSABLE.includes(type)) { setAnalysing(false); return; }
     setAnalysing(true);
-    import('../../lib/garment/analyze').then(({ analyzeTShirtPhoto }) => analyzeTShirtPhoto(file)).then((a) => {
+    import('../../lib/garment/analyze').then((m) => (type === 'TSHIRT' ? m.analyzeTShirtPhoto(file) : m.analyzePantsPhoto(file))).then((a) => {
       if (id !== runId.current) return;
       setAnalysis(a);
       const snapped = nearestPaletteColor(a.pkg.baseColor);
@@ -193,7 +195,7 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
     if (!file) { setError('Выберите фото вещи.'); return; }
     setSaving(true); setError('');
     try {
-      const model = analysis && type === 'TSHIRT' ? { pkg: analysis.pkg, texture: analysis.texture } : undefined;
+      const model = analysis && ANALYSABLE.includes(type) ? { pkg: analysis.pkg, texture: analysis.texture } : undefined;
       onAdded(await addWardrobeItem(file, { type, dominantColor: color, fitTag }, model));
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) { onAuthExpired(); return; }
@@ -250,9 +252,9 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
             </div>
           </div>
         </div>
-        {type === 'TSHIRT' && file && (
+        {ANALYSABLE.includes(type) && file && (
           <div className={`wardrobe-analysis${analysis?.pkg.needsReview ? ' is-review' : analysis ? ' is-ok' : ''}`} role="status" aria-live="polite">
-            {analysing && <p><b>Распознаём футболку на фото…</b> Маска, точки и цвет считаются прямо на этом устройстве, фото никуда не отправляется.</p>}
+            {analysing && <p><b>Распознаём {type === 'TSHIRT' ? 'футболку' : type === 'JEANS' ? 'джинсы' : 'брюки'} на фото…</b> Маска, точки и цвет считаются прямо на этом устройстве, фото никуда не отправляется.</p>}
             {analysisError && <p><b>Не удалось распознать фото.</b> Вещь сохранится без 3D-принта. {analysisError}</p>}
             {analysis && (
               <div className="wardrobe-analysis-row">
@@ -261,7 +263,7 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
                 <div>
                   {analysis.pkg.needsReview
                     ? <p><b>Принт перенесётся на 3D, но точки нужно проверить.</b> {[analysis.pkg.landmarkStatus !== 'ok' && 'Точки найдены неуверенно.', analysis.pkg.maskQuality !== 'ok' && 'Маска сомнительная.', ...analysis.pkg.anchorIssues].filter(Boolean).join(' ')}</p>
-                    : <p><b>Готово: фото будет перенесено на 3D-модель.</b> Перёд — с фото, спинка и бока — основным цветом.</p>}
+                    : <p><b>Готово: фото будет перенесено на 3D-модель.</b> Перёд — с фото, {type === 'TSHIRT' ? 'спинка и бока' : 'сзади и по бокам'} — основным цветом.</p>}
                   <small>Распознано за {(analysis.ms / 1000).toFixed(1)} с · основной цвет {analysis.pkg.baseColor}</small>
                 </div>
               </div>

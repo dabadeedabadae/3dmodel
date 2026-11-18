@@ -1,4 +1,4 @@
-// Ported verbatim from 3dmodel/imported-body/src/photoMap.ts (stage I-51); keep the two in sync.
+// Ported verbatim from 3dmodel/imported-body/src/photoMap.ts (stages I-51, I-53); keep the two in sync.
 /**
  * Stage I-51 — a photographed T-shirt onto the top garment of the dressed figure.
  *
@@ -294,5 +294,299 @@ export function mapPhotoToTop(fig: FigureTop, photo: PhotoAnchors): PhotoMapping
   return {
     photoTriangles, baseTriangles, uv: Float32Array.from(uv),
     stats: { frontTriangles: photoTriangles.length, baseTriangles: baseTriangles.length, sleeveTriangles, outOfImage },
+  };
+}
+
+/* ======================================================================================================
+ * Trousers and jeans (I-53). Same idea as the T-shirt: front-view flat-lay photo, landmarks from the mask,
+ * the photo is the texture of the front faces of the figure's lower garment, the rest in the base colour.
+ * All mask-derived edges are sampled into the anchors, so neither the client nor the server needs the mask.
+ * ====================================================================================================== */
+
+export type PantsPointName =
+  | 'waist_left' | 'waist_right' | 'crotch' | 'hip_left' | 'hip_right'
+  | 'hem_left_outer' | 'hem_left_inner' | 'hem_right_inner' | 'hem_right_outer';
+
+/** left/right = IMAGE left/right; the image-right leg is the wearer's LEFT leg (+X) */
+export interface PantsAnchors {
+  width: number;
+  height: number;
+  points: Record<PantsPointName, P>;
+  /** seat: side edges from the crotch line (k = 0) up to the waist (k = last) */
+  seat: { left: P; right: P }[];
+  /** legs: edges from the crotch line (k = 0) down to the hem (k = last); inner = towards the other leg */
+  legLeft: { outer: P; inner: P }[];
+  legRight: { inner: P; outer: P }[];
+}
+
+export const PANTS_SEAT_ROWS = 5;
+export const PANTS_LEG_ROWS = 9;
+
+/** runs of mask pixels on row y: [x0, x1] inclusive */
+function runs(mask: Uint8Array, width: number, height: number, y: number): [number, number][] {
+  const row = clamp(Math.round(y), 0, height - 1) * width;
+  const out: [number, number][] = [];
+  let x = 0;
+  while (x < width) {
+    while (x < width && !mask[row + x]) x++;
+    if (x >= width) break;
+    const s = x;
+    while (x < width && mask[row + x]) x++;
+    if (x - s >= 3) out.push([s, x - 1]);
+  }
+  return out;
+}
+
+export interface PantsLandmarks { points: Record<PantsPointName, P>; status: 'ok' | 'uncertain'; anchors: PantsAnchors | null; reasons: string[] }
+
+/**
+ * Landmarks of front-view trousers from the confirmed mask. Crotch: walking up from the hem, the last row where
+ * the mask still splits into two legs around the middle. Waist: a row just below the top (hanger clips and
+ * belt loops make the very top ragged). Hems: the outer and inner edge of each leg near the bottom.
+ */
+export function estimatePantsLandmarks(mask: Uint8Array, width: number, height: number): PantsLandmarks {
+  let y0 = -1, y1 = -1, x0 = width, x1 = -1;
+  for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) if (mask[y * width + x]) {
+    if (y0 < 0) y0 = y; y1 = y; if (x < x0) x0 = x; if (x > x1) x1 = x;
+  }
+  const reasons: string[] = [];
+  const empty = (): PantsLandmarks => ({ points: {} as Record<PantsPointName, P>, status: 'uncertain', anchors: null, reasons });
+  if (y0 < 0) { reasons.push('маска пустая'); return empty(); }
+  const H = y1 - y0, cx = (x0 + x1) / 2, W = x1 - x0;
+  // two legs: two runs whose gap lies in the middle 40 % of the garment's width, each a real leg (≥ 8 % of it)
+  const legsAt = (y: number) => {
+    const r = runs(mask, width, height, y);
+    if (r.length < 2) return null;
+    let best: { l: [number, number]; r: [number, number] } | null = null;
+    for (let k = 0; k + 1 < r.length; k++) {
+      const gap = (r[k]![1] + r[k + 1]![0]) / 2;
+      const l: [number, number] = [r[0]![0], r[k]![1]], rr: [number, number] = [r[k + 1]![0], r[r.length - 1]![1]];
+      if (Math.abs(gap - cx) < 0.2 * W && l[1] - l[0] >= 0.08 * W && rr[1] - rr[0] >= 0.08 * W) best = { l, r: rr };
+    }
+    return best;
+  };
+  /**
+   * The legs are the longest run of rows where the mask splits into two real legs. Its top is the crotch; its
+   * bottom, a little inside, is the hem line where BOTH legs are still whole — one leg often ends lower than the
+   * other on a flat-lay, and the ragged last rows of a mask are a few pixels wide.
+   */
+  let bestTop = -1, bestBot = -1, runTop = -1;
+  for (let y = y0; y <= y1 + 1; y++) {
+    const ok = y <= y1 && !!legsAt(y);
+    if (ok && runTop < 0) runTop = y;
+    if (!ok && runTop >= 0) { if (y - 1 - runTop > bestBot - bestTop) { bestTop = runTop; bestBot = y - 1; } runTop = -1; }
+  }
+  if (bestTop < 0 || bestBot - bestTop < 0.1 * H) { reasons.push('штанины не разделены на снимке'); return empty(); }
+  const crotchY = bestTop;
+  const hemY = bestBot - 0.01 * H;
+  const hem = legsAt(hemY) ?? legsAt(bestBot)!;
+  const gapRow = legsAt(crotchY)!;
+  const crotch = { x: (gapRow.l[1] + gapRow.r[0]) / 2, y: crotchY };
+  const waistY = y0 + 0.04 * H;
+  const wr = runs(mask, width, height, waistY);
+  const waistL = wr.length ? wr[0]![0] : x0, waistR = wr.length ? wr[wr.length - 1]![1] : x1;
+  const hipRow = runs(mask, width, height, crotchY - 2);
+  const hipL = hipRow.length ? hipRow[0]![0] : gapRow.l[0], hipR = hipRow.length ? hipRow[hipRow.length - 1]![1] : gapRow.r[1];
+  const points: Record<PantsPointName, P> = {
+    waist_left: { x: waistL, y: waistY }, waist_right: { x: waistR, y: waistY }, crotch,
+    hip_left: { x: hipL, y: crotchY }, hip_right: { x: hipR, y: crotchY },
+    hem_left_outer: { x: hem.l[0], y: hemY }, hem_left_inner: { x: hem.l[1], y: hemY },
+    hem_right_inner: { x: hem.r[0], y: hemY }, hem_right_outer: { x: hem.r[1], y: hemY },
+  };
+  // edges sampled from the mask, so the mapping never needs the mask again
+  const seat = [...Array(PANTS_SEAT_ROWS).keys()].map((k) => {
+    const f = k / (PANTS_SEAT_ROWS - 1);
+    const y = crotchY + (waistY - crotchY) * f;
+    const r = runs(mask, width, height, y);
+    const fl = lerp(points.hip_left, points.waist_left, f), fr = lerp(points.hip_right, points.waist_right, f);
+    return r.length ? { left: { x: r[0]![0], y }, right: { x: r[r.length - 1]![1], y } } : { left: fl, right: fr };
+  });
+  const legLeft: { outer: P; inner: P }[] = [], legRight: { inner: P; outer: P }[] = [];
+  for (let k = 0; k < PANTS_LEG_ROWS; k++) {
+    const f = k / (PANTS_LEG_ROWS - 1);
+    const y = crotchY + (hemY - crotchY) * f;
+    const g = k === 0 ? gapRow : legsAt(y);
+    const fallbackL = { outer: lerp(points.hip_left, points.hem_left_outer, f), inner: lerp(crotch, points.hem_left_inner, f) };
+    const fallbackR = { inner: lerp(crotch, points.hem_right_inner, f), outer: lerp(points.hip_right, points.hem_right_outer, f) };
+    if (!g) { legLeft.push(fallbackL); legRight.push(fallbackR); continue; }
+    legLeft.push({ outer: { x: k === 0 ? hipL : g.l[0], y }, inner: { x: k === 0 ? crotch.x : g.l[1], y } });
+    legRight.push({ inner: { x: k === 0 ? crotch.x : g.r[0], y }, outer: { x: k === 0 ? hipR : g.r[1], y } });
+  }
+  const anchors: PantsAnchors = { width, height, points, seat, legLeft, legRight };
+  const issues = pantsIssues(anchors);
+  reasons.push(...issues);
+  return { points, status: issues.length ? 'uncertain' : 'ok', anchors, reasons };
+}
+
+/**
+ * Plausibility of trouser points (fractions of the length L = waist → hem):
+ *   • the rise (waist → crotch) is 0.15–0.5 L — real trousers measure 0.25–0.35; a mask that filled the space
+ *     between the legs pushes the crotch down towards the hem;
+ *   • each leg at the hem is at least 0.06 of the waist width and the two hems do not overlap.
+ */
+export function pantsIssues(a: PantsAnchors): string[] {
+  const P = a.points;
+  const out: string[] = [];
+  const waistY = (P.waist_left.y + P.waist_right.y) / 2;
+  const hemY = (P.hem_left_outer.y + P.hem_right_outer.y) / 2;
+  const L = hemY - waistY, Ww = P.waist_right.x - P.waist_left.x;
+  if (!(L > 0) || !(Ww > 0)) return ['пояс и низ не найдены'];
+  const rise = (P.crotch.y - waistY) / L;
+  if (rise < 0.15 || rise > 0.5) out.push(`промежность на ${rise.toFixed(2)} длины от пояса (ожидается 0.15–0.5)`);
+  const wl = (P.hem_left_inner.x - P.hem_left_outer.x) / Ww, wrr = (P.hem_right_outer.x - P.hem_right_inner.x) / Ww;
+  if (wl < 0.06 || wrr < 0.06) out.push('штанина внизу слишком узкая');
+  if (P.hem_left_inner.x >= P.hem_right_inner.x) out.push('штанины внизу перекрываются');
+  return out;
+}
+
+export interface FigureBottom {
+  base: Float32Array;
+  index: Uint32Array;
+  part: Uint8Array;
+  bottomCode: number;
+  /** figure landmark: crotch height */
+  crotch: number;
+}
+
+/** Photo of trousers onto the figure's lower garment (front faces). Same output as mapPhotoToTop. */
+export function mapPhotoToBottom(fig: FigureBottom, photo: PantsAnchors): PhotoMapping {
+  const { base, index, part, bottomCode } = fig;
+  const n = base.length / 3;
+  const X = (i: number) => base[i * 3]!, Y = (i: number) => base[i * 3 + 1]!, Z = (i: number) => base[i * 3 + 2]!;
+  const bot: number[] = [];
+  for (let i = 0; i < n; i++) if (part[i] === bottomCode) bot.push(i);
+  if (!bot.length) throw new Error('figure has no lower garment');
+  const crotch = fig.crotch;
+  const waist = Math.max(...bot.map(Y));
+  const hemOf = (side: number) => Math.min(...bot.filter((i) => Math.sign(X(i)) === side).map(Y));
+  const hem = { [1]: hemOf(1), [-1]: hemOf(-1) } as Record<number, number>;
+
+  const profile = (from: number, to: number, f: (q: number) => number) => {
+    const qs: number[] = [], vs: number[] = [];
+    for (let q = from; q <= to + 1e-9; q += 0.01) { qs.push(q); vs.push(f(q)); }
+    const sm = vs.map((_, k) => (vs[Math.max(0, k - 1)]! + vs[k]! * 2 + vs[Math.min(vs.length - 1, k + 1)]!) / 4);
+    return (q: number) => {
+      if (q <= qs[0]!) return sm[0]!;
+      if (q >= qs[qs.length - 1]!) return sm[sm.length - 1]!;
+      const k = Math.min(sm.length - 2, Math.floor((q - from) / 0.01));
+      return sm[k]! + (sm[k + 1]! - sm[k]!) * ((q - qs[k]!) / 0.01);
+    };
+  };
+  /**
+   * Cross-sections of the SURFACE, not of nearby vertices: the trousers are a coarse mesh (around the crotch a
+   * ±2 cm band holds 14 vertices and none on the side), so "widest vertex near this height" gave a seat 13 cm wide
+   * where the surface is 19 cm, and the side faces folded. Every edge of the lower garment crossing the height
+   * contributes its exact intersection point.
+   */
+  const botTris: number[] = [];
+  for (let t = 0; t < index.length / 3; t++) if (part[index[t * 3]!] === bottomCode && part[index[t * 3 + 1]!] === bottomCode && part[index[t * 3 + 2]!] === bottomCode) botTris.push(t);
+  const section = (y: number): [number, number][] => {
+    const pts: [number, number][] = [];
+    for (const t of botTris) for (let e = 0; e < 3; e++) {
+      const a = index[t * 3 + e]!, b = index[t * 3 + ((e + 1) % 3)]!;
+      const ya = Y(a), yb = Y(b);
+      if ((ya - y) * (yb - y) > 0 || ya === yb) continue;
+      const f = (y - ya) / (yb - ya);
+      pts.push([X(a) + (X(b) - X(a)) * f, Z(a) + (Z(b) - Z(a)) * f]);
+    }
+    return pts;
+  };
+  const seatHalf = profile(crotch, waist, (y) => {
+    let w = 0;
+    for (const [x] of section(y)) w = Math.max(w, Math.abs(x));
+    return w || 0.1;
+  });
+  const legProfiles = new Map<number, { inner: (y: number) => number; outer: (y: number) => number; zMid: (y: number) => number; zHalf: (y: number) => number }>();
+  const legProfile = (side: number) => {
+    let pr = legProfiles.get(side);
+    if (pr) return pr;
+    const at = (y: number) => section(y).filter(([x]) => Math.sign(x) === side);
+    const lo = hem[side]!, hi = crotch;
+    pr = {
+      inner: profile(lo, hi, (y) => { const l = at(y); return l.length ? Math.min(...l.map(([x]) => Math.abs(x))) : 0; }),
+      outer: profile(lo, hi, (y) => { const l = at(y); return l.length ? Math.max(...l.map(([x]) => Math.abs(x))) : 0.1; }),
+      zMid: profile(lo, hi, (y) => { const l = at(y); return l.length ? (Math.min(...l.map(([, z]) => z)) + Math.max(...l.map(([, z]) => z))) / 2 : 0; }),
+      zHalf: profile(lo, hi, (y) => { const l = at(y); return l.length ? (Math.max(...l.map(([, z]) => z)) - Math.min(...l.map(([, z]) => z))) / 2 : 0.05; }),
+    };
+    legProfiles.set(side, pr);
+    return pr;
+  };
+  const seatDepth = (y: number) => {
+    const sec = section(y);
+    if (!sec.length) return [0, 0];
+    return [Math.min(...sec.map(([, z]) => z)), Math.max(...sec.map(([, z]) => z))];
+  };
+  const seatZMid = profile(crotch, waist, (y) => { const [a, b] = seatDepth(y); return (a! + b!) / 2; });
+  const seatZHalf = profile(crotch, waist, (y) => { const [a, b] = seatDepth(y); return (b! - a!) / 2; });
+
+  const rowsAt = <T>(rows: T[], f: number, mix: (a: T, b: T, t: number) => T): T => {
+    const k = clamp(f, 0, 1) * (rows.length - 1);
+    const k0 = Math.min(rows.length - 2, Math.floor(k));
+    return mix(rows[k0]!, rows[k0 + 1]!, k - k0);
+  };
+  const mixLR = (a: { left: P; right: P }, b: { left: P; right: P }, t: number) => ({ left: lerp(a.left, b.left, t), right: lerp(a.right, b.right, t) });
+  const mixIO = (a: { inner: P; outer: P }, b: { inner: P; outer: P }, t: number) => ({ inner: lerp(a.inner, b.inner, t), outer: lerp(a.outer, b.outer, t) });
+
+  const img = new Float32Array(n * 2).fill(NaN);
+  const isLeg = new Uint8Array(n);
+  for (const i of bot) {
+    const x = X(i), y = Y(i);
+    let p: P;
+    if (y >= crotch) {
+      const r = rowsAt(photo.seat, (y - crotch) / (waist - crotch), mixLR);
+      p = lerp(r.left, r.right, clamp((x / seatHalf(y) + 1) / 2, 0, 1));
+    } else {
+      isLeg[i] = 1;
+      const side = x >= 0 ? 1 : -1; // +X = wearer left = IMAGE RIGHT leg
+      const pr = legProfile(side);
+      const f = (crotch - y) / (crotch - hem[side]!);
+      const t = clamp((Math.abs(x) - pr.inner(y)) / (pr.outer(y) - pr.inner(y) || 1), 0, 1);
+      const r = side > 0 ? rowsAt(photo.legRight, f, mixIO) : rowsAt(photo.legLeft, f, mixIO);
+      p = lerp(r.inner, r.outer, t);
+      // just under the crotch the leg mapping fades into the seat mapping of the crotch line, so the two schemes
+      // meet without a seam (they disagree by a few pixels there and thin faces across the line flipped)
+      const band = 0.04;
+      if (crotch - y < band) {
+        const s0row = photo.seat[0]!;
+        const seatP = lerp(s0row.left, s0row.right, clamp((x / seatHalf(crotch) + 1) / 2, 0, 1));
+        p = lerp(seatP, p, (crotch - y) / band);
+      }
+    }
+    img[i * 2] = p.x;
+    img[i * 2 + 1] = p.y;
+  }
+
+  const photoTriangles: number[] = [], baseTriangles: number[] = [];
+  const uv: number[] = [];
+  let legTriangles = 0, outOfImage = 0;
+  for (let t = 0; t < index.length / 3; t++) {
+    const v = [index[t * 3]!, index[t * 3 + 1]!, index[t * 3 + 2]!];
+    if (!v.every((k) => part[k] === bottomCode)) continue;
+    const ux = X(v[1]!) - X(v[0]!), uy = Y(v[1]!) - Y(v[0]!), uz = Z(v[1]!) - Z(v[0]!);
+    const wx = X(v[2]!) - X(v[0]!), wy = Y(v[2]!) - Y(v[0]!), wz = Z(v[2]!) - Z(v[0]!);
+    const nx = uy * wz - uz * wy, ny = uz * wx - ux * wz, nz = ux * wy - uy * wx;
+    const len = Math.hypot(nx, ny, nz) || 1;
+    // every corner on the front of its own cross-section (seat or that leg), as for the T-shirt
+    const front = (k: number) => {
+      if (Y(k) >= crotch) return Z(k) - seatZMid(Y(k)) >= 0.25 * seatZHalf(Y(k));
+      const pr = legProfile(X(k) >= 0 ? 1 : -1);
+      return Z(k) - pr.zMid(Y(k)) >= 0.25 * pr.zHalf(Y(k));
+    };
+    // a face spanning both legs (the crotch seam) is not on the photo's front either
+    const mixedLegs = v.some((k) => isLeg[k]) && new Set(v.filter((k) => isLeg[k]).map((k) => (X(k) >= 0 ? 1 : -1))).size > 1;
+    // legs are tubes: a face turned more than 60° from the camera is their side, the silhouette of a flat-lay
+    const minFacing = v.some((k) => isLeg[k]) ? 0.5 : 0.2;
+    if (nz / len < minFacing || mixedLegs || !v.every(front)) { baseTriangles.push(t); continue; }
+    photoTriangles.push(t);
+    if (v.some((k) => isLeg[k])) legTriangles++;
+    for (const k of v) {
+      const px = img[k * 2]!, py = img[k * 2 + 1]!;
+      if (px < 0 || py < 0 || px > photo.width || py > photo.height) outOfImage++;
+      uv.push(clamp(px / photo.width, 0, 1), 1 - clamp(py / photo.height, 0, 1));
+    }
+  }
+  return {
+    photoTriangles, baseTriangles, uv: Float32Array.from(uv),
+    stats: { frontTriangles: photoTriangles.length, baseTriangles: baseTriangles.length, sleeveTriangles: legTriangles, outOfImage },
   };
 }

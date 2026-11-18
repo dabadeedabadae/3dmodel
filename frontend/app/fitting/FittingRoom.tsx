@@ -8,9 +8,9 @@ import { COLORS, GARMENT_LABELS, colorById } from '../../lib/labels';
 import { WEIGHT_NAMES, ZERO, type Weights } from '../../lib/figure/deform';
 import { listFigures, loadFigure, type Figure, type FigureEntry } from '../../lib/figure/figure';
 import type { Palette, Print, View } from './FigureViewer';
-import type { PhotoAnchors } from '../../lib/figure/photoMap';
+import type { PantsAnchors, PhotoAnchors } from '../../lib/figure/photoMap';
 
-interface SampleGarment { id: string; url: string; textureUrl: string; baseColor: string; needsReview: boolean }
+interface SampleGarment { id: string; category: 'tshirt' | 'pants'; type: string; url: string; textureUrl: string; baseColor: string; needsReview: boolean }
 
 const FigureViewer = dynamic(() => import('./FigureViewer'), { ssr: false, loading: () => <div className="fit-canvas fit-loading">Загрузка модели…</div> });
 
@@ -34,11 +34,6 @@ const VIEWS: { id: View; label: string }[] = [
   { id: 'front', label: 'Спереди' }, { id: 'threequarter', label: '3/4' }, { id: 'side', label: 'Сбоку' }, { id: 'back', label: 'Сзади' },
 ];
 
-/** Names of the prepared outfits; unknown ids fall back to a number. */
-const FIGURE_LABELS: Record<string, string> = {
-  'figure-01': 'Футболка и брюки', 'figure-02': 'Худи и брюки', 'figure-03': 'Рубашка и брюки',
-};
-const figureLabel = (id: string) => FIGURE_LABELS[id] ?? `Комплект ${Number(id.split('-')[1])}`;
 
 const DEFAULT_PALETTE: Palette = { skin: '#d3d4d8', top: '#8d9097', bottom: '#1f2f5c', shoes: '#2a2b30' };
 const QUICK_TOPS = ['white', 'gray', 'black', 'red', 'blue', 'green', 'beige', 'pink'];
@@ -64,7 +59,22 @@ export default function FittingRoom() {
   const [samplePrint, setPrint] = useState<Print | null>(null);
   /** print from the user's own analysed T-shirt (wardrobe item with a 3D package) */
   const [ownPrint, setOwnPrint] = useState<(Print & { needsReview: boolean }) | null>(null);
-  const print = ownPrint ?? samplePrint;
+  /** trousers: own analysed item or a sample, each with the garment type it shows (I-53/I-54) */
+  const [ownBottomPrint, setOwnBottomPrint] = useState<(Print & { needsReview: boolean; type: string }) | null>(null);
+  const [bottomSampleId, setBottomSampleId] = useState<string | null>(null);
+  const [bottomSamplePrint, setBottomSamplePrint] = useState<(Print & { type: string }) | null>(null);
+  const cur = figures.find((f) => f.id === figureId) ?? null;
+  // a print goes only onto the same garment type of the figure (I-54): T-shirt photos onto a T-shirt,
+  // trouser photos onto trousers
+  const topPrint = cur?.garments.top === 'TSHIRT' ? (ownPrint ?? samplePrint) : null;
+  const bottomCandidate = ownBottomPrint ?? bottomSamplePrint;
+  const bottomPrint = bottomCandidate && cur?.garments.bottom === bottomCandidate.type ? bottomCandidate : null;
+  const prints = useMemo(() => [topPrint, bottomPrint].filter((p): p is Print => !!p), [topPrint, bottomPrint]);
+  const [notice, setNotice] = useState('');
+  /** the figure for a garment type: the current one if it matches, otherwise the first that does */
+  const figureFor = (slot: 'top' | 'bottom', type: string) =>
+    cur?.garments[slot] === type ? cur : figures.find((f) => f.garments[slot] === type) ?? null;
+  const availableTypes = (slot: 'top' | 'bottom') => Array.from(new Set(figures.map((f) => f.garments[slot]))).map((t) => GARMENT_LABELS[t as GarmentType]?.toLowerCase() ?? t).join(', ');
 
   useEffect(() => {
     fetch('/garments/index.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : [])).then(setSamples).catch(() => setSamples([]));
@@ -72,14 +82,44 @@ export default function FittingRoom() {
   useEffect(() => {
     const g = samples.find((x) => x.id === printId);
     if (!g) { setPrint(null); return; }
+    // sample photos are T-shirts: show them on the T-shirt figure
+    const tee = figures.find((f) => f.garments.top === 'TSHIRT');
+    if (tee && tee.id !== figureId) setFigureId(tee.id);
     let active = true;
     fetch(g.url).then((r) => r.json()).then((pkg: { anchors: PhotoAnchors; textureUrl: string; baseColor: string }) => {
       if (!active) return;
-      setPrint({ textureUrl: pkg.textureUrl, anchors: pkg.anchors });
+      setPrint({ kind: 'tshirt', textureUrl: pkg.textureUrl, anchors: pkg.anchors });
       setTopColor(pkg.baseColor);
     }).catch(() => { if (active) setPrint(null); });
     return () => { active = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [printId, samples]);
+
+  useEffect(() => {
+    const g = samples.find((x) => x.id === bottomSampleId);
+    if (!g) { setBottomSamplePrint(null); return; }
+    const fit = figures.find((f) => f.garments.bottom === g.type);
+    if (fit && fit.garments.bottom !== cur?.garments.bottom) setFigureId(fit.id);
+    let active = true;
+    fetch(g.url).then((r) => r.json()).then((pkg: { anchors: PantsAnchors; textureUrl: string; baseColor: string }) => {
+      if (!active) return;
+      setBottomSamplePrint({ kind: 'pants', type: g.type, textureUrl: pkg.textureUrl, anchors: pkg.anchors });
+      setBottomColor(pkg.baseColor);
+    }).catch(() => { if (active) setBottomSamplePrint(null); });
+    return () => { active = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bottomSampleId, samples]);
+
+  // switching the figure by hand drops a chosen item it does not wear
+  useEffect(() => {
+    if (!cur || !wardrobe) return;
+    const top = wardrobe.find((i) => i.id === topId);
+    if (top && top.type !== cur.garments.top) { setTopId(null); setOwnPrint(null); setTopColor(DEFAULT_PALETTE.top); }
+    const bottom = wardrobe.find((i) => i.id === bottomId);
+    if (bottom && bottom.type !== cur.garments.bottom) { setBottomId(null); setOwnBottomPrint(null); setBottomColor(DEFAULT_PALETTE.bottom); }
+    if (cur.garments.top !== 'TSHIRT') setPrintId(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [figureId]);
 
   useEffect(() => {
     listFigures().then((list) => { setFigures(list); if (list.length && !list.some((f) => f.id === 'figure-01')) setFigureId(list[0].id); })
@@ -124,14 +164,28 @@ export default function FittingRoom() {
   }
   function pickItem(item: WardrobeItem, slot: 'top' | 'bottom') {
     const hex = colorById(item.dominantColor)?.hex ?? '#888';
+    const target = figureFor(slot, item.type);
+    if (!target) {
+      setNotice(`3D-модели с вещью «${GARMENT_LABELS[item.type].toLowerCase()}» пока нет — её не на что надеть. Сейчас есть ${slot === 'top' ? 'верх' : 'низ'}: ${availableTypes(slot)}.`);
+      return;
+    }
+    setNotice('');
+    if (target.id !== figureId) setFigureId(target.id);
     if (slot === 'top') {
       setTopId(item.id);
-      if (item.garment3d && item.textureUrl) {
+      if (item.garment3d?.category === 'tshirt' && item.textureUrl) {
         setPrintId(null);
-        setOwnPrint({ textureUrl: mediaUrl(item.textureUrl), anchors: item.garment3d.anchors, needsReview: item.garment3d.needsReview });
+        setOwnPrint({ kind: 'tshirt', textureUrl: mediaUrl(item.textureUrl), anchors: item.garment3d.anchors, needsReview: item.garment3d.needsReview });
         setTopColor(item.garment3d.baseColor);
       } else { setOwnPrint(null); setTopColor(hex); }
-    } else { setBottomId(item.id); setBottomColor(hex); }
+    } else {
+      setBottomId(item.id);
+      setBottomSampleId(null);
+      if (item.garment3d?.category === 'pants' && item.textureUrl) {
+        setOwnBottomPrint({ kind: 'pants', type: item.type, textureUrl: mediaUrl(item.textureUrl), anchors: item.garment3d.anchors, needsReview: item.garment3d.needsReview });
+        setBottomColor(item.garment3d.baseColor);
+      } else { setOwnBottomPrint(null); setBottomColor(hex); }
+    }
   }
   const presetActive = (w: Partial<Weights>) => WEIGHT_NAMES.every((k) => Math.abs(weights[k] - clampTo(k, w[k] ?? 0)) < 1e-6);
 
@@ -148,9 +202,9 @@ export default function FittingRoom() {
       <div className="fit-layout">
         <section className="fit-stage" aria-label="Манекен">
           {figureError ? <div className="fit-canvas fit-loading" role="alert">{figureError}</div>
-            : figure ? <FigureViewer figure={figure} weights={weights} heightCm={heightCm} palette={palette} view={view} viewNonce={viewNonce} print={print} />
+            : figure ? <FigureViewer figure={figure} weights={weights} heightCm={heightCm} palette={palette} view={view} viewNonce={viewNonce} prints={prints} />
               : <div className="fit-canvas fit-loading">Загрузка модели…</div>}
-          {ownPrint?.needsReview && <p className="fit-warning" role="status">Точки на фото этой футболки найдены неуверенно — принт может лечь неточно.</p>}
+          {((topPrint && ownPrint?.needsReview) || (bottomPrint && ownBottomPrint?.needsReview)) && <p className="fit-warning" role="status">Точки на фото этой вещи найдены неуверенно — принт может лечь неточно.</p>}
           <div className="fit-views" role="group" aria-label="Ракурс">
             {VIEWS.map((v) => (
               <button key={v.id} type="button" className={view === v.id ? 'is-active' : ''} aria-pressed={view === v.id} onClick={() => { setView(v.id); setViewNonce((n) => n + 1); }}>{v.label}</button>
@@ -164,13 +218,13 @@ export default function FittingRoom() {
               <h2>Комплект</h2>
               <div className="fit-presets" role="group" aria-label="Комплект">
                 {figures.map((f) => (
-                  <button key={f.id} type="button" className={figureId === f.id ? 'is-active' : ''} aria-pressed={figureId === f.id} onClick={() => setFigureId(f.id)}>{figureLabel(f.id)}</button>
+                  <button key={f.id} type="button" className={figureId === f.id ? 'is-active' : ''} aria-pressed={figureId === f.id} onClick={() => setFigureId(f.id)}>{f.label}</button>
                 ))}
               </div>
             </section>
           )}
 
-          {samples.some((g) => !g.needsReview) && (
+          {samples.some((g) => !g.needsReview && g.category === 'tshirt') && (
             <section className="profile-panel">
               <div className="fit-panel-head">
                 <h2>Фото на футболке</h2>
@@ -178,7 +232,7 @@ export default function FittingRoom() {
               </div>
               <div className="fit-items">
                 <ul>
-                  {samples.filter((g) => !g.needsReview).map((g) => (
+                  {samples.filter((g) => !g.needsReview && g.category === 'tshirt').map((g) => (
                     <li key={g.id}>
                       <button type="button" className={printId === g.id ? 'is-active' : ''} aria-pressed={printId === g.id} onClick={() => { setOwnPrint(null); setTopId(null); setPrintId(g.id); }} title="Фото из открытого набора (CC0)">
                         {/* eslint-disable-next-line @next/next/no-img-element -- local sample texture */}
@@ -192,13 +246,36 @@ export default function FittingRoom() {
             </section>
           )}
 
+          {samples.some((g) => !g.needsReview && g.category === 'pants' && figures.some((f) => f.garments.bottom === g.type)) && (
+            <section className="profile-panel">
+              <div className="fit-panel-head">
+                <h2>Фото на брюках</h2>
+                {bottomSampleId && <button type="button" className="profile-reset" onClick={() => setBottomSampleId(null)}>Убрать</button>}
+              </div>
+              <div className="fit-items">
+                <ul>
+                  {samples.filter((g) => !g.needsReview && g.category === 'pants' && figures.some((f) => f.garments.bottom === g.type)).map((g) => (
+                    <li key={g.id}>
+                      <button type="button" className={bottomSampleId === g.id ? 'is-active' : ''} aria-pressed={bottomSampleId === g.id} onClick={() => { setOwnBottomPrint(null); setBottomId(null); setBottomSampleId(g.id); }} title="Фото из открытого набора (CC0)">
+                        {/* eslint-disable-next-line @next/next/no-img-element -- local sample texture */}
+                        <img src={g.textureUrl} alt="Фото брюк" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <p className="fit-note">Перёд брюк — с фото, по маске и ориентирам: пояс, промежность, низ штанин. Сзади и по бокам — основной цвет. Джинсы надеваются только на модель в джинсах.</p>
+            </section>
+          )}
+
           <section className="profile-panel">
             <h2>Одежда</h2>
             {signedIn ? (
               wardrobe === null ? <p className="fit-hint">Загрузка гардероба…</p> : (
                 <>
-                  <ItemRow title="Верх" items={tops} selected={topId} onPick={(i) => pickItem(i, 'top')} empty="В гардеробе нет верха — футболки, свитера, куртки." />
-                  <ItemRow title="Низ" items={bottoms} selected={bottomId} onPick={(i) => pickItem(i, 'bottom')} empty="В гардеробе нет низа — брюк, джинсов, юбки." />
+                  <ItemRow title="Верх" items={tops} selected={topId} onPick={(i) => pickItem(i, 'top')} hasModel={(t) => figures.some((f) => f.garments.top === t)} empty="В гардеробе нет верха — футболки, свитера, куртки." />
+                  <ItemRow title="Низ" items={bottoms} selected={bottomId} onPick={(i) => pickItem(i, 'bottom')} hasModel={(t) => figures.some((f) => f.garments.bottom === t)} empty="В гардеробе нет низа — брюк, джинсов, юбки." />
+                  {notice && <p className="fit-notice" role="status">{notice}</p>}
                   {(!tops.length || !bottoms.length) && <Link className="fit-link" href="/profile">Добавить вещи в гардероб →</Link>}
                 </>
               )
@@ -209,7 +286,7 @@ export default function FittingRoom() {
                 <p className="fit-hint"><Link href="/login">Войдите</Link>, чтобы примерить вещи из своего гардероба.</p>
               </>
             )}
-            <p className="fit-note">Футболка с пометкой 3D надевается с принтом со своего фото; у остальных вещей переносится цвет. Крой — у модели.</p>
+            <p className="fit-note">Вещь надевается только на такую же вещь модели: футболка — на футболку, брюки — на брюки. Футболка с пометкой 3D — с принтом со своего фото, у остальных переносится цвет.</p>
           </section>
 
           <section className="profile-panel">
@@ -248,8 +325,9 @@ export default function FittingRoom() {
 
 const signed = (v: number) => (Math.abs(v) < 0.005 ? '0' : `${v > 0 ? '+' : '−'}${Math.round(Math.abs(v) * 100)}%`);
 
-function ItemRow({ title, items, selected, onPick, empty }: {
+function ItemRow({ title, items, selected, onPick, empty, hasModel }: {
   title: string; items: WardrobeItem[]; selected: string | null; onPick: (i: WardrobeItem) => void; empty: string;
+  hasModel: (type: string) => boolean;
 }) {
   return (
     <div className="fit-items">
@@ -258,10 +336,11 @@ function ItemRow({ title, items, selected, onPick, empty }: {
         <ul>
           {items.map((i) => (
             <li key={i.id}>
-              <button type="button" className={selected === i.id ? 'is-active' : ''} aria-pressed={selected === i.id} onClick={() => onPick(i)} title={`${GARMENT_LABELS[i.type]}, ${colorById(i.dominantColor)?.label ?? i.dominantColor}`}>
+              <button type="button" className={`${selected === i.id ? 'is-active' : ''}${hasModel(i.type) ? '' : ' no-model'}`} aria-pressed={selected === i.id} onClick={() => onPick(i)} title={`${GARMENT_LABELS[i.type]}, ${colorById(i.dominantColor)?.label ?? i.dominantColor}${hasModel(i.type) ? '' : ' — 3D-модели с такой вещью пока нет'}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element -- API upload */}
                 <img src={mediaUrl(i.imageUrl)} alt={`${GARMENT_LABELS[i.type]}, ${colorById(i.dominantColor)?.label ?? i.dominantColor}`} />
                 <i style={{ background: colorById(i.dominantColor)?.hex }} aria-hidden />
+                {!hasModel(i.type) && <em className="fit-nomodel">нет модели</em>}
                 {i.garment3d && <b className="fit-3d">3D</b>}
               </button>
             </li>
