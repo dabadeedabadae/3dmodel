@@ -61,7 +61,9 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     geometry.setIndex(new THREE.BufferAttribute(figure.index, 1));
     const colors = new THREE.BufferAttribute(new Float32Array(figure.base.length), 3);
     geometry.setAttribute('color', colors);
-    const material = new THREE.MeshStandardMaterial({ vertexColors: true, flatShading: true, roughness: 0.68, metalness: 0 });
+    // DoubleSide: generated garments are often single-layer (a shirt collar is one sheet of fabric); seen from
+    // above or behind, its inside is a back face, and with back faces culled the background showed through it
+    const material = new THREE.MeshStandardMaterial({ vertexColors: true, flatShading: true, roughness: 0.68, metalness: 0, side: THREE.DoubleSide });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -90,7 +92,7 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
     controls.enableDamping = true;
-    controls.minDistance = 2.2;
+    controls.minDistance = 0.8; // close enough to inspect a collar or a cuff
     controls.maxDistance = 8;
     controls.maxPolarAngle = Math.PI * 0.55;
 
@@ -111,6 +113,8 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     const ro = new ResizeObserver(resize);
     ro.observe(el);
     ctx.current = { renderer, scene, camera, controls, geometry, colors, render, positions: new Float32Array(figure.base), photos: [] };
+    // development only: lets automated visual checks place the camera precisely (not in production builds)
+    if (process.env.NODE_ENV === 'development') (window as unknown as Record<string, unknown>).__fitDebug = { camera, controls, render, closeUps: () => { controls.minDistance = 0.1; } };
     resize();
 
     return () => {
@@ -185,7 +189,7 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
         const g = new THREE.BufferGeometry();
         g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(nT * 9), 3));
         g.setAttribute('uv', new THREE.BufferAttribute(mapping.uv, 2));
-        const mesh = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ map: texture, flatShading: true, roughness: 0.75, metalness: 0 }));
+        const mesh = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ map: texture, flatShading: true, roughness: 0.75, metalness: 0, side: THREE.DoubleSide }));
         mesh.castShadow = true;
         mesh.receiveShadow = true;
         const ph = { mesh, corners, texture };
