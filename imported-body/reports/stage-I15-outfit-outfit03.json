@@ -3,15 +3,15 @@
   "source": "imported-body/out/composed-outfit03.json",
   "statureGiven_cm": 175,
   "weld": {
-    "before": 1998,
-    "after": 1991,
-    "triangles": 3610,
-    "seamSnapped": 39,
-    "mirrorPaired": 1990
+    "before": 1993,
+    "after": 1986,
+    "triangles": 3601,
+    "seamSnapped": 30,
+    "mirrorPaired": 1639
   },
   "symmetry_mm": {
-    "mean": 0.04,
-    "max": 6.04
+    "mean": 0.12,
+    "max": 5.85
   },
   "parts": [
     {
@@ -150,15 +150,6 @@
       ]
     },
     {
-      "kind": "arm_right",
-      "vertices": 112,
-      "triangles": 213,
-      "y_cm": [
-        133.7,
-        141.8
-      ]
-    },
-    {
       "kind": "head",
       "vertices": 133,
       "triangles": 250,
@@ -172,8 +163,17 @@
       "vertices": 107,
       "triangles": 204,
       "y_cm": [
-        133.7,
-        141.8
+        133.6,
+        141.5
+      ]
+    },
+    {
+      "kind": "arm_right",
+      "vertices": 107,
+      "triangles": 204,
+      "y_cm": [
+        133.6,
+        141.5
       ]
     }
   ],
@@ -185,7 +185,7 @@
     "hip": 84.3,
     "chest": 127.3,
     "armpit": 131.7,
-    "shoulder": 141.8,
+    "shoulder": 141.5,
     "neck_base": 141.7,
     "topHem": 87.3
   },
@@ -197,7 +197,7 @@
     "hip": 0.482,
     "chest": 0.728,
     "armpit": 0.753,
-    "shoulder": 0.81,
+    "shoulder": 0.808,
     "neck_base": 0.81,
     "topHem": 0.499
   },

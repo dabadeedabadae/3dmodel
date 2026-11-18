@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T23:00:33.494Z",
+  "generatedAt": "2026-11-18T04:28:09.729Z",
   "stature_cm": 175,
   "figures": [
     {
@@ -7,6 +7,11 @@
       "id": "outfit01",
       "status": "PASS",
       "notes": [],
+      "garments": {
+        "top": "TSHIRT",
+        "bottom": "PANTS",
+        "label": "Футболка и брюки"
+      },
       "parts": {
         "shoe_right": 90,
         "bottom": 190,
@@ -46,11 +51,16 @@
       "id": "outfit02",
       "status": "PASS",
       "notes": [],
+      "garments": {
+        "top": "HOODIE",
+        "bottom": "PANTS",
+        "label": "Худи и брюки"
+      },
       "compose": {
         "target": "raw-outfit02",
         "reference": "outfit01",
-        "vertices": 1881,
-        "triangles": 3415,
+        "vertices": 1878,
+        "triangles": 3410,
         "armSpanScale": 1.121,
         "headShift_cm": [
           0,
@@ -58,19 +68,19 @@
           -6.1
         ],
         "cuffX_cm": {
-          "arm_left": 77.9,
-          "arm_right": 77.7
+          "arm_left": 77.8,
+          "arm_right": 77.8
         },
-        "verticesPulledInsideCuff": 29
+        "verticesPulledInsideCuff": 13
       },
       "parts": {
         "shoe_right": 341,
         "bottom": 225,
         "top": 664,
         "shoe_left": 341,
-        "arm_right": 91,
         "head": 133,
-        "arm_left": 86
+        "arm_left": 87,
+        "arm_right": 87
       },
       "landmarks_cm": {
         "height": 175,
@@ -85,15 +95,15 @@
         "topHem": 90
       },
       "symmetry_mm": {
-        "mean": 0.02,
-        "max": 5.91
+        "mean": 0.11,
+        "max": 5.85
       },
       "weld": {
-        "before": 1881,
-        "after": 1881,
-        "triangles": 3415,
-        "seamSnapped": 50,
-        "mirrorPaired": 1880
+        "before": 1878,
+        "after": 1878,
+        "triangles": 3410,
+        "seamSnapped": 41,
+        "mirrorPaired": 1571
       },
       "sliderRange": "chest ±0.9, waist ±0.9, hip ±0.9, shoulders ±0.27, arms ±0.9, thighs ±0.9"
     },
@@ -102,11 +112,16 @@
       "id": "outfit03",
       "status": "PASS",
       "notes": [],
+      "garments": {
+        "top": "SHIRT",
+        "bottom": "PANTS",
+        "label": "Рубашка и брюки"
+      },
       "compose": {
         "target": "raw-outfit03",
         "reference": "outfit01",
-        "vertices": 1998,
-        "triangles": 3610,
+        "vertices": 1993,
+        "triangles": 3601,
         "armSpanScale": 1.129,
         "headShift_cm": [
           0,
@@ -114,19 +129,19 @@
           -7.1
         ],
         "cuffX_cm": {
-          "arm_left": 65.3,
-          "arm_right": 65
+          "arm_left": 65.1,
+          "arm_right": 65.1
         },
-        "verticesPulledInsideCuff": 19
+        "verticesPulledInsideCuff": 9
       },
       "parts": {
         "shoe_right": 364,
         "bottom": 251,
         "top": 660,
         "shoe_left": 364,
-        "arm_right": 112,
         "head": 133,
-        "arm_left": 107
+        "arm_left": 107,
+        "arm_right": 107
       },
       "landmarks_cm": {
         "height": 175,
@@ -136,22 +151,22 @@
         "hip": 84.3,
         "chest": 127.3,
         "armpit": 131.7,
-        "shoulder": 141.8,
+        "shoulder": 141.5,
         "neck_base": 141.7,
         "topHem": 87.3
       },
       "symmetry_mm": {
-        "mean": 0.04,
-        "max": 6.04
+        "mean": 0.12,
+        "max": 5.85
       },
       "weld": {
-        "before": 1998,
-        "after": 1991,
-        "triangles": 3610,
-        "seamSnapped": 39,
-        "mirrorPaired": 1990
+        "before": 1993,
+        "after": 1986,
+        "triangles": 3601,
+        "seamSnapped": 30,
+        "mirrorPaired": 1639
       },
-      "sliderRange": "chest ±0.81, waist ±0.81, hip ±0.81, shoulders ±0.08, arms ±0.81, thighs ±0.81"
+      "sliderRange": "chest ±0.81, waist ±0.81, hip ±0.81, shoulders ±0.81, arms ±0.81, thighs ±0.81"
     }
   ]
 }

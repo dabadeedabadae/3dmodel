@@ -12,6 +12,9 @@ const STATURE = process.env.IB_STATURE ?? '175';
 const REF = process.env.IB_BODY_REF ?? 'outfit01';
 const files = readdirSync(DIR).filter((f) => /^outfit-\d+\.(fbx|glb|gltf|obj)$/i.test(f)).sort();
 const REQUIRED = ['top', 'bottom', 'head', 'arm_left', 'arm_right', 'shoe_left', 'shoe_right'];
+// garment types per outfit (I-54): without them the site cannot know what may be put on this figure
+const TYPES = ['TSHIRT', 'SHIRT', 'JACKET', 'COAT', 'SWEATER', 'HOODIE', 'PANTS', 'JEANS', 'SHORTS', 'SKIRT', 'DRESS'];
+const manifest = JSON.parse(readFileSync(`${DIR}/outfits.json`, 'utf8'));
 const rows = [];
 const run = (args, env = {}) => spawnSync(process.execPath, ['--import', 'tsx', ...args], { encoding: 'utf8', env: { ...process.env, ...env } });
 
@@ -21,6 +24,11 @@ for (const f of files) {
   const row = { file: f, id, status: 'PASS', notes: [] };
   rows.push(row);
   if (!f.toLowerCase().endsWith('.fbx')) { row.status = 'SKIP'; row.notes.push('формат не поддерживается, нужен FBX'); continue; }
+  const m = manifest[id];
+  if (!m || !TYPES.includes(m.top) || !TYPES.includes(m.bottom) || !m.label) {
+    row.status = 'FAIL'; row.notes.push(`нет типа верха/низа в ${DIR}/outfits.json — впишите { "label", "top", "bottom" } для ${id}`); continue;
+  }
+  row.garments = { top: m.top, bottom: m.bottom, label: m.label };
   let prep;
   if (id === REF) prep = run(['imported-body/scripts/prepare-outfit.ts', `${DIR}/${f}`, id, STATURE]);
   else {

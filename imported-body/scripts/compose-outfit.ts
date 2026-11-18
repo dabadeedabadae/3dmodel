@@ -107,6 +107,17 @@ for (const side of ['arm_left', 'arm_right']) {
 }
 
 /**
+ * Hands are placed as a mirrored pair: one cuff line and one shift for both sides. Placing each side on its own
+ * sleeve made them differ by up to 27 mm, and the composed figure stopped being symmetric (check-outfit caught it).
+ */
+{
+  const c = (cuffX.arm_left! + cuffX.arm_right!) / 2;
+  cuffX.arm_left = c; cuffX.arm_right = c;
+  const L = handShift.arm_left!, Rt = handShift.arm_right!;
+  const avg = [0, (L[1]! + Rt[1]!) / 2, (L[2]! + Rt[2]!) / 2];
+  handShift.arm_left = avg; handShift.arm_right = avg;
+}
+/**
  * Which reference vertices go in. The low-poly forearm is a single long segment between the elbow ring and the
  * wrist ring, so keeping only the vertices beyond the cuff and dropping the triangles that cross it removed
  * the whole forearm surface and left a visible gap between cuff and hand. Every triangle that reaches past the
@@ -114,9 +125,15 @@ for (const side of ['arm_left', 'arm_right']) {
  * squashed strip stays hidden (compressed 7× towards the cut, not flattened).
  */
 const cutOf = (k: string) => cuffX[k]! - 0.015;
+/**
+ * The right hand is the MIRROR of the reference's left hand, not the reference's own right hand: the reference
+ * mesh is not mirror-topological (138 vs 141 arm vertices), so its two forearm strips hidden in the cuffs sat at
+ * 63.4 and 61.2 cm from the centre, and a slider amplified that past the symmetry check. Built as a mirrored
+ * pair, the hands are symmetric by construction; the head stays exactly the reference's.
+ */
 const beyond = (i: number) => {
   const k = rKind[i]!;
-  return k === 'head' || ((k === 'arm_left' || k === 'arm_right') && Math.abs(rp[i * 3]!) > cutOf(k));
+  return k === 'head' || (k === 'arm_left' && Math.abs(rp[i * 3]!) > cutOf(k));
 };
 const keep = new Uint8Array(nR);
 for (let t = 0; t < R.index.length; t += 3) {
@@ -124,24 +141,31 @@ for (let t = 0; t < R.index.length; t += 3) {
   if (tri.some(beyond) && tri.every((v) => rKind[v] === rKind[tri[0]!])) for (const v of tri) keep[v] = 1;
 }
 const remapR = new Int32Array(nR).fill(-1);
+const remapMirror = new Int32Array(nR).fill(-1);
 let pulled = 0;
 for (let i = 0; i < nR; i++) {
   if (!keep[i]) continue;
   const k = rKind[i]!;
-  const shift = k === 'head' ? headShift : handShift[k]!;
+  const shift = k === 'head' ? headShift : handShift.arm_left!;
   let x = rp[i * 3]!;
-  // compressed towards the cut, not flattened onto it: flat strips turn into near-degenerate triangles that
-  // invert at the slightest shoulder shift (the shirt lost its shoulder slider to that, ±0.81 → ±0.08)
   if (k !== 'head' && Math.abs(x) < cutOf(k)) { x = Math.sign(x) * (cutOf(k) - (cutOf(k) - Math.abs(x)) * 0.15); pulled++; }
+  const y = rp[i * 3 + 1]! + shift[1]!, z = rp[i * 3 + 2]! + shift[2]!;
   remapR[i] = out.length / 3;
-  out.push(x + shift[0]!, rp[i * 3 + 1]! + shift[1]!, rp[i * 3 + 2]! + shift[2]!);
+  out.push(x + shift[0]!, y, z);
+  if (k === 'arm_left') { remapMirror[i] = out.length / 3; out.push(-(x + shift[0]!), y, z); }
 }
 for (let t = 0; t < R.index.length; t += 3) {
-  const a = remapR[R.index[t]!]!, b = remapR[R.index[t + 1]!]!, c = remapR[R.index[t + 2]!]!;
-  if (a >= 0 && b >= 0 && c >= 0) outIndex.push(a, b, c);
+  const tri = [R.index[t]!, R.index[t + 1]!, R.index[t + 2]!];
+  const a = remapR[tri[0]!]!, b = remapR[tri[1]!]!, c = remapR[tri[2]!]!;
+  if (a < 0 || b < 0 || c < 0) continue;
+  outIndex.push(a, b, c);
+  // mirrored copy of the left hand: reflection flips the winding, so two corners swap
+  if (rKind[tri[0]!] === 'arm_left') outIndex.push(remapMirror[tri[0]!]!, remapMirror[tri[2]!]!, remapMirror[tri[1]!]!);
 }
-
-writeFileSync(outFile, JSON.stringify({ base: out.map((v) => Number(v.toFixed(6))), index: outIndex }));
+// reference vertices (head, hands) are marked: preparation must not symmetrise them against the clothes
+const fixed: number[] = [];
+for (let i = 0; i < nR; i++) { if (remapR[i]! >= 0) fixed.push(remapR[i]!); if (remapMirror[i]! >= 0) fixed.push(remapMirror[i]!); }
+writeFileSync(outFile, JSON.stringify({ base: out.map((v) => Number(v.toFixed(6))), index: outIndex, fixed }));
 console.log(JSON.stringify({
   target: targetId, reference: refId, vertices: out.length / 3, triangles: outIndex.length / 3,
   armSpanScale: Number(kArm.toFixed(3)), headShift_cm: headShift.map((v) => Number((v * 100).toFixed(1))),

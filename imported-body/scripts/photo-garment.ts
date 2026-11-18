@@ -23,22 +23,24 @@ import { U2NetpSegmentationProvider } from '../../src/providers/SegmentationProv
 import { estimateTShirtLandmarks } from '../../src/shape/landmarks';
 import { estimateBaseColor } from '../../src/image/color';
 import type { RasterImage } from '../../src/image/raster';
-import { anchorIssues, anchorsFromLandmarks, mapPhotoToTop, type PhotoAnchors, type PhotoPointName } from '../src/photoMap';
+import { anchorIssues, anchorsFromLandmarks, estimatePantsLandmarks, mapPhotoToBottom, mapPhotoToTop, type PhotoAnchors, type PhotoPointName } from '../src/photoMap';
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, 'imported-body/out/photo');
 const photos = process.argv.slice(2).length
   ? process.argv.slice(2)
-  : readdirSync(path.join(ROOT, 'fixtures/photos')).filter((f) => /^tshirt_.*\.jpe?g$/i.test(f)).sort().map((f) => path.join(ROOT, 'fixtures/photos', f));
+  : readdirSync(path.join(ROOT, 'fixtures/photos')).filter((f) => /^(tshirt|pants)_.*\.jpe?g$/i.test(f)).sort().map((f) => path.join(ROOT, 'fixtures/photos', f));
 
 const PART = { head: 0, arm_left: 1, arm_right: 1, top: 2, bottom: 3, shoe_left: 4, shoe_right: 4, other: 0 } as Record<string, number>;
 const figures = readdirSync(path.join(ROOT, 'imported-body/out')).map((f) => f.match(/^asset-(outfit\d+)\.json$/)?.[1]).filter(Boolean).sort() as string[];
+// garment types per outfit (I-54): a T-shirt photo is only ever shown on a figure that wears a T-shirt
+const manifest = JSON.parse(readFileSync('imported-body/assets/outfits.json', 'utf8')) as Record<string, { top: string; bottom: string }>;
 const figs = figures.map((id) => {
   const a = JSON.parse(readFileSync(`imported-body/out/asset-${id}.json`, 'utf8'));
   const o = JSON.parse(readFileSync(`imported-body/out/outfit-${id}.json`, 'utf8'));
   const part = new Uint8Array(a.base.length / 3);
   for (const p of o.partsIndex) for (const v of p.vertices) part[v] = PART[p.kind] ?? 0;
-  return { id, fig: { base: Float32Array.from(a.base), index: Uint32Array.from(a.index), part, topCode: 2, headCode: 0, armpit: a.landmarks.armpit as number } };
+  return { id, garments: manifest[id], fig: { base: Float32Array.from(a.base), index: Uint32Array.from(a.index), part, topCode: 2, headCode: 0, armpit: a.landmarks.armpit as number, bottomCode: 3, crotch: a.landmarks.crotch as number } };
 });
 
 async function loadRaster(file: string): Promise<RasterImage> {
@@ -54,6 +56,75 @@ function corr(a: number[], b: number[]): number {
   return sab / Math.sqrt(saa * sbb || 1);
 }
 
+/** winding sign of a triangle in figure XY vs in UV (front view: x right, y up) */
+function foldedIn(fig: { base: Float32Array; index: Uint32Array }, tris: number[], uv: Float32Array): number {
+  let folded = 0;
+  tris.forEach((t, j) => {
+    const c = [0, 1, 2].map((k) => fig.index[t * 3 + k]!);
+    const u = (k: number) => [uv[j * 6 + k * 2]!, uv[j * 6 + k * 2 + 1]!];
+    const [a, b, cc] = [u(0), u(1), u(2)];
+    const areaUV = (b[0]! - a[0]!) * (cc[1]! - a[1]!) - (b[1]! - a[1]!) * (cc[0]! - a[0]!);
+    const P = (k: number) => [fig.base[c[k]! * 3]!, fig.base[c[k]! * 3 + 1]!];
+    const [pa, pb, pc] = [P(0), P(1), P(2)];
+    const areaXY = (pb[0]! - pa[0]!) * (pc[1]! - pa[1]!) - (pb[1]! - pa[1]!) * (pc[0]! - pa[0]!);
+    if (areaUV * areaXY < 0 && Math.abs(areaUV) > 1e-7) folded++;
+  });
+  return folded;
+}
+
+/**
+ * Trousers / jeans (I-53): landmarks from the mask, package, mapping onto the lower garment of every figure.
+ * Same blocking rules as the T-shirt: inside the image, not mirrored (seat and legs: corr(x,u) ≥ 0.8), not upside
+ * down (corr(y,v) ≥ 0.8), ≤ 3 % folded faces — for 'ok' landmarks; flagged photos are reported (WARN).
+ * The mapping is checked on every figure's trousers as geometry; which garment it may be SHOWN on (trousers vs
+ * jeans) is the site's rule (I-54).
+ */
+async function pants(name: string, file: string, img: RasterImage, s: Awaited<ReturnType<U2NetpSegmentationProvider['segment']>>, row: Record<string, unknown>): Promise<number> {
+  const lm = estimatePantsLandmarks(s.binary, img.width, img.height);
+  const color = estimateBaseColor(img, s.binary);
+  Object.assign(row, { category: 'pants', mask: s.quality, landmarks: lm.status, anchorIssues: lm.reasons, baseColor: color.hex });
+  if (!lm.anchors) {
+    console.log(`WARN  ${name.padEnd(20)} ориентиры брюк не найдены: ${lm.reasons.join('; ')} — нужна проверка вручную`);
+    return 0;
+  }
+  const tex = Buffer.alloc(img.width * img.height * 3);
+  for (let i = 0; i < img.width * img.height; i++) for (let k = 0; k < 3; k++) tex[i * 3 + k] = s.binary[i] === 1 ? img.data[i * 4 + k]! : color.rgb[k]!;
+  const dir = path.join(OUT, name);
+  mkdirSync(dir, { recursive: true });
+  await sharp(tex, { raw: { width: img.width, height: img.height, channels: 3 } }).jpeg({ quality: 88 }).toFile(path.join(dir, 'texture.jpg'));
+  writeFileSync(path.join(dir, 'garment.json'), JSON.stringify({
+    source: path.relative(ROOT, file), category: 'pants', anchors: lm.anchors, baseColor: color.hex, maskQuality: s.quality,
+    landmarkStatus: lm.status, anchorIssues: lm.reasons, needsReview: lm.status !== 'ok' || s.quality !== 'ok', providers: { mask: s.providerVersion },
+    note: 'Сзади и по бокам не восстановлено по снимку — основной цвет.',
+  }, null, 2));
+  let failures = 0;
+  for (const { id, fig } of figs) {
+    const m = mapPhotoToBottom(fig, lm.anchors);
+    const errs: string[] = [];
+    if (!m.photoTriangles.length) errs.push('нет лицевых треугольников');
+    if (m.stats.outOfImage) errs.push(`углов вне снимка: ${m.stats.outOfImage}`);
+    const fx: number[] = [], fy: number[] = [], ix: number[] = [], iy: number[] = [];
+    m.photoTriangles.forEach((t, j) => {
+      for (let k = 0; k < 3; k++) {
+        const v = fig.index[t * 3 + k]!;
+        fx.push(fig.base[v * 3]!); fy.push(fig.base[v * 3 + 1]!);
+        ix.push(m.uv[j * 6 + k * 2]!); iy.push(m.uv[j * 6 + k * 2 + 1]!);
+      }
+    });
+    const cx = corr(fx, ix), cy = corr(fy, iy);
+    const folded = foldedIn(fig, m.photoTriangles, m.uv);
+    if (cx < 0.8) errs.push(`стороны перепутаны или смазаны: corr(x, u) = ${cx.toFixed(2)}`);
+    if (cy < 0.8) errs.push(`снимок перевёрнут или смазан: corr(y, v) = ${cy.toFixed(2)}`);
+    if (folded / m.photoTriangles.length > 0.03) errs.push(`перевёрнутых треугольников: ${((folded / m.photoTriangles.length) * 100).toFixed(1)} %`);
+    const blocking = lm.status === 'ok' && s.quality === 'ok';
+    const verdict = errs.length ? (blocking ? 'FAIL' : 'WARN') : 'PASS';
+    if (verdict === 'FAIL') failures++;
+    row[id] = { verdict, front: m.stats.frontTriangles, legs: m.stats.sleeveTriangles, base: m.stats.baseTriangles, corrX: Number(cx.toFixed(3)), corrY: Number(cy.toFixed(3)), folded, errors: errs };
+    console.log(`${verdict}  ${name.padEnd(20)} ${id}  низ: лицевых ${m.stats.frontTriangles} (штанины ${m.stats.sleeveTriangles}), основным цветом ${m.stats.baseTriangles}, corr x ${cx.toFixed(2)} y ${cy.toFixed(2)}, складок ${folded}  маска ${s.quality}, точки ${lm.status}${lm.reasons.length ? ' [' + lm.reasons.join('; ') + ']' : ''}${errs.length ? '  — ' + errs.join('; ') : ''}`);
+  }
+  return failures;
+}
+
 async function main() {
   const seg = new U2NetpSegmentationProvider(path.join(ROOT, 'public/models/u2netp.onnx'));
   await seg.load();
@@ -66,6 +137,7 @@ async function main() {
     try {
       const img = await loadRaster(file);
       const s = await seg.segment(img);
+      if (name.startsWith('pants_')) { failures += await pants(name, file, img, s, row); continue; }
       const lm = estimateTShirtLandmarks(s.binary, img.width, img.height);
       const points = Object.fromEntries(Object.entries(lm.points).map(([k, p]) => [k, { x: p.x, y: p.y }])) as Record<PhotoPointName, { x: number; y: number }>;
       const anchors: PhotoAnchors = anchorsFromLandmarks(points, s.binary, img.width, img.height);
@@ -88,7 +160,7 @@ async function main() {
       }, null, 2));
       Object.assign(row, { mask: s.quality, landmarks: lm.status, anchorIssues: issues, baseColor: color.hex });
 
-      for (const { id, fig } of figs) {
+      for (const { id, fig } of figs.filter((f) => f.garments?.top === 'TSHIRT')) {
         const m = mapPhotoToTop(fig, anchors);
         const errs: string[] = [];
         if (!m.photoTriangles.length) errs.push('нет лицевых треугольников');

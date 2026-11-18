@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-11-17T23:00:29.594Z",
+  "generatedAt": "2026-11-18T04:28:06.839Z",
   "asset": "outfit-outfit02",
   "shells": 17,
-  "boundaryEdges": 315,
-  "sourceAsymmetry_mm": 21.2,
+  "boundaryEdges": 314,
+  "sourceAsymmetry_mm": 20.7,
   "usableSliderRange": {
     "chest": 0.9,
     "waist": 0.9,

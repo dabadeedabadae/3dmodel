@@ -16,9 +16,13 @@ const heightCm = Number(process.argv[4] ?? 175);
 /** A generated FBX, or a mesh already composed onto the reference body (I-50: { base, index } JSON). */
 function loadGeometry(path: string): THREE.BufferGeometry {
   if (path.endsWith('.json')) {
-    const j = JSON.parse(readFileSync(path, 'utf8')) as { base: number[]; index: number[] };
+    const j = JSON.parse(readFileSync(path, 'utf8')) as { base: number[]; index: number[]; fixed?: number[] };
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(j.base, 3));
+    // marks the reference body's vertices; survives the weld because it is a vertex attribute
+    const fx = new Float32Array(j.base.length / 3);
+    for (const v of j.fixed ?? []) fx[v] = 1;
+    geo.setAttribute('fixed', new THREE.Float32BufferAttribute(fx, 1));
     geo.setIndex(j.index);
     return geo;
   }
@@ -37,6 +41,13 @@ g = mergeVertices(g, 1e-5);
 const pos = g.attributes.position!.array as Float32Array;
 const index = g.index!.array as Uint32Array;
 const n = pos.length / 3;
+/**
+ * On a mesh composed onto the reference body (I-50), the reference head and hands are marked and left out of
+ * symmetrisation, both as vertices to move and as partners: pairing them with the collar moved neck and jaw
+ * vertices of the inserted head by up to 16 mm, and the heads stopped being identical. The clothes are still
+ * symmetrised.
+ */
+const fixed = (g.getAttribute('fixed')?.array as Float32Array | undefined) ?? new Float32Array(n);
 
 /**
  * 1. Symmetrise. A generated figure is never symmetric — this one matched only 63 % of its vertices against
@@ -49,9 +60,11 @@ const mirrorPass = (tol: number) => {
   const src = new Float32Array(pos);
   let hit = 0;
   for (let i = 0; i < n; i++) {
+    if (fixed[i]) continue;
     const x = src[i * 3]!, y = src[i * 3 + 1]!, z = src[i * 3 + 2]!;
     let best = -1, bd = Infinity;
     for (let j = 0; j < n; j++) {
+      if (fixed[j]) continue;
       const d = (src[j * 3]! + x) ** 2 + (src[j * 3 + 1]! - y) ** 2 + (src[j * 3 + 2]! - z) ** 2;
       if (d < bd) { bd = d; best = j; }
     }
