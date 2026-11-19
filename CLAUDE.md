@@ -1,9 +1,10 @@
 # photo-garments — постоянная инструкция для агентов
 
-Модуль `photo-garments/` внутри репозитория FitCast. Самостоятельное приложение
-Vite + TypeScript + Three.js, независимое от `frontend/` (Next.js) и `src/` (NestJS).
-Корневой `CLAUDE.md` репозитория отсутствует; `frontend/AGENTS.md` относится только
-к Next.js и на этот модуль не распространяется.
+Корень этого репозитория — 3D-модуль: самостоятельное приложение Vite + TypeScript + Three.js. В папке `fitcast/`
+лежит сам продукт FitCast (сайт Next.js `fitcast/frontend`, API NestJS `fitcast/src`, Docker), перенесённый сюда
+со всей историей 2026-11-19 (I-65); отдельный репозиторий FitCast-architechtures больше не развивается. Модуль и
+сайт — разные npm-проекты со своими `node_modules`; фигуры попадают на сайт через `npm run figure:sync` в
+`fitcast/`. `fitcast/frontend/AGENTS.md` относится только к Next.js и на этот модуль не распространяется.
 
 Перед работой прочитай:
 - `FITCAST_PHOTO_GARMENTS_CLAUDE_PLAN.md` — план из 18 этапов и контрольные точки A–D
@@ -36,7 +37,7 @@ Vite + TypeScript + Three.js, независимое от `frontend/` (Next.js) 
 - Приоритеты (D-11, пересмотрено 2026-11-02 планом манекена): цепочка фото → 3D завершена до точки C; этапы 04/13 теперь идут как F- и P-этапы плана `PLAN_MANNEQUIN_AND_FIT.md`; `TestMannequinAdapter` не развивать; категории — по очереди из плана (брюки, юбка, худи, куртка).
 - Модели только локальные с проверенной лицензией (`public/models/README.md`); ручной режим никогда не выдаётся за распознавание; scores не называть точностью.
 
-- Старая заглушка манекена `frontend/app/model/*` в FitCast перенесена в `FitCast-architechtures/archive/` (не в git) по решению пользователя 2026-11-18; `/model` перенаправляет на `/fitting` с одетой фигурой.
+- Старая заглушка манекена `frontend/app/model/*` в FitCast перенесена в `archive/` старой рабочей папки FitCast-architechtures (не в git) по решению пользователя 2026-11-18; `/model` перенаправляет на `/fitting` с одетой фигурой.
 - Стороны во всех ID — стороны носителя, левая = +X (`src/domain/sides.ts`, D-04). Сторона снимка — отдельный тип.
 - `TestMannequinAdapter` — ЯВНО тестовый манекен. Интеграция с реальным FitCast Body не выполнена (см. STATUS → Integration blocker). Не называй её завершённой.
 - Команды: `npm ci` (lockfile закоммичен, флаги не нужны — D-02), `npm run dev`, `npm run verify`

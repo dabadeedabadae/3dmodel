@@ -1,5 +1,9 @@
 # FitCast · photo-garments
 
+> **Весь проект в этом репозитории.** Сайт, API и Docker — в папке [`fitcast/`](fitcast/): быстрый старт
+> `cd fitcast && docker compose up --build -d` → http://localhost:3001. Онбординг для команды — устройство, где какие
+> файлы, 3D-часть, проверки — [`fitcast/docs/ONBOARDING.md`](fitcast/docs/ONBOARDING.md). Корень — 3D-модуль.
+
 Отдельный модуль FitCast: фото вещи → пиксельная low-poly одежда на манекене.
 Этапы 01–03 (шаблон) и 05–07 (фото → категория → маска, точка B) — см. `docs/STATUS.md`. Этапы 04/13 (манекен) отложены.
 

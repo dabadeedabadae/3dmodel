@@ -3,7 +3,7 @@
 **Быстрый старт:** `docker compose up --build -d` → http://localhost:3001. Всё о проекте — устройство, где какие
 файлы, 3D-часть, проверки — в [docs/ONBOARDING.md](docs/ONBOARDING.md).
 
-## Клиентская часть: запуск на macOS (ветка `client-web`)
+## Клиентская часть: запуск на macOS
 
 Лендинг, вход и регистрация, личный кабинет с гардеробом, мобильная веб-вёрстка и админка с тестом рекомендаций.
 
@@ -14,9 +14,9 @@ npm run build && node dist/main.js           # API на PORT из .env (лока
 cd frontend && npm run dev                   # http://localhost:3001, NEXT_PUBLIC_API_URL в frontend/.env.local
 ```
 
-- **3D-модель (`/fitting`):** одетая фигура из модуля 3dmodel с ползунками фигуры и роста; верх и низ красятся в цвет вещей из гардероба. Файл модели собирается `npm run figure:sync` (нужна соседняя папка `../3dmodel` с подготовленными фигурами, `npm run ib:outfits` там) и в git не попадает. Старая заглушка `/model` — в `archive/` (тоже не в git), адрес перенаправляет на `/fitting`.
+- **3D-модель (`/fitting`):** одетая фигура из модуля 3dmodel с ползунками фигуры и роста; верх и низ красятся в цвет вещей из гардероба. Фигуры лежат в `frontend/public/models` (в git); пересобираются `npm run figure:sync` из 3D-модуля в корне репозитория (там `npm ci && npm run ib:outfits`). Старая заглушка `/model` — в `archive/` (тоже не в git), адрес перенаправляет на `/fitting`.
 - **Своё фото → 3D-футболка:** при добавлении футболки в профиле фото распознаётся прямо в браузере (маска, точки, цвет, текстура без фона; фото для этого никуда не отправляется) и сохраняется вместе с вещью. В `/fitting` такая футболка (метка «3D») надевается на модель с принтом. Нужно один раз: `npm run ml:sync` (копирует модель U²-Netp и рантайм onnxruntime-web, в git не попадают). Образцы из открытого набора: `npm run garments:sync`.
-- **Демо-данные:** `npm run seed:demo` создаёт `demo@fitcast.test` (7 вещей из CC0-фото модуля 3dmodel) и `admin@fitcast.test`. Пароли — в `.demo-accounts.local.json` (в git не попадает).
+- **Демо-данные:** `npm run seed:demo` создаёт `demo@fitcast.test` (7 вещей из CC0-фото, `scripts/demo-photos`) и `admin@fitcast.test`. Пароли — в `.demo-accounts.local.json` (в git не попадает).
 - **Гардероб:** `GET/POST /wardrobe`, `PATCH/DELETE /wardrobe/:id`, только свои вещи. Фото — JPEG/PNG/WebP до 8 МБ, тип проверяется по содержимому, имя файла случайное, хранится локально в `uploads/` (в git не попадает). Цвет — из палитры контракта рекомендаций (13 цветов); подсказка цвета по фото — медиана центра снимка, пользователь подтверждает.
 - **Тест рекомендаций в админке:** `POST /admin/recommendations/test` собирает запрос по контракту `recommendation-service` (только тип, цвет, посадка и id вещей) и, если задан `RECOMMENDATION_SERVICE_URL`, отправляет его в сервис и показывает ответ. Сам алгоритм не реализован, сервис отвечает 501 — это ожидаемо.
   Запуск сервиса: `cd recommendation-service && .venv/bin/python -m uvicorn app.main:app --port 8010`.

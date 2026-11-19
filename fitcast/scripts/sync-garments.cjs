@@ -1,11 +1,11 @@
-// Copies the photo → garment packages prepared by the 3D module (npm run ib:photo in ../3dmodel) into
+// Copies the photo → garment packages prepared by the 3D module (npm run ib:photo in the repository root) into
 // frontend/public/garments/<name>/ and writes frontend/public/garments/index.json. Git-ignored, like the figures.
 // These are CC0 sample photos (fixtures/photos/LICENSE-CC0.txt) for the fitting-room demo.
 const { readdirSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync } = require('node:fs');
 const { resolve } = require('node:path');
-const SRC = resolve(process.env.GARMENTS_SRC ?? '../3dmodel/imported-body/out/photo');
+const SRC = resolve(process.env.GARMENTS_SRC ?? '../imported-body/out/photo');
 const OUT = resolve('frontend/public/garments');
-if (!existsSync(SRC)) throw new Error('no packages in ' + SRC + ' (run npm run ib:photo in 3dmodel)');
+if (!existsSync(SRC)) throw new Error('no packages in ' + SRC + ' (run npm run ib:photo in the repository root)');
 mkdirSync(OUT, { recursive: true });
 // What each sample photo actually shows (checked by eye): the site puts a garment only onto the same garment
 // type of a figure (I-54), and jeans are not trousers.

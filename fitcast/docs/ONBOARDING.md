@@ -2,14 +2,20 @@
 
 Что есть в проекте, где что лежит, как запустить и как не сломать 3D-часть. Состояние на 2026-11-19.
 
+Всё в одном репозитории `3dmodel`:
+- корень — 3D-модуль (фигуры, FBX, перенос фото);
+- папка `fitcast/` — сам продукт (сайт, API, Docker).
+
+Пути ниже, если не сказано иное, — от папки `fitcast/`. Старый репозиторий `FitCast-architechtures` больше не
+развивается, всё делается здесь.
+
 ## 1. Запуск за 5 минут (Docker)
 
 Нужен только Docker Desktop. Node и Python не нужны.
 
 ```bash
-git clone git@github.com:dabadeedabadae/FitCast-architechtures.git
-cd FitCast-architechtures
-git checkout client-web
+git clone git@github.com:dabadeedabadae/3dmodel.git
+cd 3dmodel/fitcast
 docker compose up --build -d
 ```
 
@@ -70,7 +76,7 @@ npm run dev
 ```
 
 Сайт откроется на http://localhost:3001. Есть одноразовый шаг: распознавание фото в браузере требует рантайм
-onnxruntime в `frontend/public/ort`. Из корня репозитория выполните:
+onnxruntime в `frontend/public/ort`. Из папки `fitcast/` выполните:
 
 ```bash
 npm ci
@@ -83,7 +89,12 @@ API без Docker: `cp .env.example .env`, в `.env` поставьте `PORT=30
 ## 3. Что где лежит
 
 ```
-FitCast-architechtures/
+3dmodel/                      корень репозитория = 3D-модуль (см. раздел 4)
+├── imported-body/            фигуры: assets/*.fbx, out/*.json, scripts, docs (STATUS, DECISIONS, PIPELINE)
+├── src/, scripts/, tests/    перенос фото на вещь, распознавание, проверки (Vite + TS)
+├── fixtures/photos/          тестовые фото (CC0)
+└── fitcast/                  ↓ сайт и API
+fitcast/
 ├── docker-compose.yml        вся система: postgres, api, web, recommendation
 ├── Dockerfile                образ API
 ├── src/                      API на NestJS
@@ -99,8 +110,8 @@ FitCast-architechtures/
 ├── scripts/
 │   ├── seed-demo.cjs         демо-аккаунты и вещи (фото — scripts/demo-photos, CC0)
 │   ├── set-admin.cjs         выдать или забрать права админа: `npm run admin:set -- email [revoke]`
-│   ├── sync-figure.cjs       пересобрать 3D-фигуры из модуля 3dmodel (только у владельца 3D-модуля)
-│   ├── sync-garments.cjs     пересобрать образцы вещей из 3dmodel
+│   ├── sync-figure.cjs       ../imported-body/out → frontend/public/models (обновить фигуры сайта)
+│   ├── sync-garments.cjs     образцы вещей из ../imported-body/out/photo
 │   └── sync-ml.cjs           рантайм onnxruntime → frontend/public/ort
 ├── recommendation-service/   FastAPI; движок рекомендаций ещё НЕ реализован (отвечает 501)
 └── frontend/                 Next.js 16 (App Router), React 19, three.js
@@ -128,36 +139,35 @@ FitCast-architechtures/
 
 ## 4. 3D-часть: как устроена и что нельзя трогать
 
-- **Откуда фигуры.** Их готовит отдельный репозиторий `3dmodel` (модуль `imported-body`): импорт сетки, разметка на
+- **Откуда фигуры.** Их готовит 3D-модуль в корне репозитория (`imported-body/`): импорт сетки, разметка на
   голову, руки, верх, низ и обувь, проверки пересечений и ползунков. В FitCast лежит только результат
-  (`frontend/public/models`). Менять эти JSON руками нельзя: пересобирают их только в 3dmodel
-  (`npm run ib:outfits`), затем здесь — `npm run figure:sync`.
+  (`frontend/public/models`). Менять эти JSON руками нельзя: пересобирают их только в
+  3D-модуле (`npm run ib:outfits` в корне репозитория), затем в `fitcast/` — `npm run figure:sync`.
 - **Какие есть.** `figures.json` перечисляет фигуры и тип одежды на каждой:
   - 01 — футболка + брюки;
   - 02 — худи + брюки;
   - 03 и 04 — рубашка + брюки.
 - **Правило I-54.** Вещь надевается только на фигуру с таким же типом одежды. Для курток, юбок, шорт и платьев фигур
   нет: сайт так и пишет.
-- **Фото → 3D.** Весь путь от загрузки до вещи на теле описан в `3dmodel/imported-body/docs/PIPELINE.md`.
+- **Фото → 3D.** Весь путь от загрузки до вещи на теле описан в `imported-body/docs/PIPELINE.md` (корень репозитория).
   Кратко:
   1. в браузере U²-Netp строит маску;
   2. по силуэту находятся точки, считаются цвет и текстура;
   3. на сервер уходит «пакет» (`garment3d`) и текстура;
   4. в примерочной `photoMap.ts` раскладывает фото по лицевым граням фигуры.
 
-  `lib/figure/photoMap.ts` — дословная копия файла из 3dmodel. Не правьте его тут, иначе разойдётся с проверками
+  `lib/figure/photoMap.ts` — дословная копия `imported-body/src/photoMap.ts` из корня. Не правьте его тут, иначе разойдётся с проверками
   модуля.
 - **Сервер не доверяет клиенту.** `src/wardrobe/garment3d.ts` проверяет каждое поле пакета и сам ставит
   «нужна проверка». Если меняете формат пакета, меняйте клиент, сервер и `test/wardrobe.e2e.cjs` вместе.
-- **Работа с самими 3D-моделями (репозиторий `3dmodel`).** Исходники лежат в `imported-body/assets/*.fbx`,
+- **Работа с самими 3D-моделями (корень репозитория).** Исходники лежат в `imported-body/assets/*.fbx`,
   подготовленные сетки — в `imported-body/out/*.json`, список фигур и тип одежды на них — в
   `imported-body/assets/outfits.json`. Репозиторий приватный: лицензия на модели не проверена, наружу их не
   выкладывать.
 
-  Клонировать рядом с FitCast (`Проекты/3dmodel` и `Проекты/FitCast-architechtures`), затем:
+  У 3D-модуля свои `package.json` и `node_modules`. Из корня репозитория:
 
   ```bash
-  cd 3dmodel
   npm ci
   npm run ib:outfits
   ```
@@ -167,14 +177,14 @@ FitCast-architechtures/
   - `npm run ib:outfit-viewer` — просмотр фигуры в браузере;
   - `npm run ib:photo` — проверка переноса фото.
 
-  Обновить фигуры на сайте — из корня FitCast:
+  Обновить фигуры на сайте — из папки `fitcast/`:
 
   ```bash
   npm run figure:sync
   ```
 
   Затем закоммитить `frontend/public/models`. Порядок работы и все решения по 3D:
-  `3dmodel/imported-body/docs/STATUS.md`, `DECISIONS.md`, `PIPELINE.md`, `3dmodel/CLAUDE.md`.
+  `imported-body/docs/STATUS.md`, `DECISIONS.md`, `PIPELINE.md` и `CLAUDE.md` в корне.
 - **Чего 3D не делает:** не меряет сантиметры по фото, не восстанавливает спинку вещи, не симулирует ткань. В
   интерфейсе это не обещать.
 

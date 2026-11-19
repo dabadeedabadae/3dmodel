@@ -1,5 +1,5 @@
 // Demo data for local testing: one regular user with a small wardrobe and one admin.
-// Photos: the CC0 clothing-dataset fixtures copied to scripts/demo-photos (originals in 3dmodel/fixtures/photos).
+// Photos: the CC0 clothing-dataset fixtures copied to scripts/demo-photos (originals in ../fixtures/photos).
 // Credentials are written to .demo-accounts.local.json (git-ignored), never printed or committed.
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');

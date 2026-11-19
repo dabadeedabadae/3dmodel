@@ -380,3 +380,10 @@
   пересобрал все 4 фигуры из FBX — PASS, ползунки те же. Лицензия сгенерированных моделей по-прежнему не проверена:
   репозиторий держать приватным. В FitCast готовые фигуры сайта (`frontend/public/models`) тоже в git — там же
   запуск всего проекта через Docker (`docs/ONBOARDING.md` в FitCast).
+- **I-65. Весь проект в одном репозитории `3dmodel`.** Пользователь хочет один репозиторий для команды и выбрал
+  этот. Продукт FitCast (ветка `client-web` репозитория FitCast-architechtures: сайт, API, Docker, онбординг)
+  перенесён в папку `fitcast/` через `git subtree add` — со всей историей коммитов, включая коммиты тиммейтов.
+  Скрипты `figure:sync`, `garments:sync`, `ml:sync` берут данные из корня репозитория (`../imported-body/out`,
+  `../public/models`), а не из соседней папки. Запуск: `cd fitcast && docker compose up --build -d`. Корневой
+  `tsconfig`, vitest и сборка модуля ограничены своими папками и `fitcast/` не затрагивают. FitCast-architechtures
+  остаётся на GitHub как был (последний коммит `c4fcb4c`) и больше не развивается.

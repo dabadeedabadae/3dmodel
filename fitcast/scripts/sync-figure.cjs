@@ -1,21 +1,21 @@
 // Builds the client figure file from the prepared dressed figure of the 3D module.
-//   input : ../3dmodel/imported-body/out/asset-outfit01.json  (deformation asset)
-//           ../3dmodel/imported-body/out/outfit-outfit01.json (shell segmentation: top, bottom, head, arms, shoes)
+//   input : ../imported-body/out/asset-outfit01.json  (deformation asset)
+//           ../imported-body/out/outfit-outfit01.json (shell segmentation: top, bottom, head, arms, shoes)
 //   output: frontend/public/models/figure-NN.json + figures.json (git-ignored; regenerate with `npm run figure:sync`)
 // Both inputs describe the SAME welded mesh; the script refuses to merge them otherwise.
 const { readFileSync, writeFileSync, mkdirSync, readdirSync } = require('node:fs');
 const { resolve, dirname } = require('node:path');
 
-const SRC = resolve(process.env.FIGURE_SRC ?? '../3dmodel/imported-body/out');
+const SRC = resolve(process.env.FIGURE_SRC ?? '../imported-body/out');
 const OUT_DIR = resolve('frontend/public/models');
 const PART_CODES = { head: 0, arm_left: 1, arm_right: 1, top: 2, bottom: 3, shoe_left: 4, shoe_right: 4, other: 0 };
 const r = (x) => Math.round(x * 1e5) / 1e5;
 
 // garment types per outfit (I-54): the site puts a wardrobe item only on the figure wearing the same kind of garment
-const MANIFEST = resolve(process.env.FIGURE_MANIFEST ?? '../3dmodel/imported-body/assets/outfits.json');
+const MANIFEST = resolve(process.env.FIGURE_MANIFEST ?? '../imported-body/assets/outfits.json');
 const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8'));
 const ids = readdirSync(SRC).map((f) => f.match(/^asset-outfit(\d+)\.json$/)?.[1]).filter(Boolean).sort();
-if (!ids.length) throw new Error('no prepared figures in ' + SRC + ' (run npm run ib:outfits in 3dmodel)');
+if (!ids.length) throw new Error('no prepared figures in ' + SRC + ' (run npm run ib:outfits in the repository root)');
 mkdirSync(OUT_DIR, { recursive: true });
 const list = [];
 for (const num of ids) {

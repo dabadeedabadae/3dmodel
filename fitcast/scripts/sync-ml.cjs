@@ -5,7 +5,7 @@
 const { copyFileSync, mkdirSync, existsSync } = require('node:fs');
 const { resolve } = require('node:path');
 const ORT = resolve('frontend/node_modules/onnxruntime-web/dist');
-const MODELS = resolve(process.env.MODELS_SRC ?? '../3dmodel/public/models');
+const MODELS = resolve(process.env.MODELS_SRC ?? '../public/models');
 mkdirSync('frontend/public/ort', { recursive: true });
 mkdirSync('frontend/public/ml', { recursive: true });
 for (const f of ['ort-wasm-simd-threaded.wasm', 'ort-wasm-simd-threaded.mjs']) copyFileSync(resolve(ORT, f), resolve('frontend/public/ort', f));
