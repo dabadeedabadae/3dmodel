@@ -1,0 +1,14 @@
+node_modules/
+.env
+dist/
+.DS_Store
+*.tsbuildinfo
+uploads/
+.demo-accounts.local.json
+
+# Архив старых реализаций: в проекте, но не в git
+archive/
+frontend/public/ort/
+
+# Docker: local data of the containers
+.docker-local/

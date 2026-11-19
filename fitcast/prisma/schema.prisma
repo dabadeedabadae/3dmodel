@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GarmentType {
+  TSHIRT
+  SHIRT
+  JACKET
+  COAT
+  SWEATER
+  HOODIE
+  PANTS
+  JEANS
+  SHORTS
+  SKIRT
+  DRESS
+  SHOES
+  ACCESSORY
+}
+
+enum FitTag {
+  GOOD
+  TIGHT
+  LOOSE
+}
+
+enum EventType {
+  CASUAL
+  GYM
+  BUSINESS
+  FORMAL
+  OUTDOOR
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String?  @db.VarChar(80)
+  city         String?  @db.VarChar(100)
+  bio          String?  @db.VarChar(300)
+  isAdmin      Boolean  @default(false) @map("is_admin")
+  sessionVersion Int @default(0) @map("session_version")
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  wardrobeItems WardrobeItem[]
+  savedOutfits  SavedOutfit[]
+
+  @@map("users")
+}
+
+model WardrobeItem {
+  id            String      @id @default(uuid())
+  userId        String      @map("user_id")
+  type          GarmentType
+  dominantColor String      @map("dominant_color")
+  fitTag        FitTag      @map("fit_tag")
+  imageUrl      String      @map("image_url")
+  /// photo → 3D package (anchors, base colour, review flags) computed on the device; null when not analysed
+  garment3d     Json?       @map("garment_3d")
+  /// photo with the background replaced by the base colour; the texture of the 3D garment
+  textureUrl    String?     @map("texture_url")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  outfitItems OutfitItem[]
+
+  @@index([userId])
+  @@map("wardrobe_items")
+}
+
+model SavedOutfit {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  name      String
+  eventType EventType @map("event_type")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items OutfitItem[]
+
+  @@index([userId])
+  @@map("saved_outfits")
+}
+
+model OutfitItem {
+  outfitId String @map("outfit_id")
+  itemId   String @map("item_id")
+
+  outfit SavedOutfit  @relation(fields: [outfitId], references: [id], onDelete: Cascade)
+  item   WardrobeItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@id([outfitId, itemId])
+  @@map("outfit_items")
+}
