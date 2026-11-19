@@ -2,5 +2,6 @@
   "_note": "Тип верха и низа каждого комплекта — по тому, что на модели на самом деле, проверено глазами. Значения — GarmentType клиента FitCast. Вещь из гардероба надевается только на комплект с тем же типом (I-54).",
   "outfit01": { "label": "Футболка и брюки", "top": "TSHIRT", "bottom": "PANTS" },
   "outfit02": { "label": "Худи и брюки", "top": "HOODIE", "bottom": "PANTS" },
-  "outfit03": { "label": "Рубашка и брюки", "top": "SHIRT", "bottom": "PANTS" }
+  "outfit03": { "label": "Рубашка и брюки", "top": "SHIRT", "bottom": "PANTS" },
+  "outfit04": { "label": "Классическая рубашка и брюки", "top": "SHIRT", "bottom": "PANTS", "topMesh": "imported-body/assets/shirt01.fbx" }
 }

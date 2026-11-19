@@ -95,8 +95,15 @@ for (let i = 0; i < n; i++) {
 
 let minY = Infinity, maxY = -Infinity, sx = 0, sz = 0;
 for (let i = 0; i < n; i++) { minY = Math.min(minY, pos[i * 3 + 1]!); maxY = Math.max(maxY, pos[i * 3 + 1]!); sx += pos[i * 3]!; sz += pos[i * 3 + 2]!; }
-const k = heightCm / 100 / (maxY - minY);
+/**
+ * A mesh built on the reference figure (fixed vertices present) is already in the reference's frame. Re-centring
+ * it on its own vertex mean moved the reference head, arms and shoes by 7–9 mm in depth (a hoodie has more fabric
+ * at the back than a T-shirt), so they stopped being identical across figures; such a mesh is left where it is.
+ */
+const inReferenceFrame = fixed.some((f) => f > 0);
+const k = inReferenceFrame ? 1 : heightCm / 100 / (maxY - minY);
 sx /= n; sz /= n;
+if (inReferenceFrame) { sx = 0; sz = 0; minY = 0; }
 for (let i = 0; i < n; i++) {
   pos[i * 3] = (pos[i * 3]! - sx) * k;
   pos[i * 3 + 1] = (pos[i * 3 + 1]! - minY) * k;

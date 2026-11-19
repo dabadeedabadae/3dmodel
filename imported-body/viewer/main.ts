@@ -95,6 +95,10 @@ function placeCam() {
   const c = Math.cos(orbit), s = Math.sin(orbit);
   cam.position.set(p[0] * c + p[2] * s, p[1], p[2] * c - p[0] * s);
   cam.lookAt(0, 0.9 * (heightCm / 175), 0);
+  // close-ups for checks: ?cam=x,y,z&look=x,y,z (metres)
+  const qp = new URLSearchParams(location.search), cp = qp.get('cam'), lp = qp.get('look');
+  if (cp) { const [x, y, z] = cp.split(',').map(Number); cam.position.set(x!, y!, z!); }
+  if (lp) { const [x, y, z] = lp.split(',').map(Number); cam.lookAt(x!, y!, z!); }
 }
 
 let last: any = null;

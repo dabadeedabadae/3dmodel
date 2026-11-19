@@ -1,0 +1,42 @@
+{
+  "source": "imported-body/assets/source.fbx",
+  "statureGiven_cm": 165,
+  "weld": {
+    "vertices": 1123,
+    "triangles": 2242,
+    "seamSnapped": 0,
+    "mirrorPaired": 1123,
+    "mirrorUnpaired": 0
+  },
+  "armBand_cm": {
+    "low": 125.3,
+    "high": 135.7
+  },
+  "landmarks_cm": {
+    "height": 165,
+    "crotch": 82.1,
+    "hip": 87.4,
+    "waist": 106.4,
+    "chest": 124.6,
+    "armpit": 125.3,
+    "shoulder_level": 129.5,
+    "neck_base": 135.7
+  },
+  "girths_cm": {
+    "chest": 106.6,
+    "waist": 72.1,
+    "hip": 86.2
+  },
+  "widths_cm": {
+    "torso_at_chest": 36.6,
+    "arm_span": 160.7
+  },
+  "fractions_of_H": {
+    "crotch": 0.497,
+    "hip": 0.53,
+    "waist": 0.645,
+    "chest": 0.755,
+    "armpit": 0.76,
+    "neck_base": 0.822
+  }
+}

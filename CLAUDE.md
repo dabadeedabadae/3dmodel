@@ -30,7 +30,7 @@ Vite + TypeScript + Three.js, независимое от `frontend/` (Next.js) 
 
 ## Правила модуля
 
-- **imported-body** (`imported-body/`): манекен импортируется готовой сеткой (FBX → three FBXLoader → сварка → симметризация → масштаб) и параметризуется полем деформации; читай `imported-body/docs/STATUS.md` и `DECISIONS.md`; команды `npm run ib:prepare|ib:check|ib:viewer|ib:render`. Лицензия исходного ассета не проверена — в публичный репозиторий не коммитить до проверки.
+- **imported-body** (`imported-body/`): манекен импортируется готовой сеткой (FBX → three FBXLoader → сварка → симметризация → масштаб) и параметризуется полем деформации; читай `imported-body/docs/STATUS.md` и `DECISIONS.md`; команды `npm run ib:prepare|ib:check|ib:viewer|ib:render`. Исходные FBX и подготовленные сетки `imported-body/out/` в git по решению пользователя 2026-11-19 (I-64); лицензия сгенерированных моделей не проверена — репозиторий только приватный.
 - **Архив**: `archive/` (в git не попадает, I-45) — там `lowpoly-v2`. Не развивать и не чинить. Основной манекен — одетая фигура `imported-body`.
 - Манекен v1: процедурный `src/body/*` (D-22/D-23), план `docs/PLAN_MANNEQUIN_AND_FIT.md`; `npm run check:body` блокирующий; `body.html`.
 - Приоритеты (D-11, пересмотрено 2026-11-02 планом манекена): цепочка фото → 3D завершена до точки C; этапы 04/13 теперь идут как F- и P-этапы плана `PLAN_MANNEQUIN_AND_FIT.md`; `TestMannequinAdapter` не развивать; категории — по очереди из плана (брюки, юбка, худи, куртка).

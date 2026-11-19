@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-11-19T11:23:41.600Z",
+  "asset": "outfit-outfit04",
+  "shells": 8,
+  "boundaryEdges": 319,
+  "sourceAsymmetry_mm": 20.1,
+  "usableSliderRange": {
+    "chest": 0.45,
+    "waist": 0.81,
+    "hip": 0.9,
+    "shoulders": 0.45,
+    "arms": 0.9,
+    "thighs": 0.9
+  },
+  "results": [
+    {
+      "label": "base",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "chest=-0.45",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "chest=0.45",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "waist=-0.81",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "waist=0.81",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "hip=-0.9",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "hip=0.9",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "shoulders=-0.45",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "shoulders=0.45",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "arms=-0.9",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "arms=0.9",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "thighs=-0.9",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "thighs=0.9",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "все по максимуму",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "все по минимуму",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "height 150",
+      "ok": true,
+      "fails": []
+    },
+    {
+      "label": "height 200 proportional",
+      "ok": true,
+      "fails": []
+    }
+  ]
+}

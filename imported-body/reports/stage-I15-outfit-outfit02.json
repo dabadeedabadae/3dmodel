@@ -1,143 +1,35 @@
 {
   "id": "outfit02",
-  "source": "imported-body/out/composed-outfit02.json",
+  "source": "imported-body/out/layered-outfit02.json",
   "statureGiven_cm": 175,
   "weld": {
-    "before": 1900,
-    "after": 1900,
-    "triangles": 3452,
-    "seamSnapped": 41,
-    "mirrorPaired": 1571
+    "before": 1483,
+    "after": 1483,
+    "triangles": 2840,
+    "seamSnapped": 44,
+    "mirrorPaired": 889
   },
   "symmetry_mm": {
-    "mean": 0.11,
-    "max": 4.98
+    "mean": 0.62,
+    "max": 6.78
   },
   "parts": [
     {
       "kind": "shoe_right",
-      "vertices": 198,
-      "triangles": 392,
+      "vertices": 90,
+      "triangles": 176,
       "y_cm": [
         0,
         13.3
       ]
     },
     {
-      "kind": "shoe_right",
-      "vertices": 31,
-      "triangles": 40,
+      "kind": "arm_right",
+      "vertices": 141,
+      "triangles": 270,
       "y_cm": [
-        6.3,
-        8.2
-      ]
-    },
-    {
-      "kind": "shoe_right",
-      "vertices": 26,
-      "triangles": 30,
-      "y_cm": [
-        7.5,
-        9.2
-      ]
-    },
-    {
-      "kind": "shoe_right",
-      "vertices": 36,
-      "triangles": 50,
-      "y_cm": [
-        8.4,
-        10.2
-      ]
-    },
-    {
-      "kind": "shoe_right",
-      "vertices": 25,
-      "triangles": 28,
-      "y_cm": [
-        9.5,
-        11.1
-      ]
-    },
-    {
-      "kind": "shoe_right",
-      "vertices": 25,
-      "triangles": 28,
-      "y_cm": [
-        10.5,
-        12.3
-      ]
-    },
-    {
-      "kind": "bottom",
-      "vertices": 225,
-      "triangles": 436,
-      "y_cm": [
-        7.7,
-        92.2
-      ]
-    },
-    {
-      "kind": "top",
-      "vertices": 664,
-      "triangles": 1262,
-      "y_cm": [
-        90,
-        152
-      ]
-    },
-    {
-      "kind": "shoe_left",
-      "vertices": 198,
-      "triangles": 392,
-      "y_cm": [
-        0,
-        13.3
-      ]
-    },
-    {
-      "kind": "shoe_left",
-      "vertices": 31,
-      "triangles": 40,
-      "y_cm": [
-        6.3,
-        8.2
-      ]
-    },
-    {
-      "kind": "shoe_left",
-      "vertices": 26,
-      "triangles": 30,
-      "y_cm": [
-        7.5,
-        9.2
-      ]
-    },
-    {
-      "kind": "shoe_left",
-      "vertices": 36,
-      "triangles": 50,
-      "y_cm": [
-        8.4,
-        10.2
-      ]
-    },
-    {
-      "kind": "shoe_left",
-      "vertices": 25,
-      "triangles": 28,
-      "y_cm": [
-        9.5,
-        11.1
-      ]
-    },
-    {
-      "kind": "shoe_left",
-      "vertices": 25,
-      "triangles": 28,
-      "y_cm": [
-        10.5,
-        12.3
+        132.5,
+        143.3
       ]
     },
     {
@@ -150,21 +42,39 @@
       ]
     },
     {
-      "kind": "arm_left",
-      "vertices": 98,
-      "triangles": 184,
+      "kind": "shoe_left",
+      "vertices": 92,
+      "triangles": 180,
       "y_cm": [
-        135.9,
-        142
+        0,
+        13.3
       ]
     },
     {
-      "kind": "arm_right",
-      "vertices": 98,
-      "triangles": 184,
+      "kind": "arm_left",
+      "vertices": 138,
+      "triangles": 266,
       "y_cm": [
-        135.9,
-        142
+        132.4,
+        142.9
+      ]
+    },
+    {
+      "kind": "bottom",
+      "vertices": 225,
+      "triangles": 436,
+      "y_cm": [
+        7.6,
+        92.2
+      ]
+    },
+    {
+      "kind": "top",
+      "vertices": 664,
+      "triangles": 1262,
+      "y_cm": [
+        90,
+        152.1
       ]
     }
   ],
@@ -176,7 +86,7 @@
     "hip": 83.6,
     "chest": 128,
     "armpit": 132.4,
-    "shoulder": 142,
+    "shoulder": 143.3,
     "neck_base": 141.7,
     "topHem": 90
   },
@@ -188,7 +98,7 @@
     "hip": 0.478,
     "chest": 0.731,
     "armpit": 0.756,
-    "shoulder": 0.811,
+    "shoulder": 0.819,
     "neck_base": 0.81,
     "topHem": 0.514
   },

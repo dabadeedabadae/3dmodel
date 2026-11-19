@@ -1,11 +1,110 @@
 {
-  "generatedAt": "2026-11-18T06:54:35.400Z",
+  "generatedAt": "2026-11-19T16:02:04.119Z",
   "figures": [
     "outfit01",
     "outfit02",
-    "outfit03"
+    "outfit03",
+    "outfit04"
   ],
   "photos": [
+    {
+      "photo": "longsleeve_107dd572",
+      "mask": "ok",
+      "landmarks": "uncertain",
+      "anchorIssues": [
+        "рукав правый на снимке: раскрыв манжеты 1.57 ширины подола",
+        "рукав правый на снимке: линии рукава 0.93 / 0.16 ширины подола",
+        "рукав левый на снимке: раскрыв манжеты 1.38 ширины подола"
+      ],
+      "baseColor": "#3d5e53",
+      "outfit02": {
+        "verdict": "WARN",
+        "front": 328,
+        "sleeves": 163,
+        "base": 934,
+        "corrX": 0.946,
+        "corrY": 0.662,
+        "corrSleeve": 0.202,
+        "folded": 164,
+        "errors": [
+          "снимок перевёрнут или смазан: corr(y, v) = 0.66",
+          "рукав развёрнут не от плеча к манжете: corr = 0.20",
+          "перевёрнутых треугольников в развёртке: 50.0 %"
+        ]
+      },
+      "outfit03": {
+        "verdict": "WARN",
+        "front": 513,
+        "sleeves": 140,
+        "base": 686,
+        "corrX": 0.931,
+        "corrY": 0.674,
+        "corrSleeve": 0.003,
+        "folded": 153,
+        "errors": [
+          "снимок перевёрнут или смазан: corr(y, v) = 0.67",
+          "рукав развёрнут не от плеча к манжете: corr = 0.00",
+          "перевёрнутых треугольников в развёртке: 29.8 %"
+        ]
+      },
+      "outfit04": {
+        "verdict": "WARN",
+        "front": 2934,
+        "sleeves": 718,
+        "base": 4742,
+        "corrX": 0.952,
+        "corrY": 0.674,
+        "corrSleeve": 0.018,
+        "folded": 763,
+        "errors": [
+          "снимок перевёрнут или смазан: corr(y, v) = 0.67",
+          "рукав развёрнут не от плеча к манжете: corr = 0.02",
+          "перевёрнутых треугольников в развёртке: 26.0 %"
+        ]
+      }
+    },
+    {
+      "photo": "longsleeve_582f7f10",
+      "mask": "ok",
+      "landmarks": "ok",
+      "anchorIssues": [
+        "рукав правый на снимке: раскрыв манжеты 0.66 ширины подола"
+      ],
+      "baseColor": "#9dbc98",
+      "outfit02": {
+        "verdict": "PASS",
+        "front": 328,
+        "sleeves": 163,
+        "base": 934,
+        "corrX": 0.983,
+        "corrY": 0.988,
+        "corrSleeve": 0.884,
+        "folded": 2,
+        "errors": []
+      },
+      "outfit03": {
+        "verdict": "PASS",
+        "front": 513,
+        "sleeves": 140,
+        "base": 686,
+        "corrX": 0.979,
+        "corrY": 0.988,
+        "corrSleeve": 0.866,
+        "folded": 8,
+        "errors": []
+      },
+      "outfit04": {
+        "verdict": "PASS",
+        "front": 2934,
+        "sleeves": 718,
+        "base": 4742,
+        "corrX": 0.974,
+        "corrY": 0.986,
+        "corrSleeve": 0.855,
+        "folded": 4,
+        "errors": []
+      }
+    },
     {
       "photo": "pants_4cc4e673",
       "category": "pants",
@@ -25,21 +124,31 @@
       },
       "outfit02": {
         "verdict": "PASS",
-        "front": 106,
-        "legs": 80,
-        "base": 330,
-        "corrX": 0.975,
-        "corrY": 0.974,
+        "front": 122,
+        "legs": 95,
+        "base": 314,
+        "corrX": 0.981,
+        "corrY": 0.977,
         "folded": 0,
         "errors": []
       },
       "outfit03": {
         "verdict": "PASS",
-        "front": 132,
-        "legs": 94,
-        "base": 332,
-        "corrX": 0.966,
-        "corrY": 0.989,
+        "front": 129,
+        "legs": 99,
+        "base": 335,
+        "corrX": 0.973,
+        "corrY": 0.988,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit04": {
+        "verdict": "PASS",
+        "front": 89,
+        "legs": 77,
+        "base": 276,
+        "corrX": 0.977,
+        "corrY": 0.987,
         "folded": 0,
         "errors": []
       }
@@ -67,26 +176,38 @@
       },
       "outfit02": {
         "verdict": "WARN",
-        "front": 106,
-        "legs": 80,
-        "base": 330,
-        "corrX": 0.984,
-        "corrY": 0.717,
+        "front": 122,
+        "legs": 95,
+        "base": 314,
+        "corrX": 0.987,
+        "corrY": 0.735,
         "folded": 0,
         "errors": [
-          "снимок перевёрнут или смазан: corr(y, v) = 0.72"
+          "снимок перевёрнут или смазан: corr(y, v) = 0.73"
         ]
       },
       "outfit03": {
         "verdict": "WARN",
-        "front": 132,
-        "legs": 94,
-        "base": 332,
-        "corrX": 0.983,
-        "corrY": 0.786,
+        "front": 129,
+        "legs": 99,
+        "base": 335,
+        "corrX": 0.988,
+        "corrY": 0.77,
         "folded": 0,
         "errors": [
-          "снимок перевёрнут или смазан: corr(y, v) = 0.79"
+          "снимок перевёрнут или смазан: corr(y, v) = 0.77"
+        ]
+      },
+      "outfit04": {
+        "verdict": "WARN",
+        "front": 89,
+        "legs": 77,
+        "base": 276,
+        "corrX": 0.986,
+        "corrY": 0.775,
+        "folded": 0,
+        "errors": [
+          "снимок перевёрнут или смазан: corr(y, v) = 0.77"
         ]
       }
     },
@@ -109,19 +230,29 @@
       },
       "outfit02": {
         "verdict": "PASS",
-        "front": 106,
-        "legs": 80,
-        "base": 330,
-        "corrX": 0.991,
+        "front": 122,
+        "legs": 95,
+        "base": 314,
+        "corrX": 0.988,
         "corrY": 0.995,
         "folded": 0,
         "errors": []
       },
       "outfit03": {
         "verdict": "PASS",
-        "front": 132,
-        "legs": 94,
-        "base": 332,
+        "front": 129,
+        "legs": 99,
+        "base": 335,
+        "corrX": 0.987,
+        "corrY": 0.999,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit04": {
+        "verdict": "PASS",
+        "front": 89,
+        "legs": 77,
+        "base": 276,
         "corrX": 0.989,
         "corrY": 0.999,
         "folded": 0,

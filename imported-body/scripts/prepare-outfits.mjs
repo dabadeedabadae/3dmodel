@@ -1,7 +1,8 @@
 // Batch import of every dressed figure: imported-body/assets/outfit-NN.fbx
 //   1. prepare-outfit (weld, symmetrise, segment, landmarks)  2. segmentation completeness  3. check-outfit
-// Every figure except the reference is first prepared raw, then composed onto the reference body (same head,
-// hands and proportions — I-50) and prepared again from the composed mesh; the checks run on the result.
+// Every figure except the reference is first prepared raw, then its garments are laid over the reference figure
+// (I-61: the reference's head, arms and shoes verbatim, its T-shirt and trousers as the hidden body) and prepared
+// again from the layered mesh; the checks run on the result. IB_ASSEMBLY=compose selects the older rebuild (I-50).
 // Writes imported-body/reports/stage-I15-batch.json and exits non-zero if any figure fails.
 // Only FBX is supported (the generator exports FBX); other formats are listed as skipped, not silently ignored.
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -10,7 +11,14 @@ import { spawnSync } from 'node:child_process';
 const DIR = 'imported-body/assets';
 const STATURE = process.env.IB_STATURE ?? '175';
 const REF = process.env.IB_BODY_REF ?? 'outfit01';
+const ASSEMBLY = process.env.IB_ASSEMBLY ?? 'layers';
 const files = readdirSync(DIR).filter((f) => /^outfit-\d+\.(fbx|glb|gltf|obj)$/i.test(f)).sort();
+/**
+ * Garment-only figures (I-62): a manifest entry with "topMesh" (a mesh of the garment alone, path from the repo root,
+ * kept out of git) is placed on the reference by garment-source.ts and laid over it like any other figure; the
+ * reference's own trousers stay. Listed after the FBX figures, under their manifest id.
+ */
+const garmentOnly = Object.entries(JSON.parse(readFileSync(`${DIR}/outfits.json`, 'utf8'))).filter(([, m]) => m?.topMesh).map(([id]) => id);
 const REQUIRED = ['top', 'bottom', 'head', 'arm_left', 'arm_right', 'shoe_left', 'shoe_right'];
 // garment types per outfit (I-54): without them the site cannot know what may be put on this figure
 const TYPES = ['TSHIRT', 'SHIRT', 'JACKET', 'COAT', 'SWEATER', 'HOODIE', 'PANTS', 'JEANS', 'SHORTS', 'SKIRT', 'DRESS'];
@@ -18,24 +26,35 @@ const manifest = JSON.parse(readFileSync(`${DIR}/outfits.json`, 'utf8'));
 const rows = [];
 const run = (args, env = {}) => spawnSync(process.execPath, ['--import', 'tsx', ...args], { encoding: 'utf8', env: { ...process.env, ...env } });
 
-for (const f of files) {
-  const num = f.match(/^outfit-(\d+)/)[1];
-  const id = `outfit${num}`;
-  const row = { file: f, id, status: 'PASS', notes: [] };
+for (const f of [...files, ...garmentOnly]) {
+  const only = garmentOnly.includes(f);
+  const id = only ? f : `outfit${f.match(/^outfit-(\d+)/)[1]}`;
+  const row = { file: only ? `${id} (garment only)` : f, id, status: 'PASS', notes: [] };
   rows.push(row);
-  if (!f.toLowerCase().endsWith('.fbx')) { row.status = 'SKIP'; row.notes.push('формат не поддерживается, нужен FBX'); continue; }
+  if (!only && !f.toLowerCase().endsWith('.fbx')) { row.status = 'SKIP'; row.notes.push('формат не поддерживается, нужен FBX'); continue; }
   const m = manifest[id];
   if (!m || !TYPES.includes(m.top) || !TYPES.includes(m.bottom) || !m.label) {
     row.status = 'FAIL'; row.notes.push(`нет типа верха/низа в ${DIR}/outfits.json — впишите { "label", "top", "bottom" } для ${id}`); continue;
   }
   row.garments = { top: m.top, bottom: m.bottom, label: m.label };
   let prep;
-  if (id === REF) prep = run(['imported-body/scripts/prepare-outfit.ts', `${DIR}/${f}`, id, STATURE]);
+  if (only) {
+    const mesh = `imported-body/out/layered-${id}.json`;
+    const src = run(['imported-body/scripts/garment-source.ts', m.topMesh, `garment-${id}`, REF, 'top']);
+    const comp = src.status !== 0 ? src : run(['imported-body/scripts/layer-outfit.ts', REF, `garment-${id}`, REF, mesh]);
+    row.assembly = 'garment-only';
+    if (comp.status === 0) { try { row.compose = JSON.parse(comp.stdout.trim().split('\n').pop()); } catch { /* report only */ } }
+    prep = comp.status === 0 ? run(['imported-body/scripts/prepare-outfit.ts', mesh, id, STATURE]) : comp;
+  } else if (id === REF) prep = run(['imported-body/scripts/prepare-outfit.ts', `${DIR}/${f}`, id, STATURE]);
   else {
     const raw = run(['imported-body/scripts/prepare-outfit.ts', `${DIR}/${f}`, `raw-${id}`, STATURE]);
-    const comp = raw.status === 0 ? run(['imported-body/scripts/compose-outfit.ts', `raw-${id}`, REF, `imported-body/out/composed-${id}.json`]) : raw;
+    const mesh = `imported-body/out/${ASSEMBLY === 'compose' ? 'composed' : 'layered'}-${id}.json`;
+    const comp = raw.status !== 0 ? raw : ASSEMBLY === 'compose'
+      ? run(['imported-body/scripts/compose-outfit.ts', `raw-${id}`, REF, mesh])
+      : run(['imported-body/scripts/layer-outfit.ts', REF, `raw-${id}`, `raw-${id}`, mesh]);
+    row.assembly = ASSEMBLY;
     if (comp.status === 0) { try { row.compose = JSON.parse(comp.stdout.trim().split('\n').pop()); } catch { /* report only */ } }
-    prep = comp.status === 0 ? run(['imported-body/scripts/prepare-outfit.ts', `imported-body/out/composed-${id}.json`, id, STATURE]) : comp;
+    prep = comp.status === 0 ? run(['imported-body/scripts/prepare-outfit.ts', mesh, id, STATURE]) : comp;
   }
   if (prep.status !== 0) { row.status = 'FAIL'; const lines = (prep.stderr || prep.stdout).trim().split('\n'); row.notes.push('подготовка упала: ' + (lines.find((l) => /Error/.test(l)) ?? lines.slice(-2).join(' ')).trim()); continue; }
   const o = JSON.parse(readFileSync(`imported-body/out/outfit-${id}.json`, 'utf8'));

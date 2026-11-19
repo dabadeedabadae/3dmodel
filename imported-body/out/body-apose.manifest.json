@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-11-04T10:22:14.420Z",
+  "asset": {
+    "id": "tripo-male-lowpoly",
+    "version": "imported-1",
+    "topologyVersion": "imported-topo-1"
+  },
+  "weights": {},
+  "height_cm": 165,
+  "heightMode": "keep_girths",
+  "pose": "a",
+  "shoulderDegrees": 62,
+  "verified": true,
+  "failed": [],
+  "measurements": {
+    "height_cm": 165,
+    "chest_cm": 105.8,
+    "waist_cm": 72.1,
+    "hip_cm": 86.2,
+    "torso_width_cm": 37.1,
+    "bicep_cm": 35.8,
+    "thigh_cm": 52.9,
+    "levels_m": {
+      "chest": 1.2457499819993971,
+      "waist": 1.0642499846220015,
+      "hip": 0.8744999873638152,
+      "armMidY": 1.3050073196670167,
+      "armholeX": 0.1854065957241136,
+      "bicepX": 0.28451738498223006
+    }
+  },
+  "file": "imported-body/out/body-apose.glb",
+  "vertices": 1123,
+  "triangles": 2242
+}

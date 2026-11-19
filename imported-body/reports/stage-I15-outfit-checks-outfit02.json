@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-11-18T06:54:21.218Z",
+  "generatedAt": "2026-11-19T11:23:08.053Z",
   "asset": "outfit-outfit02",
-  "shells": 17,
-  "boundaryEdges": 316,
-  "sourceAsymmetry_mm": 12.3,
+  "shells": 7,
+  "boundaryEdges": 114,
+  "sourceAsymmetry_mm": 20.1,
   "usableSliderRange": {
-    "chest": 0.9,
-    "waist": 0.9,
-    "hip": 0.9,
-    "shoulders": 0.18,
-    "arms": 0.9,
-    "thighs": 0.9
+    "chest": 0.16,
+    "waist": 0.57,
+    "hip": 0.57,
+    "shoulders": 0.34,
+    "arms": 0.57,
+    "thighs": 0.57
   },
   "results": [
     {
@@ -19,62 +19,62 @@
       "fails": []
     },
     {
-      "label": "chest=-0.9",
+      "label": "chest=-0.16",
       "ok": true,
       "fails": []
     },
     {
-      "label": "chest=0.9",
+      "label": "chest=0.16",
       "ok": true,
       "fails": []
     },
     {
-      "label": "waist=-0.9",
+      "label": "waist=-0.57",
       "ok": true,
       "fails": []
     },
     {
-      "label": "waist=0.9",
+      "label": "waist=0.57",
       "ok": true,
       "fails": []
     },
     {
-      "label": "hip=-0.9",
+      "label": "hip=-0.57",
       "ok": true,
       "fails": []
     },
     {
-      "label": "hip=0.9",
+      "label": "hip=0.57",
       "ok": true,
       "fails": []
     },
     {
-      "label": "shoulders=-0.18",
+      "label": "shoulders=-0.34",
       "ok": true,
       "fails": []
     },
     {
-      "label": "shoulders=0.18",
+      "label": "shoulders=0.34",
       "ok": true,
       "fails": []
     },
     {
-      "label": "arms=-0.9",
+      "label": "arms=-0.57",
       "ok": true,
       "fails": []
     },
     {
-      "label": "arms=0.9",
+      "label": "arms=0.57",
       "ok": true,
       "fails": []
     },
     {
-      "label": "thighs=-0.9",
+      "label": "thighs=-0.57",
       "ok": true,
       "fails": []
     },
     {
-      "label": "thighs=0.9",
+      "label": "thighs=0.57",
       "ok": true,
       "fails": []
     },

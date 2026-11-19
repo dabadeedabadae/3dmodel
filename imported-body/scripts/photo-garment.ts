@@ -2,7 +2,7 @@
  * Stage I-51 — photo → garment package for the dressed figure, and its blocking check.
  *
  *   node --import tsx imported-body/scripts/photo-garment.ts [photo ...]
- * Without arguments: every fixtures/photos/tshirt_*.jpg.
+ * Without arguments: every fixtures/photos/{tshirt,longsleeve,pants}_*.jpg (long sleeves → shirt/hoodie figures, I-63).
  *
  * For each photo, with the SAME providers as the page (U²-Netp mask, silhouette landmarks, median base colour):
  *   imported-body/out/photo/<name>/texture.jpg   photo with the background replaced by the base colour
@@ -29,8 +29,10 @@ const ROOT = process.cwd();
 const OUT = path.join(ROOT, 'imported-body/out/photo');
 const photos = process.argv.slice(2).length
   ? process.argv.slice(2)
-  : readdirSync(path.join(ROOT, 'fixtures/photos')).filter((f) => /^(tshirt|pants)_.*\.jpe?g$/i.test(f)).sort().map((f) => path.join(ROOT, 'fixtures/photos', f));
+  : readdirSync(path.join(ROOT, 'fixtures/photos')).filter((f) => /^(tshirt|longsleeve|pants)_.*\.jpe?g$/i.test(f)).sort().map((f) => path.join(ROOT, 'fixtures/photos', f));
 
+// long-sleeved tops (I-63): the same points and mapping as the T-shirt, shown only on figures wearing one of these
+const LONG_TOPS = ['SHIRT', 'HOODIE', 'SWEATER'];
 const PART = { head: 0, arm_left: 1, arm_right: 1, top: 2, bottom: 3, shoe_left: 4, shoe_right: 4, other: 0 } as Record<string, number>;
 const figures = readdirSync(path.join(ROOT, 'imported-body/out')).map((f) => f.match(/^asset-(outfit\d+)\.json$/)?.[1]).filter(Boolean).sort() as string[];
 // garment types per outfit (I-54): a T-shirt photo is only ever shown on a figure that wears a T-shirt
@@ -153,14 +155,14 @@ async function main() {
       mkdirSync(dir, { recursive: true });
       await sharp(tex, { raw: { width: img.width, height: img.height, channels: 3 } }).jpeg({ quality: 88 }).toFile(path.join(dir, 'texture.jpg'));
       writeFileSync(path.join(dir, 'garment.json'), JSON.stringify({
-        source: path.relative(ROOT, file), category: 'tshirt', anchors, baseColor: color.hex,
+        source: path.relative(ROOT, file), category: name.startsWith('longsleeve_') ? 'top' : 'tshirt', anchors, baseColor: color.hex,
         maskQuality: s.quality, landmarkStatus: lm.status, anchorIssues: issues, needsReview: lm.status !== 'ok' || issues.length > 0,
         providers: { mask: s.providerVersion },
         note: 'Спинка, бока и закрытые места не восстановлены по снимку — основной цвет.',
       }, null, 2));
       Object.assign(row, { mask: s.quality, landmarks: lm.status, anchorIssues: issues, baseColor: color.hex });
 
-      for (const { id, fig } of figs.filter((f) => f.garments?.top === 'TSHIRT')) {
+      for (const { id, fig } of figs.filter((f) => (name.startsWith('longsleeve_') ? LONG_TOPS : ['TSHIRT']).includes(f.garments?.top))) {
         const m = mapPhotoToTop(fig, anchors);
         const errs: string[] = [];
         if (!m.photoTriangles.length) errs.push('нет лицевых треугольников');
