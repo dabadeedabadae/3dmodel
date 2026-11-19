@@ -1,0 +1,46 @@
+[
+  {
+    "id": "figure-01",
+    "url": "/models/figure-01.json",
+    "vertices": 993,
+    "triangles": 1921,
+    "label": "Футболка и брюки",
+    "garments": {
+      "top": "TSHIRT",
+      "bottom": "PANTS"
+    }
+  },
+  {
+    "id": "figure-02",
+    "url": "/models/figure-02.json",
+    "vertices": 1483,
+    "triangles": 2840,
+    "label": "Худи и брюки",
+    "garments": {
+      "top": "HOODIE",
+      "bottom": "PANTS"
+    }
+  },
+  {
+    "id": "figure-03",
+    "url": "/models/figure-03.json",
+    "vertices": 1505,
+    "triangles": 2805,
+    "label": "Рубашка и брюки",
+    "garments": {
+      "top": "SHIRT",
+      "bottom": "PANTS"
+    }
+  },
+  {
+    "id": "figure-04",
+    "url": "/models/figure-04.json",
+    "vertices": 4758,
+    "triangles": 9183,
+    "label": "Классическая рубашка и брюки",
+    "garments": {
+      "top": "SHIRT",
+      "bottom": "PANTS"
+    }
+  }
+]

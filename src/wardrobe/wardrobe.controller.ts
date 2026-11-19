@@ -56,10 +56,11 @@ export class WardrobeController {
     if (!file || !kind) throw new BadRequestException('Добавьте фото вещи (JPEG, PNG или WebP, до 8 МБ).');
     if (!!tex !== (garment3dRaw !== undefined)) throw new BadRequestException('Текстура и пакет 3D-вещи передаются вместе.');
     const garment3d = garment3dRaw !== undefined ? parseGarment3d(garment3dRaw) : null;
-    // a package describes one kind of garment: a T-shirt package only for T-shirts, a trousers package for
-    // trousers and jeans (I-53); nothing else has a 3D photo mapping yet
-    if (garment3d && !(garment3d.category === 'tshirt' ? dto.type === 'TSHIRT' : dto.type === 'PANTS' || dto.type === 'JEANS')) {
-      throw new BadRequestException('Пакет 3D-вещи не подходит к типу вещи: фото футболки — только для футболок, фото брюк — для брюк и джинсов.');
+    // a package describes one kind of garment: a T-shirt package only for T-shirts, a long-sleeved top package for
+    // shirts, hoodies and sweaters, a trousers package for trousers and jeans (I-53, I-63)
+    const PACKAGE_TYPES: Record<string, string[]> = { tshirt: ['TSHIRT'], top: ['SHIRT', 'HOODIE', 'SWEATER'], pants: ['PANTS', 'JEANS'] };
+    if (garment3d && !PACKAGE_TYPES[garment3d.category]!.includes(dto.type)) {
+      throw new BadRequestException('Пакет 3D-вещи не подходит к типу вещи: фото футболки — только для футболок, фото верха с длинным рукавом — для рубашек, худи и свитеров, фото брюк — для брюк и джинсов.');
     }
     const texKind = tex ? sniff(tex.buffer) : null;
     if (tex && !texKind) throw new BadRequestException('Текстура должна быть JPEG, PNG или WebP.');

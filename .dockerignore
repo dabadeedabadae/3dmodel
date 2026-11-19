@@ -1,0 +1,16 @@
+# only the API goes into the root image
+node_modules
+dist
+frontend
+recommendation-service
+archive
+uploads
+test
+docs
+.git
+.env
+.env.*
+!.env.example
+.demo-accounts.local.json
+.docker-local
+*.tsbuildinfo

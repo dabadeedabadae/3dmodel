@@ -1,0 +1,155 @@
+[
+  {
+    "id": "pants_4cc4e673",
+    "category": "pants",
+    "type": "JEANS",
+    "url": "/garments/pants_4cc4e673/garment.json",
+    "textureUrl": "/garments/pants_4cc4e673/texture.jpg",
+    "baseColor": "#606b7a",
+    "needsReview": false
+  },
+  {
+    "id": "pants_9cb9ae19",
+    "category": "pants",
+    "type": "JEANS",
+    "url": "/garments/pants_9cb9ae19/garment.json",
+    "textureUrl": "/garments/pants_9cb9ae19/texture.jpg",
+    "baseColor": "#303030",
+    "needsReview": true
+  },
+  {
+    "id": "pants_e0dc1f06",
+    "category": "pants",
+    "type": "PANTS",
+    "url": "/garments/pants_e0dc1f06/garment.json",
+    "textureUrl": "/garments/pants_e0dc1f06/texture.jpg",
+    "baseColor": "#b95769",
+    "needsReview": false
+  },
+  {
+    "id": "tshirt_0fc3fbae",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_0fc3fbae/garment.json",
+    "textureUrl": "/garments/tshirt_0fc3fbae/texture.jpg",
+    "baseColor": "#d3cfd0",
+    "needsReview": false
+  },
+  {
+    "id": "tshirt_29d44695",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_29d44695/garment.json",
+    "textureUrl": "/garments/tshirt_29d44695/texture.jpg",
+    "baseColor": "#b4b3b1",
+    "needsReview": true
+  },
+  {
+    "id": "tshirt_2aff1c58",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_2aff1c58/garment.json",
+    "textureUrl": "/garments/tshirt_2aff1c58/texture.jpg",
+    "baseColor": "#d5d2ce",
+    "needsReview": false
+  },
+  {
+    "id": "tshirt_2df565b9",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_2df565b9/garment.json",
+    "textureUrl": "/garments/tshirt_2df565b9/texture.jpg",
+    "baseColor": "#f07f4c",
+    "needsReview": true
+  },
+  {
+    "id": "tshirt_58e51574",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_58e51574/garment.json",
+    "textureUrl": "/garments/tshirt_58e51574/texture.jpg",
+    "baseColor": "#42b9bf",
+    "needsReview": true
+  },
+  {
+    "id": "tshirt_5aee6e35",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_5aee6e35/garment.json",
+    "textureUrl": "/garments/tshirt_5aee6e35/texture.jpg",
+    "baseColor": "#a09c97",
+    "needsReview": true
+  },
+  {
+    "id": "tshirt_5d9384e4",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_5d9384e4/garment.json",
+    "textureUrl": "/garments/tshirt_5d9384e4/texture.jpg",
+    "baseColor": "#cec081",
+    "needsReview": false
+  },
+  {
+    "id": "tshirt_8f0cd82c",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_8f0cd82c/garment.json",
+    "textureUrl": "/garments/tshirt_8f0cd82c/texture.jpg",
+    "baseColor": "#697080",
+    "needsReview": false
+  },
+  {
+    "id": "tshirt_91ebc326",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_91ebc326/garment.json",
+    "textureUrl": "/garments/tshirt_91ebc326/texture.jpg",
+    "baseColor": "#202f54",
+    "needsReview": true
+  },
+  {
+    "id": "tshirt_99fdccb7",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_99fdccb7/garment.json",
+    "textureUrl": "/garments/tshirt_99fdccb7/texture.jpg",
+    "baseColor": "#a9a59e",
+    "needsReview": true
+  },
+  {
+    "id": "tshirt_b40637fa",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_b40637fa/garment.json",
+    "textureUrl": "/garments/tshirt_b40637fa/texture.jpg",
+    "baseColor": "#48454a",
+    "needsReview": true
+  },
+  {
+    "id": "tshirt_bb140894",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_bb140894/garment.json",
+    "textureUrl": "/garments/tshirt_bb140894/texture.jpg",
+    "baseColor": "#948278",
+    "needsReview": true
+  },
+  {
+    "id": "tshirt_e330e5fa",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_e330e5fa/garment.json",
+    "textureUrl": "/garments/tshirt_e330e5fa/texture.jpg",
+    "baseColor": "#3c434c",
+    "needsReview": true
+  },
+  {
+    "id": "tshirt_fbb96cbf",
+    "category": "tshirt",
+    "type": "TSHIRT",
+    "url": "/garments/tshirt_fbb96cbf/garment.json",
+    "textureUrl": "/garments/tshirt_fbb96cbf/texture.jpg",
+    "baseColor": "#cc2840",
+    "needsReview": false
+  }
+]

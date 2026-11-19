@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ApiError, GarmentType, WardrobeItem, getToken, getWardrobe, mediaUrl } from '../../lib/api';
 import { COLORS, GARMENT_LABELS, colorById } from '../../lib/labels';
 import { WEIGHT_NAMES, ZERO, type Weights } from '../../lib/figure/deform';
@@ -57,16 +57,16 @@ export default function FittingRoom() {
   const [samples, setSamples] = useState<SampleGarment[]>([]);
   const [printId, setPrintId] = useState<string | null>(null);
   const [samplePrint, setPrint] = useState<Print | null>(null);
-  /** print from the user's own analysed T-shirt (wardrobe item with a 3D package) */
-  const [ownPrint, setOwnPrint] = useState<(Print & { needsReview: boolean }) | null>(null);
+  /** print from the user's own analysed top (wardrobe item with a 3D package), with the garment type it shows */
+  const [ownPrint, setOwnPrint] = useState<(Print & { needsReview: boolean; type: string }) | null>(null);
   /** trousers: own analysed item or a sample, each with the garment type it shows (I-53/I-54) */
   const [ownBottomPrint, setOwnBottomPrint] = useState<(Print & { needsReview: boolean; type: string }) | null>(null);
   const [bottomSampleId, setBottomSampleId] = useState<string | null>(null);
   const [bottomSamplePrint, setBottomSamplePrint] = useState<(Print & { type: string }) | null>(null);
   const cur = figures.find((f) => f.id === figureId) ?? null;
-  // a print goes only onto the same garment type of the figure (I-54): T-shirt photos onto a T-shirt,
-  // trouser photos onto trousers
-  const topPrint = cur?.garments.top === 'TSHIRT' ? (ownPrint ?? samplePrint) : null;
+  // a print goes only onto the same garment type of the figure (I-54): T-shirt photos onto a T-shirt, a shirt or
+  // hoodie photo onto a shirt or hoodie (I-63), trouser photos onto trousers
+  const topPrint = ownPrint && cur?.garments.top === ownPrint.type ? ownPrint : cur?.garments.top === 'TSHIRT' && !ownPrint ? samplePrint : null;
   const bottomCandidate = ownBottomPrint ?? bottomSamplePrint;
   const bottomPrint = bottomCandidate && cur?.garments.bottom === bottomCandidate.type ? bottomCandidate : null;
   const prints = useMemo(() => [topPrint, bottomPrint].filter((p): p is Print => !!p), [topPrint, bottomPrint]);
@@ -173,9 +173,9 @@ export default function FittingRoom() {
     if (target.id !== figureId) setFigureId(target.id);
     if (slot === 'top') {
       setTopId(item.id);
-      if (item.garment3d?.category === 'tshirt' && item.textureUrl) {
+      if ((item.garment3d?.category === 'tshirt' || item.garment3d?.category === 'top') && item.textureUrl) {
         setPrintId(null);
-        setOwnPrint({ kind: 'tshirt', textureUrl: mediaUrl(item.textureUrl), anchors: item.garment3d.anchors, needsReview: item.garment3d.needsReview });
+        setOwnPrint({ kind: 'tshirt', type: item.type, textureUrl: mediaUrl(item.textureUrl), anchors: item.garment3d.anchors, needsReview: item.garment3d.needsReview });
         setTopColor(item.garment3d.baseColor);
       } else { setOwnPrint(null); setTopColor(hex); }
     } else {
@@ -187,6 +187,19 @@ export default function FittingRoom() {
       } else { setOwnBottomPrint(null); setBottomColor(hex); }
     }
   }
+  // /fitting?item=<id> (the wardrobe's «Примерить на 3D»): dress the figure in that item once everything is loaded
+  const deepLinked = useRef(false);
+  useEffect(() => {
+    if (deepLinked.current || !wardrobe || !figures.length) return;
+    deepLinked.current = true;
+    const id = new URLSearchParams(window.location.search).get('item');
+    const item = id ? wardrobe.find((i) => i.id === id) : undefined;
+    if (!item) { if (id) setNotice('Эта вещь не найдена в вашем гардеробе.'); return; }
+    if (TOPS.includes(item.type)) pickItem(item, 'top');
+    else if (BOTTOMS.includes(item.type)) pickItem(item, 'bottom');
+    else setNotice(`3D-модели с вещью «${GARMENT_LABELS[item.type].toLowerCase()}» пока нет.`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wardrobe, figures]);
   const presetActive = (w: Partial<Weights>) => WEIGHT_NAMES.every((k) => Math.abs(weights[k] - clampTo(k, w[k] ?? 0)) < 1e-6);
 
   return (

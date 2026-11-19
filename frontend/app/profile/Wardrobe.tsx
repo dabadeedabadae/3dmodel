@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import {
   ApiError, FitTag, GarmentType, WardrobeItem, addWardrobeItem, deleteWardrobeItem, getWardrobe, mediaUrl,
@@ -7,10 +8,14 @@ import {
 } from '../../lib/api';
 import { COLORS, FIT_LABELS, GARMENT_LABELS, colorById, nearestPaletteColor, suggestColor } from '../../lib/labels';
 import type { Analysis } from '../../lib/garment/analyze';
+import type { PhotoPointName } from '../../lib/figure/photoMap';
 
 const MAX_BYTES = 8 * 1024 * 1024;
 /** garment types whose photo is turned into a 3D print on the figure */
-const ANALYSABLE: GarmentType[] = ['TSHIRT', 'PANTS', 'JEANS'];
+const ANALYSABLE: GarmentType[] = ['TSHIRT', 'SHIRT', 'HOODIE', 'SWEATER', 'PANTS', 'JEANS'];
+const LONG_TOPS: GarmentType[] = ['SHIRT', 'HOODIE', 'SWEATER'];
+/** what the form says it is recognising, in the accusative */
+const ANALYSING_LABEL: Partial<Record<GarmentType, string>> = { TSHIRT: 'футболку', SHIRT: 'рубашку', HOODIE: 'худи', SWEATER: 'свитер', PANTS: 'брюки', JEANS: 'джинсы' };
 const ACCEPT = 'image/jpeg,image/png,image/webp';
 
 type Filter = 'ALL' | GarmentType;
@@ -123,6 +128,7 @@ export default function Wardrobe({ onCountChange, onAuthExpired }: {
                   <div className="wardrobe-info">
                     <strong>{GARMENT_LABELS[item.type]}</strong>
                     <span className="wardrobe-color"><i style={{ background: color?.hex ?? '#ccc' }} aria-hidden />{color?.label ?? item.dominantColor}</span>
+                    <Link className="wardrobe-try" href={`/fitting?item=${encodeURIComponent(item.id)}`}>Примерить на 3D →</Link>
                   </div>
                   <div className="wardrobe-actions">
                     <label className="wardrobe-sr" htmlFor={`fit-${item.id}`}>Посадка</label>
@@ -138,6 +144,61 @@ export default function Wardrobe({ onCountChange, onAuthExpired }: {
         </>
       )}
     </section>
+  );
+}
+
+type Pt = { x: number; y: number };
+/** names as the person sees them on the photo: left/right are IMAGE sides (photo of the front, as lying) */
+const POINT_LABELS: Record<PhotoPointName, string> = {
+  neck_left: 'Ворот слева', neck_right: 'Ворот справа', neck_bottom: 'Низ выреза', shoulder_left: 'Плечо слева', shoulder_right: 'Плечо справа',
+  armpit_left: 'Подмышка слева', armpit_right: 'Подмышка справа', cuff_left_top: 'Манжета слева, верх', cuff_left_bottom: 'Манжета слева, низ',
+  cuff_right_top: 'Манжета справа, верх', cuff_right_bottom: 'Манжета справа, низ', hem_left: 'Низ слева', hem_right: 'Низ справа',
+};
+
+/**
+ * Point editor for a top (I-63): the photo with the mask, the 13 points draggable with a mouse or a finger. The
+ * anchors are recomputed from the moved points by the same code as from the estimated ones (withUserPoints).
+ */
+function PointEditor({ analysis, onDone, onCancel }: { analysis: Analysis; onDone: (points: Record<PhotoPointName, Pt>) => void; onCancel: () => void }) {
+  const edit = analysis.edit!;
+  const [points, setPoints] = useState(edit.points);
+  const [drag, setDrag] = useState<PhotoPointName | null>(null);
+  const svg = useRef<SVGSVGElement>(null);
+  const r = Math.max(6, Math.min(edit.width, edit.height) * 0.018);
+  function toImage(e: React.PointerEvent): Pt | null {
+    const m = svg.current?.getScreenCTM();
+    if (!m) return null;
+    const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
+    return { x: Math.max(0, Math.min(edit.width, p.x)), y: Math.max(0, Math.min(edit.height, p.y)) };
+  }
+  const line = (a: PhotoPointName, b: PhotoPointName) => <line key={a + b} x1={points[a].x} y1={points[a].y} x2={points[b].x} y2={points[b].y} />;
+  return (
+    <div className="point-editor">
+      <p><b>Поправьте точки.</b> Перетащите каждую точку на своё место: ворот, плечи, подмышки, края манжет, углы низа. «Слева» и «справа» — как на фото.</p>
+      <svg
+        ref={svg} viewBox={`0 0 ${edit.width} ${edit.height}`} role="img" aria-label="Фото вещи с точками"
+        onPointerMove={(e) => { if (!drag) return; const p = toImage(e); if (p) setPoints((ps) => ({ ...ps, [drag]: p })); }}
+        onPointerUp={() => setDrag(null)} onPointerLeave={() => setDrag(null)}
+      >
+        <image href={edit.backdrop} width={edit.width} height={edit.height} />
+        <g className="point-editor-lines">
+          {line('neck_left', 'shoulder_left')}{line('shoulder_left', 'cuff_left_top')}{line('cuff_left_top', 'cuff_left_bottom')}
+          {line('cuff_left_bottom', 'armpit_left')}{line('armpit_left', 'hem_left')}{line('hem_left', 'hem_right')}
+          {line('hem_right', 'armpit_right')}{line('armpit_right', 'cuff_right_bottom')}{line('cuff_right_bottom', 'cuff_right_top')}
+          {line('cuff_right_top', 'shoulder_right')}{line('shoulder_right', 'neck_right')}{line('neck_right', 'neck_bottom')}{line('neck_bottom', 'neck_left')}
+        </g>
+        {(Object.keys(POINT_LABELS) as PhotoPointName[]).map((k) => (
+          <circle
+            key={k} cx={points[k].x} cy={points[k].y} r={drag === k ? r * 1.4 : r} className={drag === k ? 'is-drag' : ''}
+            onPointerDown={(e) => { (e.target as Element).setPointerCapture?.(e.pointerId); setDrag(k); }}
+          ><title>{POINT_LABELS[k]}</title></circle>
+        ))}
+      </svg>
+      <div className="profile-save-row">
+        <button type="button" className="primary" onClick={() => onDone(points)}>Точки на месте</button>
+        <button type="button" className="profile-reset" onClick={onCancel}>Отмена</button>
+      </div>
+    </div>
   );
 }
 
@@ -157,16 +218,18 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [analysing, setAnalysing] = useState(false);
   const [analysisError, setAnalysisError] = useState('');
+  const [editing, setEditing] = useState(false);
   const runId = useRef(0);
   const input = useRef<HTMLInputElement>(null);
 
-  // photo → mask, points, base colour and texture, on this device: T-shirts (I-52), trousers and jeans (I-53)
+  // photo → mask, points, base colour and texture, on this device: T-shirts (I-52), trousers and jeans (I-53),
+  // shirts, hoodies and sweaters (I-63)
   useEffect(() => {
     const id = ++runId.current;
-    setAnalysis(null); setAnalysisError('');
+    setAnalysis(null); setAnalysisError(''); setEditing(false);
     if (!file || !ANALYSABLE.includes(type)) { setAnalysing(false); return; }
     setAnalysing(true);
-    import('../../lib/garment/analyze').then((m) => (type === 'TSHIRT' ? m.analyzeTShirtPhoto(file) : m.analyzePantsPhoto(file))).then((a) => {
+    import('../../lib/garment/analyze').then((m) => (type === 'TSHIRT' ? m.analyzeTShirtPhoto(file) : LONG_TOPS.includes(type) ? m.analyzeTShirtPhoto(file, 'top') : m.analyzePantsPhoto(file))).then((a) => {
       if (id !== runId.current) return;
       setAnalysis(a);
       const snapped = nearestPaletteColor(a.pkg.baseColor);
@@ -254,17 +317,26 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
         </div>
         {ANALYSABLE.includes(type) && file && (
           <div className={`wardrobe-analysis${analysis?.pkg.needsReview ? ' is-review' : analysis ? ' is-ok' : ''}`} role="status" aria-live="polite">
-            {analysing && <p><b>Распознаём {type === 'TSHIRT' ? 'футболку' : type === 'JEANS' ? 'джинсы' : 'брюки'} на фото…</b> Маска, точки и цвет считаются прямо на этом устройстве, фото никуда не отправляется.</p>}
+            {analysing && <p><b>Распознаём {ANALYSING_LABEL[type]} на фото…</b> Маска, точки и цвет считаются прямо на этом устройстве, фото никуда не отправляется.</p>}
             {analysisError && <p><b>Не удалось распознать фото.</b> Вещь сохранится без 3D-принта. {analysisError}</p>}
-            {analysis && (
+            {analysis && editing && (
+              <PointEditor
+                analysis={analysis} onCancel={() => setEditing(false)}
+                onDone={(points) => { import('../../lib/garment/analyze').then((m) => { setAnalysis(m.withUserPoints(analysis, points)); setEditing(false); }); }}
+              />
+            )}
+            {analysis && !editing && (
               <div className="wardrobe-analysis-row">
                 {/* eslint-disable-next-line @next/next/no-img-element -- local preview */}
-                <img src={analysis.preview} alt="Маска и найденные точки футболки" />
+                <img src={analysis.preview} alt="Маска и найденные точки вещи" />
                 <div>
                   {analysis.pkg.needsReview
                     ? <p><b>Принт перенесётся на 3D, но точки нужно проверить.</b> {[analysis.pkg.landmarkStatus !== 'ok' && 'Точки найдены неуверенно.', analysis.pkg.maskQuality !== 'ok' && 'Маска сомнительная.', ...analysis.pkg.anchorIssues].filter(Boolean).join(' ')}</p>
-                    : <p><b>Готово: фото будет перенесено на 3D-модель.</b> Перёд — с фото, {type === 'TSHIRT' ? 'спинка и бока' : 'сзади и по бокам'} — основным цветом.</p>}
-                  <small>Распознано за {(analysis.ms / 1000).toFixed(1)} с · основной цвет {analysis.pkg.baseColor}</small>
+                    : <p><b>Готово: фото будет перенесено на 3D-модель.</b> Перёд — с фото, {type === 'PANTS' || type === 'JEANS' ? 'сзади и по бокам' : 'спинка и бока'} — основным цветом.</p>}
+                  <small>
+                    {analysis.pkg.pointsSource === 'user' ? 'Точки расставлены вручную' : `Распознано за ${(analysis.ms / 1000).toFixed(1)} с`} · основной цвет {analysis.pkg.baseColor}
+                  </small>
+                  {analysis.edit && <button type="button" className="wardrobe-edit-points" onClick={() => setEditing(true)}>{analysis.pkg.needsReview ? 'Поправить точки' : 'Проверить точки'}</button>}
                 </div>
               </div>
             )}
@@ -272,7 +344,7 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
         )}
         {error && <p className="error" role="alert">{error}</p>}
         <div className="profile-save-row">
-          <button className="primary" type="submit" disabled={!file || analysing}>{saving ? 'Сохраняем…' : analysing ? 'Распознаём…' : 'Добавить в гардероб'}</button>
+          <button className="primary" type="submit" disabled={!file || analysing || editing}>{saving ? 'Сохраняем…' : analysing ? 'Распознаём…' : 'Добавить в гардероб'}</button>
           <button type="button" className="profile-reset" onClick={onCancel}>Отмена</button>
         </div>
       </fieldset>

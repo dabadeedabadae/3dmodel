@@ -1,5 +1,5 @@
 // Demo data for local testing: one regular user with a small wardrobe and one admin.
-// Photos come from the CC0 clothing-dataset fixtures of the 3D module (../3dmodel/fixtures/photos).
+// Photos: the CC0 clothing-dataset fixtures copied to scripts/demo-photos (originals in 3dmodel/fixtures/photos).
 // Credentials are written to .demo-accounts.local.json (git-ignored), never printed or committed.
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');
@@ -7,8 +7,8 @@ const { randomBytes, randomUUID } = require('node:crypto');
 const { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } = require('node:fs');
 const { join, resolve } = require('node:path');
 
-const FIXTURES = resolve(process.env.FIXTURES_DIR ?? '../3dmodel/fixtures/photos');
-const CREDS = '.demo-accounts.local.json';
+const FIXTURES = resolve(process.env.FIXTURES_DIR ?? join(__dirname, 'demo-photos'));
+const CREDS = process.env.DEMO_CREDS_FILE ?? '.demo-accounts.local.json';
 const ITEMS = [
   ['tshirt_8f0cd82c.jpg', 'TSHIRT', 'gray', 'GOOD'],
   ['tshirt_0fc3fbae.jpg', 'TSHIRT', 'white', 'LOOSE'],

@@ -115,6 +115,20 @@ test('wardrobe CRUD is per-owner, validates input, and the admin recommendation 
     assert.equal((await post(with3d(pkg(), 'TSHIRT', null))).status, 400, 'package without texture');
     assert.equal((await post(with3d(pkg(), 'JEANS'))).status, 400, 'package only for t-shirts');
     assert.equal((await post(with3d(pkg(), 'TSHIRT', Buffer.from('nope')))).status, 400, 'texture bytes are checked');
+    // long-sleeved top package (I-63): same points as the T-shirt, valid for shirts, hoodies and sweaters only
+    const okTop = await post(with3d(pkg({ category: 'top' }), 'SHIRT'));
+    assert.equal(okTop.status, 201, await okTop.clone().text());
+    assert.equal((await okTop.json()).garment3d.category, 'top');
+    for (const t of ['HOODIE', 'SWEATER']) assert.equal((await post(with3d(pkg({ category: 'top' }), t))).status, 201, `top package for ${t}`);
+    assert.equal((await post(with3d(pkg({ category: 'top' }), 'TSHIRT'))).status, 400, 'long-sleeve package not for a T-shirt');
+    assert.equal((await post(with3d(pkg(), 'SHIRT'))).status, 400, 'T-shirt package not for a shirt');
+    assert.equal((await post(with3d(pkg({ category: 'dress' }), 'SHIRT'))).status, 400, 'unknown category');
+    const userPts = await (await post(with3d(pkg({ category: 'top', pointsSource: 'user' }), 'HOODIE'))).json();
+    assert.equal(userPts.garment3d.pointsSource, 'user', 'points placed by the person are kept as such');
+    assert.equal(item3d.garment3d.pointsSource, 'auto', 'older packages default to estimator points');
+    assert.equal((await post(with3d(pkg({ category: 'top', pointsSource: 'robot' }), 'SHIRT'))).status, 400, 'unknown points source');
+    const topRows = await (await fetch(base + '/wardrobe', { headers: auth(a) })).json();
+    for (const r of topRows.filter((x) => x.garment3d?.category === 'top')) await fetch(base + '/wardrobe/' + r.id, { method: 'DELETE', headers: auth(a) });
     // trousers package (I-53): valid for PANTS and JEANS, rejected for a T-shirt and when malformed
     const pnames = ['waist_left', 'waist_right', 'crotch', 'hip_left', 'hip_right', 'hem_left_outer', 'hem_left_inner', 'hem_right_inner', 'hem_right_outer'];
     const ppkg = (over = {}, anchorsOver = {}) => ({
@@ -133,6 +147,7 @@ test('wardrobe CRUD is per-owner, validates input, and the admin recommendation 
     assert.equal((await post(with3d(ppkg(), 'TSHIRT'))).status, 400, 'trousers package not for a T-shirt');
     assert.equal((await post(with3d(ppkg({}, { seat: [] }), 'PANTS'))).status, 400, 'wrong number of seat rows');
     assert.equal((await post(with3d(ppkg({}, { rows: [] }), 'PANTS'))).status, 400, 'extra anchor field');
+    assert.equal((await post(with3d(ppkg({ pointsSource: 'user' }), 'PANTS'))).status, 400, 'no manual points for trousers yet');
     const pantsRows = await (await fetch(base + '/wardrobe', { headers: auth(a) })).json();
     for (const r of pantsRows.filter((x) => x.garment3d?.category === 'pants')) await fetch(base + '/wardrobe/' + r.id, { method: 'DELETE', headers: auth(a) });
 

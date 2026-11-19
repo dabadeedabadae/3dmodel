@@ -17,8 +17,9 @@ const POINTS = [
 type Pt = { x: number; y: number };
 export interface Garment3d {
   version: 1;
-  /** tshirt → figure top (I-51); pants → figure bottom, trousers and jeans (I-53) */
-  category: 'tshirt' | 'pants';
+  /** tshirt → figure top (I-51); top → long-sleeved top: shirt, hoodie, sweater (same points); pants → figure
+   *  bottom, trousers and jeans (I-53) */
+  category: 'tshirt' | 'top' | 'pants';
   anchors:
     | { width: number; height: number; points: Record<string, Pt>; rows: { left: Pt; right: Pt }[] }
     | { width: number; height: number; points: Record<string, Pt>; seat: { left: Pt; right: Pt }[]; legLeft: { outer: Pt; inner: Pt }[]; legRight: { inner: Pt; outer: Pt }[] };
@@ -28,6 +29,8 @@ export interface Garment3d {
   anchorIssues: string[];
   needsReview: boolean;
   provider: string;
+  /** who placed the points: the estimator or the person in the form (I-63); absent in older packages = 'auto' */
+  pointsSource: 'auto' | 'user';
 }
 
 const fail = (why: string): never => { throw new BadRequestException(`Пакет 3D-вещи отклонён: ${why}.`); };
@@ -38,7 +41,7 @@ export function parseGarment3d(raw: unknown): Garment3d {
   let j: unknown;
   try { j = JSON.parse(raw as string); } catch { fail('не JSON'); }
   if (!isObj(j)) return fail('не объект');
-  if (j.version !== 1 || (j.category !== 'tshirt' && j.category !== 'pants')) fail('неизвестная версия или категория');
+  if (j.version !== 1 || !['tshirt', 'top', 'pants'].includes(j.category as string)) fail('неизвестная версия или категория');
   const isPants = j.category === 'pants';
   const a = j.anchors;
   if (!isObj(a)) return fail('нет опорных точек');
@@ -75,12 +78,16 @@ export function parseGarment3d(raw: unknown): Garment3d {
   if (!Array.isArray(j.anchorIssues) || j.anchorIssues.length > 10 || !j.anchorIssues.every((s) => typeof s === 'string' && s.length <= 200)) fail('замечания');
   if (typeof j.needsReview !== 'boolean') fail('флаг проверки');
   if (typeof j.provider !== 'string' || j.provider.length > 120) fail('модель');
+  if (j.pointsSource !== undefined && j.pointsSource !== 'auto' && j.pointsSource !== 'user') fail('источник точек');
+  // the manual point editor exists for tops only; trousers points always come from the estimator
+  if (j.pointsSource === 'user' && isPants) fail('ручные точки — только для верха');
   return {
-    version: 1, category: isPants ? 'pants' : 'tshirt', anchors,
+    version: 1, category: j.category as Garment3d['category'], anchors,
     baseColor: (j.baseColor as string).toLowerCase(), maskQuality: j.maskQuality as Garment3d['maskQuality'],
     landmarkStatus: j.landmarkStatus as Garment3d['landmarkStatus'], anchorIssues: j.anchorIssues as string[],
     // the server never lets a package claim it is fine when its own statuses say otherwise
     needsReview: (j.needsReview as boolean) || j.landmarkStatus !== 'ok' || j.maskQuality !== 'ok' || (j.anchorIssues as string[]).length > 0,
     provider: j.provider as string,
+    pointsSource: (j.pointsSource as 'auto' | 'user' | undefined) ?? 'auto',
   };
 }

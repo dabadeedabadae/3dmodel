@@ -1002,6 +1002,14 @@ a.landing-secondary { font: 12px var(--font-mono), monospace; letter-spacing: .0
 
 /* ---------- On-device photo analysis (I-52) ---------- */
 .wardrobe-3d { position: absolute; right: 10px; bottom: 10px; padding: 5px 7px; border-radius: 5px; font: 500 10px var(--font-mono), monospace; background: var(--blue); color: #fff; }
+.point-editor { display: grid; gap: 12px; }
+.point-editor svg { width: 100%; max-height: 70vh; touch-action: none; background: #111; border-radius: 8px; }
+.point-editor circle { fill: #1f3ff0; stroke: #fff; stroke-width: 2; vector-effect: non-scaling-stroke; cursor: grab; }
+.point-editor circle.is-drag { fill: #ff7a1a; cursor: grabbing; }
+.point-editor-lines line { stroke: #fff; stroke-opacity: .75; stroke-width: 1.5; vector-effect: non-scaling-stroke; stroke-dasharray: 4 3; pointer-events: none; }
+.wardrobe-edit-points { display: block; margin-top: 8px; padding: 6px 10px; font-size: 13px; border: 1px solid var(--blue); color: var(--blue); background: transparent; border-radius: 6px; cursor: pointer; }
+.wardrobe-try { display: inline-block; margin-top: 8px; font-size: 13px; color: var(--blue); text-decoration: none; }
+.wardrobe-try:hover { text-decoration: underline; }
 .wardrobe-3d.is-review { background: #fff3e4; color: #9a6418; }
 .wardrobe-analysis { margin: 16px 0 4px; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--rule); background: #fff; font-size: 14px; line-height: 1.55; }
 .wardrobe-analysis.is-ok { border-color: #bfe6cf; background: #f2fbf6; }

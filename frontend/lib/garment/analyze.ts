@@ -27,11 +27,14 @@ interface PackageCommon {
   anchorIssues: string[];
   /** true when the points must be confirmed by a person before the print is trusted */
   needsReview: boolean;
+  /** who placed the points: the estimator, or the person after dragging them in the form (I-63) */
+  pointsSource?: 'auto' | 'user';
   provider: string;
 }
-/** photo → 3D package: a T-shirt (onto the figure's top) or trousers/jeans (onto its bottom) */
+/** photo → 3D package: a T-shirt or a long-sleeved top (shirt, hoodie, sweater — the same points, I-63) onto the
+ *  figure's top, or trousers/jeans onto its bottom */
 export type GarmentPackage =
-  | (PackageCommon & { category: 'tshirt'; anchors: PhotoAnchors })
+  | (PackageCommon & { category: 'tshirt' | 'top'; anchors: PhotoAnchors })
   | (PackageCommon & { category: 'pants'; anchors: PantsAnchors });
 
 export interface Analysis {
@@ -40,6 +43,8 @@ export interface Analysis {
   /** small preview: photo dimmed outside the mask, for the form */
   preview: string;
   ms: number;
+  /** tops only: what the point editor needs to recompute the anchors from points the person moved */
+  edit?: { mask: Uint8Array; width: number; height: number; points: Record<PhotoPointName, { x: number; y: number }>; backdrop: string };
 }
 
 type Ort = typeof import('onnxruntime-web/wasm');
@@ -104,13 +109,15 @@ async function renderOutputs(img: RasterImage, mask: Uint8Array, rgb: [number, n
   ctx.putImageData(tex, 0, 0);
   const texture = await new Promise<Blob>((res, rej) => canvas.toBlob((b) => (b ? res(b) : rej(new Error('texture encode failed'))), 'image/jpeg', 0.88));
   ctx.putImageData(prev, 0, 0);
+  const backdrop = canvas.toDataURL('image/jpeg', 0.8);
   ctx.fillStyle = '#1f3ff0';
   const r = Math.max(3, Math.round(Math.min(img.width, img.height) * 0.012));
   for (const p of points) { ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.fill(); }
-  return { texture, preview: canvas.toDataURL('image/jpeg', 0.8) };
+  return { texture, preview: canvas.toDataURL('image/jpeg', 0.8), backdrop };
 }
 
-export async function analyzeTShirtPhoto(file: Blob): Promise<Analysis> {
+/** Top photo (front view, sleeves away from the body) → package for the figure's top: T-shirt or long-sleeved top. */
+export async function analyzeTShirtPhoto(file: Blob, category: 'tshirt' | 'top' = 'tshirt'): Promise<Analysis> {
   const t0 = performance.now();
   const img = await toRaster(file);
   const { mask, quality } = await segment(img);
@@ -119,13 +126,31 @@ export async function analyzeTShirtPhoto(file: Blob): Promise<Analysis> {
   const anchors = anchorsFromLandmarks(points, mask, img.width, img.height);
   const issues = anchorIssues(anchors);
   const color = estimateBaseColor(img, mask);
-  const { texture, preview } = await renderOutputs(img, mask, color.rgb, Object.values(points));
+  const { texture, preview, backdrop } = await renderOutputs(img, mask, color.rgb, Object.values(points));
   return {
     pkg: {
-      version: 1, category: 'tshirt', anchors, baseColor: color.hex, maskQuality: quality, landmarkStatus: lm.status,
+      version: 1, category, anchors, baseColor: color.hex, maskQuality: quality, landmarkStatus: lm.status,
       anchorIssues: issues, needsReview: lm.status !== 'ok' || issues.length > 0 || quality !== 'ok', provider: MASK_PROVIDER,
+      pointsSource: 'auto',
     },
     texture, preview, ms: Math.round(performance.now() - t0),
+    edit: { mask, width: img.width, height: img.height, points, backdrop },
+  };
+}
+
+/**
+ * The person moved the points in the form: the anchors (edge rows from the mask) and their plausibility are
+ * recomputed from those points exactly as from estimated ones. The points are now the person's ('user'), so the
+ * estimator's 'uncertain' no longer applies; the plausibility checks and the mask status still do.
+ */
+export function withUserPoints(a: Analysis, points: Record<PhotoPointName, { x: number; y: number }>): Analysis {
+  if (!a.edit || a.pkg.category === 'pants') return a;
+  const anchors = anchorsFromLandmarks(points, a.edit.mask, a.edit.width, a.edit.height);
+  const issues = anchorIssues(anchors);
+  return {
+    ...a,
+    pkg: { ...a.pkg, anchors, landmarkStatus: 'ok', anchorIssues: issues, needsReview: issues.length > 0 || a.pkg.maskQuality !== 'ok', pointsSource: 'user' },
+    edit: { ...a.edit, points },
   };
 }
 
