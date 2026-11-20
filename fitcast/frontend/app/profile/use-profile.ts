@@ -20,7 +20,7 @@ export function useProfile(allowAdmin = false) {
     }).catch((err: unknown) => {
       if (!active) return;
       if (err instanceof ApiError && err.status === 401) { clearToken(); router.replace('/login'); return; }
-      setError('Не удалось загрузить аккаунт. Проверьте подключение к серверу.'); setLoading(false);
+      setError('Could not load your account. Check your connection to the server.'); setLoading(false);
     });
     return () => { active = false; };
   }, [router, allowAdmin, attempt]);

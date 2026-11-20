@@ -52,21 +52,21 @@ test('admin endpoints enforce authentication, current database role, and safe re
     });
     assert.equal(otherRegistration.status, 201);
     const other = await otherRegistration.json();
-    const updatedResponse = await patch({ name: '  Тимур  ', city: '  Алматы ', bio: 'Люблю casual', isAdmin: true, id: other.user.id, email: otherEmail });
+    const updatedResponse = await patch({ name: '  Timur  ', city: '  London ', bio: 'Love casual', isAdmin: true, id: other.user.id, email: otherEmail });
     assert.equal(updatedResponse.status, 200);
     const updated = await updatedResponse.json();
-    assert.equal(updated.name, 'Тимур'); assert.equal(updated.city, 'Алматы');
+    assert.equal(updated.name, 'Timur'); assert.equal(updated.city, 'London');
     assert.equal(updated.email, email); assert.equal(updated.isAdmin, false);
     assert.ok(!('passwordHash' in updated));
     const reread = await (await get('/users/me', accessToken)).json();
-    assert.equal(reread.bio, 'Люблю casual');
+    assert.equal(reread.bio, 'Love casual');
     const untouched = await (await get('/users/me', other.accessToken)).json();
     assert.equal(untouched.name, null);
     for (const body of [{ name: 'x'.repeat(81) }, { city: 'x'.repeat(101) }, { bio: 'x'.repeat(301) }, { name: 123 }, { city: {} }]) {
       assert.equal((await patch(body)).status, 400);
     }
     const cleared = await (await patch({ bio: '   ' })).json();
-    assert.equal(cleared.bio, null); assert.equal(cleared.name, 'Тимур');
+    assert.equal(cleared.bio, null); assert.equal(cleared.name, 'Timur');
     await prisma.wardrobeItem.create({ data: { userId: updated.id, type: 'TSHIRT', dominantColor: 'blue', fitTag: 'GOOD', imageUrl: 'https://example.com/test.jpg' } });
     const counts = await (await get('/users/me', accessToken)).json();
     assert.equal(counts._count.wardrobeItems, 1);
@@ -79,7 +79,7 @@ test('admin endpoints enforce authentication, current database role, and safe re
     assert.equal((await passwordPatch({ currentPassword: 'wrong-password', newPassword: 'ReplacementPass123!' })).status, 400);
     assert.equal((await passwordPatch({ currentPassword: password, newPassword: 'short' })).status, 400);
     assert.equal((await passwordPatch({ currentPassword: password, newPassword: password })).status, 400);
-    assert.equal((await passwordPatch({ currentPassword: password, newPassword: 'Ж'.repeat(40) })).status, 400);
+    assert.equal((await passwordPatch({ currentPassword: password, newPassword: 'é'.repeat(40) })).status, 400);
     assert.equal((await get('/users/me', other.accessToken)).status, 200);
     const newPassword = randomUUID();
     const changed = await passwordPatch({ currentPassword: password, newPassword, id: updated.id, userId: updated.id });

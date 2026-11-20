@@ -25,6 +25,6 @@ export default function HomePage() {
   }, [router, attempt]);
   if (guest) return <Landing />;
   return <div className="container"><div className="card"><h1>FitCast</h1>
-    {error ? <><p role="alert">Не удалось подключиться к серверу.</p><button className="secondary" onClick={() => setAttempt((value) => value + 1)}>Повторить</button></> : <p role="status">Загрузка…</p>}
+    {error ? <><p role="alert">Could not connect to the server.</p><button className="secondary" onClick={() => setAttempt((value) => value + 1)}>Try again</button></> : <p role="status">Loading…</p>}
   </div></div>;
 }

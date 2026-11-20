@@ -174,7 +174,7 @@ export function estimateTShirtLandmarks(mask: Uint8Array, width: number, height:
   if (full.length < 20) {
     const empty = {} as Record<TShirtLandmarkName, Landmark>;
     for (const n of TSHIRT_LANDMARK_NAMES) empty[n] = mk(n, null);
-    return { points: empty, contour: full, hull: [], status: 'uncertain', checks: [{ name: 'contour', pass: false, detail: 'маска пуста или слишком мала' }] };
+    return { points: empty, contour: full, hull: [], status: 'uncertain', checks: [{ name: 'contour', pass: false, detail: 'mask is empty or too small' }] };
   }
   // subsample contour for speed (keep every k-th point, but at least ~600 points)
   const step = Math.max(1, Math.floor(full.length / 1200));
@@ -342,18 +342,18 @@ export function estimateTShirtLandmarks(mask: Uint8Array, width: number, height:
   // --- sanity checks
   const ok = (name: string, pass: boolean, detail: string) => checks.push({ name, pass, detail });
   const neckW = neckL && neckR ? Math.hypot(neckR.x - neckL.x, neckR.y - neckL.y) : 0;
-  ok('neck_sides_found', !!neckL && !!neckR && neckW > 0.08 * W && neckW < 0.6 * W, neckL && neckR ? `ширина горловины ${(neckW / W).toFixed(2)} ширины вещи${neckDefaulted ? ' — ЗНАЧЕНИЕ ПО УМОЛЧАНИЮ (края воротника не видны на силуэте), проверьте точки' : ''}` : 'стороны горловины не найдены');
-  ok('neck_bottom_measured', neckMeasured, neckMeasured ? 'низ выреза виден на силуэте' : 'низ выреза не виден на силуэте (воротник сзади выше) — поставлено значение по умолчанию, проверьте точку');
-  ok('armpits_found', !!armL && !!armR, armL && armR ? `подмышки на y=${armL.y},${armR.y}` : 'не найдены');
+  ok('neck_sides_found', !!neckL && !!neckR && neckW > 0.08 * W && neckW < 0.6 * W, neckL && neckR ? `neckline width is ${(neckW / W).toFixed(2)} of garment width${neckDefaulted ? ' (DEFAULT VALUE: collar edges not visible in the silhouette), check the points' : ''}` : 'neckline sides not found');
+  ok('neck_bottom_measured', neckMeasured, neckMeasured ? 'neckline bottom is visible in the silhouette' : 'neckline bottom is not visible in the silhouette (back collar is higher); a default was used, check the point');
+  ok('armpits_found', !!armL && !!armR, armL && armR ? `armpits at y=${armL.y},${armR.y}` : 'not found');
   // checks[2..] indices used below
-  ok('armpits_below_shoulders', !!armL && !!armR && !!shoulderL && !!shoulderR && armL.y > shoulderL.y && armR.y > shoulderR.y, 'подмышки ниже плеч');
-  ok('armpits_above_hem', !!armL && !!armR && armL.y < hemL.y - 0.2 * H && armR.y < hemR.y - 0.2 * H, 'подмышки заметно выше подола');
+  ok('armpits_below_shoulders', !!armL && !!armR && !!shoulderL && !!shoulderR && armL.y > shoulderL.y && armR.y > shoulderR.y, 'armpits are below the shoulders');
+  ok('armpits_above_hem', !!armL && !!armR && armL.y < hemL.y - 0.2 * H && armR.y < hemR.y - 0.2 * H, 'armpits are well above the hem');
   const symm = armL && armR ? Math.abs(armL.y - armR.y) / H : 1;
-  ok('armpits_symmetric', symm < 0.08, `разница высоты подмышек ${(symm * 100).toFixed(1)} % высоты`);
+  ok('armpits_symmetric', symm < 0.08, `armpit height difference is ${(symm * 100).toFixed(1)}% of height`);
   const sleeveL = shoulderL ? Math.hypot(tipL.x - shoulderL.x, tipL.y - shoulderL.y) : 0;
   const sleeveR = shoulderR ? Math.hypot(tipR.x - shoulderR.x, tipR.y - shoulderR.y) : 0;
-  ok('sleeves_similar', sleeveL > 0 && sleeveR > 0 && Math.abs(sleeveL - sleeveR) / Math.max(sleeveL, sleeveR) < 0.25, `длины рукавов ${sleeveL.toFixed(0)} / ${sleeveR.toFixed(0)} px`);
-  ok('cuffs_outside_body', !!armL && !!armR && tipL.x < armL.x - 0.05 * W && tipR.x > armR.x + 0.05 * W, 'манжеты снаружи от подмышек');
+  ok('sleeves_similar', sleeveL > 0 && sleeveR > 0 && Math.abs(sleeveL - sleeveR) / Math.max(sleeveL, sleeveR) < 0.25, `sleeve lengths ${sleeveL.toFixed(0)} / ${sleeveR.toFixed(0)} px`);
+  ok('cuffs_outside_body', !!armL && !!armR && tipL.x < armL.x - 0.05 * W && tipR.x > armR.x + 0.05 * W, 'cuffs are outside the armpits');
 
   const status: LandmarkEstimate['status'] = checks.every((c) => c.pass || c.name === 'neck_bottom_measured') ? 'ok' : 'uncertain';
   const st = (pass: boolean): Landmark['status'] => (pass ? 'ok' : 'uncertain');

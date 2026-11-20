@@ -10,11 +10,11 @@ import RecommendationBench from './RecommendationBench';
 
 type Section = 'overview' | 'users' | 'wardrobe' | 'outfits' | 'recommendations';
 const SECTIONS: { id: Section; label: string; description: string }[] = [
-  { id: 'overview', label: 'Обзор', description: 'Основные показатели и последние регистрации' },
-  { id: 'users', label: 'Пользователи', description: 'Аккаунты, роли и активность пользователей' },
-  { id: 'wardrobe', label: 'Гардероб', description: 'Вещи, добавленные пользователями FitCast' },
-  { id: 'outfits', label: 'Образы', description: 'Сохранённые образы и их состав' },
-  { id: 'recommendations', label: 'Тест рекомендаций', description: 'Запрос к сервису рекомендаций по гардеробу выбранного пользователя' },
+  { id: 'overview', label: 'Overview', description: 'Key metrics and recent sign-ups' },
+  { id: 'users', label: 'Users', description: 'Accounts, roles and user activity' },
+  { id: 'wardrobe', label: 'Wardrobe', description: 'Items added by FitCast users' },
+  { id: 'outfits', label: 'Outfits', description: 'Saved outfits and what they contain' },
+  { id: 'recommendations', label: 'Recommendation test', description: "Query the recommendation service with the selected user's wardrobe" },
 ];
 
 function Icon({ name }: { name: Section | 'logout' | 'arrow' | 'refresh' | 'search' }) {
@@ -32,7 +32,7 @@ function Icon({ name }: { name: Section | 'logout' | 'arrow' | 'refresh' | 'sear
   return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
 }
 
-const date = (value: string) => new Date(value).toLocaleDateString('ru-RU');
+const date = (value: string) => new Date(value).toLocaleDateString('en-US');
 const label = (value: string) => value.replaceAll('_', ' ').toLowerCase();
 
 export default function AdminPage() {
@@ -77,7 +77,7 @@ export default function AdminPage() {
       }
     }
     load().catch((err: unknown) => {
-      if (!controller.signal.aborted) setError({ message: err instanceof Error ? err.message : 'Не удалось загрузить данные.', status: err instanceof ApiError ? err.status : undefined });
+      if (!controller.signal.aborted) setError({ message: err instanceof Error ? err.message : 'Could not load data.', status: err instanceof ApiError ? err.status : undefined });
     }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [section, attempt]);
@@ -90,52 +90,52 @@ export default function AdminPage() {
   const filteredOutfits = outfits.filter((item) => `${item.name} ${item.user.email} ${item.eventType}`.toLowerCase().includes(search));
 
   function userTable(rows: AdminUser[]) {
-    return <div className="dash-table-scroll"><table><caption className="dash-sr-only">Пользователи FitCast</caption>
-      <thead><tr><th scope="col">Пользователь</th><th scope="col">Роль</th><th scope="col">Регистрация</th><th scope="col">Вещи</th><th scope="col">Образы</th></tr></thead>
+    return <div className="dash-table-scroll"><table><caption className="dash-sr-only">FitCast users</caption>
+      <thead><tr><th scope="col">User</th><th scope="col">Role</th><th scope="col">Joined</th><th scope="col">Items</th><th scope="col">Outfits</th></tr></thead>
       <tbody>{rows.length ? rows.map((user) => <tr key={user.id}>
         <td><div className="dash-person"><span className="dash-avatar">{user.email.slice(0, 1).toUpperCase()}</span><span>{user.email}</span></div></td>
-        <td><span className={`dash-badge ${user.isAdmin ? 'is-admin' : ''}`}>{user.isAdmin ? 'Администратор' : 'Пользователь'}</span></td>
+        <td><span className={`dash-badge ${user.isAdmin ? 'is-admin' : ''}`}>{user.isAdmin ? 'Admin' : 'User'}</span></td>
         <td>{date(user.createdAt)}</td><td>{user._count.wardrobeItems}</td><td>{user._count.savedOutfits}</td>
-      </tr>) : <tr><td colSpan={5} className="dash-empty">{search ? 'По вашему запросу ничего не найдено.' : 'Пользователей пока нет.'}</td></tr>}</tbody>
+      </tr>) : <tr><td colSpan={5} className="dash-empty">{search ? 'Nothing matches your search.' : 'No users yet.'}</td></tr>}</tbody>
     </table></div>;
   }
 
   return <div className="dash-shell">
     <aside className="dash-sidebar">
       <Link href="/admin" className="dash-brand">FitCast<span>ADMIN PANEL</span></Link>
-      <div className="dash-nav-label">РАБОЧЕЕ ПРОСТРАНСТВО</div>
-      <nav aria-label="Разделы админки">{SECTIONS.map((item) => <button key={item.id} type="button" className={section === item.id ? 'is-active' : ''} aria-current={section === item.id ? 'page' : undefined} onClick={() => changeSection(item.id)}><Icon name={item.id} />{item.label}</button>)}</nav>
+      <div className="dash-nav-label">WORKSPACE</div>
+      <nav aria-label="Admin sections">{SECTIONS.map((item) => <button key={item.id} type="button" className={section === item.id ? 'is-active' : ''} aria-current={section === item.id ? 'page' : undefined} onClick={() => changeSection(item.id)}><Icon name={item.id} />{item.label}</button>)}</nav>
       <div className="dash-sidebar-bottom">
-        <Link href="/"><Icon name="arrow" />Вернуться на сайт</Link>
-        <button onClick={logout}><Icon name="logout" />Выйти из аккаунта</button>
-        <div className="dash-sidebar-note">FitCast · Панель управления</div>
+        <Link href="/"><Icon name="arrow" />Back to site</Link>
+        <button onClick={logout}><Icon name="logout" />Sign out</button>
+        <div className="dash-sidebar-note">FitCast · Dashboard</div>
       </div>
     </aside>
     <div className="dash-workspace">
-      <header className="dash-topbar"><span>Панель управления <span className="dash-slash">/</span> <strong>{current.label}</strong></span>
-        <div className="dash-account"><span className="dash-avatar">{email ? email[0].toUpperCase() : 'A'}</span><div><strong>{email || 'Аккаунт'}</strong><small>Администрирование</small></div></div>
+      <header className="dash-topbar"><span>Dashboard <span className="dash-slash">/</span> <strong>{current.label}</strong></span>
+        <div className="dash-account"><span className="dash-avatar">{email ? email[0].toUpperCase() : 'A'}</span><div><strong>{email || 'Account'}</strong><small>Administrator</small></div></div>
       </header>
       <main className="dash-content">
         <div className="dash-title-row"><div><h1>{current.label}</h1><p>{current.description}</p></div>
-          <button className="dash-refresh" onClick={() => setAttempt((value) => value + 1)} disabled={loading}><Icon name="refresh" />Обновить</button></div>
-        {loading && <div className="dash-loading" role="status">Загрузка данных…</div>}
-        {error && <section className="dash-panel dash-error" role="alert"><h2>{error.status === 403 ? 'Доступ ограничен' : error.status === 401 ? 'Войдите в аккаунт' : 'Не удалось загрузить данные'}</h2><p>{error.message}</p>{error.status === 401 && <Link href="/login">Перейти ко входу →</Link>}{error.status !== 401 && error.status !== 403 && <button className="dash-refresh" onClick={() => setAttempt((value) => value + 1)}>Повторить</button>}</section>}
+          <button className="dash-refresh" onClick={() => setAttempt((value) => value + 1)} disabled={loading}><Icon name="refresh" />Refresh</button></div>
+        {loading && <div className="dash-loading" role="status">Loading data…</div>}
+        {error && <section className="dash-panel dash-error" role="alert"><h2>{error.status === 403 ? 'Access denied' : error.status === 401 ? 'Please sign in' : 'Could not load data'}</h2><p>{error.message}</p>{error.status === 401 && <Link href="/login">Go to sign in →</Link>}{error.status !== 401 && error.status !== 403 && <button className="dash-refresh" onClick={() => setAttempt((value) => value + 1)}>Try again</button>}</section>}
         {!loading && !error && <>
-          {section === 'overview' && overview && <section className="dash-stats" aria-label="Статистика">{([
-            ['users', 'Пользователи', overview.users, 'Зарегистрировано аккаунтов'],
-            ['wardrobe', 'Вещи в гардеробе', overview.wardrobeItems, 'Добавлено пользователями'],
-            ['outfits', 'Сохранённые образы', overview.savedOutfits, 'Собрано в приложении'],
-          ] as const).map(([id, title, count, hint]) => <button key={id} className="dash-stat" onClick={() => changeSection(id)}><span className="dash-stat-top">{title}<span className={`dash-stat-icon ${id}`}><Icon name={id} /></span></span><strong>{count.toLocaleString('ru-RU')}</strong><span className="dash-stat-hint">{hint}</span></button>)}</section>}
+          {section === 'overview' && overview && <section className="dash-stats" aria-label="Statistics">{([
+            ['users', 'Users', overview.users, 'Registered accounts'],
+            ['wardrobe', 'Wardrobe items', overview.wardrobeItems, 'Added by users'],
+            ['outfits', 'Saved outfits', overview.savedOutfits, 'Put together in the app'],
+          ] as const).map(([id, title, count, hint]) => <button key={id} className="dash-stat" onClick={() => changeSection(id)}><span className="dash-stat-top">{title}<span className={`dash-stat-icon ${id}`}><Icon name={id} /></span></span><strong>{count.toLocaleString('en-US')}</strong><span className="dash-stat-hint">{hint}</span></button>)}</section>}
           {section === 'recommendations' && <RecommendationBench users={users} />}
           {section !== 'recommendations' && <section className="dash-panel">
-            <div className="dash-panel-heading"><div><h2>{section === 'overview' ? 'Последние пользователи' : current.label}</h2><p>{section === 'overview' ? 'Последние 5 зарегистрированных аккаунтов' : 'Последние 100 записей · Режим просмотра'}</p></div>
-              {section === 'overview' ? <button className="dash-text-button" onClick={() => changeSection('users')}>Все пользователи →</button> : <label className="dash-search"><Icon name="search" /><input aria-label="Поиск в текущем списке" placeholder="Поиск в списке…" value={query} onChange={(event) => setQuery(event.target.value)} /></label>}
+            <div className="dash-panel-heading"><div><h2>{section === 'overview' ? 'Recent users' : current.label}</h2><p>{section === 'overview' ? 'The 5 most recently registered accounts' : 'Latest 100 records · Read-only'}</p></div>
+              {section === 'overview' ? <button className="dash-text-button" onClick={() => changeSection('users')}>All users →</button> : <label className="dash-search"><Icon name="search" /><input aria-label="Search the current list" placeholder="Search list…" value={query} onChange={(event) => setQuery(event.target.value)} /></label>}
             </div>
             {(section === 'overview' || section === 'users') && userTable(section === 'overview' ? users.slice(0, 5) : filteredUsers)}
-            {section === 'wardrobe' && <div className="dash-table-scroll"><table><caption className="dash-sr-only">Вещи пользователей</caption><thead><tr><th scope="col">Тип</th><th scope="col">Владелец</th><th scope="col">Цвет</th><th scope="col">Посадка</th><th scope="col">Добавлено</th></tr></thead><tbody>{filteredWardrobe.length ? filteredWardrobe.map((item) => <tr key={item.id}><td><div className="dash-person">{/* eslint-disable-next-line @next/next/no-img-element -- API upload */}<img className="dash-thumb" src={mediaUrl(item.imageUrl)} alt="" loading="lazy" /><span>{GARMENT_LABELS[item.type as GarmentType] ?? label(item.type)}</span></div></td><td>{item.user.email}</td><td><span className="dash-color"><i style={{ background: colorById(item.dominantColor)?.hex ?? '#ccc' }} aria-hidden />{colorById(item.dominantColor)?.label ?? item.dominantColor}</span></td><td>{FIT_LABELS[item.fitTag as FitTag] ?? label(item.fitTag)}</td><td>{date(item.createdAt)}</td></tr>) : <tr><td colSpan={5} className="dash-empty"><Icon name="wardrobe" /><strong>{search ? 'Ничего не найдено' : 'Гардероб пока пуст'}</strong><span>{search ? 'Попробуйте другой запрос.' : 'Здесь появятся вещи, добавленные пользователями.'}</span></td></tr>}</tbody></table></div>}
-            {section === 'outfits' && <div className="dash-table-scroll"><table><caption className="dash-sr-only">Сохранённые образы</caption><thead><tr><th scope="col">Название</th><th scope="col">Владелец</th><th scope="col">Событие</th><th scope="col">Вещи</th><th scope="col">Создано</th></tr></thead><tbody>{filteredOutfits.length ? filteredOutfits.map((item) => <tr key={item.id}><td>{item.name}</td><td>{item.user.email}</td><td className="dash-capitalize">{label(item.eventType)}</td><td>{item._count.items}</td><td>{date(item.createdAt)}</td></tr>) : <tr><td colSpan={5} className="dash-empty"><Icon name="outfits" /><strong>{search ? 'Ничего не найдено' : 'Образов пока нет'}</strong><span>{search ? 'Попробуйте другой запрос.' : 'Здесь появятся сохранённые образы пользователей.'}</span></td></tr>}</tbody></table></div>}
+            {section === 'wardrobe' && <div className="dash-table-scroll"><table><caption className="dash-sr-only">User items</caption><thead><tr><th scope="col">Type</th><th scope="col">Owner</th><th scope="col">Color</th><th scope="col">Fit</th><th scope="col">Added</th></tr></thead><tbody>{filteredWardrobe.length ? filteredWardrobe.map((item) => <tr key={item.id}><td><div className="dash-person">{/* eslint-disable-next-line @next/next/no-img-element -- API upload */}<img className="dash-thumb" src={mediaUrl(item.imageUrl)} alt="" loading="lazy" /><span>{GARMENT_LABELS[item.type as GarmentType] ?? label(item.type)}</span></div></td><td>{item.user.email}</td><td><span className="dash-color"><i style={{ background: colorById(item.dominantColor)?.hex ?? '#ccc' }} aria-hidden />{colorById(item.dominantColor)?.label ?? item.dominantColor}</span></td><td>{FIT_LABELS[item.fitTag as FitTag] ?? label(item.fitTag)}</td><td>{date(item.createdAt)}</td></tr>) : <tr><td colSpan={5} className="dash-empty"><Icon name="wardrobe" /><strong>{search ? 'Nothing found' : 'The wardrobe is empty'}</strong><span>{search ? 'Try a different search.' : 'Items added by users will show up here.'}</span></td></tr>}</tbody></table></div>}
+            {section === 'outfits' && <div className="dash-table-scroll"><table><caption className="dash-sr-only">Saved outfits</caption><thead><tr><th scope="col">Name</th><th scope="col">Owner</th><th scope="col">Occasion</th><th scope="col">Items</th><th scope="col">Created</th></tr></thead><tbody>{filteredOutfits.length ? filteredOutfits.map((item) => <tr key={item.id}><td>{item.name}</td><td>{item.user.email}</td><td className="dash-capitalize">{label(item.eventType)}</td><td>{item._count.items}</td><td>{date(item.createdAt)}</td></tr>) : <tr><td colSpan={5} className="dash-empty"><Icon name="outfits" /><strong>{search ? 'Nothing found' : 'No outfits yet'}</strong><span>{search ? 'Try a different search.' : 'Outfits saved by users will show up here.'}</span></td></tr>}</tbody></table></div>}
           </section>}
-          <p className="dash-footnote">Данные FitCast · Доступ только для администраторов</p>
+          <p className="dash-footnote">FitCast data · Admins only</p>
         </>}
       </main>
     </div>

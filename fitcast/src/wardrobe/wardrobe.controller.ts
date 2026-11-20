@@ -53,17 +53,17 @@ export class WardrobeController {
   ) {
     const file = files.image?.[0], tex = files.texture?.[0];
     const kind = file ? sniff(file.buffer) : null;
-    if (!file || !kind) throw new BadRequestException('Добавьте фото вещи (JPEG, PNG или WebP, до 8 МБ).');
-    if (!!tex !== (garment3dRaw !== undefined)) throw new BadRequestException('Текстура и пакет 3D-вещи передаются вместе.');
+    if (!file || !kind) throw new BadRequestException('Add a photo of the item (JPEG, PNG or WebP, up to 8 MB).');
+    if (!!tex !== (garment3dRaw !== undefined)) throw new BadRequestException('The texture and the 3D garment package must be sent together.');
     const garment3d = garment3dRaw !== undefined ? parseGarment3d(garment3dRaw) : null;
     // a package describes one kind of garment: a T-shirt package only for T-shirts, a long-sleeved top package for
     // shirts, hoodies and sweaters, a trousers package for trousers and jeans (I-53, I-63)
     const PACKAGE_TYPES: Record<string, string[]> = { tshirt: ['TSHIRT'], top: ['SHIRT', 'HOODIE', 'SWEATER'], pants: ['PANTS', 'JEANS'] };
     if (garment3d && !PACKAGE_TYPES[garment3d.category]!.includes(dto.type)) {
-      throw new BadRequestException('Пакет 3D-вещи не подходит к типу вещи: фото футболки — только для футболок, фото верха с длинным рукавом — для рубашек, худи и свитеров, фото брюк — для брюк и джинсов.');
+      throw new BadRequestException('The 3D garment package does not match the item type: a T-shirt photo is only for T-shirts, a long-sleeve top photo is for shirts, hoodies and sweaters, and a pants photo is for pants and jeans.');
     }
     const texKind = tex ? sniff(tex.buffer) : null;
-    if (tex && !texKind) throw new BadRequestException('Текстура должна быть JPEG, PNG или WebP.');
+    if (tex && !texKind) throw new BadRequestException('The texture must be JPEG, PNG or WebP.');
     // Random names, extension from the detected content type — never from the client's filename.
     const saved: string[] = [];
     const save = async (buf: Buffer, k: string) => {

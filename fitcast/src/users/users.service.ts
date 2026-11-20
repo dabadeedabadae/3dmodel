@@ -18,21 +18,21 @@ export class UsersService {
     const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { passwordHash: true } });
     if (!user) throw new NotFoundException('User not found');
     if (!await bcrypt.compare(dto.currentPassword, user.passwordHash)) {
-      throw new BadRequestException('Текущий пароль указан неверно.');
+      throw new BadRequestException('The current password is incorrect.');
     }
     if (Buffer.byteLength(dto.newPassword, 'utf8') > 72) {
-      throw new BadRequestException('Новый пароль должен занимать не более 72 байт UTF-8.');
+      throw new BadRequestException('The new password must be at most 72 bytes of UTF-8.');
     }
     if (await bcrypt.compare(dto.newPassword, user.passwordHash)) {
-      throw new BadRequestException('Новый пароль должен отличаться от текущего.');
+      throw new BadRequestException('The new password must be different from the current one.');
     }
     const passwordHash = await bcrypt.hash(dto.newPassword, 10);
     const result = await this.prisma.user.updateMany({
       where: { id: userId, passwordHash: user.passwordHash },
       data: { passwordHash, sessionVersion: { increment: 1 } },
     });
-    if (!result.count) throw new BadRequestException('Пароль уже изменён. Войдите снова.');
-    return { message: 'Пароль изменён. Войдите в аккаунт заново.' };
+    if (!result.count) throw new BadRequestException('The password has already been changed. Please sign in again.');
+    return { message: 'Password changed. Please sign in again.' };
   }
 
   async getProfile(userId: string) {

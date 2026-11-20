@@ -1,34 +1,34 @@
 import type { EventType, FitTag, GarmentType, Precipitation } from './api';
 
 export const GARMENT_LABELS: Record<GarmentType, string> = {
-  TSHIRT: 'Футболка', SHIRT: 'Рубашка', JACKET: 'Куртка', COAT: 'Пальто', SWEATER: 'Свитер',
-  HOODIE: 'Худи', PANTS: 'Брюки', JEANS: 'Джинсы', SHORTS: 'Шорты', SKIRT: 'Юбка',
-  DRESS: 'Платье', SHOES: 'Обувь', ACCESSORY: 'Аксессуар',
+  TSHIRT: 'T-shirt', SHIRT: 'Shirt', JACKET: 'Jacket', COAT: 'Coat', SWEATER: 'Sweater',
+  HOODIE: 'Hoodie', PANTS: 'Pants', JEANS: 'Jeans', SHORTS: 'Shorts', SKIRT: 'Skirt',
+  DRESS: 'Dress', SHOES: 'Shoes', ACCESSORY: 'Accessory',
 };
 
-export const FIT_LABELS: Record<FitTag, string> = { GOOD: 'Сидит хорошо', TIGHT: 'Жмёт', LOOSE: 'Великовато' };
+export const FIT_LABELS: Record<FitTag, string> = { GOOD: 'Fits well', TIGHT: 'Too tight', LOOSE: 'Too loose' };
 
 export const EVENT_LABELS: Record<EventType, string> = {
-  CASUAL: 'Повседневное', GYM: 'Спортзал', BUSINESS: 'Деловая встреча', FORMAL: 'Торжество', OUTDOOR: 'На природе',
+  CASUAL: 'Casual', GYM: 'Gym', BUSINESS: 'Business meeting', FORMAL: 'Formal event', OUTDOOR: 'Outdoors',
 };
 
-export const PRECIPITATION_LABELS: Record<Precipitation, string> = { NONE: 'Без осадков', RAIN: 'Дождь', SNOW: 'Снег', MIXED: 'Дождь со снегом' };
+export const PRECIPITATION_LABELS: Record<Precipitation, string> = { NONE: 'No precipitation', RAIN: 'Rain', SNOW: 'Snow', MIXED: 'Rain and snow' };
 
 /** The 13-colour palette of the recommendation contract, with display values. */
 export const COLORS: { id: string; label: string; hex: string }[] = [
-  { id: 'black', label: 'Чёрный', hex: '#1b1b1f' },
-  { id: 'white', label: 'Белый', hex: '#f4f4f2' },
-  { id: 'gray', label: 'Серый', hex: '#8d9097' },
-  { id: 'beige', label: 'Бежевый', hex: '#d8c3a0' },
-  { id: 'brown', label: 'Коричневый', hex: '#7a5134' },
-  { id: 'red', label: 'Красный', hex: '#c62f35' },
-  { id: 'orange', label: 'Оранжевый', hex: '#e57a2c' },
-  { id: 'yellow', label: 'Жёлтый', hex: '#e8c53a' },
-  { id: 'green', label: 'Зелёный', hex: '#3f8a4c' },
-  { id: 'blue', label: 'Синий', hex: '#3a6fd1' },
-  { id: 'navy', label: 'Тёмно-синий', hex: '#1f2f5c' },
-  { id: 'purple', label: 'Фиолетовый', hex: '#7b4bb3' },
-  { id: 'pink', label: 'Розовый', hex: '#e48fb0' },
+  { id: 'black', label: 'Black', hex: '#1b1b1f' },
+  { id: 'white', label: 'White', hex: '#f4f4f2' },
+  { id: 'gray', label: 'Gray', hex: '#8d9097' },
+  { id: 'beige', label: 'Beige', hex: '#d8c3a0' },
+  { id: 'brown', label: 'Brown', hex: '#7a5134' },
+  { id: 'red', label: 'Red', hex: '#c62f35' },
+  { id: 'orange', label: 'Orange', hex: '#e57a2c' },
+  { id: 'yellow', label: 'Yellow', hex: '#e8c53a' },
+  { id: 'green', label: 'Green', hex: '#3f8a4c' },
+  { id: 'blue', label: 'Blue', hex: '#3a6fd1' },
+  { id: 'navy', label: 'Navy', hex: '#1f2f5c' },
+  { id: 'purple', label: 'Purple', hex: '#7b4bb3' },
+  { id: 'pink', label: 'Pink', hex: '#e48fb0' },
 ];
 export const colorById = (id: string) => COLORS.find((c) => c.id === id);
 

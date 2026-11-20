@@ -11,23 +11,23 @@ const pixel = VT323({
 
 const mono = IBM_Plex_Mono({
   weight: ['400', '500'],
-  subsets: ['latin', 'cyrillic'],
+  subsets: ['latin'],
   variable: '--font-mono',
 });
 
 const serif = Source_Serif_4({
-  subsets: ['latin', 'cyrillic'],
+  subsets: ['latin'],
   variable: '--font-serif',
 });
 
 export const metadata: Metadata = {
   title: 'FitCast',
-  description: 'FitCast — цифровой гардероб: сфотографируйте вещь, получите её 3D-копию и образ под погоду и повод.',
+  description: 'FitCast is a digital wardrobe: photograph a garment, get a 3D copy of it, and get outfits for the weather and occasion.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${pixel.variable} ${mono.variable} ${serif.variable}`}>
+    <html lang="en" className={`${pixel.variable} ${mono.variable} ${serif.variable}`}>
       <body>
         <AppShell>{children}</AppShell>
       </body>
