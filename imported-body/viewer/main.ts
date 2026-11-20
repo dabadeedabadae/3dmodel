@@ -119,7 +119,7 @@ function rebuild() {
   g.computeBoundingSphere();
   if (wf) { scene.remove(wf); wf.geometry.dispose(); wf = null; }
   if (wire) { wf = new THREE.LineSegments(new THREE.WireframeGeometry(g), new THREE.LineBasicMaterial({ color: 0x33384a, transparent: true, opacity: 0.35 })); scene.add(wf); }
-  last = measureImported(asset, measureOn);
+  last = measureImported(asset, measureOn, mode);
   if (!headless) readout(poseNote);
   placeCam();
   renderer.render(scene, cam);

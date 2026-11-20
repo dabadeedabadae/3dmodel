@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ApiError, GarmentType, WardrobeItem, getToken, getWardrobe, mediaUrl } from '../../lib/api';
 import { COLORS, GARMENT_LABELS, colorById } from '../../lib/labels';
-import { WEIGHT_NAMES, ZERO, type Weights } from '../../lib/figure/deform';
+import { GAIN, WEIGHT_NAMES, ZERO, type Weights } from '../../lib/figure/deform';
 import { listFigures, loadFigure, type Figure, type FigureEntry } from '../../lib/figure/figure';
+import { BODY_TYPES, describeZ, pinFromSlider, solveShape, type Girth, type ShapeState } from '../../lib/figure/proportions';
 import type { Palette, Print, View } from './FigureViewer';
 import type { PantsAnchors, PhotoAnchors } from '../../lib/figure/photoMap';
 
@@ -46,6 +47,10 @@ export default function FittingRoom() {
   const [figureError, setFigureError] = useState('');
   const [weights, setWeights] = useState<Weights>(ZERO);
   const [heightCm, setHeightCm] = useState(175);
+  /** linked proportions (I-68): height and weight size the whole figure, girth sliders shape it at that weight */
+  const [linked, setLinked] = useState(true);
+  const [weightZ, setWeightZ] = useState(0);
+  const [pins, setPins] = useState<ShapeState['pins']>({});
   const [view, setView] = useState<View>('threequarter');
   const [viewNonce, setViewNonce] = useState(0);
   const [wardrobe, setWardrobe] = useState<WardrobeItem[] | null>(null);
@@ -157,6 +162,20 @@ export default function FittingRoom() {
     const r = figure?.range[k] ?? 1;
     return Math.max(-r, Math.min(r, v));
   };
+  const shapeState: ShapeState = { heightCm, weightZ, pins };
+  const shape = useMemo(() => solveShape({ heightCm, weightZ, pins }), [heightCm, weightZ, pins]);
+  /** what the figure shows: linked values clamped to the figure's working range, or the sliders as they are */
+  const shown = useMemo<Weights>(() => (linked
+    ? Object.fromEntries(WEIGHT_NAMES.map((k) => [k, clampTo(k, shape.weights[k])])) as unknown as Weights
+    : weights),
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [linked, shape, weights, figure]);
+  function resetShape() { applyPreset({}); setHeightCm(175); setWeightZ(0); setPins({}); }
+  function toggleLinked(on: boolean) {
+    // the figure does not jump: switching off keeps what was shown, switching on starts from the usual shape
+    if (!on) setWeights(shown); else { setPins({}); setWeightZ(0); }
+    setLinked(on);
+  }
   function applyPreset(w: Partial<Weights>) {
     const next = { ...ZERO };
     for (const k of WEIGHT_NAMES) next[k] = clampTo(k, w[k] ?? 0);
@@ -201,6 +220,8 @@ export default function FittingRoom() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wardrobe, figures]);
   const presetActive = (w: Partial<Weights>) => WEIGHT_NAMES.every((k) => Math.abs(weights[k] - clampTo(k, w[k] ?? 0)) < 1e-6);
+  const typeActive = (t: (typeof BODY_TYPES)[number]) => Math.abs(t.weightZ - weightZ) < 1e-9
+    && WEIGHT_NAMES.every((k) => (t.pins[k] ?? null) === (pins[k] ?? null));
 
   return (
     <main className="fit-main">
@@ -215,7 +236,7 @@ export default function FittingRoom() {
       <div className="fit-layout">
         <section className="fit-stage" aria-label="Манекен">
           {figureError ? <div className="fit-canvas fit-loading" role="alert">{figureError}</div>
-            : figure ? <FigureViewer figure={figure} weights={weights} heightCm={heightCm} palette={palette} view={view} viewNonce={viewNonce} prints={prints} />
+            : figure ? <FigureViewer figure={figure} weights={shown} heightCm={heightCm} palette={palette} view={view} viewNonce={viewNonce} prints={prints} />
               : <div className="fit-canvas fit-loading">Загрузка модели…</div>}
           {((topPrint && ownPrint?.needsReview) || (bottomPrint && ownBottomPrint?.needsReview)) && <p className="fit-warning" role="status">Точки на фото этой вещи найдены неуверенно — принт может лечь неточно.</p>}
           <div className="fit-views" role="group" aria-label="Ракурс">
@@ -305,29 +326,56 @@ export default function FittingRoom() {
           <section className="profile-panel">
             <div className="fit-panel-head">
               <h2>Фигура</h2>
-              <button type="button" className="profile-reset" onClick={() => { applyPreset({}); setHeightCm(175); }}>Сбросить</button>
+              <button type="button" className="profile-reset" onClick={resetShape}>Сбросить</button>
             </div>
+            <label className="fit-linked">
+              <input type="checkbox" checked={linked} onChange={(e) => toggleLinked(e.target.checked)} />
+              <span>Пропорции как у людей</span>
+            </label>
             <div className="fit-presets" role="group" aria-label="Тип фигуры">
-              {PRESETS.map((p) => (
-                <button key={p.id} type="button" className={presetActive(p.w) ? 'is-active' : ''} aria-pressed={presetActive(p.w)} onClick={() => applyPreset(p.w)}>{p.label}</button>
-              ))}
+              {linked
+                ? BODY_TYPES.map((t) => (
+                  <button key={t.id} type="button" className={typeActive(t) ? 'is-active' : ''} aria-pressed={typeActive(t)} onClick={() => { setWeightZ(t.weightZ); setPins(t.pins); }}>{t.label}</button>
+                ))
+                : PRESETS.map((p) => (
+                  <button key={p.id} type="button" className={presetActive(p.w) ? 'is-active' : ''} aria-pressed={presetActive(p.w)} onClick={() => applyPreset(p.w)}>{p.label}</button>
+                ))}
             </div>
             <label className="fit-slider">
               <span>Рост <b>{heightCm} см</b></span>
               <input type="range" min={150} max={200} step={1} value={heightCm} onChange={(e) => setHeightCm(Number(e.target.value))} />
             </label>
+            {linked && (
+              <label className="fit-slider">
+                <span>Вес <b>{signed(shape.weightRatio)}</b></span>
+                <input type="range" min={-2} max={2.5} step={0.05} value={weightZ} onChange={(e) => setWeightZ(Number(e.target.value))} />
+                <small className="fit-z">{describeZ(weightZ)} для такого роста</small>
+              </label>
+            )}
             {SLIDERS.map(({ key, label }) => {
               const r = figure?.range[key] ?? 1;
+              const v = shown[key];
+              const atLimit = linked && Math.abs(shape.weights[key]) > r + 1e-6;
               return (
                 <label key={key} className="fit-slider">
-                  <span>{label} <b>{signed(weights[key] / r)}</b></span>
+                  <span>{label} <b>{signed(GAIN[key] * v)}</b></span>
                   <input
-                    type="range" min={-r} max={r} step={r / 50} value={weights[key]} disabled={!figure}
-                    onChange={(e) => setWeights((w) => ({ ...w, [key]: Number(e.target.value) }))}
+                    type="range" min={-r} max={r} step={r / 50} value={v} disabled={!figure}
+                    onChange={(e) => {
+                      const nv = Number(e.target.value);
+                      if (linked) setPins((p) => ({ ...p, [key]: pinFromSlider(shapeState, key as Girth, nv) }));
+                      else setWeights((w) => ({ ...w, [key]: nv }));
+                    }}
                   />
+                  {linked && (
+                    <small className="fit-z">
+                      {describeZ(shape.z[key as Girth])}{pins[key as Girth] === undefined ? ' · авто' : ''}{atLimit ? ' · предел модели' : ''}
+                    </small>
+                  )}
                 </label>
               );
             })}
+            {linked && <p className="fit-note">Рост и вес меняют всю фигуру, ползунки — форму при том же весе; остальное подстраивается по замерам 4 000 мужчин (ANSUR II). «Обычно» — для такого роста и веса. Проценты — от базовой фигуры, не сантиметры.</p>}
             <p className="fit-note">Ползунки ограничены диапазоном, в котором модель остаётся корректной. Это пропорции, не мерки в сантиметрах.</p>
           </section>
         </aside>

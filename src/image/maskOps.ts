@@ -188,3 +188,63 @@ export function assessMask(mask: Uint8Array, width: number, height: number): Mas
   if (holes.regions.length > 0) warnings.push(`внутренние разрывы: ${holes.regions.length} (${((openHoleArea / Math.max(1, area)) * 100).toFixed(1)} % площади вещи) — настоящий вырез оставьте, остальное восстановите`);
   return { status: area === 0 ? 'empty' : warnings.length ? 'suspicious' : 'ok', coverage, touchesBorder, components: comps.regions.length, openHoles: holes.regions.length, openHoleArea, warnings };
 }
+
+export interface CarveResult {
+  mask: Uint8Array;
+  /** mask pixels given back to the background */
+  carved: number;
+}
+
+/**
+ * post-v3 (I-66): background that the saliency model swallowed — typically the wall between trouser legs, or the
+ * surface under a hem — is given back. Colour model: the median of the pixels outside the mask (background) and
+ * inside it (garment). From the background a flood fill enters the mask through pixels that are clearly
+ * background-coloured: closer to the background than half their distance to the garment, and within 60 (RGB
+ * distance) of it — and where the model was less than fully sure (soft map below 250 of 255; garment fabric reads
+ * 254–255). On the test photos the swallowed wall between trouser legs is 160–250, while a dark sleeve on a dark
+ * carpet, which colour alone would carve, is ≥ 250. A white T-shirt on a light blanket still loses thin edge
+ * slivers: there the boundary is ambiguous by colour and almost so for the model. A print or a stripe inside the
+ * garment is surrounded by fabric, so the fill never reaches it; a garment of the background's own colour stops the
+ * fill at once. The largest component is kept afterwards. Nothing
+ * is carved when that would take more than 40 % of the mask (the model's mask is then kept as it was).
+ */
+export function carveBackground(rgba: ArrayLike<number>, soft: ArrayLike<number>, mask: Uint8Array, width: number, height: number): CarveResult {
+  const n = width * height;
+  const median = (inside: boolean): [number, number, number] => {
+    const hist = [new Uint32Array(256), new Uint32Array(256), new Uint32Array(256)];
+    let count = 0;
+    for (let i = 0; i < n; i += 3) if ((mask[i] === 1) === inside) { count++; for (let k = 0; k < 3; k++) hist[k]![rgba[i * 4 + k]!]!++; }
+    return [0, 1, 2].map((k) => { let acc = 0; for (let v = 0; v < 256; v++) { acc += hist[k]![v]!; if (acc * 2 >= count) return v; } return 0; }) as [number, number, number];
+  };
+  let area = 0;
+  for (let i = 0; i < n; i++) area += mask[i]!;
+  if (area === 0 || area === n) return { mask, carved: 0 };
+  const bg = median(false), fg = median(true);
+  const dist = (i: number, c: [number, number, number]) => Math.hypot(rgba[i * 4]! - c[0], rgba[i * 4 + 1]! - c[1], rgba[i * 4 + 2]! - c[2]);
+  const bgLike = (i: number) => { if (soft[i]! >= 250) return false; const b = dist(i, bg); return b < 60 && b < 0.5 * dist(i, fg); };
+  const out = Uint8Array.from(mask);
+  const stack: number[] = [];
+  for (let i = 0; i < n; i++) {
+    if (mask[i] !== 1 || !bgLike(i)) continue;
+    const x = i % width, y = (i - x) / width;
+    const touches = x === 0 || y === 0 || x === width - 1 || y === height - 1 || mask[i - 1] === 0 || mask[i + 1] === 0 || mask[i - width] === 0 || mask[i + width] === 0;
+    if (touches) { out[i] = 0; stack.push(i); }
+  }
+  while (stack.length) {
+    const i = stack.pop()!;
+    const x = i % width;
+    for (const j of [x > 0 ? i - 1 : -1, x < width - 1 ? i + 1 : -1, i - width, i + width]) {
+      if (j < 0 || j >= n || out[j] !== 1 || !bgLike(j)) continue;
+      out[j] = 0;
+      stack.push(j);
+    }
+  }
+  const comps = maskComponents(out, width, height);
+  let best = -1;
+  for (const r of comps.regions) if (best < 0 || r.area > comps.regions[best]!.area) best = r.id;
+  const kept = best >= 0 ? keepComponents(out, comps, [best]) : out;
+  let left = 0;
+  for (let i = 0; i < n; i++) left += kept[i]!;
+  if (left < 0.6 * area) return { mask, carved: 0 };
+  return { mask: kept, carved: area - left };
+}

@@ -958,6 +958,8 @@ a.landing-secondary { font: 12px var(--font-mono), monospace; letter-spacing: .0
 .fit-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
 .fit-stage { position: relative; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, #fbfbfa 0%, #f1f0ee 70%); }
 .fit-canvas { width: 100%; height: min(72vh, 720px); min-height: 420px; touch-action: none; cursor: grab; }
+/* the figure stays on screen while the panel scrolls: a slider is moved and its effect is seen at once */
+.fit-stage { position: sticky; top: 16px; z-index: 2; }
 .fit-canvas:active { cursor: grabbing; }
 .fit-canvas canvas { display: block; }
 .fit-loading { display: grid; place-items: center; color: var(--muted); font: 12px var(--font-mono), monospace; cursor: default; padding: 20px; text-align: center; }
@@ -987,10 +989,14 @@ a.landing-secondary { font: 12px var(--font-mono), monospace; letter-spacing: .0
 @media (max-width: 900px) {
   .fit-layout { grid-template-columns: 1fr; }
   .fit-canvas { height: 62vh; min-height: 360px; }
+  /* one column: the figure pins to the top at a smaller height and the settings scroll under it */
+  .fit-stage { top: 0; box-shadow: 0 6px 18px #0000001a; }
+  .fit-stage .fit-canvas { height: 46vh; min-height: 260px; }
 }
 @media (max-width: 640px) {
   .fit-main { padding-top: 20px; }
   .fit-canvas { height: 56vh; min-height: 320px; }
+  .fit-stage .fit-canvas { height: 42vh; min-height: 240px; }
   .fit-views { bottom: 10px; }
   .fit-views button { padding: 8px 9px; font-size: 11px; }
 }
@@ -1024,3 +1030,6 @@ a.landing-secondary { font: 12px var(--font-mono), monospace; letter-spacing: .0
 .fit-items li button.no-model { opacity: .55; }
 .fit-nomodel { position: absolute; left: 0; right: 0; bottom: 0; padding: 2px; background: #fffd; color: var(--muted); font: 9px var(--font-mono), monospace; font-style: normal; text-align: center; }
 .fit-notice { margin: 4px 0 10px; padding: 10px 12px; border-radius: 6px; background: #fff7ea; border: 1px solid #f1d3a8; color: #8a5a12; font-size: 13px; line-height: 1.5; }
+.fit-linked { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 13px; color: var(--ink); cursor: pointer; }
+.fit-linked input { accent-color: var(--blue); width: 16px; height: 16px; }
+.fit-z { display: block; margin-top: -2px; font: 11px var(--font-mono), monospace; color: var(--muted); }

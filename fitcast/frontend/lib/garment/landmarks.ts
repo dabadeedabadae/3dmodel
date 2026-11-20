@@ -199,8 +199,14 @@ export function estimateTShirtLandmarks(mask: Uint8Array, width: number, height:
   const cx = (minX + maxX) / 2;
 
   // --- hem corners: lowest hull vertices on each side
-  const hemL = hull.filter((p) => p.x < cx).reduce((a, b) => (b.y > a.y || (b.y === a.y && b.x < a.x) ? b : a));
-  const hemR = hull.filter((p) => p.x >= cx).reduce((a, b) => (b.y > a.y || (b.y === a.y && b.x > a.x) ? b : a));
+  // I-66: the corner, not the lowest point — a hem tilted by a few degrees made the lowest hull vertex land
+  // halfway along the hem. Corner = the hull vertex farthest down AND out (normalised coordinates) among those in
+  // the bottom 12 % of the height — a tilted hem stays in that band, long sleeves hanging beside it do not.
+  const lowerHalf = hull.filter((p) => p.y >= maxY - 0.12 * H);
+  const corner = (side: -1 | 1) => (lowerHalf.length ? lowerHalf : hull).filter((p) => (p.x - cx) * side >= 0)
+    .reduce((a, b) => ((b.y - minY) / H + ((b.x - cx) * side) / W > (a.y - minY) / H + ((a.x - cx) * side) / W ? b : a));
+  const hemL = corner(-1);
+  const hemR = corner(1);
 
   // --- sleeve tips: extreme-x hull vertices in the upper 70 %
   const upper = hull.filter((p) => p.y < minY + 0.7 * H);
@@ -238,6 +244,35 @@ export function estimateTShirtLandmarks(mask: Uint8Array, width: number, height:
   };
   if (!armR || !band(armR)) armR = restrict(idxOf(tipR), idxOf(hemR), tipR, hemR) ?? armR;
   if (!armL || !band(armL)) armL = restrict(idxOf(hemL), idxOf(tipL), hemL, tipL) ?? armL;
+  // I-66: the armpit from the side profile. Walking the mask's outer edge up from the hem, the torso side moves
+  // slowly; where the sleeve's underside leaves the body the edge steps OUT steeply. The lowest such step (at least
+  // 20 % of the height above the hem, inside the band) is the armpit. This holds for short sleeves that hang down,
+  // where the deepest concavity under the tip→hem chord lands halfway down the side. The concavity stays the
+  // fallback when no step is found (e.g. sleeves lying along the body).
+  {
+    const edge = (y: number, side: -1 | 1): number => {
+      const row = Math.round(y) * width;
+      if (side < 0) { for (let x = 0; x < width; x++) if (mask[row + x] === 1) return x; }
+      else { for (let x = width - 1; x >= 0; x--) if (mask[row + x] === 1) return x; }
+      return NaN;
+    };
+    const win = Math.max(2, Math.round(0.03 * H));
+    const nearestOnContour = (x: number, y: number): Pt => contour.reduce((a, b) => (Math.hypot(b.x - x, b.y - y) < Math.hypot(a.x - x, a.y - y) ? b : a));
+    const step = (side: -1 | 1, hem: Pt): Pt | null => {
+      for (let y = Math.round(hem.y - 0.2 * H) - win; y > minY + 0.08 * H; y--) {
+        const lo = edge(y + win, side), hi = edge(y, side);
+        if (!Number.isFinite(lo) || !Number.isFinite(hi)) continue;
+        const out = side < 0 ? lo - hi : hi - lo; // > 0: the edge moves outwards going up
+        if (out > 0.035 * W && out > 0.8 * win) {
+          const p = nearestOnContour(lo, y + win);
+          return band(p) ? p : null;
+        }
+      }
+      return null;
+    };
+    armL = step(-1, hemL) ?? armL;
+    armR = step(1, hemR) ?? armR;
+  }
 
   // --- shoulders: a tee's shoulder seam sits above the armpit. Shoulder = highest contour point in a narrow
   // column band just outside the armpit x. Robust to drooping sleeves and raised collars.
@@ -279,6 +314,8 @@ export function estimateTShirtLandmarks(mask: Uint8Array, width: number, height:
         const dx = Math.max(1, Math.abs(q.x - p.x));
         const slope = (q.y - p.y) / dx; // <0 rising (collar), >0 descending (dip)
         if (Math.abs(p.x - cx) < 0.05 * W) return null; // reached the centre without a collar edge
+        // the neck is not the shoulder: the shoulder seam's own curve next to the sleeve can be steep (I-66)
+        if (Math.abs(p.x - contour[from]!.x) < 0.06 * W) { if (i === until) break; i = (i + dir + n) % n; continue; }
         if (slope < -tan35) return { pt: p, dip: false };
         if (slope > tan35) return { pt: p, dip: true };
         if (i === until) break;
@@ -286,8 +323,15 @@ export function estimateTShirtLandmarks(mask: Uint8Array, width: number, height:
       }
       return null;
     };
-    const l = walk(topLi, 1, topRi);
-    const r = walk(topRi, -1, topLi);
+    // walk from each shoulder TOWARDS the centre: which way that is along the trace is measured, not assumed
+    // (I-66 — on a shoulder at the sleeve's top corner the wrong way runs down the sleeve and reads as a dip)
+    const inward = (i0: number): 1 | -1 => {
+      const k = Math.max(3, Math.round((0.05 * W) / step));
+      const a = contour[(i0 + k) % n]!, b = contour[(i0 - k + n) % n]!;
+      return Math.abs(a.x - cx) < Math.abs(b.x - cx) ? 1 : -1;
+    };
+    const l = walk(topLi, inward(topLi), topRi);
+    const r = walk(topRi, inward(topRi), topLi);
     if (!(l && r)) {
       // No steep collar edge on the silhouette (smooth collar hump or collar flush with the shoulders): the neck
       // seam is a colour feature, not a silhouette feature. Use an explicit DEFAULT — neck width 0.42 of the
@@ -312,8 +356,9 @@ export function estimateTShirtLandmarks(mask: Uint8Array, width: number, height:
       neckR = r.pt;
       if (l.dip || r.dip) {
         // dip: deepest contour point between the sides
-        const iA = contour.indexOf(neckL),
+        let iA = contour.indexOf(neckL),
           iB = contour.indexOf(neckR);
+        if (((iB - iA) % n + n) % n > n / 2) [iA, iB] = [iB, iA]; // the short arc between the neck sides
         const d = deepestBetween(contour, iA, iB, neckL, neckR);
         if (d.index >= 0) {
           neckBottom = contour[d.index]!;
@@ -329,15 +374,57 @@ export function estimateTShirtLandmarks(mask: Uint8Array, width: number, height:
   const shoulderL: Pt | null = shL;
   const shoulderR: Pt | null = shR;
 
-  // --- cuffs: top/bottom-most contour points within 6 % of W of each sleeve tip
-  const cuffPts = (tip: Pt) => {
-    const near = contour.filter((p) => Math.abs(p.x - tip.x) < 0.06 * W);
-    const top = near.reduce((a, b) => (b.y < a.y ? b : a));
-    const bot = near.reduce((a, b) => (b.y > a.y ? b : a));
-    return { top, bot };
+  // --- cuffs (I-66). The sleeve is the contour arc between the shoulder and the armpit — nothing else. Its tip is
+  // the arc point farthest from the armhole centre; the cuff corners are the corners on either side of the tip:
+  // the arc point farthest from the chord shoulder→tip (upper edge) and from the chord tip→armpit (underside),
+  // looked for only on the outer half of the sleeve so a curved shoulder or armhole cannot win. A corner shallower
+  // than 2 % of W means the tip itself is that corner. The old column search (top/bottom-most contour points near
+  // the tip x) caught the torso side and the hem whenever the sleeve ended above the body's edge.
+  const arc = (iA: number, iB: number): Pt[] => {
+    const out: Pt[] = [];
+    const steps = ((iB - iA) % n + n) % n;
+    for (let k = 0; k <= steps; k++) out.push(contour[(iA + k) % n]!);
+    return out;
   };
-  const cL = cuffPts(tipL);
-  const cR = cuffPts(tipR);
+  const columnCuff = (tip: Pt) => {
+    const near = contour.filter((p) => Math.abs(p.x - tip.x) < 0.06 * W);
+    return { top: near.reduce((a, b) => (b.y < a.y ? b : a)), bot: near.reduce((a, b) => (b.y > a.y ? b : a)), tip };
+  };
+  const sleeveCuff = (sh: Pt | null, ap: Pt | null, tipFallback: Pt) => {
+    if (!sh || !ap) return columnCuff(tipFallback);
+    const iS = contour.indexOf(sh), iA = contour.indexOf(ap);
+    if (iS < 0 || iA < 0) return columnCuff(tipFallback);
+    // the sleeve is the SHORTER contour arc between shoulder and armpit (the other one is the whole body), taken
+    // shoulder → armpit whichever way the trace runs
+    const fwd = arc(iS, iA), back = arc(iA, iS).reverse();
+    const s = fwd.length <= back.length ? fwd : back;
+    if (s.length < 8 || s.length > n / 2) return columnCuff(tipFallback);
+    // the sleeve sticks out of the armhole line shoulder→armpit: the tip is the arc point farthest from that line
+    // (not from the armhole centre — on a short sleeve hanging down the shoulder itself would win that)
+    const out = (p: Pt) => distToSegment(p, sh, ap);
+    let ti = 0;
+    s.forEach((p, i) => { if (out(p) > out(s[ti]!)) ti = i; });
+    const tip = s[ti]!;
+    const len = out(tip) || 1;
+    const along = out;
+    // the cuff edge runs ACROSS the sleeve: a candidate whose segment to the tip runs along the sleeve axis
+    // (armhole centre → tip) is a bend of the sleeve — an elbow on a long sleeve — not a cuff corner
+    const root = { x: (sh.x + ap.x) / 2, y: (sh.y + ap.y) / 2 };
+    const ax = tip.x - root.x, ay = tip.y - root.y, al = Math.hypot(ax, ay) || 1;
+    const across = (p: Pt) => { const dx = tip.x - p.x, dy = tip.y - p.y, dl = Math.hypot(dx, dy) || 1; return Math.abs(dx * ax + dy * ay) / (dl * al) < 0.7; };
+    const corner = (pts: Pt[], a: Pt, b: Pt): Pt => {
+      let best = tip, depth = 0.02 * W;
+      for (const p of pts) {
+        if (along(p) < 0.5 * len || !across(p)) continue;
+        const d = distToSegment(p, a, b);
+        if (d > depth) { depth = d; best = p; }
+      }
+      return best;
+    };
+    return { top: corner(s.slice(0, ti + 1), sh, tip), bot: corner(s.slice(ti), tip, ap), tip };
+  };
+  const cL = sleeveCuff(shL, armL, tipL);
+  const cR = sleeveCuff(shR, armR, tipR);
 
   // --- sanity checks
   const ok = (name: string, pass: boolean, detail: string) => checks.push({ name, pass, detail });
@@ -350,10 +437,20 @@ export function estimateTShirtLandmarks(mask: Uint8Array, width: number, height:
   ok('armpits_above_hem', !!armL && !!armR && armL.y < hemL.y - 0.2 * H && armR.y < hemR.y - 0.2 * H, 'подмышки заметно выше подола');
   const symm = armL && armR ? Math.abs(armL.y - armR.y) / H : 1;
   ok('armpits_symmetric', symm < 0.08, `разница высоты подмышек ${(symm * 100).toFixed(1)} % высоты`);
-  const sleeveL = shoulderL ? Math.hypot(tipL.x - shoulderL.x, tipL.y - shoulderL.y) : 0;
-  const sleeveR = shoulderR ? Math.hypot(tipR.x - shoulderR.x, tipR.y - shoulderR.y) : 0;
+  const sleeveL = shoulderL ? Math.hypot(cL.tip.x - shoulderL.x, cL.tip.y - shoulderL.y) : 0;
+  const sleeveR = shoulderR ? Math.hypot(cR.tip.x - shoulderR.x, cR.tip.y - shoulderR.y) : 0;
   ok('sleeves_similar', sleeveL > 0 && sleeveR > 0 && Math.abs(sleeveL - sleeveR) / Math.max(sleeveL, sleeveR) < 0.25, `длины рукавов ${sleeveL.toFixed(0)} / ${sleeveR.toFixed(0)} px`);
-  ok('cuffs_outside_body', !!armL && !!armR && tipL.x < armL.x - 0.05 * W && tipR.x > armR.x + 0.05 * W, 'манжеты снаружи от подмышек');
+  ok('cuffs_outside_body', !!armL && !!armR && cL.tip.x < armL.x - 0.05 * W && cR.tip.x > armR.x + 0.05 * W, 'манжеты снаружи от подмышек');
+
+  // I-66: a garment cut by the frame has no complete silhouette — sleeve tips or the hem are guessed at the edge.
+  // More than 3 % of any image side covered by the mask makes the points 'uncertain' (the user confirms them).
+  {
+    const cover = { сверху: 0, снизу: 0, слева: 0, справа: 0 };
+    for (let x = 0; x < width; x++) { cover.сверху += mask[x] === 1 ? 1 : 0; cover.снизу += mask[(height - 1) * width + x] === 1 ? 1 : 0; }
+    for (let y = 0; y < height; y++) { cover.слева += mask[y * width] === 1 ? 1 : 0; cover.справа += mask[y * width + width - 1] === 1 ? 1 : 0; }
+    const cut = Object.entries(cover).filter(([k, v]) => v / (k === 'сверху' || k === 'снизу' ? width : height) > 0.03).map(([k]) => k);
+    ok('inside_frame', cut.length === 0, cut.length ? `вещь обрезана краем кадра (${cut.join(', ')}) — снимите её целиком` : 'вещь целиком в кадре');
+  }
 
   const status: LandmarkEstimate['status'] = checks.every((c) => c.pass || c.name === 'neck_bottom_measured') ? 'ok' : 'uncertain';
   const st = (pass: boolean): Landmark['status'] => (pass ? 'ok' : 'uncertain');

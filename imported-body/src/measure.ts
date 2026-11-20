@@ -6,6 +6,7 @@
  */
 import { sliceContours } from './geom/measure';
 import type { BodyAsset } from './asset';
+import { statureLevel, type HeightMode } from './deform';
 
 export interface ImportedMeasurements {
   height_cm: number;
@@ -52,13 +53,12 @@ function rotatedZ(p: Float32Array): Float32Array {
  * definition, used by the measurements and by the skeleton — they disagreed once and the arm bones ended up
  * at the fingertips.
  */
-export function armholeHalfWidth(asset: BodyAsset, positions: Float32Array): { half: number; level: number; tipX: number } {
+export function armholeHalfWidth(asset: BodyAsset, positions: Float32Array, mode: HeightMode['mode'] = 'keep_girths'): { half: number; level: number; tipX: number } {
   const n = positions.length / 3;
   let maxY = -Infinity, tipX = 0;
   for (let i = 0; i < n; i++) { maxY = Math.max(maxY, positions[i * 3 + 1]!); tipX = Math.max(tipX, Math.abs(positions[i * 3]!)); }
-  const k = maxY / asset.landmarks.height;
   let half = 0,
-    level = asset.landmarks.armpit * k - 0.006;
+    level = statureLevel(asset, asset.landmarks.armpit, maxY, mode) - 0.006;
   for (let step = 0; step < 12; step++) {
     half = 0;
     for (const c of sliceContours(positions, asset.index, level)) for (const q of c.points) half = Math.max(half, Math.abs(q[0]));
@@ -68,22 +68,22 @@ export function armholeHalfWidth(asset: BodyAsset, positions: Float32Array): { h
   return { half, level, tipX };
 }
 
-export function measureImported(asset: BodyAsset, positions: Float32Array): ImportedMeasurements {
+export function measureImported(asset: BodyAsset, positions: Float32Array, mode: HeightMode['mode'] = 'keep_girths'): ImportedMeasurements {
   const idx = asset.index;
   const L = asset.landmarks;
   let maxY = -Infinity;
   for (let i = 0; i < positions.length / 3; i++) maxY = Math.max(maxY, positions[i * 3 + 1]!);
-  const k = maxY / L.height; // the stature may have been scaled; landmark levels ride along
-  const lv = (y: number) => y * k;
+  // the stature may have been changed; landmark levels follow the same map as the mesh (I-67)
+  const lv = (y: number) => statureLevel(asset, y, maxY, mode);
   const rot = rotatedZ(positions);
   // Shoulder width across the deltoids CANNOT be measured on a T-pose mesh: the deltoid continues into the arm
   // with no geometric break, so every threshold rule jumps around (tried and rejected — it moved the wrong way
   // when the shoulder weight went down). What IS well defined is the width of the TORSO at the armhole level,
   // taken just below the arm band where the slice is clean. That is also the number garment fitting needs.
-  const { half: torsoHalf, tipX } = armholeHalfWidth(asset, positions);
+  const { half: torsoHalf, tipX } = armholeHalfWidth(asset, positions, mode);
   const bicepX = torsoHalf + (tipX - torsoHalf) * 0.16;
   const cm = (m: number) => Number((m * 100).toFixed(1));
-  const armMidY = ((asset.armBand.low + asset.armBand.high) / 2) * k;
+  const armMidY = statureLevel(asset, (asset.armBand.low + asset.armBand.high) / 2, maxY, mode);
   return {
     height_cm: cm(maxY),
     chest_cm: cm(girthAt(positions, idx, lv(L.chest) - 0.004)),

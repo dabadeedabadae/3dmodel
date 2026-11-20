@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T11:23:42.140Z",
+  "generatedAt": "2026-11-20T05:56:00.695Z",
   "stature_cm": 175,
   "figures": [
     {
@@ -44,7 +44,7 @@
         "seamSnapped": 17,
         "mirrorPaired": 979
       },
-      "sliderRange": "chest ±0.4, waist ±0.7, hip ±1, shoulders ±0.1, arms ±1, thighs ±0.7"
+      "sliderRange": "chest ±0.72, waist ±0.72, hip ±1, shoulders ±1, arms ±1, thighs ±0.72"
     },
     {
       "file": "outfit-02.fbx",
@@ -138,7 +138,7 @@
         "seamSnapped": 44,
         "mirrorPaired": 889
       },
-      "sliderRange": "chest ±0.16, waist ±0.57, hip ±0.57, shoulders ±0.34, arms ±0.57, thighs ±0.57"
+      "sliderRange": "chest ±0.9, waist ±1, hip ±1, shoulders ±0.5, arms ±1, thighs ±1"
     },
     {
       "file": "outfit-03.fbx",
@@ -232,7 +232,7 @@
         "seamSnapped": 37,
         "mirrorPaired": 910
       },
-      "sliderRange": "chest ±0.54, waist ±0.9, hip ±0.9, shoulders ±0.09, arms ±0.9, thighs ±0.9"
+      "sliderRange": "chest ±0.45, waist ±1, hip ±1, shoulders ±1, arms ±1, thighs ±1"
     },
     {
       "file": "outfit04 (garment only)",
@@ -316,7 +316,7 @@
         "seamSnapped": 44,
         "mirrorPaired": 4149
       },
-      "sliderRange": "chest ±0.45, waist ±0.81, hip ±0.9, shoulders ±0.45, arms ±0.9, thighs ±0.9"
+      "sliderRange": "chest ±0.7, waist ±0.81, hip ±1, shoulders ±1, arms ±1, thighs ±1"
     }
   ]
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { assessMask, fillHoles, keepComponents, maskComponents, maskHoles, postprocessSoftMask } from '../src/image/maskOps';
+import { assessMask, carveBackground, fillHoles, keepComponents, maskComponents, maskHoles, postprocessSoftMask } from '../src/image/maskOps';
 
 function grid(rows: string[]): { mask: Uint8Array; width: number; height: number } {
   const height = rows.length;
@@ -67,5 +67,37 @@ describe('maskOps', () => {
     expect(a.keptArea).toBe(50);
     expect(b.keptArea).toBe(100);
     expect(soft[0]).toBe(200);
+  });
+});
+
+describe('carveBackground (post-v3, I-66)', () => {
+  // 60×60: light background; a dark "trousers" block 10..50 × 5..55 that the model filled across the leg gap
+  // (x 25..35, y 30..55, background-coloured, open to the bottom edge); a light print 15..20 × 10..15 inside the fabric
+  const W = 60, H = 60;
+  const make = (gapSoft: number) => {
+    const rgba = new Uint8ClampedArray(W * H * 4), soft = new Uint8ClampedArray(W * H), mask = new Uint8Array(W * H);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const i = y * W + x;
+      const inBlock = x >= 10 && x < 50 && y >= 5 && y < 60;
+      const gap = x >= 25 && x < 35 && y >= 30;
+      const print = x >= 15 && x < 20 && y >= 10 && y < 15;
+      const light = !inBlock || gap || print;
+      rgba.set(light ? [220, 220, 215, 255] : [40, 40, 50, 255], i * 4);
+      mask[i] = inBlock ? 1 : 0;
+      soft[i] = !inBlock ? 0 : gap ? gapSoft : 250;
+    }
+    return { rgba, soft, mask };
+  };
+  it('gives the swallowed gap back to the background, keeps the print', () => {
+    const { rgba, soft, mask } = make(180);
+    const r = carveBackground(rgba, soft, mask, W, H);
+    expect(r.carved).toBe(10 * 30);
+    expect(r.mask[45 * W + 30]).toBe(0); // gap
+    expect(r.mask[12 * W + 17]).toBe(1); // print, surrounded by fabric
+    expect(r.mask[40 * W + 15]).toBe(1); // leg
+  });
+  it('keeps pixels the model was sure about', () => {
+    const { rgba, soft, mask } = make(250);
+    expect(carveBackground(rgba, soft, mask, W, H).carved).toBe(0);
   });
 });

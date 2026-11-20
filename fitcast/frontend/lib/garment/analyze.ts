@@ -2,18 +2,18 @@
 /**
  * Photo → garment package, in the browser. Same steps and parameters as the 3D module's pipeline
  * (3dmodel: SegmentationProvider U²-Netp, landmarks.ts, color.ts, imported-body/src/photoMap.ts):
- *   mask (U²-Netp, 320×320, post-processing post-v2) → T-shirt landmarks from the mask → photo anchors and their
+ *   mask (U²-Netp, 320×320, post-processing post-v3: + background the model swallowed is carved back, I-66) → T-shirt landmarks from the mask → photo anchors and their
  *   plausibility → median base colour → texture = the photo with everything outside the mask in the base colour.
  * Runs locally with onnxruntime-web (wasm, one thread); the photo is not sent anywhere for this.
  * The model and the runtime files are served from /ml and /ort (npm run ml:sync in the FitCast root).
  */
 import { resizeGray, resizeRaster, toCHWFloat, type GrayImage, type RasterImage } from './raster';
-import { assessMask, postprocessSoftMask } from './maskOps';
+import { assessMask, carveBackground, postprocessSoftMask } from './maskOps';
 import { estimateTShirtLandmarks } from './landmarks';
 import { estimateBaseColor } from './color';
 import { anchorIssues, anchorsFromLandmarks, estimatePantsLandmarks, type PantsAnchors, type PhotoAnchors, type PhotoPointName } from '../figure/photoMap';
 
-export const MASK_PROVIDER = 'u2netp.onnx@sha256:309c8469…4ddd8;post-v2';
+export const MASK_PROVIDER = 'u2netp.onnx@sha256:309c8469…4ddd8;post-v3';
 const N = 320;
 const THRESHOLD = 128;
 /** longest side the analysis works at; larger photos are scaled down first (speed, texture size) */
@@ -87,8 +87,9 @@ async function segment(image: RasterImage) {
   for (let i = 0; i < d0.length; i++) small.data[i] = ((d0[i]! - mn) / (mx - mn || 1)) * 255;
   const soft = resizeGray(small, image.width, image.height);
   const post = postprocessSoftMask(soft, THRESHOLD);
-  const quality = assessMask(post.mask, image.width, image.height);
-  return { mask: post.mask, quality: quality.status };
+  const mask = carveBackground(image.data, soft.data, post.mask, image.width, image.height).mask;
+  const quality = assessMask(mask, image.width, image.height);
+  return { mask, quality: quality.status };
 }
 
 /** texture (background in the base colour) and a dimmed preview with the points drawn */

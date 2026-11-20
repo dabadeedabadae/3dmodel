@@ -35,7 +35,7 @@ const mode = (opt('mode', 'keep_girths') as 'keep_girths' | 'proportional');
 const wantPose = opt('pose', 'a');
 
 const base = deform(asset, w, { mode, height_cm });
-const measurements = measureImported(asset, base);
+const measurements = measureImported(asset, base, mode);
 let positions = base;
 let poseInfo: Record<string, unknown> = { pose: 't' };
 if (wantPose === 'a') {

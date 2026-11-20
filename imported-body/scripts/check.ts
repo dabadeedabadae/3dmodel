@@ -33,7 +33,7 @@ for (const c of cases) {
   let maxY = -Infinity;
   for (let i = 0; i < p.length / 3; i++) maxY = Math.max(maxY, p[i * 3 + 1]!);
   const r = checkBodyMesh({ geometry: g, frame: { height: maxY } } as any, { minTriangles: 1500, maxTriangles: 3000 });
-  const m = measureImported(asset, p);
+  const m = measureImported(asset, p, c.h?.mode);
   const failed = r.checks.filter((x) => !x.pass && x.level === 'fail');
   if (failed.length) ok = false;
   results.push({ label: c.label, ok: failed.length === 0, failed: failed.map((x) => `${x.name}: ${x.detail}`), m });

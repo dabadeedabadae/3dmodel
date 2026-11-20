@@ -5,7 +5,7 @@
  * size as the input image), plus a binary post-processed version. The user
  * confirms/edits it separately (stage 07 editor).
  */
-import { assessMask, postprocessSoftMask, type MaskQuality, type Region } from '../image/maskOps';
+import { assessMask, carveBackground, postprocessSoftMask, type MaskQuality, type Region } from '../image/maskOps';
 import { resizeGray, resizeRaster, toCHWFloat, type GrayImage, type RasterImage } from '../image/raster';
 import { float32Tensor, loadSession, type OrtSession } from './onnx';
 
@@ -55,7 +55,7 @@ export interface SegmentationProvider {
 }
 
 export const U2NETP_PROVIDER_ID = 'u2netp';
-export const U2NETP_PROVIDER_VERSION = 'u2netp.onnx@sha256:309c8469…4ddd8;post-v2';
+export const U2NETP_PROVIDER_VERSION = 'u2netp.onnx@sha256:309c8469…4ddd8;post-v3';
 
 /**
  * U²-Netp (Qin et al., Apache-2.0; ONNX export from the rembg release) via
@@ -100,7 +100,10 @@ export class U2NetpSegmentationProvider implements SegmentationProvider {
     const soft = resizeGray(small, image.width, image.height);
 
     const threshold = this.options.threshold ?? DEFAULT_MASK_THRESHOLD;
-    const { post, quality } = rethreshold({ soft: soft.data, width: image.width, height: image.height }, threshold);
+    const { post } = rethreshold({ soft: soft.data, width: image.width, height: image.height }, threshold);
+    // post-v3 (I-66): background the model swallowed (between trouser legs, under a hem) goes back to the background
+    post.mask = carveBackground(image.data, soft.data, post.mask, image.width, image.height).mask;
+    const quality = assessMask(post.mask, image.width, image.height);
     let bounds: SegmentationResult['stats']['bounds'] = null;
     for (let y = 0; y < image.height; y++)
       for (let x = 0; x < image.width; x++)

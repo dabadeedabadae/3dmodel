@@ -43,6 +43,7 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     positions: Float32Array;
     photos: { mesh: THREE.Mesh; corners: Uint32Array; texture: THREE.Texture }[];
   } | null>(null);
+  const lastHeight = useRef(heightCm);
 
   // one-time scene set-up
   useEffect(() => {
@@ -140,6 +141,15 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     c.geometry.computeBoundingSphere();
     c.positions = p;
     for (const ph of c.photos) fillPhotoPositions(ph, p);
+    // a taller figure walked out of the top of the frame: the camera and its target scale with the stature, so
+    // the angle and the framing the user chose stay as they were
+    const f = heightCm / (lastHeight.current || heightCm);
+    if (Math.abs(f - 1) > 1e-6) {
+      c.controls.target.multiplyScalar(f);
+      c.camera.position.multiplyScalar(f);
+      c.controls.update();
+    }
+    lastHeight.current = heightCm;
     c.render();
   }, [figure, weights, heightCm]);
 
