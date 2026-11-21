@@ -1,95 +1,95 @@
 # FitCast
 
-**Быстрый старт:** `docker compose up --build -d` → http://localhost:3001. Всё о проекте — устройство, где какие
-файлы, 3D-часть, проверки — в [docs/ONBOARDING.md](docs/ONBOARDING.md).
+**Quick start:** `docker compose up --build -d` → http://localhost:3001. Everything about the project (architecture,
+where files live, the 3D part, checks) is in [docs/ONBOARDING.md](docs/ONBOARDING.md).
 
-## Клиентская часть: запуск на macOS
+## Client: running on macOS
 
-Лендинг, вход и регистрация, личный кабинет с гардеробом, мобильная веб-вёрстка и админка с тестом рекомендаций.
+Landing page, sign-in and sign-up, an account area with the wardrobe, a mobile web layout, and an admin panel with a recommendation test bench.
 
 ```bash
-docker start fitcast-preview-postgres        # или: npm run db:up (порт из DATABASE_URL в .env)
+docker start fitcast-preview-postgres        # or: npm run db:up (port taken from DATABASE_URL in .env)
 npm run migrate:deploy && npm run generate
-npm run build && node dist/main.js           # API на PORT из .env (локально 3002)
-cd frontend && npm run dev                   # http://localhost:3001, NEXT_PUBLIC_API_URL в frontend/.env.local
+npm run build && node dist/main.js           # API on PORT from .env (3002 locally)
+cd frontend && npm run dev                   # http://localhost:3001, NEXT_PUBLIC_API_URL in frontend/.env.local
 ```
 
-- **3D-модель (`/fitting`):** одетая фигура из модуля 3dmodel с ползунками фигуры и роста; верх и низ красятся в цвет вещей из гардероба. Фигуры лежат в `frontend/public/models` (в git); пересобираются `npm run figure:sync` из 3D-модуля в корне репозитория (там `npm ci && npm run ib:outfits`). Старая заглушка `/model` — в `archive/` (тоже не в git), адрес перенаправляет на `/fitting`.
-- **Своё фото → 3D-футболка:** при добавлении футболки в профиле фото распознаётся прямо в браузере (маска, точки, цвет, текстура без фона; фото для этого никуда не отправляется) и сохраняется вместе с вещью. В `/fitting` такая футболка (метка «3D») надевается на модель с принтом. Нужно один раз: `npm run ml:sync` (копирует модель U²-Netp и рантайм onnxruntime-web, в git не попадают). Образцы из открытого набора: `npm run garments:sync`.
-- **Демо-данные:** `npm run seed:demo` создаёт `demo@fitcast.test` (7 вещей из CC0-фото, `scripts/demo-photos`) и `admin@fitcast.test`. Пароли — в `.demo-accounts.local.json` (в git не попадает).
-- **Гардероб:** `GET/POST /wardrobe`, `PATCH/DELETE /wardrobe/:id`, только свои вещи. Фото — JPEG/PNG/WebP до 8 МБ, тип проверяется по содержимому, имя файла случайное, хранится локально в `uploads/` (в git не попадает). Цвет — из палитры контракта рекомендаций (13 цветов); подсказка цвета по фото — медиана центра снимка, пользователь подтверждает.
-- **Тест рекомендаций в админке:** `POST /admin/recommendations/test` собирает запрос по контракту `recommendation-service` (только тип, цвет, посадка и id вещей) и, если задан `RECOMMENDATION_SERVICE_URL`, отправляет его в сервис и показывает ответ. Сам алгоритм не реализован, сервис отвечает 501 — это ожидаемо.
-  Запуск сервиса: `cd recommendation-service && .venv/bin/python -m uvicorn app.main:app --port 8010`.
-- **Проверки:** `npm run test:wardrobe` (владение, валидация, файлы, стенд рекомендаций), `npm run test:admin`, `cd frontend && npx next build`.
+- **3D model (`/fitting`):** a dressed figure from the 3dmodel module with body and height sliders; the top and bottom are tinted with the colors of wardrobe items. Figures live in `frontend/public/models` (in git) and are rebuilt with `npm run figure:sync` from the 3D module at the repository root (run `npm ci && npm run ib:outfits` there). The old `/model` placeholder is in `archive/` (also not in git), and the URL redirects to `/fitting`.
+- **Your photo → 3D T-shirt:** when you add a T-shirt in your profile, the photo is analyzed right in the browser (mask, points, color, background-free texture; the photo is not sent anywhere for this) and saved with the item. In `/fitting`, such a T-shirt (labeled "3D") goes on the model with its print. One-time setup: `npm run ml:sync` (copies the U²-Netp model and the onnxruntime-web runtime, neither is committed). Samples from an open dataset: `npm run garments:sync`.
+- **Demo data:** `npm run seed:demo` creates `demo@fitcast.test` (7 items from CC0 photos in `scripts/demo-photos`) and `admin@fitcast.test`. Passwords are written to `.demo-accounts.local.json` (not committed).
+- **Wardrobe:** `GET/POST /wardrobe`, `PATCH/DELETE /wardrobe/:id`, own items only. Photos are JPEG/PNG/WebP up to 8 MB; the type is checked by content, the file name is random, and files are stored locally in `uploads/` (not committed). Colors come from the recommendation contract palette (13 colors); the color hint from the photo is the median of the image center, and the user confirms it.
+- **Recommendation test in the admin panel:** `POST /admin/recommendations/test` builds a request following the `recommendation-service` contract (item type, color, fit and id only) and, if `RECOMMENDATION_SERVICE_URL` is set, sends it to the service and shows the response. The algorithm itself is not implemented; the service returns 501, which is expected.
+  Run the service: `cd recommendation-service && .venv/bin/python -m uvicorn app.main:app --port 8010`.
+- **Checks:** `npm run test:wardrobe` (ownership, validation, files, recommendation bench), `npm run test:admin`, `cd frontend && npx next build`.
 
-## Администрирование
+## Administration
 
-Простая панель `/admin`: количество пользователей, вещей и образов, а также последние 100 пользователей. Панель доступна только для просмотра. Доступ к API проверяется на сервере; пароли и их хеши не выдаются.
+A simple `/admin` panel: counts of users, items and outfits, plus the latest 100 users. The panel is read-only. API access is checked on the server; passwords and their hashes are never returned.
 
-После обновления проекта выполните в корне:
+After updating the project, run in the root:
 
 ```powershell
 npm run migrate:deploy
 npm run generate
 ```
 
-Перед `generate` остановите backend (`Ctrl+C`), чтобы Windows не блокировала DLL Prisma. Затем зарегистрируйте свой аккаунт через `/register` и назначьте ему права:
+Stop the backend (`Ctrl+C`) before `generate` so Windows doesn't lock the Prisma DLL. Then register your account via `/register` and grant it admin rights:
 
 ```powershell
 npm run admin:set -- your-email@example.com
 ```
 
-Запустите backend заново (`npm run start:dev`), frontend — из папки `frontend` (`npm run dev`). Войдите обычным паролем своего аккаунта и откройте `http://localhost:3001/admin`. Ссылка на панель также появится на странице аккаунта. Общего пароля администратора нет; регистрация не позволяет назначать себе права.
+Start the backend again (`npm run start:dev`) and the frontend from the `frontend` folder (`npm run dev`). Sign in with your account's normal password and open `http://localhost:3001/admin`. A link to the panel also appears on the account page. There is no shared admin password, and sign-up can't grant admin rights.
 
-Отзыв прав: `npm run admin:set -- your-email@example.com revoke`. Изменение прав учитывается на следующем запросе, без перевыпуска JWT.
+Revoke rights: `npm run admin:set -- your-email@example.com revoke`. Changes take effect on the next request, without reissuing the JWT.
 
-Проверка разграничения доступа: `npm run test:admin` (нужны локальная БД с применёнными миграциями и свободный порт 3102; временный тестовый аккаунт удаляется после проверки).
+Access-control check: `npm run test:admin` (requires a local database with migrations applied and free port 3102; the temporary test account is deleted afterwards).
 
-Веб-приложение, которое строит цифровой гардероб из фото реальной одежды пользователя и подбирает образы с учётом погоды, события, посадки и сочетаемости цветов.
+## Overview
 
-## Обзор
+FitCast is a web app that builds a digital wardrobe from photos of the user's real clothes and suggests outfits based on weather, occasion, fit and color coordination.
 
-FitCast позволяет пользователю фотографировать отдельные вещи, автоматически определяет тип одежды и цвет через computer vision, и размещает вещи на абстрактной preset-модели тела (не цифровом двойнике пользователя). Рекомендации образов фильтруются по погоде, типу события, посадке и сочетаемости цветов.
+Users photograph individual items; FitCast detects the clothing type and color with computer vision and places the items on an abstract preset body model (not a digital twin of the user). Outfit recommendations are filtered by weather, occasion type, fit and color coordination.
 
-## Флоу пользователя
+## User flow
 
-1. Пользователь фотографирует несколько вещей из гардероба (по одной штуке)
-2. Система автоматически определяет **тип одежды** (футболка / куртка / штаны и т.д.) и **доминирующий цвет** по фото
-3. Пользователь вручную добавляет **fit-тег** для каждой вещи (сидит хорошо / жмёт / великовато)
-4. Вещь добавляется в цифровой гардероб и визуально размещается на **абстрактной preset-модели тела** (не копия тела пользователя — заданная вручную модель)
-5. Пользователь получает **предложение образа**, отфильтрованное сразу по нескольким параметрам
+1. The user photographs several items from their wardrobe (one at a time)
+2. The system automatically detects the **clothing type** (T-shirt / jacket / pants, etc.) and the **dominant color** from the photo
+3. The user manually adds a **fit tag** to each item (fits well / too tight / too loose)
+4. The item is added to the digital wardrobe and shown on an **abstract preset body model** (not a copy of the user's body, but a predefined model)
+5. The user gets an **outfit suggestion** filtered by several parameters at once
 
-## Основные фичи (MVP)
+## Core features (MVP)
 
-| Фича | Описание |
+| Feature | Description |
 |---|---|
-| **Garment & Color Detection** | Определение типа одежды и доминирующего цвета по загруженному фото (computer vision) |
-| **Body Preset Model** | Визуальная модель, на которую надевается одежда, вместо плоского списка фото |
-| **Fit Tagging** | Ручная отметка посадки для каждой вещи, влияет на рекомендации |
-| **Weather Integration** | Подключение к погодному API, образ подбирается под текущую погоду |
-| **Event-Type Filter** | Пользователь выбирает контекст (зал / деловая встреча / повседневное), сужающий подборку |
-| **Color-Coordination Check** | Предупреждение о несочетающихся цветах при сборке образа |
-| **Outfit Builder** | Основная логика: комбинирует вещи по погоде + событию + fit-тегу + цвету, исключая вещи, которые не подходят по посадке |
+| **Garment & Color Detection** | Detects the clothing type and dominant color from an uploaded photo (computer vision) |
+| **Body Preset Model** | A visual model that wears the clothes, instead of a flat list of photos |
+| **Fit Tagging** | A manual fit tag for each item that affects recommendations |
+| **Weather Integration** | Connects to a weather API so outfits match the current weather |
+| **Event-Type Filter** | The user picks a context (gym / business meeting / casual) that narrows the selection |
+| **Color-Coordination Check** | Warns about clashing colors when building an outfit |
+| **Outfit Builder** | The core logic: combines items by weather + occasion + fit tag + color, excluding items that don't fit |
 
-## Stretch-фичи (после MVP)
+## Stretch features (post-MVP)
 
-- **Личностный/стилевой квиз**, влияющий на рекомендации — отложен; ниша уже насыщена похожими квизами у конкурентов, не входит в основную уникальность продукта
+- **Personality/style quiz** that influences recommendations — postponed; the niche is already crowded with similar quizzes from competitors, and it isn't part of the product's core differentiation
 
-## Технический стек
+## Tech stack
 
 - **Backend:** NestJS
-- **База данных:** PostgreSQL + Redis
+- **Database:** PostgreSQL + Redis
 - **Frontend:** Next.js (React)
-- **Garment/Color Detection:** computer vision подход, опирающийся на существующие исследования (классификация одежды на датасетах вроде DeepFashion / Fashionpedia, CNN-архитектуры типа ResNet / SSD)
+- **Garment/Color Detection:** a computer vision approach building on existing research (clothing classification on datasets like DeepFashion / Fashionpedia, CNN architectures such as ResNet / SSD)
 
-## Ключевое отличие от конкурентов
+## Key difference from competitors
 
-Конкуренты либо показывают гардероб плоским списком без визуальной модели (Cladwell, Stylebook), либо строят "цифрового двойника" тела пользователя по фото (Fitted, частично Whering). FitCast фотографирует **одежду**, а не тело пользователя, и размещает её на нейтральной preset-модели — то есть пайплайн распознавания работает только с вещами, а не с распознаванием человека.
+Competitors either show the wardrobe as a flat list with no visual model (Cladwell, Stylebook) or build a "digital twin" of the user's body from photos (Fitted, partly Whering). FitCast photographs the **clothes**, not the user's body, and places them on a neutral preset model, so the recognition pipeline only deals with garments, never with recognizing a person.
 
-## Профиль пользователя
+## User profile
 
-После входа обычный пользователь попадает на /profile, администратор — на /admin. На главной сохраняется автоматический переход в соответствующий кабинет. Профиль позволяет изменить имя (до 80 символов), город (до 100) и описание (до 300); email доступен только для просмотра. Пустые значения очищают поля. Счётчики вещей и образов берутся из личных данных пользователя.
+After signing in, a regular user lands on /profile and an admin on /admin. The home page keeps redirecting to the matching area. The profile lets users change their name (up to 80 characters), city (up to 100) and bio (up to 300); the email is read-only. Empty values clear the fields. Item and outfit counters come from the user's own data.
 
-Примените новую миграцию: npm run migrate:deploy. Остановите backend перед npm run generate, затем запустите его заново. API: GET /users/me и PATCH /users/me; изменение доступно только владельцу действующего JWT. Проверки сохранения, ограничений и изоляции данных включены в npm run test:admin.
+Apply the new migration: npm run migrate:deploy. Stop the backend before npm run generate, then start it again. API: GET /users/me and PATCH /users/me; only the owner of a valid JWT can make changes. Checks for saving, limits and data isolation are part of npm run test:admin.
 
-Настройки аккаунта: /profile/settings. Личные данные и описание редактируются отдельно от карточки профиля. PATCH /users/me/password принимает currentPassword и newPassword (от 8 символов, до 72 байт UTF-8). Смена пароля требует подтверждения текущего, обновляет bcrypt-хеш и завершает все старые JWT-сеансы. Примените миграцию password_sessions и перезапустите backend после prisma generate. Тесты смены пароля включены в npm run test:admin.
+Account settings: /profile/settings. Personal details and bio are edited separately from the profile card. PATCH /users/me/password accepts currentPassword and newPassword (at least 8 characters, up to 72 bytes of UTF-8). Changing the password requires confirming the current one, updates the bcrypt hash and ends all old JWT sessions. Apply the password_sessions migration and restart the backend after prisma generate. Password-change tests are part of npm run test:admin.

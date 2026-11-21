@@ -160,7 +160,7 @@ export async function analyzePantsPhoto(file: Blob): Promise<Analysis> {
   const img = await toRaster(file);
   const { mask, quality } = await segment(img);
   const lm = estimatePantsLandmarks(mask, img.width, img.height);
-  if (!lm.anchors) throw new Error(`Не нашли штанины на фото: ${lm.reasons.join('; ')}. Сфотографируйте брюки спереди, штанины раздельно.`);
+  if (!lm.anchors) throw new Error(`Could not find the pant legs in the photo: ${lm.reasons.join('; ')}. Photograph the pants from the front with the legs apart.`);
   const color = estimateBaseColor(img, mask);
   const { texture, preview } = await renderOutputs(img, mask, color.rgb, Object.values(lm.points));
   return {

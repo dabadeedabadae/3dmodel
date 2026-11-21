@@ -1,17 +1,17 @@
-# FitCast — онбординг для команды
+# FitCast — team onboarding
 
-Что есть в проекте, где что лежит, как запустить и как не сломать 3D-часть. Состояние на 2026-11-19.
+What's in the project, where things live, how to run it, and how not to break the 3D part. Current as of 2026-11-19.
 
-Всё в одном репозитории `3dmodel`:
-- корень — 3D-модуль (фигуры, FBX, перенос фото);
-- папка `fitcast/` — сам продукт (сайт, API, Docker).
+Everything is in a single `3dmodel` repository:
+- the root is the 3D module (figures, FBX, photo transfer);
+- the `fitcast/` folder is the product itself (website, API, Docker).
 
-Пути ниже, если не сказано иное, — от папки `fitcast/`. Старый репозиторий `FitCast-architechtures` больше не
-развивается, всё делается здесь.
+Unless stated otherwise, paths below are relative to `fitcast/`. The old `FitCast-architechtures` repository is no
+longer developed; all work happens here.
 
-## 1. Запуск за 5 минут (Docker)
+## 1. Up and running in 5 minutes (Docker)
 
-Нужен только Docker Desktop. Node и Python не нужны.
+All you need is Docker Desktop. No Node or Python required.
 
 ```bash
 git clone git@github.com:dabadeedabadae/3dmodel.git
@@ -19,25 +19,25 @@ cd 3dmodel/fitcast
 docker compose up --build -d
 ```
 
-Первая сборка занимает несколько минут. Потом откройте:
-- сайт: http://localhost:3001
+The first build takes a few minutes. Then open:
+- website: http://localhost:3001
 - API: http://localhost:3002
-- сервис рекомендаций: http://localhost:8010/health
-- Postgres: `localhost:5433` (пользователь, пароль и база — `fitcast`)
+- recommendation service: http://localhost:8010/health
+- Postgres: `localhost:5433` (user, password and database are all `fitcast`)
 
-Миграции базы применяются сами при старте API.
+Database migrations are applied automatically when the API starts.
 
-**Демо-аккаунты с гардеробом из 7 вещей:**
+**Demo accounts with a 7-item wardrobe:**
 
 ```bash
 docker compose exec api node scripts/seed-demo.cjs
 docker compose exec api cat .demo-accounts.local.json
 ```
 
-Вторая команда показывает логин и пароль. Это `demo@fitcast.test` и `admin@fitcast.test`, пароли случайные.
-Файл живёт только в контейнере, в git его не кладите.
+The second command prints the logins and passwords: `demo@fitcast.test` and `admin@fitcast.test`, with random
+passwords. The file lives only inside the container; don't commit it.
 
-**Если порт занят**, создайте рядом с `docker-compose.yml` файл `.env` с нужными значениями:
+**If a port is taken**, create a `.env` file next to `docker-compose.yml` with the values you need:
 
 ```
 WEB_PORT=3101
@@ -46,26 +46,26 @@ DB_PORT=55433
 REC_PORT=8110
 ```
 
-Адрес API вшивается во фронт при сборке. После смены портов пересоберите:
+The API URL is baked into the frontend at build time. After changing ports, rebuild:
 
 ```bash
 docker compose up --build -d
 ```
 
-**Полезное:**
-- `docker compose logs -f api` — логи API;
-- `docker compose down` — остановить;
-- `docker compose down -v` — остановить и стереть базу и загруженные фото.
+**Handy commands:**
+- `docker compose logs -f api` — API logs;
+- `docker compose down` — stop;
+- `docker compose down -v` — stop and wipe the database and uploaded photos.
 
-После правок фронта пересоберите его:
+After frontend changes, rebuild it:
 
 ```bash
 docker compose up --build -d web
 ```
 
-## 2. Запуск для разработки (без Docker для фронта)
+## 2. Running for development (frontend outside Docker)
 
-Удобнее для фронта: горячая перезагрузка. База и API остаются в Docker.
+Better for frontend work thanks to hot reload. The database and API stay in Docker.
 
 ```bash
 docker compose up -d postgres api recommendation
@@ -75,140 +75,141 @@ echo "NEXT_PUBLIC_API_URL=http://localhost:3002" > .env.local
 npm run dev
 ```
 
-Сайт откроется на http://localhost:3001. Есть одноразовый шаг: распознавание фото в браузере требует рантайм
-onnxruntime в `frontend/public/ort`. Из папки `fitcast/` выполните:
+The site opens at http://localhost:3001. There's a one-time step: in-browser photo analysis needs the onnxruntime
+runtime in `frontend/public/ort`. From the `fitcast/` folder run:
 
 ```bash
 npm ci
 npm run ml:sync
 ```
 
-API без Docker: `cp .env.example .env`, в `.env` поставьте `PORT=3002`, `DATABASE_URL` на вашу базу, затем
+API without Docker: `cp .env.example .env`, set `PORT=3002` and point `DATABASE_URL` at your database in `.env`, then
 `npm run migrate:deploy && npm run build && node dist/main.js`.
 
-## 3. Что где лежит
+## 3. Where things live
 
 ```
-3dmodel/                      корень репозитория = 3D-модуль (см. раздел 4)
-├── imported-body/            фигуры: assets/*.fbx, out/*.json, scripts, docs (STATUS, DECISIONS, PIPELINE)
-├── src/, scripts/, tests/    перенос фото на вещь, распознавание, проверки (Vite + TS)
-├── fixtures/photos/          тестовые фото (CC0)
-└── fitcast/                  ↓ сайт и API
+3dmodel/                      repository root = 3D module (see section 4)
+├── imported-body/            figures: assets/*.fbx, out/*.json, scripts, docs (STATUS, DECISIONS, PIPELINE)
+├── src/, scripts/, tests/    photo-to-garment transfer, recognition, checks (Vite + TS)
+├── fixtures/photos/          test photos (CC0)
+└── fitcast/                  ↓ website and API
 fitcast/
-├── docker-compose.yml        вся система: postgres, api, web, recommendation
-├── Dockerfile                образ API
-├── src/                      API на NestJS
+├── docker-compose.yml        the whole system: postgres, api, web, recommendation
+├── Dockerfile                API image
+├── src/                      NestJS API
 │   ├── auth/                 POST /auth/register, /auth/login (JWT)
 │   ├── users/                GET/PATCH /users/me, PATCH /users/me/password
 │   ├── wardrobe/             GET/POST /wardrobe, PATCH/DELETE /wardrobe/:id
-│   │   └── garment3d.ts      строгая проверка «пакета 3D-вещи» с клиента — не ослаблять
-│   ├── admin/                /admin/* только для isAdmin, стенд рекомендаций
+│   │   └── garment3d.ts      strict validation of the client's "3D garment package" — do not loosen
+│   ├── admin/                /admin/* for isAdmin only, recommendation bench
 │   └── prisma/               PrismaService
 ├── prisma/schema.prisma      User, WardrobeItem (garment3d JSON, textureUrl), SavedOutfit, OutfitItem
-├── prisma/migrations/        миграции: новые — через `npx prisma migrate dev --name ...`
-├── test/*.e2e.cjs            e2e API: `npm run test:wardrobe`, `npm run test:admin` (нужна база)
+├── prisma/migrations/        migrations; create new ones with `npx prisma migrate dev --name ...`
+├── test/*.e2e.cjs            API e2e: `npm run test:wardrobe`, `npm run test:admin` (need a database)
 ├── scripts/
-│   ├── seed-demo.cjs         демо-аккаунты и вещи (фото — scripts/demo-photos, CC0)
-│   ├── set-admin.cjs         выдать или забрать права админа: `npm run admin:set -- email [revoke]`
-│   ├── sync-figure.cjs       ../imported-body/out → frontend/public/models (обновить фигуры сайта)
-│   ├── sync-garments.cjs     образцы вещей из ../imported-body/out/photo
-│   └── sync-ml.cjs           рантайм onnxruntime → frontend/public/ort
-├── recommendation-service/   FastAPI; движок рекомендаций ещё НЕ реализован (отвечает 501)
+│   ├── seed-demo.cjs         demo accounts and items (photos in scripts/demo-photos, CC0)
+│   ├── set-admin.cjs         grant or revoke admin rights: `npm run admin:set -- email [revoke]`
+│   ├── sync-figure.cjs       ../imported-body/out → frontend/public/models (update the site's figures)
+│   ├── sync-garments.cjs     sample garments from ../imported-body/out/photo
+│   └── sync-ml.cjs           onnxruntime runtime → frontend/public/ort
+├── recommendation-service/   FastAPI; the recommendation engine is NOT implemented yet (returns 501)
 └── frontend/                 Next.js 16 (App Router), React 19, three.js
     ├── app/
-    │   ├── page.tsx, components/Landing.tsx    лендинг
-    │   ├── components/SiteHeader.tsx, AppShell.tsx   шапка и каркас
-    │   ├── login/, register/                   вход и регистрация
-    │   ├── profile/page.tsx, use-profile.ts    личный кабинет
-    │   ├── profile/settings/                   имя, город, о себе, смена пароля
-    │   ├── profile/Wardrobe.tsx                гардероб + загрузка фото + редактор точек
-    │   ├── fitting/                            3D-примерочная (FittingRoom.tsx, FigureViewer.tsx)
-    │   ├── admin/                              админка
-    │   └── globals.css                         все стили (один файл)
+    │   ├── page.tsx, components/Landing.tsx    landing page
+    │   ├── components/SiteHeader.tsx, AppShell.tsx   header and app shell
+    │   ├── login/, register/                   sign-in and sign-up
+    │   ├── profile/page.tsx, use-profile.ts    account area
+    │   ├── profile/settings/                   name, city, bio, password change
+    │   ├── profile/Wardrobe.tsx                wardrobe + photo upload + point editor
+    │   ├── fitting/                            3D fitting room (FittingRoom.tsx, FigureViewer.tsx)
+    │   ├── admin/                              admin panel
+    │   └── globals.css                         all styles (single file)
     ├── lib/
-    │   ├── api.ts            все запросы к API, токен в localStorage, типы
-    │   ├── labels.ts         подписи типов, цветов, посадки
-    │   ├── garment/*         распознавание фото в браузере (маска, точки, цвет)
-    │   └── figure/*          3D: загрузка фигуры, деформация ползунками, перенос фото (photoMap.ts)
+    │   ├── api.ts            all API requests, token in localStorage, types
+    │   ├── labels.ts         labels for types, colors, fit
+    │   ├── garment/*         in-browser photo analysis (mask, points, color)
+    │   └── figure/*          3D: figure loading, slider deformation, photo transfer (photoMap.ts)
     └── public/
-        ├── models/           ГОТОВЫЕ 3D-фигуры: figures.json + figure-01..04.json
-        ├── ml/u2netp.onnx    модель маски (Apache-2.0, лицензия рядом)
-        ├── garments/         образцы вещей с фото (CC0)
-        └── ort/              рантайм onnxruntime (не в git, `npm run ml:sync`)
+        ├── models/           PREBUILT 3D figures: figures.json + figure-01..04.json
+        ├── ml/u2netp.onnx    mask model (Apache-2.0, license alongside)
+        ├── garments/         sample garments from photos (CC0)
+        └── ort/              onnxruntime runtime (not in git, `npm run ml:sync`)
 ```
 
-## 4. 3D-часть: как устроена и что нельзя трогать
+## 4. The 3D part: how it works and what not to touch
 
-- **Откуда фигуры.** Их готовит 3D-модуль в корне репозитория (`imported-body/`): импорт сетки, разметка на
-  голову, руки, верх, низ и обувь, проверки пересечений и ползунков. В FitCast лежит только результат
-  (`frontend/public/models`). Менять эти JSON руками нельзя: пересобирают их только в
-  3D-модуле (`npm run ib:outfits` в корне репозитория), затем в `fitcast/` — `npm run figure:sync`.
-- **Какие есть.** `figures.json` перечисляет фигуры и тип одежды на каждой:
-  - 01 — футболка + брюки;
-  - 02 — худи + брюки;
-  - 03 и 04 — рубашка + брюки.
-- **Правило I-54.** Вещь надевается только на фигуру с таким же типом одежды. Для курток, юбок, шорт и платьев фигур
-  нет: сайт так и пишет.
-- **Фото → 3D.** Весь путь от загрузки до вещи на теле описан в `imported-body/docs/PIPELINE.md` (корень репозитория).
-  Кратко:
-  1. в браузере U²-Netp строит маску;
-  2. по силуэту находятся точки, считаются цвет и текстура;
-  3. на сервер уходит «пакет» (`garment3d`) и текстура;
-  4. в примерочной `photoMap.ts` раскладывает фото по лицевым граням фигуры.
+- **Where the figures come from.** They're produced by the 3D module at the repository root (`imported-body/`): mesh
+  import, segmentation into head, arms, top, bottom and shoes, plus intersection and slider checks. FitCast only holds
+  the output (`frontend/public/models`). Never edit these JSON files by hand: rebuild them only in the
+  3D module (`npm run ib:outfits` at the repository root), then run `npm run figure:sync` in `fitcast/`.
+- **What's available.** `figures.json` lists the figures and the clothing type on each:
+  - 01 — T-shirt + pants;
+  - 02 — hoodie + pants;
+  - 03 and 04 — shirt + pants.
+- **Rule I-54.** An item only goes on a figure wearing the same clothing type. There are no figures for jackets,
+  skirts, shorts or dresses, and the site says so.
+- **Photo → 3D.** The full path from upload to garment on the body is described in `imported-body/docs/PIPELINE.md`
+  (repository root). In short:
+  1. U²-Netp builds the mask in the browser;
+  2. points are found on the silhouette, and color and texture are computed;
+  3. a "package" (`garment3d`) and the texture are sent to the server;
+  4. in the fitting room, `photoMap.ts` maps the photo onto the figure's front faces.
 
-  `lib/figure/photoMap.ts` — дословная копия `imported-body/src/photoMap.ts` из корня. Не правьте его тут, иначе разойдётся с проверками
-  модуля.
-- **Сервер не доверяет клиенту.** `src/wardrobe/garment3d.ts` проверяет каждое поле пакета и сам ставит
-  «нужна проверка». Если меняете формат пакета, меняйте клиент, сервер и `test/wardrobe.e2e.cjs` вместе.
-- **Работа с самими 3D-моделями (корень репозитория).** Исходники лежат в `imported-body/assets/*.fbx`,
-  подготовленные сетки — в `imported-body/out/*.json`, список фигур и тип одежды на них — в
-  `imported-body/assets/outfits.json`. Репозиторий приватный: лицензия на модели не проверена, наружу их не
-  выкладывать.
+  `lib/figure/photoMap.ts` is a verbatim copy of `imported-body/src/photoMap.ts` from the root. Don't edit it here,
+  or it will drift from the module's checks.
+- **The server doesn't trust the client.** `src/wardrobe/garment3d.ts` validates every field of the package and sets
+  "needs review" itself. If you change the package format, change the client, the server and `test/wardrobe.e2e.cjs`
+  together.
+- **Working with the 3D models themselves (repository root).** Sources are in `imported-body/assets/*.fbx`,
+  prepared meshes in `imported-body/out/*.json`, and the list of figures with their clothing types in
+  `imported-body/assets/outfits.json`. The repository is private: the model license hasn't been verified, so don't
+  publish them.
 
-  У 3D-модуля свои `package.json` и `node_modules`. Из корня репозитория:
+  The 3D module has its own `package.json` and `node_modules`. From the repository root:
 
   ```bash
   npm ci
   npm run ib:outfits
   ```
 
-  `ib:outfits` пересобирает все фигуры из FBX и проверяет пересечения и ползунки (примерно 1–2 минуты, нужен
-  `PASS`). Остальные команды:
-  - `npm run ib:outfit-viewer` — просмотр фигуры в браузере;
-  - `npm run ib:photo` — проверка переноса фото.
+  `ib:outfits` rebuilds all figures from FBX and checks intersections and sliders (about 1–2 minutes; you need a
+  `PASS`). Other commands:
+  - `npm run ib:outfit-viewer` — view a figure in the browser;
+  - `npm run ib:photo` — check photo transfer.
 
-  Обновить фигуры на сайте — из папки `fitcast/`:
+  To update the figures on the site, from the `fitcast/` folder:
 
   ```bash
   npm run figure:sync
   ```
 
-  Затем закоммитить `frontend/public/models`. Порядок работы и все решения по 3D:
-  `imported-body/docs/STATUS.md`, `DECISIONS.md`, `PIPELINE.md` и `CLAUDE.md` в корне.
-- **Чего 3D не делает:** не меряет сантиметры по фото, не восстанавливает спинку вещи, не симулирует ткань. В
-  интерфейсе это не обещать.
+  Then commit `frontend/public/models`. The 3D workflow and all decisions are in
+  `imported-body/docs/STATUS.md`, `DECISIONS.md`, `PIPELINE.md` and `CLAUDE.md` at the root.
+- **What 3D doesn't do:** it doesn't measure centimeters from a photo, doesn't reconstruct the back of a garment, and
+  doesn't simulate fabric. Don't promise any of this in the UI.
 
-## 5. Фронт профилей и регистрации: с чего начать
+## 5. Profile and sign-up frontend: where to start
 
-- **Регистрация и вход:** `app/register/page.tsx`, `app/login/page.tsx` → `lib/api.ts`. В API —
-  `src/auth/*`, DTO с валидацией в `src/auth/dto`.
-  - Сейчас есть только email + пароль.
-  - Нет подтверждения почты, сброса пароля и входа через соцсети.
-  - JWT хранится в `localStorage`. Сессии сбрасываются через `sessionVersion` при смене пароля.
-- **Профиль:** `app/profile/page.tsx` (гардероб, сохранённые образы) и `app/profile/settings/page.tsx` (имя,
-  город, «о себе», пароль). API: `GET/PATCH /users/me`, `PATCH /users/me/password`.
-  - Поля профиля: `name` до 80 символов, `city` до 100, `bio` до 300 (см. `prisma/schema.prisma`).
-  - Новое поле добавляется так:
-    1. миграция Prisma;
-    2. DTO в `src/users/dto`;
-    3. тип `UserProfile` в `lib/api.ts`;
-    4. форма.
-- **Стили:** один `app/globals.css`, классы с префиксами страниц (`wardrobe-*`, `fit-*`, `profile-*`). Мобильная
-  вёрстка там же, в media-запросах.
-- **Next 16.** Это не тот Next, что в старых туториалах (см. `frontend/AGENTS.md`). Документация версии лежит в
-  `frontend/node_modules/next/dist/docs/`.
+- **Sign-up and sign-in:** `app/register/page.tsx`, `app/login/page.tsx` → `lib/api.ts`. On the API side:
+  `src/auth/*`, with validated DTOs in `src/auth/dto`.
+  - Only email + password for now.
+  - No email verification, password reset or social login.
+  - The JWT is stored in `localStorage`. Sessions are invalidated via `sessionVersion` when the password changes.
+- **Profile:** `app/profile/page.tsx` (wardrobe, saved outfits) and `app/profile/settings/page.tsx` (name,
+  city, bio, password). API: `GET/PATCH /users/me`, `PATCH /users/me/password`.
+  - Profile fields: `name` up to 80 characters, `city` up to 100, `bio` up to 300 (see `prisma/schema.prisma`).
+  - To add a new field:
+    1. a Prisma migration;
+    2. the DTO in `src/users/dto`;
+    3. the `UserProfile` type in `lib/api.ts`;
+    4. the form.
+- **Styles:** a single `app/globals.css`, with page-prefixed classes (`wardrobe-*`, `fit-*`, `profile-*`). The mobile
+  layout is in the same file, in media queries.
+- **Next 16.** This is not the Next.js from older tutorials (see `frontend/AGENTS.md`). The docs for this version are
+  in `frontend/node_modules/next/dist/docs/`.
 
-## 6. Проверки перед пушем
+## 6. Checks before pushing
 
 ```bash
 npm run test:wardrobe
@@ -218,16 +219,16 @@ npx tsc --noEmit
 npx next build
 ```
 
-Для `test:wardrobe` и `test:admin` нужна база: `docker compose up -d postgres` и `.env` с `DATABASE_URL`.
+`test:wardrobe` and `test:admin` need a database: `docker compose up -d postgres` and a `.env` with `DATABASE_URL`.
 
-`npm run lint` во frontend не работает: в Next 16 команды `next lint` нет. Если нужен линтер, его надо
-настроить отдельно (ESLint 9, flat config).
+`npm run lint` doesn't work in the frontend: Next 16 has no `next lint` command. If you need a linter, set it up
+separately (ESLint 9, flat config).
 
-## 7. Известные долги
+## 7. Known debt
 
-- Движок рекомендаций не реализован: сервис отвечает 501, стенд в админке это показывает.
-- Распознавание фото идёт в основном потоке: интерфейс замирает примерно на 2 с. Кандидат на Web Worker.
-- Нет ручной правки точек для брюк (для верха есть).
-- Фото хранятся на диске API (`uploads/`, в Docker — том `uploads`), не в облаке.
-- Палитра гардероба — 16 цветов: точный цвет вещи хранится только в 3D-пакете.
-- Корневой `README.md` местами устарел (Windows-инструкции, план MVP). Этот файл актуальнее.
+- The recommendation engine isn't implemented: the service returns 501, and the admin bench shows it.
+- Photo analysis runs on the main thread, freezing the UI for about 2 s. A candidate for a Web Worker.
+- No manual point editing for pants (tops have it).
+- Photos are stored on the API's disk (`uploads/`, the `uploads` volume in Docker), not in the cloud.
+- The wardrobe palette has 16 colors; the exact garment color is stored only in the 3D package.
+- The root `README.md` is partly outdated (Windows instructions, MVP plan). This file is more up to date.

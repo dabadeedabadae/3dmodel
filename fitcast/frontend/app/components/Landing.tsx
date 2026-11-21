@@ -3,36 +3,36 @@ import Link from 'next/link';
 
 const FEATURES = [
   {
-    title: 'Фото → 3D-вещь',
+    title: 'Photo → 3D garment',
     image: '/images/landing/feature-scan-v2.jpg',
-    alt: 'Фото полосатой футболки, вырезанная по маске вещь и её 3D-модель',
+    alt: 'Photo of a striped T-shirt, the garment cut out by its mask, and its 3D model',
     text:
-      'Сфотографируйте вещь на ровной поверхности. FitCast определяет тип одежды, отделяет её от фона ' +
-      'и переносит рисунок ткани на 3D-выкройку. Каждый шаг можно поправить вручную: маску, точки, цвет.',
+      'Snap a photo of a garment laid flat. FitCast detects the clothing type, separates it from the background ' +
+      'and maps the fabric pattern onto a 3D pattern. You can fine-tune every step by hand: mask, points, color.',
   },
   {
-    title: 'Модель под вашу фигуру',
+    title: 'A model shaped like you',
     image: '/images/landing/feature-bodies-v3.jpg',
-    alt: 'Одна и та же модель в трёх вариантах фигуры: стройная, базовая и плотная',
+    alt: 'The same model in three body shapes: slim, regular and full',
     text:
-      'Вещи надеваются не на ваше фото, а на нейтральный манекен. Рост, плечи, грудь, талия и бёдра ' +
-      'настраиваются ползунками — так видно, как вещь сядет на похожую фигуру.',
+      'Clothes go on a neutral mannequin, not on a photo of you. Height, shoulders, chest, waist and hips ' +
+      'are adjustable with sliders, so you can see how a piece sits on a similar figure.',
   },
   {
-    title: 'Образ на день',
+    title: 'Outfit of the day',
     image: '/images/landing/feature-outfit-v3.jpg',
-    alt: 'Одетая 3D-модель в ракурсе три четверти',
+    alt: 'A dressed 3D model in three-quarter view',
     text:
-      'Отметьте, как сидит каждая вещь: хорошо, жмёт или великовато. FitCast соберёт образ под погоду ' +
-      'и повод — учёба, спортзал, встреча — и не предложит то, что не подходит по посадке или цвету.',
+      'Mark how each piece fits: just right, tight or loose. FitCast builds an outfit for the weather ' +
+      'and the occasion (class, gym, a meeting) and skips anything that doesn\'t fit or clashes.',
   },
 ];
 
 const STEPS = [
-  ['01', 'Снимите вещь', 'Одна вещь — одно фото, сверху, на ровном фоне.'],
-  ['02', 'Проверьте распознавание', 'Тип, цвет и посадку можно подтвердить или исправить.'],
-  ['03', 'Примерьте на манекене', '3D-вещь с вашей текстурой на настраиваемой фигуре.'],
-  ['04', 'Получите образ', 'Комплект из вашего гардероба под погоду и событие.'],
+  ['01', 'Photograph a garment', 'One item per photo, shot from above on a plain background.'],
+  ['02', 'Check the detection', 'Confirm or correct the type, color and fit.'],
+  ['03', 'Try it on the mannequin', 'A 3D garment with your texture on an adjustable figure.'],
+  ['04', 'Get an outfit', 'A look from your own wardrobe for the weather and occasion.'],
 ] as const;
 
 export default function Landing() {
@@ -40,44 +40,44 @@ export default function Landing() {
     <>
       <main className="landing-main">
         <section className="landing-text">
-          <span className="landing-kicker">ЦИФРОВОЙ ГАРДЕРОБ</span>
-          <h1>Ваша одежда в 3D — по одной фотографии</h1>
+          <span className="landing-kicker">DIGITAL WARDROBE</span>
+          <h1>Your clothes in 3D from a single photo</h1>
           <p className="dropcap">
-            Сколько вещей из шкафа вы на самом деле носите? FitCast собирает цифровой гардероб из фотографий
-            вашей настоящей одежды. Снимите вещь — приложение определит её тип и цвет, построит 3D-копию с
-            рисунком ткани и покажет её на манекене. Отметьте, как сидит каждая вещь, и FitCast подберёт
-            образ под сегодняшнюю погоду и повод.
+            How much of your closet do you actually wear? FitCast builds a digital wardrobe from photos of
+            your real clothes. Take a picture and the app detects the type and color, builds a 3D copy with
+            the fabric pattern and shows it on a mannequin. Mark how each piece fits, and FitCast picks an
+            outfit for today's weather and occasion.
           </p>
           <div className="landing-actions">
             <Link href="/register" className="landing-cta">
-              Начать бесплатно →
+              Get started free →
             </Link>
             <Link href="/login" className="landing-secondary">
-              У меня есть аккаунт
+              I already have an account
             </Link>
           </div>
         </section>
 
         <figure className="landing-figure">
           <span className="fig-label fig-label-left">FIG_001</span>
-          <span className="fig-label fig-label-right">[ Фото → 3D ]</span>
+          <span className="fig-label fig-label-right">[ Photo → 3D ]</span>
           <Image
             src="/images/landing/hero-photo-to-3d-v2.jpg"
-            alt="Слева — фото футболки на кровати, справа — её 3D-модель с перенесённым рисунком"
+            alt="Left: a photo of a T-shirt on a bed. Right: its 3D model with the transferred pattern"
             width={1280}
             height={860}
             priority
             sizes="(max-width: 900px) 100vw, 50vw"
             className="landing-photo"
           />
-          <figcaption className="landing-caption">Реальный снимок и 3D-вещь, построенная по нему в FitCast.</figcaption>
+          <figcaption className="landing-caption">A real photo and the 3D garment FitCast built from it.</figcaption>
         </figure>
       </main>
 
       <section className="landing-features">
         <div className="features-head">
           <span className="features-rule" aria-hidden />
-          <h2>Что умеет FitCast</h2>
+          <h2>What FitCast does</h2>
           <span className="features-rule" aria-hidden />
         </div>
 
@@ -102,7 +102,7 @@ export default function Landing() {
       <section className="landing-steps" aria-labelledby="steps-title">
         <div className="features-head">
           <span className="features-rule" aria-hidden />
-          <h2 id="steps-title">Как это работает</h2>
+          <h2 id="steps-title">How it works</h2>
           <span className="features-rule" aria-hidden />
         </div>
         <ol className="steps-grid">
@@ -115,16 +115,16 @@ export default function Landing() {
           ))}
         </ol>
         <div className="landing-bottom-cta">
-          <p>Начните с одной вещи — это займёт пару минут.</p>
+          <p>Start with a single item. It only takes a couple of minutes.</p>
           <Link href="/register" className="landing-cta">
-            Создать гардероб →
+            Create your wardrobe →
           </Link>
         </div>
       </section>
 
       <footer className="landing-footer">
         <span>© {new Date().getFullYear()} FitCast</span>
-        <span>[ Фото одежды → образ дня ]</span>
+        <span>[ Clothing photo → outfit of the day ]</span>
       </footer>
     </>
   );

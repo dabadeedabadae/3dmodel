@@ -143,6 +143,76 @@ body {
   box-shadow: 0 0 0 1px var(--blue);
 }
 
+.field textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-mono), monospace;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.field textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 1px var(--blue);
+}
+
+.field input:disabled {
+  opacity: 0.6;
+}
+
+/* sign-up chain */
+.reg-steps {
+  display: flex;
+  gap: 0;
+  margin: -12px 0 24px;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--rule);
+  background: #fff;
+}
+
+.reg-steps li {
+  flex: 1;
+  padding: 8px 10px;
+  border-left: 1px solid var(--rule);
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.reg-steps li:first-child { border-left: 0; }
+.reg-steps li span { display: block; margin-bottom: 2px; font-size: 13px; }
+.reg-steps li.is-done { color: var(--ink); }
+.reg-steps li.is-current { background: var(--blue); color: #fff; }
+
+.card p.reg-hint {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.reg-summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 16px;
+  margin: 0 0 20px;
+  padding: 12px;
+  border: 1px dashed var(--rule);
+  background: #fff;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+}
+
+.reg-summary dt { color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.reg-summary dd { margin: 0; overflow-wrap: anywhere; }
+
 button.primary,
 button.secondary {
   width: 100%;
