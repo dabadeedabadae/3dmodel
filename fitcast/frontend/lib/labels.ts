@@ -2,17 +2,42 @@ import type { EventType, FitTag, GarmentType, Precipitation } from './api';
 
 export const GARMENT_LABELS: Record<GarmentType, string> = {
   TSHIRT: 'T-shirt', SHIRT: 'Shirt', JACKET: 'Jacket', COAT: 'Coat', SWEATER: 'Sweater',
-  HOODIE: 'Hoodie', PANTS: 'Pants', JEANS: 'Jeans', SHORTS: 'Shorts', SKIRT: 'Skirt',
-  DRESS: 'Dress', SHOES: 'Shoes', ACCESSORY: 'Accessory',
+  HOODIE: 'Hoodie', CARDIGAN: 'Cardigan', BLAZER: 'Blazer', PANTS: 'Pants', JEANS: 'Jeans', SHORTS: 'Shorts',
+  SKIRT: 'Skirt', DRESS: 'Dress', SHOES: 'Shoes', ACCESSORY: 'Accessory',
 };
 
 export const FIT_LABELS: Record<FitTag, string> = { GOOD: 'Fits well', TIGHT: 'Too tight', LOOSE: 'Too loose' };
 
 export const EVENT_LABELS: Record<EventType, string> = {
   CASUAL: 'Casual', GYM: 'Gym', BUSINESS: 'Business meeting', FORMAL: 'Formal event', OUTDOOR: 'Outdoors',
+  DATE: 'Date', WEDDING_GUEST: 'Wedding (guest)', INTERVIEW: 'Job interview', PARTY: 'Party',
+  THEATER: 'Theater or restaurant', TRAVEL: 'Travel', STUDY: 'Study', FAMILY_WALK: 'Walk with kids',
 };
 
 export const PRECIPITATION_LABELS: Record<Precipitation, string> = { NONE: 'No precipitation', RAIN: 'Rain', SNOW: 'Snow', MIXED: 'Rain and snow' };
+
+/** what each occasion usually asks of an outfit (shown when picking the event type) */
+export const EVENT_HINTS: Record<EventType, string> = {
+  CASUAL: 'Everyday comfort', GYM: 'Sportswear, freedom of movement', BUSINESS: 'Neat and restrained',
+  FORMAL: 'Smart, dressed up', OUTDOOR: 'Practical, ready for the weather',
+  DATE: 'A bit dressed up, your style', WEDDING_GUEST: 'Festive, but not white', INTERVIEW: 'Blazer, shirt, calm colors',
+  PARTY: 'Bright colors welcome', THEATER: 'Smart casual, no hoodie', TRAVEL: 'Comfortable layers',
+  STUDY: 'Comfortable and neat', FAMILY_WALK: 'Practical, easy to move in',
+};
+
+/** A symbol for a WMO weather code (Open-Meteo `weather_code`). */
+export function weatherIcon(code: number): string {
+  if (code === 0 || code === 1) return '☀';
+  if (code === 2) return '⛅';
+  if (code === 3) return '☁';
+  if (code === 45 || code === 48) return '🌫';
+  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return '❄';
+  if (code >= 95) return '⛈';
+  if (code >= 51) return '🌧';
+  return '☁';
+}
+
+export const formatTemp = (c: number) => `${c > 0 ? '+' : ''}${Math.round(c)}°`;
 
 /** The 13-colour palette of the recommendation contract, with display values. */
 export const COLORS: { id: string; label: string; hex: string }[] = [

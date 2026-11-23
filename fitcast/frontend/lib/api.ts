@@ -146,9 +146,10 @@ export async function changePassword(currentPassword: string, newPassword: strin
 
 /* ---------- Wardrobe ---------- */
 
-export type GarmentType = 'TSHIRT' | 'SHIRT' | 'JACKET' | 'COAT' | 'SWEATER' | 'HOODIE' | 'PANTS' | 'JEANS' | 'SHORTS' | 'SKIRT' | 'DRESS' | 'SHOES' | 'ACCESSORY';
+export type GarmentType = 'TSHIRT' | 'SHIRT' | 'JACKET' | 'COAT' | 'SWEATER' | 'HOODIE' | 'CARDIGAN' | 'BLAZER' | 'PANTS' | 'JEANS' | 'SHORTS' | 'SKIRT' | 'DRESS' | 'SHOES' | 'ACCESSORY';
 export type FitTag = 'GOOD' | 'TIGHT' | 'LOOSE';
-export type EventType = 'CASUAL' | 'GYM' | 'BUSINESS' | 'FORMAL' | 'OUTDOOR';
+export type EventType = 'CASUAL' | 'GYM' | 'BUSINESS' | 'FORMAL' | 'OUTDOOR' | 'DATE' | 'WEDDING_GUEST' | 'INTERVIEW'
+  | 'PARTY' | 'THEATER' | 'TRAVEL' | 'STUDY' | 'FAMILY_WALK';
 export type Precipitation = 'NONE' | 'RAIN' | 'SNOW' | 'MIXED';
 
 export interface WardrobeItem {
@@ -208,3 +209,99 @@ export const runRecommendationTest = (input: RecommendationTestInput) =>
   authed<RecommendationTestResult>('/admin/recommendations/test', {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input),
   }, 'Could not run the test.');
+
+/* ---------- Weather (Open-Meteo through the API) ---------- */
+
+export interface WeatherLocation { name: string; country: string | null; latitude: number; longitude: number; timezone: string }
+export interface DailyWeather {
+  date: string; minC: number; maxC: number; weatherCode: number; precipitation: Precipitation;
+  precipitationProbability: number | null; description: string;
+}
+export interface WeatherReport {
+  city: string; fromProfile: boolean; location: WeatherLocation;
+  current: { time: string; temperatureC: number; weatherCode: number; precipitation: Precipitation; description: string };
+  daily: DailyWeather[];
+  recommendationWeather: { temperatureC: number; precipitation: Precipitation };
+}
+/** without `city` the city from the profile is used */
+export const getWeather = (city?: string) =>
+  authed<WeatherReport>('/weather' + (city ? '?city=' + encodeURIComponent(city) : ''), {}, 'Could not load the weather.');
+
+/* ---------- Events ---------- */
+
+export type EventWeather =
+  | { status: 'FORECAST'; city: string; cityFromProfile: boolean; location: string; temperatureC: number;
+      precipitation: Precipitation; weatherCode: number; description: string;
+      recommendationInput: { weather: { temperatureC: number; precipitation: Precipitation }; eventType: EventType } }
+  | { status: 'PAST' | 'TOO_FAR'; city: string; cityFromProfile: boolean; location: string; forecastFrom?: string }
+  | { status: 'NO_CITY' }
+  | { status: 'CITY_NOT_FOUND' | 'UNAVAILABLE'; city: string; cityFromProfile: boolean };
+
+export interface UserEvent {
+  id: string; title: string; eventType: EventType; startsAt: string; city: string | null; note: string | null;
+  createdAt: string; updatedAt: string;
+  /** null for past events */
+  weather: EventWeather | null;
+}
+export interface EventInput { title: string; eventType: EventType; startsAt: string; city: string; note: string }
+
+export const getEvents = (scope: 'upcoming' | 'past' = 'upcoming') =>
+  authed<UserEvent[]>('/events?scope=' + scope, {}, 'Could not load your events.');
+export const createEvent = (input: EventInput) =>
+  authed<UserEvent>('/events', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input),
+  }, 'Could not add the event.');
+export const updateEvent = (id: string, input: Partial<EventInput>) =>
+  authed<UserEvent>('/events/' + id, {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input),
+  }, 'Could not save the event.');
+export const deleteEvent = (id: string) =>
+  authed<{ id: string }>('/events/' + id, { method: 'DELETE' }, 'Could not delete the event.');
+
+/* ---------- Recommendations, feedback, saved outfits ---------- */
+
+export type OutfitItem = Pick<WardrobeItem, 'id' | 'type' | 'dominantColor' | 'fitTag' | 'imageUrl'>;
+export type Verdict = 'LIKE' | 'DISLIKE';
+export interface RecommendedOutfit {
+  key: string; items: OutfitItem[]; score: number; explanation: string;
+  breakdown: { occasion: number; weather: number; color: number; fit: number | null };
+  feedback: Verdict | null; savedOutfitId: string | null;
+}
+export interface RecommendationContext {
+  eventId: string | null; eventTitle: string | null; startsAt: string | null; eventType: EventType; location: string;
+  weather: { temperatureC: number; precipitation: Precipitation; description: string };
+}
+export interface Recommendations {
+  context: RecommendationContext; status: 'OK' | 'NO_VALID_OUTFITS'; outfits: RecommendedOutfit[];
+  hiddenDisliked: number; warnings: string[];
+}
+/** for an event (its forecast), or for an occasion with the current weather in the profile city */
+export const getRecommendations = (target: { eventId: string } | { eventType: EventType }, limit = 3) =>
+  authed<Recommendations>('/recommendations', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...target, limit }),
+  }, 'Could not get outfit suggestions.');
+
+export const sendOutfitFeedback = (ctx: RecommendationContext, outfit: RecommendedOutfit, verdict: Verdict | null) =>
+  authed<{ outfitKey: string; verdict: Verdict | null }>('/recommendations/feedback', {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      itemIds: outfit.items.map((i) => i.id), eventId: ctx.eventId ?? undefined, eventType: ctx.eventType,
+      temperatureC: ctx.weather.temperatureC, precipitation: ctx.weather.precipitation, score: outfit.score, verdict,
+    }),
+  }, 'Could not save your feedback.');
+
+export interface SavedOutfit {
+  id: string; name: string; eventType: EventType; explanation: string | null; createdAt: string;
+  event: { id: string; title: string; startsAt: string } | null; items: OutfitItem[];
+}
+export const getSavedOutfits = () => authed<SavedOutfit[]>('/outfits', {}, 'Could not load your outfits.');
+export const saveOutfit = (ctx: RecommendationContext, outfit: RecommendedOutfit) =>
+  authed<SavedOutfit>('/outfits', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      eventType: ctx.eventType, eventId: ctx.eventId ?? undefined, itemIds: outfit.items.map((i) => i.id),
+      explanation: outfit.explanation, name: ctx.eventTitle ? `For "${ctx.eventTitle}"`.slice(0, 100) : undefined,
+    }),
+  }, 'Could not save the outfit.');
+export const deleteSavedOutfit = (id: string) =>
+  authed<{ id: string }>('/outfits/' + id, { method: 'DELETE' }, 'Could not delete the outfit.');

@@ -14,6 +14,9 @@ enum GarmentType {
   COAT
   SWEATER
   HOODIE
+  CARDIGAN
+  /// a tailored jacket (пиджак), worn over a shirt; JACKET is outerwear
+  BLAZER
   PANTS
   JEANS
   SHORTS
@@ -35,24 +38,88 @@ enum EventType {
   BUSINESS
   FORMAL
   OUTDOOR
+  DATE
+  WEDDING_GUEST
+  INTERVIEW
+  PARTY
+  /// theater or restaurant
+  THEATER
+  TRAVEL
+  STUDY
+  /// a walk with children
+  FAMILY_WALK
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  name         String?  @db.VarChar(80)
-  city         String?  @db.VarChar(100)
-  bio          String?  @db.VarChar(300)
-  isAdmin      Boolean  @default(false) @map("is_admin")
-  sessionVersion Int @default(0) @map("session_version")
-  passwordHash String   @map("password_hash")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id             String   @id @default(uuid())
+  email          String   @unique
+  name           String?  @db.VarChar(80)
+  city           String?  @db.VarChar(100)
+  bio            String?  @db.VarChar(300)
+  isAdmin        Boolean  @default(false) @map("is_admin")
+  sessionVersion Int      @default(0) @map("session_version")
+  passwordHash   String   @map("password_hash")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 
-  wardrobeItems WardrobeItem[]
-  savedOutfits  SavedOutfit[]
+  wardrobeItems  WardrobeItem[]
+  savedOutfits   SavedOutfit[]
+  events         UserEvent[]
+  outfitFeedback OutfitFeedback[]
 
   @@map("users")
+}
+
+/// A planned occasion of the user (a meeting, a workout, a party). Its type and the weather forecast for its
+/// time and city are the inputs of the outfit recommendation (recommendation-service contract).
+model UserEvent {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  title     String    @db.VarChar(100)
+  eventType EventType @map("event_type")
+  startsAt  DateTime  @map("starts_at")
+  /// null: the city from the user's profile is used for the weather
+  city      String?   @db.VarChar(100)
+  note      String?   @db.VarChar(300)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  savedOutfits SavedOutfit[]
+
+  @@index([userId, startsAt])
+  @@map("user_events")
+}
+
+enum FeedbackVerdict {
+  LIKE
+  DISLIKE
+}
+
+/// "Fits / doesn't fit" on a recommended outfit, kept with the conditions it was recommended for, so the rules can
+/// later be tuned per person. One verdict per user, outfit and context (an event, or an occasion without an event).
+model OutfitFeedback {
+  id            String          @id @default(uuid())
+  userId        String          @map("user_id")
+  /// sorted item ids joined with "," (the outfit's identity)
+  outfitKey     String          @map("outfit_key")
+  itemIds       String[]        @map("item_ids")
+  /// "event:<id>" or "type:<EventType>"
+  context       String
+  eventId       String?         @map("event_id")
+  eventType     EventType       @map("event_type")
+  temperatureC  Float           @map("temperature_c")
+  precipitation String
+  score         Float?
+  verdict       FeedbackVerdict
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, outfitKey, context])
+  @@index([userId])
+  @@map("outfit_feedback")
 }
 
 model WardrobeItem {
@@ -77,14 +144,19 @@ model WardrobeItem {
 }
 
 model SavedOutfit {
-  id        String    @id @default(uuid())
-  userId    String    @map("user_id")
-  name      String
-  eventType EventType @map("event_type")
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  name        String
+  eventType   EventType @map("event_type")
+  /// the event the outfit was saved for; kept as null when the event is deleted
+  eventId     String?   @map("event_id")
+  /// why the outfit was recommended (the engine's explanation), when it came from a recommendation
+  explanation String?   @db.VarChar(400)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
   user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event UserEvent?   @relation(fields: [eventId], references: [id], onDelete: SetNull)
   items OutfitItem[]
 
   @@index([userId])

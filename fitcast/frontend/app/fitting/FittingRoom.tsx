@@ -14,7 +14,7 @@ interface SampleGarment { id: string; category: 'tshirt' | 'pants'; type: string
 
 const FigureViewer = dynamic(() => import('./FigureViewer'), { ssr: false, loading: () => <div className="fit-canvas fit-loading">Loading model…</div> });
 
-const TOPS: GarmentType[] = ['TSHIRT', 'SHIRT', 'SWEATER', 'HOODIE', 'JACKET', 'COAT', 'DRESS'];
+const TOPS: GarmentType[] = ['TSHIRT', 'SHIRT', 'SWEATER', 'HOODIE', 'CARDIGAN', 'BLAZER', 'JACKET', 'COAT', 'DRESS'];
 const BOTTOMS: GarmentType[] = ['PANTS', 'JEANS', 'SHORTS', 'SKIRT'];
 
 const SLIDERS: { key: keyof Weights; label: string }[] = [
@@ -192,7 +192,20 @@ export default function FittingRoom() {
   useEffect(() => {
     if (deepLinked.current || !wardrobe || !figures.length) return;
     deepLinked.current = true;
-    const id = new URLSearchParams(window.location.search).get('item');
+    const params = new URLSearchParams(window.location.search);
+    // ?top=<id>&bottom=<id> (a recommended outfit): dress both, on the figure that has both garment types if one does
+    const topId = params.get('top'), bottomId = params.get('bottom');
+    if (topId || bottomId) {
+      const top = topId ? wardrobe.find((i) => i.id === topId) : undefined;
+      const bottom = bottomId ? wardrobe.find((i) => i.id === bottomId) : undefined;
+      if ((topId && !top) || (bottomId && !bottom)) setNotice('Some items of this outfit were not found in your wardrobe.');
+      if (top && TOPS.includes(top.type)) pickItem(top, 'top');
+      if (bottom && BOTTOMS.includes(bottom.type)) pickItem(bottom, 'bottom');
+      const both = top && bottom && figures.find((f) => f.garments.top === top.type && f.garments.bottom === bottom.type);
+      if (both) setFigureId(both.id);
+      return;
+    }
+    const id = params.get('item');
     const item = id ? wardrobe.find((i) => i.id === id) : undefined;
     if (!item) { if (id) setNotice('This item was not found in your wardrobe.'); return; }
     if (TOPS.includes(item.type)) pickItem(item, 'top');

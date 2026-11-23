@@ -67,7 +67,7 @@ def test_unknown_fields_rejected(payload):
 
 
 def test_invalid_event_and_precipitation(payload):
-    for field, value in [("eventType", "DATE"), ("precipitation", "HAIL")]:
+    for field, value in [("eventType", "PICNIC"), ("precipitation", "HAIL")]:
         candidate = deepcopy(payload)
         target = candidate if field == "eventType" else candidate["weather"]
         target[field] = value
@@ -90,6 +90,8 @@ def test_response_status_must_match_outfits():
 def test_api_contract(payload):
     client = TestClient(app)
     assert client.get("/health").json() == {"status": "ok"}
-    assert client.post("/recommendations", json=payload).status_code == 501
+    response = client.post("/recommendations", json=payload)
+    assert response.status_code == 200
+    assert response.json()["status"] == "NO_VALID_OUTFITS"  # a single T-shirt is not an outfit
     payload["wardrobe"][0]["dominantColor"] = "unknown"
     assert client.post("/recommendations", json=payload).status_code == 422

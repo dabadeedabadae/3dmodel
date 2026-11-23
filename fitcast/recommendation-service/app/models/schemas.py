@@ -17,6 +17,8 @@ class GarmentType(str, Enum):
     COAT = "COAT"
     SWEATER = "SWEATER"
     HOODIE = "HOODIE"
+    CARDIGAN = "CARDIGAN"
+    BLAZER = "BLAZER"
     PANTS = "PANTS"
     JEANS = "JEANS"
     SHORTS = "SHORTS"
@@ -38,6 +40,14 @@ class EventType(str, Enum):
     BUSINESS = "BUSINESS"
     FORMAL = "FORMAL"
     OUTDOOR = "OUTDOOR"
+    DATE = "DATE"
+    WEDDING_GUEST = "WEDDING_GUEST"
+    INTERVIEW = "INTERVIEW"
+    PARTY = "PARTY"
+    THEATER = "THEATER"
+    TRAVEL = "TRAVEL"
+    STUDY = "STUDY"
+    FAMILY_WALK = "FAMILY_WALK"
 
 
 class ColorName(str, Enum):

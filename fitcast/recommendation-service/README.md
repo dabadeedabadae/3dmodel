@@ -1,7 +1,10 @@
 # FitCast Recommendation Service — phases 1–2
 
-Status: proposed contract and validated scaffold. No recommendation algorithm yet.
-This document records implementation proposals, not team approval.
+Status (2026-11-23): the rule-based engine v1 is implemented in `app/engine/` (`catalog.py` holds the tables of
+garment formality/warmth, occasions and colours; `recommend.py` the generation, hard rules, scoring and ranking;
+tests in `tests/test_engine.py`). `/recommendations` answers 200 instead of 501. The contract gained the event types
+DATE, WEDDING_GUEST, INTERVIEW, PARTY, THEATER, TRAVEL, STUDY, FAMILY_WALK and the garment types CARDIGAN, BLAZER.
+The sections below are the original phase 1–2 proposal, kept for history.
 
 ## Responsibilities
 
