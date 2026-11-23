@@ -11,7 +11,7 @@
  * cover (the neck under the head, the arm roots, the ankles above the shoes, the split between the legs) give
  * the heights everything else hangs from.
  */
-export type PartKind = 'head' | 'arm_left' | 'arm_right' | 'top' | 'bottom' | 'shoe_left' | 'shoe_right' | 'other';
+export type PartKind = 'head' | 'arm_left' | 'arm_right' | 'top' | 'bottom' | 'shoe_left' | 'shoe_right' | 'inner' | 'other';
 
 export interface Part {
   kind: PartKind;

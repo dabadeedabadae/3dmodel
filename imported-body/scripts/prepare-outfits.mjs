@@ -40,8 +40,11 @@ for (const f of [...files, ...garmentOnly]) {
   let prep;
   if (only) {
     const mesh = `imported-body/out/layered-${id}.json`;
-    const src = run(['imported-body/scripts/garment-source.ts', m.topMesh, `garment-${id}`, REF, 'top']);
-    const comp = src.status !== 0 ? src : run(['imported-body/scripts/layer-outfit.ts', REF, `garment-${id}`, REF, mesh]);
+    // ease (I-70): width over the base trunk; a layer worn over the T-shirt needs more than the default 1.06
+    const src = run(['imported-body/scripts/garment-source.ts', m.topMesh, `garment-${id}`, REF, 'top'], {
+      ...(m.ease ? { IB_EASE: String(m.ease) } : {}), ...(m.cuffCut ? { IB_CUFF_CUT: String(m.cuffCut) } : {}), ...(m.hemCut ? { IB_HEM_CUT: String(m.hemCut) } : {}), ...(m.deepCut ? { IB_DEEP_CUT: String(m.deepCut) } : {}), ...(m.dropDetails ? { IB_DROP_DETAILS: '1' } : {}),
+    });
+    const comp = src.status !== 0 ? src : run(['imported-body/scripts/layer-outfit.ts', REF, `garment-${id}`, REF, mesh], { ...(m.inner ? { IB_INNER: '1' } : {}), ...(m.collarClear ? { IB_COLLAR_CLEAR: '1' } : {}), ...(m.innerShrink ? { IB_INNER_SHRINK: String(m.innerShrink) } : {}) });
     row.assembly = 'garment-only';
     if (comp.status === 0) { try { row.compose = JSON.parse(comp.stdout.trim().split('\n').pop()); } catch { /* report only */ } }
     prep = comp.status === 0 ? run(['imported-body/scripts/prepare-outfit.ts', mesh, id, STATURE]) : comp;

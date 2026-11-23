@@ -1,0 +1,144 @@
+[
+  {
+    "id": "m-tshirt",
+    "label": "T-shirt",
+    "layer": "1",
+    "type": "TSHIRT",
+    "status": "figure",
+    "figure": "figure-01"
+  },
+  {
+    "id": "m-shirt",
+    "label": "Shirt",
+    "layer": "1",
+    "type": "SHIRT",
+    "status": "figure",
+    "figure": "figure-03"
+  },
+  {
+    "id": "m-shirt-classic",
+    "label": "Dress shirt",
+    "layer": "1",
+    "type": "SHIRT",
+    "status": "figure",
+    "figure": "figure-04"
+  },
+  {
+    "id": "m-tank",
+    "label": "Tank top",
+    "layer": "1",
+    "type": "TSHIRT",
+    "status": "image",
+    "image": "/catalog/m-tank.webp"
+  },
+  {
+    "id": "m-longsleeve",
+    "label": "Long-sleeve tee",
+    "layer": "1",
+    "type": "TSHIRT",
+    "status": "image",
+    "image": "/catalog/m-longsleeve.webp"
+  },
+  {
+    "id": "m-polo",
+    "label": "Polo",
+    "layer": "1",
+    "type": "TSHIRT",
+    "status": "image",
+    "image": "/catalog/m-polo.webp"
+  },
+  {
+    "id": "m-turtleneck",
+    "label": "Turtleneck",
+    "layer": "1",
+    "type": "SWEATER",
+    "status": "image",
+    "image": "/catalog/m-turtleneck.webp"
+  },
+  {
+    "id": "m-hoodie",
+    "label": "Hoodie",
+    "layer": "2",
+    "type": "HOODIE",
+    "status": "figure",
+    "figure": "figure-02"
+  },
+  {
+    "id": "m-sweater",
+    "label": "Sweatshirt",
+    "layer": "2",
+    "type": "SWEATER",
+    "status": "image",
+    "image": "/catalog/m-sweater.webp"
+  },
+  {
+    "id": "m-sweater-v",
+    "label": "V-neck sweater",
+    "layer": "2",
+    "type": "SWEATER",
+    "status": "figure",
+    "image": "/catalog/m-sweater-v.webp",
+    "figure": "figure-05"
+  },
+  {
+    "id": "m-cardigan",
+    "label": "Cardigan",
+    "layer": "2",
+    "type": "SWEATER",
+    "status": "figure",
+    "image": "/catalog/m-cardigan.webp",
+    "figure": "figure-06"
+  },
+  {
+    "id": "m-zip-hoodie",
+    "label": "Zip hoodie",
+    "layer": "2",
+    "type": "HOODIE",
+    "status": "figure",
+    "image": "/catalog/m-zip-hoodie.webp",
+    "figure": "figure-07"
+  },
+  {
+    "id": "m-blazer",
+    "label": "Blazer",
+    "layer": "2",
+    "type": "JACKET",
+    "status": "figure",
+    "image": "/catalog/m-blazer.webp",
+    "figure": "figure-08"
+  },
+  {
+    "id": "m-pants",
+    "label": "Pants",
+    "layer": "bottom",
+    "type": "PANTS",
+    "status": "figure",
+    "figure": "figure-01"
+  },
+  {
+    "id": "m-shorts",
+    "label": "Shorts",
+    "layer": "bottom",
+    "type": "SHORTS",
+    "status": "image",
+    "image": "/catalog/m-shorts.webp"
+  },
+  {
+    "id": "m-jacket",
+    "label": "Jacket",
+    "layer": "outer",
+    "type": "JACKET",
+    "status": "figure",
+    "image": "/catalog/m-jacket.webp",
+    "figure": "figure-09"
+  },
+  {
+    "id": "m-coat",
+    "label": "Coat",
+    "layer": "outer",
+    "type": "COAT",
+    "status": "figure",
+    "image": "/catalog/m-coat.webp",
+    "figure": "figure-10"
+  }
+]

@@ -127,7 +127,13 @@ export default function FittingRoom() {
   }, [figureId]);
 
   useEffect(() => {
-    listFigures().then((list) => { setFigures(list); if (list.length && !list.some((f) => f.id === 'figure-01')) setFigureId(list[0].id); })
+    listFigures().then((list) => {
+      setFigures(list);
+      // /fitting?figure=<id> (the admin's 3D catalogue): open that figure
+      const asked = new URLSearchParams(window.location.search).get('figure');
+      if (asked && list.some((f) => f.id === asked)) setFigureId(asked);
+      else if (list.length && !list.some((f) => f.id === 'figure-01')) setFigureId(list[0].id);
+    })
       .catch((e: unknown) => setFigureError(e instanceof Error ? e.message : 'Could not load the model list.'));
   }, []);
 

@@ -8,7 +8,7 @@ import { PART, type Figure } from '../../lib/figure/figure';
 import { mapPhotoToBottom, mapPhotoToTop, type PantsAnchors, type PhotoAnchors } from '../../lib/figure/photoMap';
 
 export type View = 'front' | 'threequarter' | 'side' | 'back';
-export interface Palette { skin: string; top: string; bottom: string; shoes: string }
+export interface Palette { skin: string; top: string; bottom: string; shoes: string; inner?: string }
 /** A photographed garment: the photo is the texture, anchors place it — a T-shirt on the top (I-51),
  *  trousers on the bottom (I-53). */
 export type Print =
@@ -24,6 +24,8 @@ interface Props {
   /** bumps when the user presses a view button, so the same view can be re-applied */
   viewNonce: number;
   prints?: Print[];
+  /** false in a scrolling grid of cards (admin): the wheel scrolls the page instead of zooming the model */
+  zoom?: boolean;
 }
 
 const VIEW_DIR: Record<View, [number, number]> = {
@@ -35,7 +37,7 @@ const VIEW_DIR: Record<View, [number, number]> = {
  * shadow-only floor, filmic tone mapping, flat-shaded faceted surface. Positions are re-derived from the
  * canonical base on every slider change; GPU resources are released on unmount.
  */
-export default function FigureViewer({ figure, weights, heightCm, palette, view, viewNonce, prints = [] }: Props) {
+export default function FigureViewer({ figure, weights, heightCm, palette, view, viewNonce, prints = [], zoom = true }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const ctx = useRef<{
     renderer: THREE.WebGLRenderer; scene: THREE.Scene; camera: THREE.PerspectiveCamera;
@@ -96,6 +98,7 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     controls.minDistance = 0.8; // close enough to inspect a collar or a cuff
     controls.maxDistance = 8;
     controls.maxPolarAngle = Math.PI * 0.55;
+    controls.enableZoom = zoom;
 
     let frame = 0;
     const render = () => {
@@ -157,7 +160,7 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
   useEffect(() => {
     const c = ctx.current;
     if (!c) return;
-    const byPart = [palette.skin, palette.skin, palette.top, palette.bottom, palette.shoes].map((hex) => new THREE.Color(hex));
+    const byPart = [palette.skin, palette.skin, palette.top, palette.bottom, palette.shoes, palette.inner ?? '#f3f2ee'].map((hex) => new THREE.Color(hex));
     const arr = c.colors.array as Float32Array;
     for (let i = 0; i < figure.part.length; i++) {
       const col = byPart[figure.part[i]] ?? byPart[PART.head];

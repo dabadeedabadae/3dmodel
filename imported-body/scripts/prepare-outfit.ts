@@ -16,13 +16,25 @@ const heightCm = Number(process.argv[4] ?? 175);
 /** A generated FBX, or a mesh already composed onto the reference body (I-50: { base, index } JSON). */
 function loadGeometry(path: string): THREE.BufferGeometry {
   if (path.endsWith('.json')) {
-    const j = JSON.parse(readFileSync(path, 'utf8')) as { base: number[]; index: number[]; fixed?: number[] };
+    const j = JSON.parse(readFileSync(path, 'utf8')) as { base: number[]; index: number[]; fixed?: number[]; inner?: number[]; upper?: number[] };
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(j.base, 3));
     // marks the reference body's vertices; survives the weld because it is a vertex attribute
     const fx = new Float32Array(j.base.length / 3);
     for (const v of j.fixed ?? []) fx[v] = 1;
     geo.setAttribute('fixed', new THREE.Float32BufferAttribute(fx, 1));
+    // the base's T-shirt kept as the inner layer (layer-outfit IB_INNER): labelled 'inner' after segmentation
+    if (j.inner) {
+      const inn = new Float32Array(j.base.length / 3);
+      for (const v of j.inner) inn[v] = 1;
+      geo.setAttribute('inner', new THREE.Float32BufferAttribute(inn, 1));
+    }
+    // the upper garment's vertices (layer-outfit, garment-only top): its shells are 'top' whatever their height
+    if (j.upper) {
+      const up = new Float32Array(j.base.length / 3);
+      for (const v of j.upper) up[v] = 1;
+      geo.setAttribute('upper', new THREE.Float32BufferAttribute(up, 1));
+    }
     geo.setIndex(j.index);
     return geo;
   }
@@ -37,9 +49,47 @@ let g = loadGeometry(file);
 g.deleteAttribute('normal');
 if (g.hasAttribute('uv')) g.deleteAttribute('uv');
 const before = g.attributes.position!.count;
-g = mergeVertices(g, 1e-5);
+/** vertices of undirected edges shared by more than two triangles */
+function nonManifoldVertices(idx: ArrayLike<number>): Set<number> {
+  const count = new Map<string, number>();
+  for (let t = 0; t < idx.length; t += 3) for (let k = 0; k < 3; k++) {
+    const a = idx[t + k]!, b = idx[t + ((k + 1) % 3)]!;
+    if (a === b) continue;
+    const key = a < b ? `${a}_${b}` : `${b}_${a}`;
+    count.set(key, (count.get(key) ?? 0) + 1);
+  }
+  const out = new Set<number>();
+  for (const [key, c] of count) if (c > 2) for (const s of key.split('_')) out.add(Number(s));
+  return out;
+}
+/**
+ * Weld guard. A mesh laid over the reference (layer-outfit) is already indexed and manifold; there the distance weld
+ * can only zip two different sheets that happen to touch. On the V-neck sweater (outfit05) the relaxation squashed a
+ * thin strip at the neckline until two non-adjacent vertices with a common neighbour coincided; welding them put four
+ * triangles on one edge and check-outfit failed on the base pose. Such merges are refused: the vertices at a new
+ * non-manifold edge get their own weld group (mergeVertices hashes every attribute) and the weld is repeated. Every
+ * other merge is the same as before; an FBX (unindexed) input is welded exactly as before.
+ */
+let welded = mergeVertices(g, 1e-5);
+let weldRefused = 0;
+if (g.index && nonManifoldVertices(g.index.array as ArrayLike<number>).size === 0) {
+  const op = g.attributes.position!.array as ArrayLike<number>;
+  const key = (p: ArrayLike<number>, v: number) => `${~~(p[v * 3]! * 1e5)},${~~(p[v * 3 + 1]! * 1e5)},${~~(p[v * 3 + 2]! * 1e5)}`;
+  const group = new Float32Array(before);
+  for (let round = 0; round < 5; round++) {
+    const bad = nonManifoldVertices(welded.index!.array as ArrayLike<number>);
+    if (!bad.size) break;
+    const wp = welded.attributes.position!.array as ArrayLike<number>;
+    const keys = new Set([...bad].map((v) => key(wp, v)));
+    for (let i = 0; i < before; i++) if (group[i] === 0 && keys.has(key(op, i))) { group[i] = i + 1; weldRefused++; }
+    g.setAttribute('weldGroup', new THREE.Float32BufferAttribute(group, 1));
+    welded = mergeVertices(g, 1e-5);
+  }
+  if (welded.hasAttribute('weldGroup')) welded.deleteAttribute('weldGroup');
+}
+g = welded;
 const pos = g.attributes.position!.array as Float32Array;
-const index = g.index!.array as Uint32Array;
+let index = g.index!.array as Uint32Array;
 const n = pos.length / 3;
 /**
  * On a mesh composed onto the reference body (I-50), the reference head and hands are marked and left out of
@@ -80,6 +130,78 @@ const mirrorPass = (tol: number) => {
 paired = mirrorPass(0.03);
 paired = Math.max(paired, mirrorPass(0.012));
 for (let i = 0; i < n; i++) if (Math.abs(pos[i * 3]!) < 1e-4) { pos[i * 3] = 0; snapped++; }
+/**
+ * Faces the symmetrisation folded into a line (I-70, coat: two slivers at the back at 117 cm — three vertices of a
+ * vertical seam each averaged with the same mirror partner, so they share x and z) have no area and no normal;
+ * check-outfit blocks on them. They are dropped and counted in the report.
+ */
+let zeroAreaDropped = 0;
+{
+  const keep: number[] = [];
+  for (let t = 0; t < index.length; t += 3) {
+    const a = index[t]! * 3, b = index[t + 1]! * 3, c = index[t + 2]! * 3;
+    const ux = pos[b]! - pos[a]!, uy = pos[b + 1]! - pos[a + 1]!, uz = pos[b + 2]! - pos[a + 2]!;
+    const vx = pos[c]! - pos[a]!, vy = pos[c + 1]! - pos[a + 1]!, vz = pos[c + 2]! - pos[a + 2]!;
+    if (Math.hypot(uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx) < 1e-10) { zeroAreaDropped++; continue; }
+    keep.push(index[t]!, index[t + 1]!, index[t + 2]!);
+  }
+  if (zeroAreaDropped) index = Uint32Array.from(keep);
+}
+/**
+ * An edge shared by three faces (I-70, new coat: the point where the lapels meet, 0.8 mm edges at 130 cm, a fold of
+ * the generated mesh) is non-manifold and blocks check-outfit. The smallest of those faces is dropped until two are
+ * left; counted in the report.
+ */
+let nonManifoldDropped = 0;
+for (let round = 0; round < 5; round++) {
+  const area = (t: number) => {
+    const a = index[t]! * 3, b = index[t + 1]! * 3, c = index[t + 2]! * 3;
+    const ux = pos[b]! - pos[a]!, uy = pos[b + 1]! - pos[a + 1]!, uz = pos[b + 2]! - pos[a + 2]!;
+    const vx = pos[c]! - pos[a]!, vy = pos[c + 1]! - pos[a + 1]!, vz = pos[c + 2]! - pos[a + 2]!;
+    return Math.hypot(uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx);
+  };
+  const edges = new Map<string, number[]>();
+  for (let t = 0; t < index.length; t += 3) for (let e = 0; e < 3; e++) {
+    const a = index[t + e]!, b = index[t + (e + 1) % 3]!, k = a < b ? `${a},${b}` : `${b},${a}`;
+    let f = edges.get(k); if (!f) edges.set(k, (f = [])); f.push(t);
+  }
+  const drop = new Set<number>();
+  for (const f of edges.values()) if (f.length > 2) {
+    const live = f.filter((t) => !drop.has(t)).sort((x, y) => area(x) - area(y));
+    for (let i = 0; i < live.length - 2; i++) drop.add(live[i]!);
+  }
+  if (!drop.size) break;
+  const keep: number[] = [];
+  for (let t = 0; t < index.length; t += 3) if (!drop.has(t)) keep.push(index[t]!, index[t + 1]!, index[t + 2]!);
+  index = Uint32Array.from(keep);
+  nonManifoldDropped += drop.size;
+}
+/**
+ * Faces wound against their neighbours (the same lapel fold): a face that disagrees with most of its neighbours is
+ * turned over; if each disagreement is one against one, the smaller face of the pair is. Counted in the report.
+ */
+let windingFixed = 0;
+for (let round = 0; round < 10; round++) {
+  const dir = new Map<string, number[]>();
+  for (let t = 0; t < index.length; t += 3) for (let e = 0; e < 3; e++) {
+    const a = index[t + e]!, b = index[t + (e + 1) % 3]!, k = `${a},${b}`;
+    let f = dir.get(k); if (!f) dir.set(k, (f = [])); f.push(t);
+  }
+  const conflicts = new Map<number, number>(), pairs: [number, number][] = [];
+  for (const f of dir.values()) if (f.length > 1) for (let i = 0; i < f.length; i++) for (let j = i + 1; j < f.length; j++) {
+    conflicts.set(f[i]!, (conflicts.get(f[i]!) ?? 0) + 1); conflicts.set(f[j]!, (conflicts.get(f[j]!) ?? 0) + 1); pairs.push([f[i]!, f[j]!]);
+  }
+  if (!pairs.length) break;
+  const area = (t: number) => {
+    const a = index[t]! * 3, b = index[t + 1]! * 3, c = index[t + 2]! * 3;
+    const ux = pos[b]! - pos[a]!, uy = pos[b + 1]! - pos[a + 1]!, uz = pos[b + 2]! - pos[a + 2]!;
+    const vx = pos[c]! - pos[a]!, vy = pos[c + 1]! - pos[a + 1]!, vz = pos[c + 2]! - pos[a + 2]!;
+    return Math.hypot(uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx);
+  };
+  let flip = [...conflicts].filter(([, c]) => c >= 2).map(([t]) => t);
+  if (!flip.length) flip = [...new Set(pairs.map(([x, y]) => (area(x) < area(y) ? x : y)))];
+  for (const t of flip) { const b = index[t + 1]!; index[t + 1] = index[t + 2]!; index[t + 2] = b; windingFixed++; }
+}
 // residual asymmetry, in millimetres of the normalised figure
 let asymMax = 0, asymSum = 0;
 for (let i = 0; i < n; i++) {
@@ -113,6 +235,12 @@ const H = heightCm / 100;
 
 // 2. segment and label
 const parts = labelParts(pos, index, { splitFused: !file.endsWith('.json') });
+/** inner layer (I-70): a shell made only of the base T-shirt's vertices is not the outer top */
+const innerMark = g.getAttribute('inner')?.array as Float32Array | undefined;
+if (innerMark) for (const p of parts) if (p.vertices.length && p.vertices.every((v) => innerMark[v]! > 0)) p.kind = 'inner';
+/** upper garment (I-70): a shell made only of its vertices is the top, even one reaching below the crotch (coat) */
+const upperMark = g.getAttribute('upper')?.array as Float32Array | undefined;
+if (upperMark) for (const p of parts) if (p.kind === 'bottom' && p.vertices.length && p.vertices.every((v) => upperMark[v]! > 0)) p.kind = 'top';
 const by = (kind: string) => parts.filter((p) => p.kind === kind);
 // the main shell of each kind is the largest one: small loose pieces (buttons, laces) carry the same label
 const largest = (ps: Part[]) => ps.reduce<Part | undefined>((b, p) => (!b || p.vertices.length > b.vertices.length ? p : b), undefined);
@@ -248,7 +376,7 @@ if (bottom) {
 const cm = (m: number) => Number((m * 100).toFixed(1));
 const report = {
   id, source: file, statureGiven_cm: heightCm,
-  weld: { before, after: n, triangles: index.length / 3, seamSnapped: snapped, mirrorPaired: paired },
+  weld: { before, after: n, triangles: index.length / 3, refusedNonManifold: weldRefused, seamSnapped: snapped, mirrorPaired: paired, zeroAreaDropped, nonManifoldDropped, windingFixed },
   symmetry_mm: { mean: Number(((asymSum / n) * heightCm).toFixed(2)), max: Number((asymMax * heightCm).toFixed(2)) },
   parts: parts.map((p) => ({ kind: p.kind, vertices: p.vertices.length, triangles: p.triangles.length, y_cm: [cm(p.bbox.min[1]), cm(p.bbox.max[1])] })),
   landmarks_cm: Object.fromEntries(Object.entries(landmarks).map(([key, v]) => [key, cm(v)])),

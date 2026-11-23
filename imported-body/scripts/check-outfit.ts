@@ -6,6 +6,7 @@
  *   • the figure is symmetric left to right within the tolerance the symmetrisation targets
  *   • feet on the floor, head at the stated stature, no non-finite values, no degenerate triangles
  *   • every slider combination keeps all of the above and turns at most 0.1 % of the triangles inside out (I-67)
+ *   • a T-shirt worn under the garment (part "inner", I-70) never crosses the garment more than in the base pose
  * Non-zero exit on failure.
  *   IB_ASSET=imported-body/out/asset-outfit01.json node --import tsx imported-body/scripts/check-outfit.ts
  */
@@ -13,6 +14,8 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { loadAsset } from '../src/load';
 import { deform, GAIN, WEIGHT_NAMES, type Weights } from '../src/deform';
 import { components } from '../src/outfit';
+import { countIntersections } from '../src/layers';
+import { existsSync } from 'node:fs';
 
 /** distance from a point to a triangle */
 function pointTri(px: number, py: number, pz: number, ax: number, ay: number, az: number, bx: number, by: number, bz: number, cx: number, cy: number, cz: number): number {
@@ -125,7 +128,8 @@ const shells = components(base, idx);
  * The source figure's own asymmetry is a property of the generator, not of our code, so it is reported and not
  * failed. What IS ours is whether a slider makes it worse: that is the check.
  */
-const baseAsym = shellChecks(base).asym;
+const baseShell = shellChecks(base);
+const baseAsym = baseShell.asym;
 /**
  * Usable slider range: at the extremes a dressed figure folds into itself, because shrinking a garment with
  * folds by half has nowhere to put the material. The range where no triangle inverts is MEASURED here rather
@@ -140,6 +144,18 @@ const usable: Record<string, number> = {};
  * fold and still limits the range and fails the suite. The count is reported for every case.
  */
 const FLIP_BUDGET = Math.max(2, Math.round(0.001 * tCount));
+/**
+ * A flipped triangle of the inner T-shirt counts 1/16 (I-70): layer-outfit subdivides it twice (1 → 16) so that it
+ * bends with the sliders, and one flipped face of the same T-shirt must not weigh sixteen times more than before.
+ */
+const flipWeight = new Float32Array(tCount).fill(1);
+{
+  const pf = (process.env.IB_ASSET ?? '').replace(/asset-(outfit\d+)\.json$/, 'outfit-$1.json');
+  if (pf !== process.env.IB_ASSET && existsSync(pf)) {
+    const inn = new Set(((JSON.parse(readFileSync(pf, 'utf8')).partsIndex ?? []) as { kind: string; vertices: number[] }[]).filter((q) => q.kind === 'inner').flatMap((q) => q.vertices));
+    for (let t = 0; t < tCount; t++) if (inn.has(idx[t * 3]!) && inn.has(idx[t * 3 + 1]!) && inn.has(idx[t * 3 + 2]!)) flipWeight[t] = 1 / 16;
+  }
+}
 /** how many triangles this weight set turns inside out (counting stops just past the budget) */
 function flipCount(w: Partial<Weights>): number {
       let n = 0;
@@ -154,11 +170,35 @@ function flipCount(w: Partial<Weights>): number {
         const A = nrm2(base), B = nrm2(q);
         const la = Math.hypot(...A), lb = Math.hypot(...B);
         if (la < 1e-12 || lb < 1e-12) continue;
-        if ((A[0] * B[0] + A[1] * B[1] + A[2] * B[2]) / (la * lb) < 0 && ++n > FLIP_BUDGET * 4) return n;
+        if ((A[0] * B[0] + A[1] * B[1] + A[2] * B[2]) / (la * lb) < 0 && (n += flipWeight[t]!) > FLIP_BUDGET * 4) return n;
       }
       return n;
 }
-const inverts = (w: Partial<Weights>) => flipCount(w) > FLIP_BUDGET;
+/**
+ * Inner layer poking through (I-70). The flip count does not see it: the zip hoodie passed with every slider at its
+ * limit, yet in the browser the T-shirt under it came through the front panel and as two white specks on the back.
+ * The part list comes from outfit-<id>.json, whose vertex order is the asset's. Crossings between the inner
+ * T-shirt and the top garment must not grow over the base pose; this limits the slider range like a fold does.
+ */
+const partsFile = (process.env.IB_ASSET ?? '').replace(/asset-(outfit\d+)\.json$/, 'outfit-$1.json');
+const layerTris = (kind: string) => {
+  if (!partsFile.endsWith('.json') || !existsSync(partsFile) || partsFile === process.env.IB_ASSET) return [];
+  const parts = (JSON.parse(readFileSync(partsFile, 'utf8')).partsIndex ?? []) as { kind: string; vertices: number[] }[];
+  const set = new Set(parts.filter((q) => q.kind === kind).flatMap((q) => q.vertices));
+  const out: number[] = [];
+  for (let t = 0; t < tCount; t++) if (set.has(idx[t * 3]!) && set.has(idx[t * 3 + 1]!) && set.has(idx[t * 3 + 2]!)) out.push(idx[t * 3]!, idx[t * 3 + 1]!, idx[t * 3 + 2]!);
+  return out;
+};
+const innerTris = layerTris('inner'), topTris = innerTris.length ? layerTris('top') : [];
+const innerCrossings = (p: Float32Array) => (innerTris.length && topTris.length ? countIntersections({ p, tris: innerTris }, { p, tris: topTris }).crossings : 0);
+const innerBase = innerCrossings(base);
+/**
+ * Allowance like the flip budget: 0.1 % of the T-shirt's triangles (at least 2). What is left at the limits of the
+ * zip hoodie is 1–3 crossings at the hem rim, where the T-shirt comes out from under the garment anyway, and inside
+ * the trunk; the defects seen in the browser were 26–69.
+ */
+const INNER_BUDGET = innerBase + Math.max(2, Math.round(0.001 * innerTris.length / 3));
+const inverts = (w: Partial<Weights>) => flipCount(w) > FLIP_BUDGET || innerCrossings(deform(asset, w)) > INNER_BUDGET;
 for (const nme of WEIGHT_NAMES) {
   let limit = 0;
   for (const v of [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]) {
@@ -175,7 +215,8 @@ for (const nme of WEIGHT_NAMES) {
  * that only chest and shoulders cause. The check itself is not relaxed.
  */
 const corner = (sgn: number, u = usable) => Object.fromEntries(WEIGHT_NAMES.map((nme) => [nme, sgn * u[nme]!])) as Partial<Weights>;
-const cornerFlips = (u: Record<string, number>) => Math.max(0, flipCount(corner(1, u)) - FLIP_BUDGET) + Math.max(0, flipCount(corner(-1, u)) - FLIP_BUDGET);
+const cornerFlips = (u: Record<string, number>) => Math.max(0, flipCount(corner(1, u)) - FLIP_BUDGET) + Math.max(0, flipCount(corner(-1, u)) - FLIP_BUDGET)
+  + Math.max(0, innerCrossings(deform(asset, corner(1, u))) - INNER_BUDGET) + Math.max(0, innerCrossings(deform(asset, corner(-1, u))) - INNER_BUDGET);
 for (let k = 0; k < 60 && cornerFlips(usable) > 0; k++) {
   // first choice: the single slider that fixes both corners while keeping the largest share of its range
   let solo = '', kept = 0;
@@ -223,7 +264,7 @@ cases.push({ label: 'height 200 proportional', w: {}, h: { mode: 'proportional',
 
 const results: unknown[] = [];
 let ok = true;
-console.log(`${asset.id}: ${base.length / 3} вершин / ${tCount} треугольников, ${shells.length} оболочек`);
+console.log(`${asset.id}: ${base.length / 3} вершин / ${tCount} треугольников, ${shells.length} оболочек${innerTris.length ? `, футболка под вещью: ${innerTris.length / 3} треугольников, пересечений в базовой позе ${innerBase}` : ''}`);
 console.log(`собственная асимметрия исходника: ${(baseAsym * 1000).toFixed(1)} мм (свойство генерации, не проверяется — записано в отчёт)`);
 for (const c of cases) {
   const p = deform(asset, c.w, c.h);
@@ -241,15 +282,20 @@ for (const c of cases) {
     const A = nrm(base), B = nrm(p);
     const la = Math.hypot(...A), lb = Math.hypot(...B);
     if (la < 1e-12 || lb < 1e-12) continue;
-    if ((A[0] * B[0] + A[1] * B[1] + A[2] * B[2]) / (la * lb) < 0) flipped++;
+    if ((A[0] * B[0] + A[1] * B[1] + A[2] * B[2]) / (la * lb) < 0) flipped += flipWeight[t]!;
   }
   if (flipped > FLIP_BUDGET) r.fails.push(`перевёрнутых треугольников: ${flipped} (допуск ${FLIP_BUDGET})`);
+  const ic = innerCrossings(p);
+  if (ic > INNER_BUDGET) r.fails.push(`футболка под вещью протыкает её: ${ic} пересечений (допуск ${INNER_BUDGET})`);
   /**
    * A deformation that scales the figure up scales its asymmetry with it — widening the hips by 32 % turned
    * 16.7 mm into 22.4 mm, which is arithmetic, not a defect. So the allowance grows with the factor the case
    * actually applies, and what is caught is asymmetry appearing from nowhere.
    */
-  const factor = 1 + Math.max(0, ...WEIGHT_NAMES.map((nme) => GAIN[nme] * Math.abs((c.w as Record<string, number>)[nme] ?? 0)));
+  // proportional growth scales the whole figure by height / base height (200 cm: ×1.14; the blazer's 58.4 mm became
+  // 66.7 mm = 58.4 × 1.143 and failed against a slider-only allowance)
+  const grow = c.h?.mode === 'proportional' ? Math.max(1, c.h.height_cm / (baseShell.maxY * 100)) : 1;
+  const factor = (1 + Math.max(0, ...WEIGHT_NAMES.map((nme) => GAIN[nme] * Math.abs((c.w as Record<string, number>)[nme] ?? 0)))) * grow;
   if (r.asym > baseAsym * factor + 0.005) r.fails.push(`деформация усилила асимметрию: ${(baseAsym * 1000).toFixed(1)} → ${r.noTwin} мм (допуск ${((baseAsym * factor + 0.005) * 1000).toFixed(1)})`);
   if (r.fails.length) ok = false;
   results.push({ label: c.label, ok: !r.fails.length, fails: r.fails, flipped });

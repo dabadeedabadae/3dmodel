@@ -7,8 +7,9 @@ import { AdminOverview, AdminUser, AdminGarment, AdminOutfit, ApiError, clearTok
 import { FIT_LABELS, GARMENT_LABELS, colorById } from '../../lib/labels';
 import type { FitTag, GarmentType } from '../../lib/api';
 import RecommendationBench from './RecommendationBench';
+import Garments3D from './Garments3D';
 
-type Section = 'overview' | 'users' | 'wardrobe' | 'outfits' | 'recommendations';
+type Section = 'overview' | 'users' | 'wardrobe' | 'outfits' | 'garments3d' | 'recommendations';
 const SECTIONS: { id: Section; label: string; description: string }[] = [
   { id: 'overview', label: 'Overview', description: 'Key metrics and recent sign-ups' },
   { id: 'users', label: 'Users', description: 'Accounts, roles and user activity' },
@@ -23,6 +24,7 @@ function Icon({ name }: { name: Section | 'logout' | 'arrow' | 'refresh' | 'sear
     users: <><circle cx="9" cy="8" r="3" /><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6M21 21v-3a6 6 0 0 0-3-5" /></>,
     wardrobe: <path d="m8 3-5 3-2 5 4 2 1-3v11h12V10l1 3 4-2-2-5-5-3a4 4 0 0 1-8 0Z" />,
     outfits: <><rect x="3" y="3" width="18" height="18" rx="3" /><path d="m3 9 9 5 9-5M12 14v7" /></>,
+    garments3d: <><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Z" /><path d="m3 7 9 5 9-5M12 12v10" /></>,
     recommendations: <><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3" /><path d="M7 15h10" /></>,
     logout: <><path d="M9 4H4v16h5M10 12h11m-4-4 4 4-4 4" /></>,
     arrow: <path d="M19 12H5m6-6-6 6 6 6" />,
@@ -68,6 +70,8 @@ export default function AdminPage() {
       } else if (section === 'users' || section === 'recommendations') {
         const accounts = await getAdminUsers(controller.signal);
         if (!controller.signal.aborted) setUsers(accounts);
+      } else if (section === 'garments3d') {
+        // static 3D files of the site: nothing to ask the API
       } else if (section === 'wardrobe') {
         const items = await getAdminWardrobe(controller.signal);
         if (!controller.signal.aborted) setWardrobe(items);
@@ -127,7 +131,8 @@ export default function AdminPage() {
             ['outfits', 'Saved outfits', overview.savedOutfits, 'Put together in the app'],
           ] as const).map(([id, title, count, hint]) => <button key={id} className="dash-stat" onClick={() => changeSection(id)}><span className="dash-stat-top">{title}<span className={`dash-stat-icon ${id}`}><Icon name={id} /></span></span><strong>{count.toLocaleString('en-US')}</strong><span className="dash-stat-hint">{hint}</span></button>)}</section>}
           {section === 'recommendations' && <RecommendationBench users={users} />}
-          {section !== 'recommendations' && <section className="dash-panel">
+          {section === 'garments3d' && <Garments3D />}
+          {section !== 'recommendations' && section !== 'garments3d' && <section className="dash-panel">
             <div className="dash-panel-heading"><div><h2>{section === 'overview' ? 'Recent users' : current.label}</h2><p>{section === 'overview' ? 'The 5 most recently registered accounts' : 'Latest 100 records · Read-only'}</p></div>
               {section === 'overview' ? <button className="dash-text-button" onClick={() => changeSection('users')}>All users →</button> : <label className="dash-search"><Icon name="search" /><input aria-label="Search the current list" placeholder="Search list…" value={query} onChange={(event) => setQuery(event.target.value)} /></label>}
             </div>
