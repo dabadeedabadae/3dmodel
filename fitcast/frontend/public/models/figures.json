@@ -214,5 +214,47 @@
       "arms": 1,
       "thighs": 1
     }
+  },
+  {
+    "id": "figure-12",
+    "url": "/models/figure-12.json",
+    "vertices": 8463,
+    "triangles": 16425,
+    "label": "Blazer and pants",
+    "garments": {
+      "top": "BLAZER",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-13",
+    "url": "/models/figure-13.json",
+    "vertices": 7646,
+    "triangles": 14821,
+    "label": "Cardigan and pants",
+    "garments": {
+      "top": "CARDIGAN",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
   }
 ]

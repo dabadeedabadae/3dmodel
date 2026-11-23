@@ -10,5 +10,7 @@
   "outfit08": { "label": "Blazer and pants", "top": "BLAZER", "bottom": "PANTS", "topMesh": "imported-body/assets/m-blazer.fbx", "inner": true, "ease": 1.14, "cuffCut": 0.10, "hemCut": 0.32, "deepCut": 0.5, "collarClear": true },
   "outfit09": { "label": "Jacket and pants", "top": "JACKET", "bottom": "PANTS", "topMesh": "imported-body/assets/m-jacket.fbx", "inner": true, "dropDetails": true, "ease": 1.10, "cuffCut": 0.08, "hemCut": 0.25, "deepCut": 0.5, "collarClear": true },
   "outfit10": { "label": "Coat and pants", "top": "COAT", "bottom": "PANTS", "topMesh": "imported-body/assets/m-coat.fbx", "inner": true, "dropDetails": true, "ease": 1.14, "cuffCut": 0.10, "hemCut": 0.25, "deepCut": 0.5, "collarClear": true },
-  "outfit11": { "label": "T-shirt and pants", "top": "TSHIRT", "bottom": "PANTS", "sex": "female", "base": true }
+  "outfit11": { "label": "T-shirt and pants", "top": "TSHIRT", "bottom": "PANTS", "sex": "female", "base": true },
+  "outfit12": { "label": "Blazer and pants", "top": "BLAZER", "bottom": "PANTS", "sex": "female", "ref": "outfit11", "topMesh": "imported-body/assets/f-blazer.fbx", "inner": true, "dropDetails": true, "ease": 1.14, "cuffCut": 0.10, "hemCut": 0.32, "deepCut": 0.5, "collarClear": true },
+  "outfit13": { "label": "Cardigan and pants", "top": "CARDIGAN", "bottom": "PANTS", "sex": "female", "ref": "outfit11", "topMesh": "imported-body/assets/f-cardigan.fbx", "inner": true, "dropDetails": true, "ease": 1.14, "cuffCut": 0.06, "hemCut": 0.18 }
 }
