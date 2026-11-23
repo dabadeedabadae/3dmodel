@@ -6,7 +6,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
-import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { mergeGeometries, mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { sliceContours } from '../src/geom/measure';
 import { labelParts, type OutfitLandmarks, type Part } from '../src/outfit';
 
@@ -41,11 +41,24 @@ function loadGeometry(path: string): THREE.BufferGeometry {
   const buf = readFileSync(path);
   const root = new FBXLoader().parse(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer, '');
   root.updateMatrixWorld(true);
-  let src: THREE.Mesh | null = null;
-  root.traverse((o) => { if ((o as THREE.Mesh).isMesh && !src) src = o as THREE.Mesh; });
-  return (src as unknown as THREE.Mesh).geometry.clone().applyMatrix4((src as unknown as THREE.Mesh).matrixWorld);
+  const meshes: THREE.Mesh[] = [];
+  root.traverse((o) => { if ((o as THREE.Mesh).isMesh) meshes.push(o as THREE.Mesh); });
+  if (meshes.length === 1) return meshes[0]!.geometry.clone().applyMatrix4(meshes[0]!.matrixWorld);
+  // a figure exported as separate parts (head, top, sleeves, arms, trousers, shoes): every part is kept, and the
+  // 'part' attribute stops the weld from joining parts along their shared cut, so each stays its own shell
+  const geos = meshes.map((m, k) => {
+    const gm = m.geometry.index ? m.geometry.toNonIndexed() : m.geometry.clone();
+    const out = new THREE.BufferGeometry();
+    out.setAttribute('position', gm.attributes.position!.clone());
+    out.applyMatrix4(m.matrixWorld);
+    out.setAttribute('part', new THREE.Float32BufferAttribute(new Float32Array(out.attributes.position!.count).fill(k), 1));
+    return out;
+  });
+  return mergeGeometries(geos)!;
 }
 let g = loadGeometry(file);
+/** the input came as separate meshes (head, top, arms…): see labelParts */
+const fromParts = g.hasAttribute('part');
 g.deleteAttribute('normal');
 if (g.hasAttribute('uv')) g.deleteAttribute('uv');
 const before = g.attributes.position!.count;
@@ -234,7 +247,7 @@ for (let i = 0; i < n; i++) {
 const H = heightCm / 100;
 
 // 2. segment and label
-const parts = labelParts(pos, index, { splitFused: !file.endsWith('.json') });
+const parts = labelParts(pos, index, { splitFused: !file.endsWith('.json'), fromParts });
 /** inner layer (I-70): a shell made only of the base T-shirt's vertices is not the outer top */
 const innerMark = g.getAttribute('inner')?.array as Float32Array | undefined;
 if (innerMark) for (const p of parts) if (p.vertices.length && p.vertices.every((v) => innerMark[v]! > 0)) p.kind = 'inner';
@@ -306,7 +319,8 @@ const handsOnly = arms.length > 0 && arms.every((a) => a.cut || innerX([a]) > H 
 const armpit = handsOnly && top ? (sleeveStart(top) ?? lowestOf(arms)) : arms.length ? lowestOf(arms) : H * 0.75;
 let chest = armpit - 0.05, chestW = 0;
 if (top) {
-  for (let y = top.bbox.min[1]; y < armpit; y += 0.005) {
+  // only the upper trunk: on a women's figure the hem flaring over the hips is wider than the bust
+  for (let y = Math.max(top.bbox.min[1], armpit - 0.06 * H); y < armpit; y += 0.005) {
     let w = 0;
     for (const i of top.vertices) if (Math.abs(pos[i * 3 + 1]! - y) < 0.012) w = Math.max(w, Math.abs(pos[i * 3]!));
     if (w > chestW) { chestW = w; chest = y; }

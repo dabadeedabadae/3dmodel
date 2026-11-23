@@ -15,6 +15,7 @@ const SECTIONS: { id: Section; label: string; description: string }[] = [
   { id: 'users', label: 'Users', description: 'Accounts, roles and user activity' },
   { id: 'wardrobe', label: 'Wardrobe', description: 'Items added by FitCast users' },
   { id: 'outfits', label: 'Outfits', description: 'Saved outfits and what they contain' },
+  { id: 'garments3d', label: '3D garments', description: 'Ready 3D outfits on the mannequin and the garment catalog' },
   { id: 'recommendations', label: 'Recommendation test', description: "Query the recommendation service with the selected user's wardrobe" },
 ];
 

@@ -84,7 +84,7 @@
     "id": "m-cardigan",
     "label": "Cardigan",
     "layer": "2",
-    "type": "SWEATER",
+    "type": "CARDIGAN",
     "status": "figure",
     "image": "/catalog/m-cardigan.webp",
     "figure": "figure-06"
@@ -102,7 +102,7 @@
     "id": "m-blazer",
     "label": "Blazer",
     "layer": "2",
-    "type": "JACKET",
+    "type": "BLAZER",
     "status": "figure",
     "image": "/catalog/m-blazer.webp",
     "figure": "figure-08"

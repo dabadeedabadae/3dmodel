@@ -40,7 +40,7 @@ for (const num of ids) {
   }));
   const m = manifest[`outfit${num}`];
   if (!m?.top || !m?.bottom) throw new Error(`figure ${num}: no garment types in ${MANIFEST}`);
-  list.push({ id, url: `/models/${id}.json`, vertices: n, triangles: asset.index.length / 3, label: m.label, garments: { top: m.top, bottom: m.bottom }, ...(m.inner ? { inner: 'TSHIRT' } : {}), range: asset.usableSliderRange });
+  list.push({ id, url: `/models/${id}.json`, vertices: n, triangles: asset.index.length / 3, label: m.label, garments: { top: m.top, bottom: m.bottom }, ...(m.inner ? { inner: 'TSHIRT' } : {}), ...(m.sex === 'female' ? { sex: 'female' } : {}), range: asset.usableSliderRange });
   console.log(`${id}: ${n} vertices, ${asset.index.length / 3} triangles`);
 }
 writeFileSync(resolve(OUT_DIR, 'figures.json'), JSON.stringify(list, null, 2));

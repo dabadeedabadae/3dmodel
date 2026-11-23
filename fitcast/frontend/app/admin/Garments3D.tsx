@@ -40,6 +40,7 @@ function FigureCard({ entry }: { entry: FigureEntry }) {
         <span className="dash-badge is-admin">top: {typeLabel(entry.garments.top)}</span>
         <span className="dash-badge">bottom: {typeLabel(entry.garments.bottom)}</span>
         {entry.inner && <span className="dash-badge">underneath: {typeLabel(entry.inner)}</span>}
+        <span className="dash-badge">{entry.sex === 'female' ? 'women' : 'men'}</span>
       </div>
       <p className="dash-card-meta">{entry.vertices.toLocaleString('en-US')} vertices · {entry.triangles.toLocaleString('en-US')} triangles</p>
       {range && <div className="dash-card-ranges" aria-label="Usable slider range">

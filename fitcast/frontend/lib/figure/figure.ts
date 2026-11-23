@@ -29,6 +29,8 @@ export interface FigureEntry {
   id: string; url: string; vertices: number; triangles: number; label: string; garments: { top: string; bottom: string };
   /** a T-shirt shown under an open neckline (I-70) */
   inner?: string;
+  /** women's figures; absent means a men's figure */
+  sex?: 'female';
   range?: Record<string, number>;
 }
 

@@ -1043,6 +1043,9 @@ a.landing-secondary { font: 12px var(--font-mono), monospace; letter-spacing: .0
 .fit-panel-head .profile-reset { padding: 0; }
 .fit-presets { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 14px; }
 .fit-presets button { border: 1px solid var(--rule); }
+.fit-sex { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; padding: 3px; gap: 2px; margin-bottom: 12px; }
+.fit-sex button { border: 0; background: transparent; border-radius: 6px; padding: 7px 16px; font: 12px var(--font-mono), monospace; color: var(--muted); cursor: pointer; }
+.fit-sex button.is-active { background: var(--blue); color: #fff; }
 .fit-slider { display: block; margin-bottom: 12px; }
 .fit-slider span { display: flex; justify-content: space-between; font: 12px var(--font-mono), monospace; color: var(--muted); margin-bottom: 4px; }
 .fit-slider b { font-weight: 500; color: var(--ink); }

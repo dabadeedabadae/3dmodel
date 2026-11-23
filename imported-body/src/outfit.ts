@@ -54,7 +54,7 @@ export function components(positions: Float32Array, index: Uint32Array): { verti
  * Labels the shells from their place in the figure. Nothing is matched by name or by material — a generated
  * asset carries neither — only by where the shell sits and how far it reaches.
  */
-export function labelParts(positions: Float32Array, index: Uint32Array, opts: { splitFused?: boolean } = {}): Part[] {
+export function labelParts(positions: Float32Array, index: Uint32Array, opts: { splitFused?: boolean; fromParts?: boolean } = {}): Part[] {
   let H = 0;
   for (let i = 0; i < positions.length / 3; i++) H = Math.max(H, positions[i * 3 + 1]!);
   // a mesh composed onto the reference body is clean by construction; cutting it again would trim the cuffs
@@ -77,6 +77,9 @@ export function labelParts(positions: Float32Array, index: Uint32Array, opts: { 
     const width = p.bbox.max[0] - p.bbox.min[0];
     if (bot < 0.12 && top < 0.2) p.kind = midX(p) > 0 ? 'shoe_left' : 'shoe_right';
     else if (top > 0.95 && width < H * 0.3) p.kind = 'head';
+    // a neck exported as its own part (a figure split into parts) belongs with the head; never applied to a
+    // single-mesh figure, where a shell this high is a collar
+    else if (opts.fromParts && bot > 0.78 && width < H * 0.15 && reach(p) < H * 0.08) p.kind = 'head';
     else if (reach(p) > H * 0.35 && top > 0.6 && !crossesCentre(p)) p.kind = midX(p) > 0 ? 'arm_left' : 'arm_right';
     else if (bot < 0.3) p.kind = 'bottom';
     else p.kind = 'top';

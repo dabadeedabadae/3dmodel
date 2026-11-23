@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T11:05:22.579Z",
+  "generatedAt": "2026-11-23T17:02:39.288Z",
   "stature_cm": 175,
   "figures": [
     {
@@ -10,7 +10,7 @@
       "garments": {
         "top": "TSHIRT",
         "bottom": "PANTS",
-        "label": "Футболка и брюки"
+        "label": "T-shirt and pants"
       },
       "parts": {
         "shoe_right": 90,
@@ -48,7 +48,7 @@
         "nonManifoldDropped": 0,
         "windingFixed": 0
       },
-      "sliderRange": "chest ±0.72, waist ±0.72, hip ±1, shoulders ±1, arms ±1, thighs ±0.72"
+      "sliderRange": "chest \u00b10.72, waist \u00b10.72, hip \u00b11, shoulders \u00b11, arms \u00b11, thighs \u00b10.72"
     },
     {
       "file": "outfit-02.fbx",
@@ -58,7 +58,7 @@
       "garments": {
         "top": "HOODIE",
         "bottom": "PANTS",
-        "label": "Худи и брюки"
+        "label": "Hoodie and pants"
       },
       "assembly": "layers",
       "compose": {
@@ -149,7 +149,7 @@
         "nonManifoldDropped": 0,
         "windingFixed": 0
       },
-      "sliderRange": "chest ±0.9, waist ±1, hip ±1, shoulders ±0.5, arms ±1, thighs ±1"
+      "sliderRange": "chest \u00b10.9, waist \u00b11, hip \u00b11, shoulders \u00b10.5, arms \u00b11, thighs \u00b11"
     },
     {
       "file": "outfit-03.fbx",
@@ -159,7 +159,7 @@
       "garments": {
         "top": "SHIRT",
         "bottom": "PANTS",
-        "label": "Рубашка и брюки"
+        "label": "Shirt and pants"
       },
       "assembly": "layers",
       "compose": {
@@ -250,7 +250,55 @@
         "nonManifoldDropped": 0,
         "windingFixed": 0
       },
-      "sliderRange": "chest ±0.45, waist ±1, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+      "sliderRange": "chest \u00b10.45, waist \u00b11, hip \u00b11, shoulders \u00b11, arms \u00b11, thighs \u00b11"
+    },
+    {
+      "file": "outfit-11.fbx",
+      "id": "outfit11",
+      "status": "PASS",
+      "notes": [],
+      "garments": {
+        "top": "TSHIRT",
+        "bottom": "PANTS",
+        "label": "T-shirt and pants"
+      },
+      "parts": {
+        "bottom": 236,
+        "arm_right": 176,
+        "arm_left": 174,
+        "top": 276,
+        "head": 248,
+        "shoe_right": 96,
+        "shoe_left": 99
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 10.9,
+        "crotch": 88.1,
+        "waistband": 102.3,
+        "hip": 93.1,
+        "chest": 129,
+        "armpit": 133.4,
+        "shoulder": 143.5,
+        "neck_base": 150.8,
+        "topHem": 100.3
+      },
+      "symmetry_mm": {
+        "mean": 0,
+        "max": 0
+      },
+      "weld": {
+        "before": 7200,
+        "after": 1305,
+        "triangles": 2400,
+        "refusedNonManifold": 0,
+        "seamSnapped": 64,
+        "mirrorPaired": 1305,
+        "zeroAreaDropped": 0,
+        "nonManifoldDropped": 0,
+        "windingFixed": 0
+      },
+      "sliderRange": "chest \u00b11, waist \u00b11, hip \u00b11, shoulders \u00b11, arms \u00b11, thighs \u00b11"
     },
     {
       "file": "outfit04 (garment only)",
@@ -260,7 +308,7 @@
       "garments": {
         "top": "SHIRT",
         "bottom": "PANTS",
-        "label": "Классическая рубашка и брюки"
+        "label": "Dress shirt and pants"
       },
       "assembly": "garment-only",
       "compose": {
@@ -341,7 +389,7 @@
         "nonManifoldDropped": 0,
         "windingFixed": 0
       },
-      "sliderRange": "chest ±0.7, waist ±0.81, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+      "sliderRange": "chest \u00b10.7, waist \u00b10.81, hip \u00b11, shoulders \u00b11, arms \u00b11, thighs \u00b11"
     },
     {
       "file": "outfit05 (garment only)",
@@ -351,7 +399,7 @@
       "garments": {
         "top": "SWEATER",
         "bottom": "PANTS",
-        "label": "Свитер с V-вырезом и брюки"
+        "label": "V-neck sweater and pants"
       },
       "assembly": "garment-only",
       "compose": {
@@ -433,7 +481,7 @@
         "nonManifoldDropped": 0,
         "windingFixed": 0
       },
-      "sliderRange": "chest ±1, waist ±0.11, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+      "sliderRange": "chest \u00b11, waist \u00b10.11, hip \u00b11, shoulders \u00b11, arms \u00b11, thighs \u00b11"
     },
     {
       "file": "outfit06 (garment only)",
@@ -441,9 +489,9 @@
       "status": "PASS",
       "notes": [],
       "garments": {
-        "top": "SWEATER",
+        "top": "CARDIGAN",
         "bottom": "PANTS",
-        "label": "Кардиган и брюки"
+        "label": "Cardigan and pants"
       },
       "assembly": "garment-only",
       "compose": {
@@ -525,7 +573,7 @@
         "nonManifoldDropped": 0,
         "windingFixed": 0
       },
-      "sliderRange": "chest ±1, waist ±0.64, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+      "sliderRange": "chest \u00b11, waist \u00b10.64, hip \u00b11, shoulders \u00b11, arms \u00b11, thighs \u00b11"
     },
     {
       "file": "outfit07 (garment only)",
@@ -535,7 +583,7 @@
       "garments": {
         "top": "HOODIE",
         "bottom": "PANTS",
-        "label": "Худи на молнии и брюки"
+        "label": "Zip hoodie and pants"
       },
       "assembly": "garment-only",
       "compose": {
@@ -617,7 +665,7 @@
         "nonManifoldDropped": 0,
         "windingFixed": 0
       },
-      "sliderRange": "chest ±1, waist ±0.72, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+      "sliderRange": "chest \u00b11, waist \u00b10.72, hip \u00b11, shoulders \u00b11, arms \u00b11, thighs \u00b11"
     },
     {
       "file": "outfit08 (garment only)",
@@ -625,9 +673,9 @@
       "status": "PASS",
       "notes": [],
       "garments": {
-        "top": "JACKET",
+        "top": "BLAZER",
         "bottom": "PANTS",
-        "label": "Пиджак и брюки"
+        "label": "Blazer and pants"
       },
       "assembly": "garment-only",
       "compose": {
@@ -709,7 +757,7 @@
         "nonManifoldDropped": 0,
         "windingFixed": 0
       },
-      "sliderRange": "chest ±1, waist ±0.81, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+      "sliderRange": "chest \u00b11, waist \u00b10.81, hip \u00b11, shoulders \u00b11, arms \u00b11, thighs \u00b11"
     },
     {
       "file": "outfit09 (garment only)",
@@ -719,7 +767,7 @@
       "garments": {
         "top": "JACKET",
         "bottom": "PANTS",
-        "label": "Куртка и брюки"
+        "label": "Jacket and pants"
       },
       "assembly": "garment-only",
       "compose": {
@@ -735,12 +783,12 @@
         "bottom": {
           "source": "outfit01"
         },
-        "vertices": 6273,
-        "triangles": 12159,
+        "vertices": 5415,
+        "triangles": 10599,
         "cuffVerticesTightened": 22,
         "sleeveVerticesFloored": 22,
         "collarVerticesHugged": 0,
-        "collarVerticesCleared": 1202,
+        "collarVerticesCleared": 34,
         "collarChordFacesDropped": 0,
         "bottomPush": null,
         "topPush": {
@@ -751,8 +799,8 @@
         },
         "bottomRelax": null,
         "topRelax": {
-          "relaxedVertices": 3150,
-          "squashedVerticesLeft": 541
+          "relaxedVertices": 781,
+          "squashedVerticesLeft": 109
         },
         "smallShellVerticesCarried": 0,
         "bottomResidual": {
@@ -772,7 +820,7 @@
         "arm_left": 138,
         "inner": 3314,
         "bottom": 190,
-        "top": 2175
+        "top": 1317
       },
       "landmarks_cm": {
         "height": 175,
@@ -787,21 +835,21 @@
         "topHem": 94.2
       },
       "symmetry_mm": {
-        "mean": 0.89,
+        "mean": 1,
         "max": 14.4
       },
       "weld": {
-        "before": 6273,
-        "after": 6273,
-        "triangles": 12159,
+        "before": 5415,
+        "after": 5415,
+        "triangles": 10599,
         "refusedNonManifold": 0,
-        "seamSnapped": 52,
-        "mirrorPaired": 2346,
+        "seamSnapped": 44,
+        "mirrorPaired": 1486,
         "zeroAreaDropped": 0,
         "nonManifoldDropped": 0,
         "windingFixed": 0
       },
-      "sliderRange": "chest ±0.51, waist ±0.8, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+      "sliderRange": "chest \u00b10.51, waist \u00b10.8, hip \u00b11, shoulders \u00b11, arms \u00b11, thighs \u00b11"
     },
     {
       "file": "outfit10 (garment only)",
@@ -811,7 +859,7 @@
       "garments": {
         "top": "COAT",
         "bottom": "PANTS",
-        "label": "Пальто и брюки"
+        "label": "Coat and pants"
       },
       "assembly": "garment-only",
       "compose": {
@@ -893,7 +941,7 @@
         "nonManifoldDropped": 2,
         "windingFixed": 4
       },
-      "sliderRange": "chest ±0.28, waist ±0.1, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+      "sliderRange": "chest \u00b10.28, waist \u00b10.1, hip \u00b11, shoulders \u00b11, arms \u00b11, thighs \u00b11"
     }
   ]
 }

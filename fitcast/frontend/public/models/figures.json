@@ -102,7 +102,7 @@
     "triangles": 13415,
     "label": "Cardigan and pants",
     "garments": {
-      "top": "SWEATER",
+      "top": "CARDIGAN",
       "bottom": "PANTS"
     },
     "inner": "TSHIRT",
@@ -142,7 +142,7 @@
     "triangles": 15979,
     "label": "Blazer and pants",
     "garments": {
-      "top": "JACKET",
+      "top": "BLAZER",
       "bottom": "PANTS"
     },
     "inner": "TSHIRT",
@@ -189,6 +189,26 @@
     "range": {
       "chest": 0.28,
       "waist": 0.1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-11",
+    "url": "/models/figure-11.json",
+    "vertices": 1305,
+    "triangles": 2400,
+    "label": "T-shirt and pants",
+    "garments": {
+      "top": "TSHIRT",
+      "bottom": "PANTS"
+    },
+    "sex": "female",
+    "range": {
+      "chest": 1,
+      "waist": 1,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,

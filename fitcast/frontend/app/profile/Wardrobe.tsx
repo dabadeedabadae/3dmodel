@@ -12,10 +12,10 @@ import type { PhotoPointName } from '../../lib/figure/photoMap';
 
 const MAX_BYTES = 8 * 1024 * 1024;
 /** garment types whose photo is turned into a 3D print on the figure */
-const ANALYSABLE: GarmentType[] = ['TSHIRT', 'SHIRT', 'HOODIE', 'SWEATER', 'PANTS', 'JEANS'];
-const LONG_TOPS: GarmentType[] = ['SHIRT', 'HOODIE', 'SWEATER'];
+const ANALYSABLE: GarmentType[] = ['TSHIRT', 'SHIRT', 'HOODIE', 'SWEATER', 'CARDIGAN', 'PANTS', 'JEANS'];
+const LONG_TOPS: GarmentType[] = ['SHIRT', 'HOODIE', 'SWEATER', 'CARDIGAN'];
 /** what the form says it is recognising */
-const ANALYSING_LABEL: Partial<Record<GarmentType, string>> = { TSHIRT: 'T-shirt', SHIRT: 'shirt', HOODIE: 'hoodie', SWEATER: 'sweater', PANTS: 'pants', JEANS: 'jeans' };
+const ANALYSING_LABEL: Partial<Record<GarmentType, string>> = { TSHIRT: 'T-shirt', SHIRT: 'shirt', HOODIE: 'hoodie', SWEATER: 'sweater', CARDIGAN: 'cardigan', PANTS: 'pants', JEANS: 'jeans' };
 const ACCEPT = 'image/jpeg,image/png,image/webp';
 
 type Filter = 'ALL' | GarmentType;

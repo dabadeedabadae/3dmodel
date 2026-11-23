@@ -48,7 +48,7 @@ export default function FittingRoom() {
   const [weights, setWeights] = useState<Weights>(ZERO);
   const [heightCm, setHeightCm] = useState(175);
   /** linked proportions (I-68): height and weight size the whole figure, girth sliders shape it at that weight */
-  const [linked, setLinked] = useState(true);
+  const [linkedPref, setLinked] = useState(true);
   const [weightZ, setWeightZ] = useState(0);
   const [pins, setPins] = useState<ShapeState['pins']>({});
   const [view, setView] = useState<View>('threequarter');
@@ -69,6 +69,18 @@ export default function FittingRoom() {
   const [bottomSampleId, setBottomSampleId] = useState<string | null>(null);
   const [bottomSamplePrint, setBottomSamplePrint] = useState<(Print & { type: string }) | null>(null);
   const cur = figures.find((f) => f.id === figureId) ?? null;
+  /** men's and women's figures; linked proportions come from men's measurements (ANSUR II men), so women's figures use the sliders alone */
+  const sex = cur?.sex ?? 'male';
+  const linked = linkedPref && sex === 'male';
+  const sameSex = (f: FigureEntry) => (f.sex ?? 'male') === sex;
+  function switchSex(to: 'male' | 'female') {
+    if (to === sex) return;
+    const next = figures.find((f) => (f.sex ?? 'male') === to && f.garments.top === cur?.garments.top && f.garments.bottom === cur?.garments.bottom) ?? figures.find((f) => (f.sex ?? 'male') === to);
+    if (!next) return;
+    setFigureId(next.id);
+  }
+  // the default height follows the mannequin: 175 cm for men, 165 cm for women (also when opened by a link)
+  useEffect(() => { setHeightCm(sex === 'female' ? 165 : 175); }, [sex]);
   // a print goes only onto the same garment type of the figure (I-54): T-shirt photos onto a T-shirt, a shirt or
   // hoodie photo onto a shirt or hoodie (I-63), trouser photos onto trousers
   const topPrint = ownPrint && cur?.garments.top === ownPrint.type ? ownPrint : cur?.garments.top === 'TSHIRT' && !ownPrint ? samplePrint : null;
@@ -78,7 +90,7 @@ export default function FittingRoom() {
   const [notice, setNotice] = useState('');
   /** the figure for a garment type: the current one if it matches, otherwise the first that does */
   const figureFor = (slot: 'top' | 'bottom', type: string) =>
-    cur?.garments[slot] === type ? cur : figures.find((f) => f.garments[slot] === type) ?? null;
+    cur?.garments[slot] === type ? cur : figures.find((f) => sameSex(f) && f.garments[slot] === type) ?? figures.find((f) => f.garments[slot] === type) ?? null;
   const availableTypes = (slot: 'top' | 'bottom') => Array.from(new Set(figures.map((f) => f.garments[slot]))).map((t) => GARMENT_LABELS[t as GarmentType]?.toLowerCase() ?? t).join(', ');
 
   useEffect(() => {
@@ -88,7 +100,7 @@ export default function FittingRoom() {
     const g = samples.find((x) => x.id === printId);
     if (!g) { setPrint(null); return; }
     // sample photos are T-shirts: show them on the T-shirt figure
-    const tee = figures.find((f) => f.garments.top === 'TSHIRT');
+    const tee = figures.find((f) => sameSex(f) && f.garments.top === 'TSHIRT') ?? figures.find((f) => f.garments.top === 'TSHIRT');
     if (tee && tee.id !== figureId) setFigureId(tee.id);
     let active = true;
     fetch(g.url).then((r) => r.json()).then((pkg: { anchors: PhotoAnchors; textureUrl: string; baseColor: string }) => {
@@ -103,7 +115,7 @@ export default function FittingRoom() {
   useEffect(() => {
     const g = samples.find((x) => x.id === bottomSampleId);
     if (!g) { setBottomSamplePrint(null); return; }
-    const fit = figures.find((f) => f.garments.bottom === g.type);
+    const fit = figures.find((f) => sameSex(f) && f.garments.bottom === g.type) ?? figures.find((f) => f.garments.bottom === g.type);
     if (fit && fit.garments.bottom !== cur?.garments.bottom) setFigureId(fit.id);
     let active = true;
     fetch(g.url).then((r) => r.json()).then((pkg: { anchors: PantsAnchors; textureUrl: string; baseColor: string }) => {
@@ -176,7 +188,7 @@ export default function FittingRoom() {
     : weights),
   // eslint-disable-next-line react-hooks/exhaustive-deps
   [linked, shape, weights, figure]);
-  function resetShape() { applyPreset({}); setHeightCm(175); setWeightZ(0); setPins({}); }
+  function resetShape() { applyPreset({}); setHeightCm(sex === 'female' ? 165 : 175); setWeightZ(0); setPins({}); }
   function toggleLinked(on: boolean) {
     // the figure does not jump: switching off keeps what was shown, switching on starts from the usual shape
     if (!on) setWeights(shown); else { setPins({}); setWeightZ(0); }
@@ -269,8 +281,13 @@ export default function FittingRoom() {
           {figures.length > 1 && (
             <section className="profile-panel">
               <h2>Outfit</h2>
+              {figures.some((f) => f.sex === 'female') && (
+                <div className="fit-sex" role="group" aria-label="Mannequin">
+                  {([['male', 'Men'], ['female', 'Women']] as const).map(([v, l]) => <button key={v} type="button" className={sex === v ? 'is-active' : ''} aria-pressed={sex === v} onClick={() => switchSex(v)}>{l}</button>)}
+                </div>
+              )}
               <div className="fit-presets" role="group" aria-label="Outfit">
-                {figures.map((f) => (
+                {figures.filter(sameSex).map((f) => (
                   <button key={f.id} type="button" className={figureId === f.id ? 'is-active' : ''} aria-pressed={figureId === f.id} onClick={() => setFigureId(f.id)}>{f.label}</button>
                 ))}
               </div>
@@ -348,9 +365,10 @@ export default function FittingRoom() {
               <button type="button" className="profile-reset" onClick={resetShape}>Reset</button>
             </div>
             <label className="fit-linked">
-              <input type="checkbox" checked={linked} onChange={(e) => toggleLinked(e.target.checked)} />
+              <input type="checkbox" checked={linked} disabled={sex === 'female'} onChange={(e) => toggleLinked(e.target.checked)} />
               <span>Realistic proportions</span>
             </label>
+            {sex === 'female' && <p className="fit-note">Linked proportions are built from men&apos;s measurements, so the women&apos;s figure is shaped with the sliders directly.</p>}
             <div className="fit-presets" role="group" aria-label="Body type">
               {linked
                 ? BODY_TYPES.map((t) => (
