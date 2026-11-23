@@ -32,7 +32,7 @@ async function main() {
       await prisma.user.upsert({
         where: { email },
         update: { passwordHash, isAdmin, sessionVersion: { increment: 1 } },
-        create: { email, passwordHash, isAdmin, name: role === 'admin' ? 'Админ FitCast' : 'Демо', city: 'Алматы' },
+        create: { email, passwordHash, isAdmin, name: role === 'admin' ? 'FitCast Admin' : 'Demo', city: 'London' },
       });
     }
     const user = await prisma.user.findUniqueOrThrow({ where: { email: creds.user.email } });

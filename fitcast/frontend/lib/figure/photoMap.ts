@@ -97,14 +97,14 @@ export function anchorIssues(a: PhotoAnchors): string[] {
   const d = (p: P, q: P) => Math.hypot(p.x - q.x, p.y - q.y);
   const W = d(P.hem_left, P.hem_right);
   const out: string[] = [];
-  if (!(W > 0)) return ['ширина подола нулевая'];
+  if (!(W > 0)) return ['hem width is zero'];
   for (const [label, sh, ap, ct, cb] of [
-    ['правый на снимке', P.shoulder_right, P.armpit_right, P.cuff_right_top, P.cuff_right_bottom],
-    ['левый на снимке', P.shoulder_left, P.armpit_left, P.cuff_left_top, P.cuff_left_bottom],
+    ['right in the photo', P.shoulder_right, P.armpit_right, P.cuff_right_top, P.cuff_right_bottom],
+    ['left in the photo', P.shoulder_left, P.armpit_left, P.cuff_left_top, P.cuff_left_bottom],
   ] as const) {
     const open = d(ct, cb) / W, top = d(sh, ct) / W, bot = d(ap, cb) / W;
-    if (open > 0.4) out.push(`рукав ${label}: раскрыв манжеты ${open.toFixed(2)} ширины подола`);
-    if (bot > 2 * top + 0.1 || top > 2 * bot + 0.1) out.push(`рукав ${label}: линии рукава ${top.toFixed(2)} / ${bot.toFixed(2)} ширины подола`);
+    if (open > 0.4) out.push(`sleeve ${label}: cuff opening is ${open.toFixed(2)} of hem width`);
+    if (bot > 2 * top + 0.1 || top > 2 * bot + 0.1) out.push(`sleeve ${label}: sleeve edges are ${top.toFixed(2)} / ${bot.toFixed(2)} of hem width`);
   }
   return out;
 }
@@ -351,7 +351,7 @@ export function estimatePantsLandmarks(mask: Uint8Array, width: number, height: 
   }
   const reasons: string[] = [];
   const empty = (): PantsLandmarks => ({ points: {} as Record<PantsPointName, P>, status: 'uncertain', anchors: null, reasons });
-  if (y0 < 0) { reasons.push('маска пустая'); return empty(); }
+  if (y0 < 0) { reasons.push('mask is empty'); return empty(); }
   const H = y1 - y0, cx = (x0 + x1) / 2, W = x1 - x0;
   // two legs: two runs whose gap lies in the middle 40 % of the garment's width, each a real leg (≥ 8 % of it)
   const legsAt = (y: number) => {
@@ -376,7 +376,7 @@ export function estimatePantsLandmarks(mask: Uint8Array, width: number, height: 
     if (ok && runTop < 0) runTop = y;
     if (!ok && runTop >= 0) { if (y - 1 - runTop > bestBot - bestTop) { bestTop = runTop; bestBot = y - 1; } runTop = -1; }
   }
-  if (bestTop < 0 || bestBot - bestTop < 0.1 * H) { reasons.push('штанины не разделены на снимке'); return empty(); }
+  if (bestTop < 0 || bestBot - bestTop < 0.1 * H) { reasons.push('legs are not separated in the photo'); return empty(); }
   const crotchY = bestTop;
   const hemY = bestBot - 0.01 * H;
   const hem = legsAt(hemY) ?? legsAt(bestBot)!;
@@ -430,12 +430,12 @@ export function pantsIssues(a: PantsAnchors): string[] {
   const waistY = (P.waist_left.y + P.waist_right.y) / 2;
   const hemY = (P.hem_left_outer.y + P.hem_right_outer.y) / 2;
   const L = hemY - waistY, Ww = P.waist_right.x - P.waist_left.x;
-  if (!(L > 0) || !(Ww > 0)) return ['пояс и низ не найдены'];
+  if (!(L > 0) || !(Ww > 0)) return ['waistband and hems not found'];
   const rise = (P.crotch.y - waistY) / L;
-  if (rise < 0.15 || rise > 0.5) out.push(`промежность на ${rise.toFixed(2)} длины от пояса (ожидается 0.15–0.5)`);
+  if (rise < 0.15 || rise > 0.5) out.push(`crotch is at ${rise.toFixed(2)} of the length from the waistband (expected 0.15–0.5)`);
   const wl = (P.hem_left_inner.x - P.hem_left_outer.x) / Ww, wrr = (P.hem_right_outer.x - P.hem_right_inner.x) / Ww;
-  if (wl < 0.06 || wrr < 0.06) out.push('штанина внизу слишком узкая');
-  if (P.hem_left_inner.x >= P.hem_right_inner.x) out.push('штанины внизу перекрываются');
+  if (wl < 0.06 || wrr < 0.06) out.push('leg is too narrow at the hem');
+  if (P.hem_left_inner.x >= P.hem_right_inner.x) out.push('legs overlap at the hem');
   return out;
 }
 

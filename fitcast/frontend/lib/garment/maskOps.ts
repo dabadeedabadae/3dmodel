@@ -181,12 +181,12 @@ export function assessMask(mask: Uint8Array, width: number, height: number): Mas
   const touchesBorder = borderHits / (2 * (width + height)) > 0.15;
   const openHoleArea = holes.regions.reduce((a, h) => a + h.area, 0);
   const warnings: string[] = [];
-  if (area === 0) warnings.push('маска пустая');
-  if (coverage > 0 && coverage < 0.05) warnings.push('маска меньше 5 % кадра — вещь могла не найтись');
-  if (coverage > 0.9) warnings.push('маска больше 90 % кадра — вероятно, захвачен фон');
-  if (touchesBorder) warnings.push('маска касается края кадра — вещь обрезана или захвачен фон');
-  if (comps.regions.length > 1) warnings.push(`${comps.regions.length} отдельных фрагментов`);
-  if (holes.regions.length > 0) warnings.push(`внутренние разрывы: ${holes.regions.length} (${((openHoleArea / Math.max(1, area)) * 100).toFixed(1)} % площади вещи) — настоящий вырез оставьте, остальное восстановите`);
+  if (area === 0) warnings.push('mask is empty');
+  if (coverage > 0 && coverage < 0.05) warnings.push('mask covers less than 5% of the frame; the garment may not have been found');
+  if (coverage > 0.9) warnings.push('mask covers more than 90% of the frame; the background was probably included');
+  if (touchesBorder) warnings.push('mask touches the frame edge; the garment is cropped or the background was included');
+  if (comps.regions.length > 1) warnings.push(`${comps.regions.length} separate fragments`);
+  if (holes.regions.length > 0) warnings.push(`internal gaps: ${holes.regions.length} (${((openHoleArea / Math.max(1, area)) * 100).toFixed(1)}% of garment area); keep the real neckline, fill in the rest`);
   return { status: area === 0 ? 'empty' : warnings.length ? 'suspicious' : 'ok', coverage, touchesBorder, components: comps.regions.length, openHoles: holes.regions.length, openHoleArea, warnings };
 }
 

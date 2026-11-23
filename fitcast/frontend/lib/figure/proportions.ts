@@ -104,20 +104,20 @@ export function pinFromSlider(st: ShapeState, g: Girth, v: number): number {
 /** plain words for a deviation in standard deviations; "usual" means usual for this height and weight */
 export function describeZ(z: number): string {
   const a = Math.abs(z);
-  if (a < 0.5) return 'как обычно';
-  const dir = z > 0 ? 'больше' : 'меньше';
-  if (a < 1.5) return `чуть ${dir} обычного`;
-  if (a < 2.5) return `${dir} обычного`;
-  return `заметно ${dir} обычного`;
+  if (a < 0.5) return 'typical';
+  const dir = z > 0 ? 'larger' : 'smaller';
+  if (a < 1.5) return `slightly ${dir} than typical`;
+  if (a < 2.5) return `${dir} than typical`;
+  return `much ${dir} than typical`;
 }
 
 /** body types in the same units: weight z and pinned girth z; everything not listed follows the data */
 export const BODY_TYPES: { id: string; label: string; weightZ: number; pins: Partial<Record<Girth, number>> }[] = [
-  { id: 'base', label: 'Обычная', weightZ: 0, pins: {} },
-  { id: 'slim', label: 'Худощавая', weightZ: -1.3, pins: {} },
-  { id: 'full', label: 'Плотная', weightZ: 1.5, pins: {} },
-  { id: 'athletic', label: 'Атлетичная', weightZ: 0.6, pins: { shoulders: 1.5, chest: 1.2, waist: -1.2 } },
-  { id: 'chest', label: 'Грудь больше', weightZ: 0, pins: { chest: 2 } },
-  { id: 'belly', label: 'С животом', weightZ: 0.8, pins: { waist: 1.6 } },
-  { id: 'pear', label: 'Широкие бёдра', weightZ: 0, pins: { hip: 2, shoulders: -1 } },
+  { id: 'base', label: 'Average', weightZ: 0, pins: {} },
+  { id: 'slim', label: 'Slim', weightZ: -1.3, pins: {} },
+  { id: 'full', label: 'Heavy', weightZ: 1.5, pins: {} },
+  { id: 'athletic', label: 'Athletic', weightZ: 0.6, pins: { shoulders: 1.5, chest: 1.2, waist: -1.2 } },
+  { id: 'chest', label: 'Larger chest', weightZ: 0, pins: { chest: 2 } },
+  { id: 'belly', label: 'Belly', weightZ: 0.8, pins: { waist: 1.6 } },
+  { id: 'pear', label: 'Wide hips', weightZ: 0, pins: { hip: 2, shoulders: -1 } },
 ];

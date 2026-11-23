@@ -33,30 +33,30 @@ export interface Garment3d {
   pointsSource: 'auto' | 'user';
 }
 
-const fail = (why: string): never => { throw new BadRequestException(`Пакет 3D-вещи отклонён: ${why}.`); };
+const fail = (why: string): never => { throw new BadRequestException(`3D garment package rejected: ${why}.`); };
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 
 export function parseGarment3d(raw: unknown): Garment3d {
-  if (typeof raw !== 'string' || raw.length > 20_000) fail('ожидается JSON до 20 КБ');
+  if (typeof raw !== 'string' || raw.length > 20_000) fail('expected JSON up to 20 KB');
   let j: unknown;
-  try { j = JSON.parse(raw as string); } catch { fail('не JSON'); }
-  if (!isObj(j)) return fail('не объект');
-  if (j.version !== 1 || !['tshirt', 'top', 'pants'].includes(j.category as string)) fail('неизвестная версия или категория');
+  try { j = JSON.parse(raw as string); } catch { fail('not JSON'); }
+  if (!isObj(j)) return fail('not an object');
+  if (j.version !== 1 || !['tshirt', 'top', 'pants'].includes(j.category as string)) fail('unknown version or category');
   const isPants = j.category === 'pants';
   const a = j.anchors;
-  if (!isObj(a)) return fail('нет опорных точек');
+  if (!isObj(a)) return fail('no anchor points');
   const W = a.width, H = a.height;
-  if (!Number.isInteger(W) || !Number.isInteger(H) || (W as number) < 16 || (H as number) < 16 || (W as number) > 4096 || (H as number) > 4096) fail('размер снимка');
+  if (!Number.isInteger(W) || !Number.isInteger(H) || (W as number) < 16 || (H as number) < 16 || (W as number) > 4096 || (H as number) > 4096) fail('image size');
   const pt = (p: unknown, what: string) => {
-    if (!isObj(p) || !Number.isFinite(p.x) || !Number.isFinite(p.y)) fail(`точка ${what}`);
+    if (!isObj(p) || !Number.isFinite(p.x) || !Number.isFinite(p.y)) fail(`point ${what}`);
     const { x, y } = p as { x: number; y: number };
-    if (x < -(W as number) || x > 2 * (W as number) || y < -(H as number) || y > 2 * (H as number)) fail(`точка ${what} вне снимка`);
+    if (x < -(W as number) || x > 2 * (W as number) || y < -(H as number) || y > 2 * (H as number)) fail(`point ${what} is outside the image`);
     return { x, y };
   };
-  if (!isObj(a.points)) fail('нет точек');
+  if (!isObj(a.points)) fail('no points');
   const pts = a.points as Record<string, unknown>;
   const names = isPants ? PANTS_POINTS : POINTS;
-  if (Object.keys(pts).length !== names.length) fail('лишние или недостающие точки');
+  if (Object.keys(pts).length !== names.length) fail('extra or missing points');
   const points = Object.fromEntries(names.map((k) => [k, pt(pts[k], k)]));
   /** an array of exactly n rows, each { a, b } of two points */
   const rowList = <A extends string, B extends string>(v: unknown, n: number, ka: A, kb: B, what: string) => {
@@ -68,19 +68,19 @@ export function parseGarment3d(raw: unknown): Garment3d {
     });
   };
   const anchors: Garment3d['anchors'] = isPants
-    ? { width: W as number, height: H as number, points, seat: rowList(a.seat, 5, 'left', 'right', 'сиденье'), legLeft: rowList(a.legLeft, 9, 'outer', 'inner', 'левая штанина'), legRight: rowList(a.legRight, 9, 'inner', 'outer', 'правая штанина') }
-    : { width: W as number, height: H as number, points, rows: rowList(a.rows, 4, 'left', 'right', 'ряд') };
+    ? { width: W as number, height: H as number, points, seat: rowList(a.seat, 5, 'left', 'right', 'seat'), legLeft: rowList(a.legLeft, 9, 'outer', 'inner', 'left leg'), legRight: rowList(a.legRight, 9, 'inner', 'outer', 'right leg') }
+    : { width: W as number, height: H as number, points, rows: rowList(a.rows, 4, 'left', 'right', 'row') };
   const extra = Object.keys(a).filter((k) => !['width', 'height', 'points', ...(isPants ? ['seat', 'legLeft', 'legRight'] : ['rows'])].includes(k));
-  if (extra.length) fail('лишние поля');
-  if (typeof j.baseColor !== 'string' || !/^#[0-9a-f]{6}$/i.test(j.baseColor)) fail('цвет');
-  if (!['ok', 'suspicious', 'empty'].includes(j.maskQuality as string)) fail('статус маски');
-  if (!['ok', 'uncertain'].includes(j.landmarkStatus as string)) fail('статус точек');
-  if (!Array.isArray(j.anchorIssues) || j.anchorIssues.length > 10 || !j.anchorIssues.every((s) => typeof s === 'string' && s.length <= 200)) fail('замечания');
-  if (typeof j.needsReview !== 'boolean') fail('флаг проверки');
-  if (typeof j.provider !== 'string' || j.provider.length > 120) fail('модель');
-  if (j.pointsSource !== undefined && j.pointsSource !== 'auto' && j.pointsSource !== 'user') fail('источник точек');
+  if (extra.length) fail('unexpected fields');
+  if (typeof j.baseColor !== 'string' || !/^#[0-9a-f]{6}$/i.test(j.baseColor)) fail('color');
+  if (!['ok', 'suspicious', 'empty'].includes(j.maskQuality as string)) fail('mask status');
+  if (!['ok', 'uncertain'].includes(j.landmarkStatus as string)) fail('landmark status');
+  if (!Array.isArray(j.anchorIssues) || j.anchorIssues.length > 10 || !j.anchorIssues.every((s) => typeof s === 'string' && s.length <= 200)) fail('issues');
+  if (typeof j.needsReview !== 'boolean') fail('review flag');
+  if (typeof j.provider !== 'string' || j.provider.length > 120) fail('provider');
+  if (j.pointsSource !== undefined && j.pointsSource !== 'auto' && j.pointsSource !== 'user') fail('points source');
   // the manual point editor exists for tops only; trousers points always come from the estimator
-  if (j.pointsSource === 'user' && isPants) fail('ручные точки — только для верха');
+  if (j.pointsSource === 'user' && isPants) fail('manual points are only allowed for tops');
   return {
     version: 1, category: j.category as Garment3d['category'], anchors,
     baseColor: (j.baseColor as string).toLowerCase(), maskQuality: j.maskQuality as Garment3d['maskQuality'],

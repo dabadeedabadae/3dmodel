@@ -96,7 +96,7 @@ export function clearToken() {
 
 export async function getProfile(): Promise<UserProfile> {
   const token = getToken();
-  if (!token) throw new ApiError(401, 'Войдите в аккаунт.');
+  if (!token) throw new ApiError(401, 'Please sign in.');
 
   const res = await fetch(`${API_URL}/users/me`, {
     cache: 'no-store',
@@ -104,7 +104,7 @@ export async function getProfile(): Promise<UserProfile> {
   });
 
   if (!res.ok) {
-    throw new ApiError(res.status, res.status === 401 ? 'Сессия истекла. Войдите снова.' : 'Не удалось загрузить профиль.');
+    throw new ApiError(res.status, res.status === 401 ? 'Your session has expired. Please sign in again.' : 'Could not load the profile.');
   }
 
   return res.json();
@@ -117,7 +117,7 @@ export interface UserProfile extends AuthUser {
 export interface ProfileChanges { name: string; city: string; bio: string }
 export async function updateProfile(changes: ProfileChanges): Promise<UserProfile> {
   const token = getToken();
-  if (!token) throw new ApiError(401, 'Войдите в аккаунт.');
+  if (!token) throw new ApiError(401, 'Please sign in.');
   const response = await fetch(API_URL + '/users/me', {
     method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
     body: JSON.stringify(changes),
@@ -125,14 +125,14 @@ export async function updateProfile(changes: ProfileChanges): Promise<UserProfil
   if (!response.ok) {
     const data = await response.json().catch(() => null);
     const message = Array.isArray(data?.message) ? data.message.join('. ') : data?.message;
-    throw new ApiError(response.status, message || 'Не удалось сохранить профиль.');
+    throw new ApiError(response.status, message || 'Could not save the profile.');
   }
   return response.json();
 }
 
 export async function changePassword(currentPassword: string, newPassword: string): Promise<void> {
   const token = getToken();
-  if (!token) throw new ApiError(401, 'Войдите в аккаунт.');
+  if (!token) throw new ApiError(401, 'Please sign in.');
   const response = await fetch(API_URL + '/users/me/password', {
     method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
     body: JSON.stringify({ currentPassword, newPassword }),
@@ -140,15 +140,16 @@ export async function changePassword(currentPassword: string, newPassword: strin
   if (!response.ok) {
     const data = await response.json().catch(() => null);
     const message = Array.isArray(data?.message) ? data.message.join('. ') : data?.message;
-    throw new ApiError(response.status, message || 'Не удалось изменить пароль.');
+    throw new ApiError(response.status, message || 'Could not change the password.');
   }
 }
 
 /* ---------- Wardrobe ---------- */
 
-export type GarmentType = 'TSHIRT' | 'SHIRT' | 'JACKET' | 'COAT' | 'SWEATER' | 'HOODIE' | 'PANTS' | 'JEANS' | 'SHORTS' | 'SKIRT' | 'DRESS' | 'SHOES' | 'ACCESSORY';
+export type GarmentType = 'TSHIRT' | 'SHIRT' | 'JACKET' | 'COAT' | 'SWEATER' | 'HOODIE' | 'CARDIGAN' | 'BLAZER' | 'PANTS' | 'JEANS' | 'SHORTS' | 'SKIRT' | 'DRESS' | 'SHOES' | 'ACCESSORY';
 export type FitTag = 'GOOD' | 'TIGHT' | 'LOOSE';
-export type EventType = 'CASUAL' | 'GYM' | 'BUSINESS' | 'FORMAL' | 'OUTDOOR';
+export type EventType = 'CASUAL' | 'GYM' | 'BUSINESS' | 'FORMAL' | 'OUTDOOR' | 'DATE' | 'WEDDING_GUEST' | 'INTERVIEW'
+  | 'PARTY' | 'THEATER' | 'TRAVEL' | 'STUDY' | 'FAMILY_WALK';
 export type Precipitation = 'NONE' | 'RAIN' | 'SNOW' | 'MIXED';
 
 export interface WardrobeItem {
@@ -161,21 +162,21 @@ export interface WardrobeItem {
 /** Absolute URL of a stored upload (the API serves /uploads/...). */
 export const mediaUrl = (path: string) => (path.startsWith('/uploads/') ? API_URL + path : path);
 
-async function authed<T>(path: string, init: RequestInit = {}, fallback = 'Запрос не выполнен.'): Promise<T> {
+async function authed<T>(path: string, init: RequestInit = {}, fallback = 'The request failed.'): Promise<T> {
   const token = getToken();
-  if (!token) throw new ApiError(401, 'Войдите в аккаунт.');
+  if (!token) throw new ApiError(401, 'Please sign in.');
   const response = await fetch(API_URL + path, {
     ...init, cache: 'no-store', headers: { ...(init.headers ?? {}), Authorization: 'Bearer ' + token },
   });
   if (!response.ok) {
     const data = await response.json().catch(() => null);
     const message = Array.isArray(data?.message) ? data.message.join('. ') : data?.message;
-    throw new ApiError(response.status, response.status === 401 ? 'Сессия истекла. Войдите снова.' : message || fallback);
+    throw new ApiError(response.status, response.status === 401 ? 'Your session has expired. Please sign in again.' : message || fallback);
   }
   return response.json();
 }
 
-export const getWardrobe = () => authed<WardrobeItem[]>('/wardrobe', {}, 'Не удалось загрузить гардероб.');
+export const getWardrobe = () => authed<WardrobeItem[]>('/wardrobe', {}, 'Could not load your wardrobe.');
 
 export function addWardrobeItem(image: Blob, fields: { type: GarmentType; dominantColor: string; fitTag: FitTag }, model?: { pkg: GarmentPackage; texture: Blob }) {
   const body = new FormData();
@@ -184,16 +185,16 @@ export function addWardrobeItem(image: Blob, fields: { type: GarmentType; domina
   body.append('fitTag', fields.fitTag);
   body.append('image', image, 'garment');
   if (model) { body.append('garment3d', JSON.stringify(model.pkg)); body.append('texture', model.texture, 'texture.jpg'); }
-  return authed<WardrobeItem>('/wardrobe', { method: 'POST', body }, 'Не удалось добавить вещь.');
+  return authed<WardrobeItem>('/wardrobe', { method: 'POST', body }, 'Could not add the item.');
 }
 
 export const updateWardrobeItem = (id: string, changes: Partial<Pick<WardrobeItem, 'type' | 'dominantColor' | 'fitTag'>>) =>
   authed<WardrobeItem>('/wardrobe/' + id, {
     method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(changes),
-  }, 'Не удалось сохранить изменения.');
+  }, 'Could not save the changes.');
 
 export const deleteWardrobeItem = (id: string) =>
-  authed<{ id: string }>('/wardrobe/' + id, { method: 'DELETE' }, 'Не удалось удалить вещь.');
+  authed<{ id: string }>('/wardrobe/' + id, { method: 'DELETE' }, 'Could not remove the item.');
 
 /* ---------- Admin: recommendation test bench ---------- */
 
@@ -207,4 +208,100 @@ export interface RecommendationTestResult {
 export const runRecommendationTest = (input: RecommendationTestInput) =>
   authed<RecommendationTestResult>('/admin/recommendations/test', {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input),
-  }, 'Не удалось выполнить тест.');
+  }, 'Could not run the test.');
+
+/* ---------- Weather (Open-Meteo through the API) ---------- */
+
+export interface WeatherLocation { name: string; country: string | null; latitude: number; longitude: number; timezone: string }
+export interface DailyWeather {
+  date: string; minC: number; maxC: number; weatherCode: number; precipitation: Precipitation;
+  precipitationProbability: number | null; description: string;
+}
+export interface WeatherReport {
+  city: string; fromProfile: boolean; location: WeatherLocation;
+  current: { time: string; temperatureC: number; weatherCode: number; precipitation: Precipitation; description: string };
+  daily: DailyWeather[];
+  recommendationWeather: { temperatureC: number; precipitation: Precipitation };
+}
+/** without `city` the city from the profile is used */
+export const getWeather = (city?: string) =>
+  authed<WeatherReport>('/weather' + (city ? '?city=' + encodeURIComponent(city) : ''), {}, 'Could not load the weather.');
+
+/* ---------- Events ---------- */
+
+export type EventWeather =
+  | { status: 'FORECAST'; city: string; cityFromProfile: boolean; location: string; temperatureC: number;
+      precipitation: Precipitation; weatherCode: number; description: string;
+      recommendationInput: { weather: { temperatureC: number; precipitation: Precipitation }; eventType: EventType } }
+  | { status: 'PAST' | 'TOO_FAR'; city: string; cityFromProfile: boolean; location: string; forecastFrom?: string }
+  | { status: 'NO_CITY' }
+  | { status: 'CITY_NOT_FOUND' | 'UNAVAILABLE'; city: string; cityFromProfile: boolean };
+
+export interface UserEvent {
+  id: string; title: string; eventType: EventType; startsAt: string; city: string | null; note: string | null;
+  createdAt: string; updatedAt: string;
+  /** null for past events */
+  weather: EventWeather | null;
+}
+export interface EventInput { title: string; eventType: EventType; startsAt: string; city: string; note: string }
+
+export const getEvents = (scope: 'upcoming' | 'past' = 'upcoming') =>
+  authed<UserEvent[]>('/events?scope=' + scope, {}, 'Could not load your events.');
+export const createEvent = (input: EventInput) =>
+  authed<UserEvent>('/events', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input),
+  }, 'Could not add the event.');
+export const updateEvent = (id: string, input: Partial<EventInput>) =>
+  authed<UserEvent>('/events/' + id, {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input),
+  }, 'Could not save the event.');
+export const deleteEvent = (id: string) =>
+  authed<{ id: string }>('/events/' + id, { method: 'DELETE' }, 'Could not delete the event.');
+
+/* ---------- Recommendations, feedback, saved outfits ---------- */
+
+export type OutfitItem = Pick<WardrobeItem, 'id' | 'type' | 'dominantColor' | 'fitTag' | 'imageUrl'>;
+export type Verdict = 'LIKE' | 'DISLIKE';
+export interface RecommendedOutfit {
+  key: string; items: OutfitItem[]; score: number; explanation: string;
+  breakdown: { occasion: number; weather: number; color: number; fit: number | null };
+  feedback: Verdict | null; savedOutfitId: string | null;
+}
+export interface RecommendationContext {
+  eventId: string | null; eventTitle: string | null; startsAt: string | null; eventType: EventType; location: string;
+  weather: { temperatureC: number; precipitation: Precipitation; description: string };
+}
+export interface Recommendations {
+  context: RecommendationContext; status: 'OK' | 'NO_VALID_OUTFITS'; outfits: RecommendedOutfit[];
+  hiddenDisliked: number; warnings: string[];
+}
+/** for an event (its forecast), or for an occasion with the current weather in the profile city */
+export const getRecommendations = (target: { eventId: string } | { eventType: EventType }, limit = 3) =>
+  authed<Recommendations>('/recommendations', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...target, limit }),
+  }, 'Could not get outfit suggestions.');
+
+export const sendOutfitFeedback = (ctx: RecommendationContext, outfit: RecommendedOutfit, verdict: Verdict | null) =>
+  authed<{ outfitKey: string; verdict: Verdict | null }>('/recommendations/feedback', {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      itemIds: outfit.items.map((i) => i.id), eventId: ctx.eventId ?? undefined, eventType: ctx.eventType,
+      temperatureC: ctx.weather.temperatureC, precipitation: ctx.weather.precipitation, score: outfit.score, verdict,
+    }),
+  }, 'Could not save your feedback.');
+
+export interface SavedOutfit {
+  id: string; name: string; eventType: EventType; explanation: string | null; createdAt: string;
+  event: { id: string; title: string; startsAt: string } | null; items: OutfitItem[];
+}
+export const getSavedOutfits = () => authed<SavedOutfit[]>('/outfits', {}, 'Could not load your outfits.');
+export const saveOutfit = (ctx: RecommendationContext, outfit: RecommendedOutfit) =>
+  authed<SavedOutfit>('/outfits', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      eventType: ctx.eventType, eventId: ctx.eventId ?? undefined, itemIds: outfit.items.map((i) => i.id),
+      explanation: outfit.explanation, name: ctx.eventTitle ? `For "${ctx.eventTitle}"`.slice(0, 100) : undefined,
+    }),
+  }, 'Could not save the outfit.');
+export const deleteSavedOutfit = (id: string) =>
+  authed<{ id: string }>('/outfits/' + id, { method: 'DELETE' }, 'Could not delete the outfit.');
