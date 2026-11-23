@@ -844,6 +844,9 @@ button.secondary.model-photo-btn {
 .profile-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 24px; }
 .profile-stats article > strong { display: block; font: 38px var(--font-mono), monospace; color: var(--blue); margin: 18px 0 12px; }
 .profile-stats p { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 0; }
+.profile-stat-link { display: block; text-decoration: none; color: inherit; }
+.profile-stat-link > article { height: 100%; transition: border-color .15s; }
+.profile-stat-link:hover > article { border-color: var(--blue); }
 .profile-model-link { text-decoration: none; color: var(--ink); background: #eef1ff; border-color: #dce2ff; }
 .profile-model-link h2 { font-weight: 400; font-size: 24px; margin: 18px 0 8px; }
 .profile-model-link b { font-weight: 400; font-size: 13px; display: block; margin-top: 20px; color: var(--blue); }

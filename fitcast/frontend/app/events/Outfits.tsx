@@ -126,6 +126,12 @@ export function SavedOutfits({ version, onAuthExpired }: { version: number; onAu
     });
     return () => { active = false; };
   }, [version, onAuthExpired]);
+  // the profile's "Saved outfits" card links to #saved-outfits; the section exists only after the page has loaded,
+  // so the browser's own jump to the anchor happens too early
+  const loaded = outfits !== null;
+  useEffect(() => {
+    if (loaded && window.location.hash === '#saved-outfits') document.getElementById('saved-outfits')?.scrollIntoView({ block: 'start' });
+  }, [loaded]);
   async function remove(o: SavedOutfit) {
     if (!window.confirm(`Delete the saved outfit "${o.name}"? The items stay in your wardrobe.`)) return;
     setBusyId(o.id); setError('');
@@ -137,7 +143,7 @@ export function SavedOutfits({ version, onAuthExpired }: { version: number; onAu
       setError(err instanceof Error ? err.message : 'Could not delete the outfit.');
     } finally { setBusyId(null); }
   }
-  return <section className="profile-panel wardrobe" aria-labelledby="saved-title">
+  return <section id="saved-outfits" className="profile-panel wardrobe" aria-labelledby="saved-title">
     <div className="wardrobe-head"><div><span className="profile-kicker">OUTFITS</span><h2 id="saved-title">Saved outfits</h2><p>Outfits you kept from the suggestions, with the event they were for.</p></div></div>
     {error && <p className="error" role="alert">{error}</p>}
     {!outfits ? !error && <p className="profile-loading" role="status">Loading outfits…</p>

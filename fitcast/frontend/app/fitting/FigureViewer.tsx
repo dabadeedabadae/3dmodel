@@ -116,6 +116,10 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     };
     const ro = new ResizeObserver(resize);
     ro.observe(el);
+    // a browser keeps ~16 WebGL contexts per page and drops the oldest past that (the admin grid has 13 viewers);
+    // three.js restores a dropped context, but nothing drew the scene again, so a card stayed blank until a click
+    const restored = () => render();
+    renderer.domElement.addEventListener('webglcontextrestored', restored);
     ctx.current = { renderer, scene, camera, controls, geometry, colors, render, positions: new Float32Array(figure.base), photos: [] };
     // development only: lets automated visual checks place the camera precisely (not in production builds)
     if (process.env.NODE_ENV === 'development') (window as unknown as Record<string, unknown>).__fitDebug = { camera, controls, render, closeUps: () => { controls.minDistance = 0.1; } };
@@ -128,7 +132,10 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
       controls.dispose();
       geometry.dispose(); material.dispose(); floorGeo.dispose(); floorMat.dispose();
       key.shadow.map?.dispose();
+      renderer.domElement.removeEventListener('webglcontextrestored', restored);
       renderer.dispose();
+      // free the context now instead of at garbage collection, so unmounted viewers do not count against the limit
+      renderer.forceContextLoss();
       renderer.domElement.remove();
       ctx.current = null;
     };

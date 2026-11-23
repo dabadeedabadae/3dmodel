@@ -66,16 +66,28 @@ function toLab([r, g, b]: number[]): [number, number, number] {
   return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
 }
 
+const NEUTRALS = new Set(['black', 'white', 'gray']);
+const lch = (lab: number[]) => [lab[0]!, Math.hypot(lab[1]!, lab[2]!), (Math.atan2(lab[2]!, lab[1]!) * 180 / Math.PI + 360) % 360];
+
 /**
- * Nearest palette colour to an sRGB triple in Lab. The earlier redmean RGB distance weighted green 4× and sent
- * desaturated colours to green (washed jeans #606b7a came out "Green"); in Lab they go to gray.
+ * Nearest palette colour to an sRGB triple. A garment colour with little chroma (C < 13 in Lab: washed denim
+ * #606b7a, a gray-white stripe) takes the nearest colour in Lab. A colour with a visible hue goes by hue first,
+ * then lightness and chroma, among the chromatic colours only: photo colours are darker and duller than the
+ * palette, and plain Lab distance sent a dark green sweater (#3d5e53) to gray. Redmean RGB, used before, sent the
+ * washed denim to green.
  */
 function nearestRgb(px: number[]): string {
-  const p = toLab(px);
+  const p = toLab(px), [L, C, h] = lch(p);
   let best = COLORS[0]!.id, bestD = Infinity;
   for (const c of COLORS) {
     const q = toLab([1, 3, 5].map((i) => parseInt(c.hex.slice(i, i + 2), 16)));
-    const d = (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2 + (p[2] - q[2]) ** 2;
+    let d: number;
+    if (C < 13) d = (p[0]! - q[0]!) ** 2 + (p[1]! - q[1]!) ** 2 + (p[2]! - q[2]!) ** 2;
+    else {
+      if (NEUTRALS.has(c.id)) continue;
+      const [qL, qC, qh] = lch(q), dh = Math.min(Math.abs(h - qh), 360 - Math.abs(h - qh));
+      d = (dh / 30) ** 2 + ((L - qL) / 25) ** 2 + ((C - qC) / 30) ** 2;
+    }
     if (d < bestD) { bestD = d; best = c.id; }
   }
   return best;
