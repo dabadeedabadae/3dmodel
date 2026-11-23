@@ -36,13 +36,13 @@ export class WardrobeService {
     const result = await this.prisma.wardrobeItem.updateMany({
       where: { id, userId }, data: { type: dto.type, dominantColor: dto.dominantColor, fitTag: dto.fitTag },
     });
-    if (!result.count) throw new NotFoundException('Вещь не найдена.');
+    if (!result.count) throw new NotFoundException('Item not found.');
     return this.prisma.wardrobeItem.findUniqueOrThrow({ where: { id }, select: itemSelect });
   }
 
   async remove(userId: string, id: string) {
     const item = await this.prisma.wardrobeItem.findFirst({ where: { id, userId }, select: { imageUrl: true, textureUrl: true } });
-    if (!item) throw new NotFoundException('Вещь не найдена.');
+    if (!item) throw new NotFoundException('Item not found.');
     await this.prisma.wardrobeItem.deleteMany({ where: { id, userId } });
     await removeUpload(item.imageUrl);
     if (item.textureUrl) await removeUpload(item.textureUrl);

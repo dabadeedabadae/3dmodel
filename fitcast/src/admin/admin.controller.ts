@@ -60,7 +60,7 @@ export class AdminController {
   @HttpCode(200)
   async recommendationTest(@Body() dto: RecommendationTestDto) {
     const user = await this.prisma.user.findUnique({ where: { id: dto.userId }, select: { id: true } });
-    if (!user) throw new NotFoundException('Пользователь не найден.');
+    if (!user) throw new NotFoundException('User not found.');
     const wardrobe = await this.prisma.wardrobeItem.findMany({
       where: { userId: dto.userId }, take: 200, orderBy: { createdAt: 'desc' },
       select: { id: true, type: true, dominantColor: true, fitTag: true },

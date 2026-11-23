@@ -6,7 +6,7 @@ dist/
 uploads/
 .demo-accounts.local.json
 
-# Архив старых реализаций: в проекте, но не в git
+# Archive of old implementations: kept in the project, not in git
 archive/
 frontend/public/ort/
 

@@ -12,26 +12,26 @@ import type { PantsAnchors, PhotoAnchors } from '../../lib/figure/photoMap';
 
 interface SampleGarment { id: string; category: 'tshirt' | 'pants'; type: string; url: string; textureUrl: string; baseColor: string; needsReview: boolean }
 
-const FigureViewer = dynamic(() => import('./FigureViewer'), { ssr: false, loading: () => <div className="fit-canvas fit-loading">Загрузка модели…</div> });
+const FigureViewer = dynamic(() => import('./FigureViewer'), { ssr: false, loading: () => <div className="fit-canvas fit-loading">Loading model…</div> });
 
 const TOPS: GarmentType[] = ['TSHIRT', 'SHIRT', 'SWEATER', 'HOODIE', 'JACKET', 'COAT', 'DRESS'];
 const BOTTOMS: GarmentType[] = ['PANTS', 'JEANS', 'SHORTS', 'SKIRT'];
 
 const SLIDERS: { key: keyof Weights; label: string }[] = [
-  { key: 'chest', label: 'Грудь' }, { key: 'waist', label: 'Талия' }, { key: 'hip', label: 'Бёдра' },
-  { key: 'shoulders', label: 'Плечи' }, { key: 'arms', label: 'Руки' }, { key: 'thighs', label: 'Ноги' },
+  { key: 'chest', label: 'Chest' }, { key: 'waist', label: 'Waist' }, { key: 'hip', label: 'Hips' },
+  { key: 'shoulders', label: 'Shoulders' }, { key: 'arms', label: 'Arms' }, { key: 'thighs', label: 'Legs' },
 ];
 
 /** Presets in slider units; each value is clamped to the figure's measured working range. */
 const PRESETS: { id: string; label: string; w: Partial<Weights> }[] = [
-  { id: 'base', label: 'Базовая', w: {} },
-  { id: 'slim', label: 'Стройная', w: { chest: -0.6, waist: -0.8, hip: -0.5, shoulders: -0.5, arms: -0.6, thighs: -0.6 } },
-  { id: 'athletic', label: 'Атлетичная', w: { chest: 0.8, waist: -0.6, hip: -0.2, shoulders: 1, arms: 0.7, thighs: 0.4 } },
-  { id: 'round', label: 'Плотная', w: { chest: 0.4, waist: 1, hip: 0.8, shoulders: -0.3, arms: 0.2, thighs: 0.6 } },
+  { id: 'base', label: 'Regular', w: {} },
+  { id: 'slim', label: 'Slim', w: { chest: -0.6, waist: -0.8, hip: -0.5, shoulders: -0.5, arms: -0.6, thighs: -0.6 } },
+  { id: 'athletic', label: 'Athletic', w: { chest: 0.8, waist: -0.6, hip: -0.2, shoulders: 1, arms: 0.7, thighs: 0.4 } },
+  { id: 'round', label: 'Full', w: { chest: 0.4, waist: 1, hip: 0.8, shoulders: -0.3, arms: 0.2, thighs: 0.6 } },
 ];
 
 const VIEWS: { id: View; label: string }[] = [
-  { id: 'front', label: 'Спереди' }, { id: 'threequarter', label: '3/4' }, { id: 'side', label: 'Сбоку' }, { id: 'back', label: 'Сзади' },
+  { id: 'front', label: 'Front' }, { id: 'threequarter', label: '3/4' }, { id: 'side', label: 'Side' }, { id: 'back', label: 'Back' },
 ];
 
 
@@ -123,7 +123,7 @@ export default function FittingRoom() {
 
   useEffect(() => {
     listFigures().then((list) => { setFigures(list); if (list.length && !list.some((f) => f.id === 'figure-01')) setFigureId(list[0].id); })
-      .catch((e: unknown) => setFigureError(e instanceof Error ? e.message : 'Не удалось загрузить список моделей.'));
+      .catch((e: unknown) => setFigureError(e instanceof Error ? e.message : 'Could not load the model list.'));
   }, []);
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export default function FittingRoom() {
       // every figure has its own measured slider range: keep the sliders inside it
       setWeights((w) => Object.fromEntries(WEIGHT_NAMES.map((k) => [k, Math.max(-f.range[k], Math.min(f.range[k], w[k]))])) as unknown as Weights);
       setFigure(f);
-    }).catch((e: unknown) => { if (active) setFigureError(e instanceof Error ? e.message : 'Не удалось загрузить модель.'); });
+    }).catch((e: unknown) => { if (active) setFigureError(e instanceof Error ? e.message : 'Could not load the model.'); });
     return () => { active = false; };
   }, [figures, figureId]);
 
@@ -166,7 +166,7 @@ export default function FittingRoom() {
     const hex = colorById(item.dominantColor)?.hex ?? '#888';
     const target = figureFor(slot, item.type);
     if (!target) {
-      setNotice(`3D-модели с вещью «${GARMENT_LABELS[item.type].toLowerCase()}» пока нет — её не на что надеть. Сейчас есть ${slot === 'top' ? 'верх' : 'низ'}: ${availableTypes(slot)}.`);
+      setNotice(`There's no 3D model for "${GARMENT_LABELS[item.type].toLowerCase()}" yet, so it can't be dressed. Available ${slot === 'top' ? 'tops' : 'bottoms'}: ${availableTypes(slot)}.`);
       return;
     }
     setNotice('');
@@ -187,17 +187,17 @@ export default function FittingRoom() {
       } else { setOwnBottomPrint(null); setBottomColor(hex); }
     }
   }
-  // /fitting?item=<id> (the wardrobe's «Примерить на 3D»): dress the figure in that item once everything is loaded
+  // /fitting?item=<id> (the wardrobe's "Try on in 3D"): dress the figure in that item once everything is loaded
   const deepLinked = useRef(false);
   useEffect(() => {
     if (deepLinked.current || !wardrobe || !figures.length) return;
     deepLinked.current = true;
     const id = new URLSearchParams(window.location.search).get('item');
     const item = id ? wardrobe.find((i) => i.id === id) : undefined;
-    if (!item) { if (id) setNotice('Эта вещь не найдена в вашем гардеробе.'); return; }
+    if (!item) { if (id) setNotice('This item was not found in your wardrobe.'); return; }
     if (TOPS.includes(item.type)) pickItem(item, 'top');
     else if (BOTTOMS.includes(item.type)) pickItem(item, 'bottom');
-    else setNotice(`3D-модели с вещью «${GARMENT_LABELS[item.type].toLowerCase()}» пока нет.`);
+    else setNotice(`There's no 3D model for "${GARMENT_LABELS[item.type].toLowerCase()}" yet.`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wardrobe, figures]);
   const presetActive = (w: Partial<Weights>) => WEIGHT_NAMES.every((k) => Math.abs(weights[k] - clampTo(k, w[k] ?? 0)) < 1e-6);
@@ -206,19 +206,19 @@ export default function FittingRoom() {
     <main className="fit-main">
       <div className="profile-heading fit-heading">
         <div>
-          <span className="profile-kicker">ПРИМЕРОЧНАЯ</span>
-          <h1>3D-модель</h1>
-          <p>Настройте фигуру и посмотрите свои вещи на манекене. Поверните модель мышью или пальцем.</p>
+          <span className="profile-kicker">FITTING ROOM</span>
+          <h1>3D model</h1>
+          <p>Adjust the figure and see your clothes on the mannequin. Rotate the model with your mouse or finger.</p>
         </div>
       </div>
 
       <div className="fit-layout">
-        <section className="fit-stage" aria-label="Манекен">
+        <section className="fit-stage" aria-label="Mannequin">
           {figureError ? <div className="fit-canvas fit-loading" role="alert">{figureError}</div>
             : figure ? <FigureViewer figure={figure} weights={weights} heightCm={heightCm} palette={palette} view={view} viewNonce={viewNonce} prints={prints} />
-              : <div className="fit-canvas fit-loading">Загрузка модели…</div>}
-          {((topPrint && ownPrint?.needsReview) || (bottomPrint && ownBottomPrint?.needsReview)) && <p className="fit-warning" role="status">Точки на фото этой вещи найдены неуверенно — принт может лечь неточно.</p>}
-          <div className="fit-views" role="group" aria-label="Ракурс">
+              : <div className="fit-canvas fit-loading">Loading model…</div>}
+          {((topPrint && ownPrint?.needsReview) || (bottomPrint && ownBottomPrint?.needsReview)) && <p className="fit-warning" role="status">The points on this item's photo were detected with low confidence, so the print may be slightly off.</p>}
+          <div className="fit-views" role="group" aria-label="View">
             {VIEWS.map((v) => (
               <button key={v.id} type="button" className={view === v.id ? 'is-active' : ''} aria-pressed={view === v.id} onClick={() => { setView(v.id); setViewNonce((n) => n + 1); }}>{v.label}</button>
             ))}
@@ -228,8 +228,8 @@ export default function FittingRoom() {
         <aside className="fit-panel">
           {figures.length > 1 && (
             <section className="profile-panel">
-              <h2>Комплект</h2>
-              <div className="fit-presets" role="group" aria-label="Комплект">
+              <h2>Outfit</h2>
+              <div className="fit-presets" role="group" aria-label="Outfit">
                 {figures.map((f) => (
                   <button key={f.id} type="button" className={figureId === f.id ? 'is-active' : ''} aria-pressed={figureId === f.id} onClick={() => setFigureId(f.id)}>{f.label}</button>
                 ))}
@@ -240,80 +240,80 @@ export default function FittingRoom() {
           {samples.some((g) => !g.needsReview && g.category === 'tshirt') && (
             <section className="profile-panel">
               <div className="fit-panel-head">
-                <h2>Фото на футболке</h2>
-                {printId && <button type="button" className="profile-reset" onClick={() => setPrintId(null)}>Убрать</button>}
+                <h2>Photo on T-shirt</h2>
+                {printId && <button type="button" className="profile-reset" onClick={() => setPrintId(null)}>Remove</button>}
               </div>
               <div className="fit-items">
                 <ul>
                   {samples.filter((g) => !g.needsReview && g.category === 'tshirt').map((g) => (
                     <li key={g.id}>
-                      <button type="button" className={printId === g.id ? 'is-active' : ''} aria-pressed={printId === g.id} onClick={() => { setOwnPrint(null); setTopId(null); setPrintId(g.id); }} title="Фото из открытого набора (CC0)">
+                      <button type="button" className={printId === g.id ? 'is-active' : ''} aria-pressed={printId === g.id} onClick={() => { setOwnPrint(null); setTopId(null); setPrintId(g.id); }} title="Photo from an open dataset (CC0)">
                         {/* eslint-disable-next-line @next/next/no-img-element -- local sample texture */}
-                        <img src={g.textureUrl} alt="Фото футболки" />
+                        <img src={g.textureUrl} alt="T-shirt photo" />
                       </button>
                     </li>
                   ))}
                 </ul>
               </div>
-              <p className="fit-note">Перёд футболки — с фото, по маске и ориентирам. Спинка и бока не видны на снимке и показаны основным цветом вещи. Образцы — открытый набор фото (CC0); снимки, где точки нужно подтвердить вручную, здесь не показаны.</p>
+              <p className="fit-note">The T-shirt front comes from the photo, using the mask and landmarks. The back and sides aren't visible in the shot, so they use the garment's main color. Samples come from an open photo dataset (CC0); shots whose points need manual confirmation are not shown here.</p>
             </section>
           )}
 
           {samples.some((g) => !g.needsReview && g.category === 'pants' && figures.some((f) => f.garments.bottom === g.type)) && (
             <section className="profile-panel">
               <div className="fit-panel-head">
-                <h2>Фото на брюках</h2>
-                {bottomSampleId && <button type="button" className="profile-reset" onClick={() => setBottomSampleId(null)}>Убрать</button>}
+                <h2>Photo on pants</h2>
+                {bottomSampleId && <button type="button" className="profile-reset" onClick={() => setBottomSampleId(null)}>Remove</button>}
               </div>
               <div className="fit-items">
                 <ul>
                   {samples.filter((g) => !g.needsReview && g.category === 'pants' && figures.some((f) => f.garments.bottom === g.type)).map((g) => (
                     <li key={g.id}>
-                      <button type="button" className={bottomSampleId === g.id ? 'is-active' : ''} aria-pressed={bottomSampleId === g.id} onClick={() => { setOwnBottomPrint(null); setBottomId(null); setBottomSampleId(g.id); }} title="Фото из открытого набора (CC0)">
+                      <button type="button" className={bottomSampleId === g.id ? 'is-active' : ''} aria-pressed={bottomSampleId === g.id} onClick={() => { setOwnBottomPrint(null); setBottomId(null); setBottomSampleId(g.id); }} title="Photo from an open dataset (CC0)">
                         {/* eslint-disable-next-line @next/next/no-img-element -- local sample texture */}
-                        <img src={g.textureUrl} alt="Фото брюк" />
+                        <img src={g.textureUrl} alt="Pants photo" />
                       </button>
                     </li>
                   ))}
                 </ul>
               </div>
-              <p className="fit-note">Перёд брюк — с фото, по маске и ориентирам: пояс, промежность, низ штанин. Сзади и по бокам — основной цвет. Джинсы надеваются только на модель в джинсах.</p>
+              <p className="fit-note">The pants front comes from the photo, using the mask and landmarks: waistband, crotch and leg hems. The back and sides use the main color. Jeans only go on a model wearing jeans.</p>
             </section>
           )}
 
           <section className="profile-panel">
-            <h2>Одежда</h2>
+            <h2>Clothes</h2>
             {signedIn ? (
-              wardrobe === null ? <p className="fit-hint">Загрузка гардероба…</p> : (
+              wardrobe === null ? <p className="fit-hint">Loading wardrobe…</p> : (
                 <>
-                  <ItemRow title="Верх" items={tops} selected={topId} onPick={(i) => pickItem(i, 'top')} hasModel={(t) => figures.some((f) => f.garments.top === t)} empty="В гардеробе нет верха — футболки, свитера, куртки." />
-                  <ItemRow title="Низ" items={bottoms} selected={bottomId} onPick={(i) => pickItem(i, 'bottom')} hasModel={(t) => figures.some((f) => f.garments.bottom === t)} empty="В гардеробе нет низа — брюк, джинсов, юбки." />
+                  <ItemRow title="Top" items={tops} selected={topId} onPick={(i) => pickItem(i, 'top')} hasModel={(t) => figures.some((f) => f.garments.top === t)} empty="No tops in your wardrobe: T-shirts, sweaters, jackets." />
+                  <ItemRow title="Bottom" items={bottoms} selected={bottomId} onPick={(i) => pickItem(i, 'bottom')} hasModel={(t) => figures.some((f) => f.garments.bottom === t)} empty="No bottoms in your wardrobe: pants, jeans, skirts." />
                   {notice && <p className="fit-notice" role="status">{notice}</p>}
-                  {(!tops.length || !bottoms.length) && <Link className="fit-link" href="/profile">Добавить вещи в гардероб →</Link>}
+                  {(!tops.length || !bottoms.length) && <Link className="fit-link" href="/profile">Add items to your wardrobe →</Link>}
                 </>
               )
             ) : (
               <>
-                <Swatches title="Цвет верха" ids={QUICK_TOPS} value={topColor} onPick={setTopColor} />
-                <Swatches title="Цвет низа" ids={QUICK_BOTTOMS} value={bottomColor} onPick={setBottomColor} />
-                <p className="fit-hint"><Link href="/login">Войдите</Link>, чтобы примерить вещи из своего гардероба.</p>
+                <Swatches title="Top color" ids={QUICK_TOPS} value={topColor} onPick={setTopColor} />
+                <Swatches title="Bottom color" ids={QUICK_BOTTOMS} value={bottomColor} onPick={setBottomColor} />
+                <p className="fit-hint"><Link href="/login">Sign in</Link> to try on clothes from your wardrobe.</p>
               </>
             )}
-            <p className="fit-note">Вещь надевается только на такую же вещь модели: футболка — на футболку, брюки — на брюки. Футболка с пометкой 3D — с принтом со своего фото, у остальных переносится цвет.</p>
+            <p className="fit-note">An item only goes on the matching garment of the model: T-shirt on T-shirt, pants on pants. A T-shirt marked 3D carries the print from its own photo; the others carry over their color.</p>
           </section>
 
           <section className="profile-panel">
             <div className="fit-panel-head">
-              <h2>Фигура</h2>
-              <button type="button" className="profile-reset" onClick={() => { applyPreset({}); setHeightCm(175); }}>Сбросить</button>
+              <h2>Figure</h2>
+              <button type="button" className="profile-reset" onClick={() => { applyPreset({}); setHeightCm(175); }}>Reset</button>
             </div>
-            <div className="fit-presets" role="group" aria-label="Тип фигуры">
+            <div className="fit-presets" role="group" aria-label="Body type">
               {PRESETS.map((p) => (
                 <button key={p.id} type="button" className={presetActive(p.w) ? 'is-active' : ''} aria-pressed={presetActive(p.w)} onClick={() => applyPreset(p.w)}>{p.label}</button>
               ))}
             </div>
             <label className="fit-slider">
-              <span>Рост <b>{heightCm} см</b></span>
+              <span>Height <b>{heightCm} cm</b></span>
               <input type="range" min={150} max={200} step={1} value={heightCm} onChange={(e) => setHeightCm(Number(e.target.value))} />
             </label>
             {SLIDERS.map(({ key, label }) => {
@@ -328,7 +328,7 @@ export default function FittingRoom() {
                 </label>
               );
             })}
-            <p className="fit-note">Ползунки ограничены диапазоном, в котором модель остаётся корректной. Это пропорции, не мерки в сантиметрах.</p>
+            <p className="fit-note">The sliders are limited to the range where the model stays correct. They are proportions, not measurements in centimeters.</p>
           </section>
         </aside>
       </div>
@@ -349,11 +349,11 @@ function ItemRow({ title, items, selected, onPick, empty, hasModel }: {
         <ul>
           {items.map((i) => (
             <li key={i.id}>
-              <button type="button" className={`${selected === i.id ? 'is-active' : ''}${hasModel(i.type) ? '' : ' no-model'}`} aria-pressed={selected === i.id} onClick={() => onPick(i)} title={`${GARMENT_LABELS[i.type]}, ${colorById(i.dominantColor)?.label ?? i.dominantColor}${hasModel(i.type) ? '' : ' — 3D-модели с такой вещью пока нет'}`}>
+              <button type="button" className={`${selected === i.id ? 'is-active' : ''}${hasModel(i.type) ? '' : ' no-model'}`} aria-pressed={selected === i.id} onClick={() => onPick(i)} title={`${GARMENT_LABELS[i.type]}, ${colorById(i.dominantColor)?.label ?? i.dominantColor}${hasModel(i.type) ? '' : ' (no 3D model for this item yet)'}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element -- API upload */}
                 <img src={mediaUrl(i.imageUrl)} alt={`${GARMENT_LABELS[i.type]}, ${colorById(i.dominantColor)?.label ?? i.dominantColor}`} />
                 <i style={{ background: colorById(i.dominantColor)?.hex }} aria-hidden />
-                {!hasModel(i.type) && <em className="fit-nomodel">нет модели</em>}
+                {!hasModel(i.type) && <em className="fit-nomodel">no model</em>}
                 {i.garment3d && <b className="fit-3d">3D</b>}
               </button>
             </li>

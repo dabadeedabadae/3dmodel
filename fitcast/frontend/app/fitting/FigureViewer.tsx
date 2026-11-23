@@ -223,7 +223,7 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, viewNonce, figure]);
 
-  return <div ref={host} className="fit-canvas" aria-label="3D-модель: перетащите, чтобы повернуть; колесо — приблизить" role="img" />;
+  return <div ref={host} className="fit-canvas" aria-label="3D model: drag to rotate, scroll to zoom" role="img" />;
 }
 
 function fillPhotoPositions(photo: { mesh: THREE.Mesh; corners: Uint32Array }, p: Float32Array) {

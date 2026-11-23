@@ -52,7 +52,7 @@ export function estimateBaseColor(img: RasterImage, mask: Uint8Array): BaseColor
     const o = i * 4;
     px.push({ l: luminance(img.data[o]!, img.data[o + 1]!, img.data[o + 2]!), r: img.data[o]!, g: img.data[o + 1]!, b: img.data[o + 2]! });
   }
-  if (px.length === 0) return { rgb: [128, 128, 128], hex: '#808080', sampled: 0, note: 'маска пуста — серый по умолчанию' };
+  if (px.length === 0) return { rgb: [128, 128, 128], hex: '#808080', sampled: 0, note: 'mask is empty, defaulting to gray' };
   px.sort((a, b) => a.l - b.l);
   const lo = Math.floor(px.length * 0.05),
     hi = Math.ceil(px.length * 0.95);
@@ -63,7 +63,7 @@ export function estimateBaseColor(img: RasterImage, mask: Uint8Array): BaseColor
   };
   const rgb: [number, number, number] = [med('r'), med('g'), med('b')];
   const hex = '#' + rgb.map((c) => c.toString(16).padStart(2, '0')).join('');
-  return { rgb, hex, sampled: mid.length, note: `медиана по ${mid.length} пикселям внутри маски (эрозия, без 5 % самых тёмных и светлых)` };
+  return { rgb, hex, sampled: mid.length, note: `median of ${mid.length} pixels inside the mask (eroded, excluding the darkest and lightest 5%)` };
 }
 
 /** Masked box blur of a scalar field (summed-area tables), radius r. Returns the blurred field (undefined where no mask within radius). */

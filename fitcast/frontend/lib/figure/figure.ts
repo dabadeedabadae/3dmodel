@@ -30,7 +30,7 @@ export interface FigureEntry { id: string; url: string; vertices: number; triang
 /** Figures available to the client (written by `npm run figure:sync`). */
 export async function listFigures(): Promise<FigureEntry[]> {
   const r = await fetch('/models/figures.json', { cache: 'no-store' });
-  if (!r.ok) throw new Error('Модели не найдены. Выполните npm run figure:sync в корне FitCast.');
+  if (!r.ok) throw new Error('No models found. Run npm run figure:sync in the FitCast root.');
   return r.json();
 }
 
@@ -41,7 +41,7 @@ export function loadFigure(url = '/models/figure-01.json'): Promise<Figure> {
   const hit = cache.get(url);
   if (hit) return hit;
   const p = fetch(url).then(async (r) => {
-    if (!r.ok) throw new Error(`Модель не найдена (${r.status}). Выполните npm run figure:sync в корне FitCast.`);
+    if (!r.ok) throw new Error(`Model not found (${r.status}). Run npm run figure:sync in the FitCast root.`);
     const f = (await r.json()) as FigureFile;
     return {
       id: f.id, version: f.version, landmarks: f.landmarks, armBand: f.armBand, axis: f.axis, legAxis: f.legAxis,

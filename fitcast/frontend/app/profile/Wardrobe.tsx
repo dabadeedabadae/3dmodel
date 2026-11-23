@@ -14,8 +14,8 @@ const MAX_BYTES = 8 * 1024 * 1024;
 /** garment types whose photo is turned into a 3D print on the figure */
 const ANALYSABLE: GarmentType[] = ['TSHIRT', 'SHIRT', 'HOODIE', 'SWEATER', 'PANTS', 'JEANS'];
 const LONG_TOPS: GarmentType[] = ['SHIRT', 'HOODIE', 'SWEATER'];
-/** what the form says it is recognising, in the accusative */
-const ANALYSING_LABEL: Partial<Record<GarmentType, string>> = { TSHIRT: 'футболку', SHIRT: 'рубашку', HOODIE: 'худи', SWEATER: 'свитер', PANTS: 'брюки', JEANS: 'джинсы' };
+/** what the form says it is recognising */
+const ANALYSING_LABEL: Partial<Record<GarmentType, string>> = { TSHIRT: 'T-shirt', SHIRT: 'shirt', HOODIE: 'hoodie', SWEATER: 'sweater', PANTS: 'pants', JEANS: 'jeans' };
 const ACCEPT = 'image/jpeg,image/png,image/webp';
 
 type Filter = 'ALL' | GarmentType;
@@ -38,7 +38,7 @@ export default function Wardrobe({ onCountChange, onAuthExpired }: {
     getWardrobe().then((list) => { if (active) setItems(list); }).catch((err: unknown) => {
       if (!active) return;
       if (err instanceof ApiError && err.status === 401) { onAuthExpired(); return; }
-      setLoadError(err instanceof Error ? err.message : 'Не удалось загрузить гардероб.');
+      setLoadError(err instanceof Error ? err.message : 'Could not load your wardrobe.');
     });
     return () => { active = false; };
   }, [attempt, onAuthExpired]);
@@ -47,7 +47,7 @@ export default function Wardrobe({ onCountChange, onAuthExpired }: {
 
   function fail(err: unknown) {
     if (err instanceof ApiError && err.status === 401) { onAuthExpired(); return; }
-    setRowError(err instanceof Error ? err.message : 'Не удалось выполнить действие.');
+    setRowError(err instanceof Error ? err.message : 'Could not complete the action.');
   }
 
   async function changeFit(item: WardrobeItem, fitTag: FitTag) {
@@ -59,7 +59,7 @@ export default function Wardrobe({ onCountChange, onAuthExpired }: {
   }
 
   async function remove(item: WardrobeItem) {
-    if (!window.confirm(`Удалить «${GARMENT_LABELS[item.type]}» из гардероба? Фото тоже будет удалено.`)) return;
+    if (!window.confirm(`Remove "${GARMENT_LABELS[item.type]}" from your wardrobe? The photo will be deleted too.`)) return;
     setBusyId(item.id); setRowError('');
     try {
       await deleteWardrobeItem(item.id);
@@ -74,11 +74,11 @@ export default function Wardrobe({ onCountChange, onAuthExpired }: {
     <section className="profile-panel wardrobe" aria-labelledby="wardrobe-title">
       <div className="wardrobe-head">
         <div>
-          <span className="profile-kicker">ГАРДЕРОБ</span>
-          <h2 id="wardrobe-title">Мои вещи</h2>
-          <p>Одна вещь — одно фото. Тип, цвет и посадку можно поменять в любой момент.</p>
+          <span className="profile-kicker">WARDROBE</span>
+          <h2 id="wardrobe-title">My items</h2>
+          <p>One item per photo. You can change the type, color and fit at any time.</p>
         </div>
-        {!adding && !!items?.length && <button type="button" className="wardrobe-add-btn" onClick={() => setAdding(true)}>+ Добавить вещь</button>}
+        {!adding && !!items?.length && <button type="button" className="wardrobe-add-btn" onClick={() => setAdding(true)}>+ Add item</button>}
       </div>
 
       {adding && (
@@ -90,22 +90,22 @@ export default function Wardrobe({ onCountChange, onAuthExpired }: {
       )}
 
       {loadError ? (
-        <div className="wardrobe-empty" role="alert"><p>{loadError}</p><button className="secondary" onClick={() => setAttempt((v) => v + 1)}>Повторить</button></div>
+        <div className="wardrobe-empty" role="alert"><p>{loadError}</p><button className="secondary" onClick={() => setAttempt((v) => v + 1)}>Try again</button></div>
       ) : !items ? (
-        <p className="profile-loading" role="status">Загрузка гардероба…</p>
+        <p className="profile-loading" role="status">Loading wardrobe…</p>
       ) : items.length === 0 ? (
         !adding && (
           <div className="wardrobe-empty">
-            <strong>Гардероб пока пуст</strong>
-            <p>Начните с вещи, которую носите чаще всего — футболки или джинсов.</p>
-            <button type="button" className="wardrobe-add-btn" onClick={() => setAdding(true)}>+ Добавить первую вещь</button>
+            <strong>Your wardrobe is empty</strong>
+            <p>Start with what you wear most often, like a T-shirt or jeans.</p>
+            <button type="button" className="wardrobe-add-btn" onClick={() => setAdding(true)}>+ Add your first item</button>
           </div>
         )
       ) : (
         <>
           {types.length > 1 && (
-            <div className="wardrobe-filters" role="group" aria-label="Фильтр по типу">
-              <button type="button" className={filter === 'ALL' ? 'is-active' : ''} aria-pressed={filter === 'ALL'} onClick={() => setFilter('ALL')}>Все · {items.length}</button>
+            <div className="wardrobe-filters" role="group" aria-label="Filter by type">
+              <button type="button" className={filter === 'ALL' ? 'is-active' : ''} aria-pressed={filter === 'ALL'} onClick={() => setFilter('ALL')}>All · {items.length}</button>
               {types.map((t) => (
                 <button key={t} type="button" className={filter === t ? 'is-active' : ''} aria-pressed={filter === t} onClick={() => setFilter(t)}>
                   {GARMENT_LABELS[t]} · {items.filter((i) => i.type === t).length}
@@ -123,19 +123,19 @@ export default function Wardrobe({ onCountChange, onAuthExpired }: {
                     {/* eslint-disable-next-line @next/next/no-img-element -- user uploads served by the API */}
                     <img src={mediaUrl(item.imageUrl)} alt={`${GARMENT_LABELS[item.type]}, ${color?.label.toLowerCase() ?? item.dominantColor}`} loading="lazy" />
                     <span className={`wardrobe-fit fit-${item.fitTag.toLowerCase()}`}>{FIT_LABELS[item.fitTag]}</span>
-                    {item.garment3d && <span className={`wardrobe-3d${item.garment3d.needsReview ? ' is-review' : ''}`} title={item.garment3d.needsReview ? 'Перенесено на 3D, но точки нужно проверить' : 'Фото перенесено на 3D-модель'}>3D</span>}
+                    {item.garment3d && <span className={`wardrobe-3d${item.garment3d.needsReview ? ' is-review' : ''}`} title={item.garment3d.needsReview ? 'Transferred to 3D, but the points need checking' : 'Photo transferred to the 3D model'}>3D</span>}
                   </div>
                   <div className="wardrobe-info">
                     <strong>{GARMENT_LABELS[item.type]}</strong>
                     <span className="wardrobe-color"><i style={{ background: color?.hex ?? '#ccc' }} aria-hidden />{color?.label ?? item.dominantColor}</span>
-                    <Link className="wardrobe-try" href={`/fitting?item=${encodeURIComponent(item.id)}`}>Примерить на 3D →</Link>
+                    <Link className="wardrobe-try" href={`/fitting?item=${encodeURIComponent(item.id)}`}>Try on in 3D →</Link>
                   </div>
                   <div className="wardrobe-actions">
-                    <label className="wardrobe-sr" htmlFor={`fit-${item.id}`}>Посадка</label>
+                    <label className="wardrobe-sr" htmlFor={`fit-${item.id}`}>Fit</label>
                     <select id={`fit-${item.id}`} value={item.fitTag} disabled={busyId === item.id} onChange={(e) => changeFit(item, e.target.value as FitTag)}>
                       {(Object.keys(FIT_LABELS) as FitTag[]).map((f) => <option key={f} value={f}>{FIT_LABELS[f]}</option>)}
                     </select>
-                    <button type="button" className="wardrobe-remove" disabled={busyId === item.id} onClick={() => remove(item)} aria-label={`Удалить: ${GARMENT_LABELS[item.type]}`}>Удалить</button>
+                    <button type="button" className="wardrobe-remove" disabled={busyId === item.id} onClick={() => remove(item)} aria-label={`Remove: ${GARMENT_LABELS[item.type]}`}>Remove</button>
                   </div>
                 </li>
               );
@@ -150,9 +150,9 @@ export default function Wardrobe({ onCountChange, onAuthExpired }: {
 type Pt = { x: number; y: number };
 /** names as the person sees them on the photo: left/right are IMAGE sides (photo of the front, as lying) */
 const POINT_LABELS: Record<PhotoPointName, string> = {
-  neck_left: 'Ворот слева', neck_right: 'Ворот справа', neck_bottom: 'Низ выреза', shoulder_left: 'Плечо слева', shoulder_right: 'Плечо справа',
-  armpit_left: 'Подмышка слева', armpit_right: 'Подмышка справа', cuff_left_top: 'Манжета слева, верх', cuff_left_bottom: 'Манжета слева, низ',
-  cuff_right_top: 'Манжета справа, верх', cuff_right_bottom: 'Манжета справа, низ', hem_left: 'Низ слева', hem_right: 'Низ справа',
+  neck_left: 'Collar, left', neck_right: 'Collar, right', neck_bottom: 'Neckline bottom', shoulder_left: 'Shoulder, left', shoulder_right: 'Shoulder, right',
+  armpit_left: 'Armpit, left', armpit_right: 'Armpit, right', cuff_left_top: 'Cuff left, top', cuff_left_bottom: 'Cuff left, bottom',
+  cuff_right_top: 'Cuff right, top', cuff_right_bottom: 'Cuff right, bottom', hem_left: 'Hem, left', hem_right: 'Hem, right',
 };
 
 /**
@@ -174,9 +174,9 @@ function PointEditor({ analysis, onDone, onCancel }: { analysis: Analysis; onDon
   const line = (a: PhotoPointName, b: PhotoPointName) => <line key={a + b} x1={points[a].x} y1={points[a].y} x2={points[b].x} y2={points[b].y} />;
   return (
     <div className="point-editor">
-      <p><b>Поправьте точки.</b> Перетащите каждую точку на своё место: ворот, плечи, подмышки, края манжет, углы низа. «Слева» и «справа» — как на фото.</p>
+      <p><b>Adjust the points.</b> Drag each point into place: collar, shoulders, armpits, cuff edges, hem corners. "Left" and "right" are as seen in the photo.</p>
       <svg
-        ref={svg} viewBox={`0 0 ${edit.width} ${edit.height}`} role="img" aria-label="Фото вещи с точками"
+        ref={svg} viewBox={`0 0 ${edit.width} ${edit.height}`} role="img" aria-label="Garment photo with points"
         onPointerMove={(e) => { if (!drag) return; const p = toImage(e); if (p) setPoints((ps) => ({ ...ps, [drag]: p })); }}
         onPointerUp={() => setDrag(null)} onPointerLeave={() => setDrag(null)}
       >
@@ -195,8 +195,8 @@ function PointEditor({ analysis, onDone, onCancel }: { analysis: Analysis; onDon
         ))}
       </svg>
       <div className="profile-save-row">
-        <button type="button" className="primary" onClick={() => onDone(points)}>Точки на месте</button>
-        <button type="button" className="profile-reset" onClick={onCancel}>Отмена</button>
+        <button type="button" className="primary" onClick={() => onDone(points)}>Points look good</button>
+        <button type="button" className="profile-reset" onClick={onCancel}>Cancel</button>
       </div>
     </div>
   );
@@ -235,7 +235,7 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
       const snapped = nearestPaletteColor(a.pkg.baseColor);
       setColor(snapped); setColorHint(snapped);
     }).catch((e: unknown) => {
-      if (id === runId.current) setAnalysisError(e instanceof Error ? e.message : 'Не удалось распознать фото.');
+      if (id === runId.current) setAnalysisError(e instanceof Error ? e.message : 'Could not analyze the photo.');
     }).finally(() => { if (id === runId.current) setAnalysing(false); });
   }, [file, type]);
 
@@ -245,8 +245,8 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
   async function pick(next: File | undefined) {
     setError('');
     if (!next) return;
-    if (!ACCEPT.split(',').includes(next.type)) { setError('Нужен файл JPEG, PNG или WebP.'); return; }
-    if (next.size > MAX_BYTES) { setError('Фото больше 8 МБ — уменьшите его и попробуйте снова.'); return; }
+    if (!ACCEPT.split(',').includes(next.type)) { setError('Please use a JPEG, PNG or WebP file.'); return; }
+    if (next.size > MAX_BYTES) { setError('The photo is larger than 8 MB. Make it smaller and try again.'); return; }
     setFile(next);
     setPreview(URL.createObjectURL(next));
     const suggested = await suggestColor(next);
@@ -255,21 +255,21 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    if (!file) { setError('Выберите фото вещи.'); return; }
+    if (!file) { setError('Choose a photo of the item.'); return; }
     setSaving(true); setError('');
     try {
       const model = analysis && ANALYSABLE.includes(type) ? { pkg: analysis.pkg, texture: analysis.texture } : undefined;
       onAdded(await addWardrobeItem(file, { type, dominantColor: color, fitTag }, model));
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) { onAuthExpired(); return; }
-      setError(err instanceof Error ? err.message : 'Не удалось добавить вещь.');
+      setError(err instanceof Error ? err.message : 'Could not add the item.');
     } finally { setSaving(false); }
   }
 
   return (
     <form className="wardrobe-form" onSubmit={submit}>
       <fieldset disabled={saving}>
-        <legend>Новая вещь</legend>
+        <legend>New item</legend>
         <div className="wardrobe-form-grid">
           <button
             type="button"
@@ -279,19 +279,19 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
             onDrop={(e) => { e.preventDefault(); pick(e.dataTransfer.files[0]); }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- local preview */}
-            {preview ? <img src={preview} alt="Выбранное фото" /> : <span><b>Выберите фото</b><small>или перетащите сюда · JPEG, PNG, WebP до 8 МБ</small></span>}
+            {preview ? <img src={preview} alt="Selected photo" /> : <span><b>Choose a photo</b><small>or drag it here · JPEG, PNG, WebP up to 8 MB</small></span>}
           </button>
           <input ref={input} type="file" accept={ACCEPT} capture="environment" hidden onChange={(e) => pick(e.target.files?.[0])} />
 
           <div className="wardrobe-form-fields">
             <div className="field">
-              <label htmlFor="new-type">Тип вещи</label>
+              <label htmlFor="new-type">Item type</label>
               <select id="new-type" value={type} onChange={(e) => setType(e.target.value as GarmentType)}>
                 {(Object.keys(GARMENT_LABELS) as GarmentType[]).map((t) => <option key={t} value={t}>{GARMENT_LABELS[t]}</option>)}
               </select>
             </div>
             <div className="field">
-              <span className="wardrobe-label" id="new-color-label">Основной цвет</span>
+              <span className="wardrobe-label" id="new-color-label">Main color</span>
               <div className="wardrobe-swatches" role="radiogroup" aria-labelledby="new-color-label">
                 {COLORS.map((c) => (
                   <button
@@ -302,11 +302,11 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
               </div>
               <small>
                 {colorById(color)?.label}
-                {colorHint && colorHint === color ? ' — подсказка по фото, проверьте' : ''}
+                {colorHint && colorHint === color ? ' (suggested from the photo, please check)' : ''}
               </small>
             </div>
             <div className="field">
-              <span className="wardrobe-label" id="new-fit-label">Как сидит</span>
+              <span className="wardrobe-label" id="new-fit-label">How it fits</span>
               <div className="wardrobe-segment" role="radiogroup" aria-labelledby="new-fit-label">
                 {(Object.keys(FIT_LABELS) as FitTag[]).map((f) => (
                   <button key={f} type="button" role="radio" aria-checked={fitTag === f} className={fitTag === f ? 'is-active' : ''} onClick={() => setFitTag(f)}>{FIT_LABELS[f]}</button>
@@ -317,8 +317,8 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
         </div>
         {ANALYSABLE.includes(type) && file && (
           <div className={`wardrobe-analysis${analysis?.pkg.needsReview ? ' is-review' : analysis ? ' is-ok' : ''}`} role="status" aria-live="polite">
-            {analysing && <p><b>Распознаём {ANALYSING_LABEL[type]} на фото…</b> Маска, точки и цвет считаются прямо на этом устройстве, фото никуда не отправляется.</p>}
-            {analysisError && <p><b>Не удалось распознать фото.</b> Вещь сохранится без 3D-принта. {analysisError}</p>}
+            {analysing && <p><b>Detecting the {ANALYSING_LABEL[type]} in the photo…</b> The mask, points and color are computed right on this device. The photo isn't sent anywhere.</p>}
+            {analysisError && <p><b>Could not analyze the photo.</b> The item will be saved without a 3D print. {analysisError}</p>}
             {analysis && editing && (
               <PointEditor
                 analysis={analysis} onCancel={() => setEditing(false)}
@@ -328,15 +328,15 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
             {analysis && !editing && (
               <div className="wardrobe-analysis-row">
                 {/* eslint-disable-next-line @next/next/no-img-element -- local preview */}
-                <img src={analysis.preview} alt="Маска и найденные точки вещи" />
+                <img src={analysis.preview} alt="Garment mask and detected points" />
                 <div>
                   {analysis.pkg.needsReview
-                    ? <p><b>Принт перенесётся на 3D, но точки нужно проверить.</b> {[analysis.pkg.landmarkStatus !== 'ok' && 'Точки найдены неуверенно.', analysis.pkg.maskQuality !== 'ok' && 'Маска сомнительная.', ...analysis.pkg.anchorIssues].filter(Boolean).join(' ')}</p>
-                    : <p><b>Готово: фото будет перенесено на 3D-модель.</b> Перёд — с фото, {type === 'PANTS' || type === 'JEANS' ? 'сзади и по бокам' : 'спинка и бока'} — основным цветом.</p>}
+                    ? <p><b>The print will be transferred to 3D, but the points need checking.</b> {[analysis.pkg.landmarkStatus !== 'ok' && 'Points detected with low confidence.', analysis.pkg.maskQuality !== 'ok' && 'The mask looks questionable.', ...analysis.pkg.anchorIssues].filter(Boolean).join(' ')}</p>
+                    : <p><b>Done: the photo will be transferred to the 3D model.</b> The front comes from the photo; the back and sides use the main color.</p>}
                   <small>
-                    {analysis.pkg.pointsSource === 'user' ? 'Точки расставлены вручную' : `Распознано за ${(analysis.ms / 1000).toFixed(1)} с`} · основной цвет {analysis.pkg.baseColor}
+                    {analysis.pkg.pointsSource === 'user' ? 'Points placed by hand' : `Analyzed in ${(analysis.ms / 1000).toFixed(1)} s`} · main color {analysis.pkg.baseColor}
                   </small>
-                  {analysis.edit && <button type="button" className="wardrobe-edit-points" onClick={() => setEditing(true)}>{analysis.pkg.needsReview ? 'Поправить точки' : 'Проверить точки'}</button>}
+                  {analysis.edit && <button type="button" className="wardrobe-edit-points" onClick={() => setEditing(true)}>{analysis.pkg.needsReview ? 'Adjust points' : 'Check points'}</button>}
                 </div>
               </div>
             )}
@@ -344,8 +344,8 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
         )}
         {error && <p className="error" role="alert">{error}</p>}
         <div className="profile-save-row">
-          <button className="primary" type="submit" disabled={!file || analysing || editing}>{saving ? 'Сохраняем…' : analysing ? 'Распознаём…' : 'Добавить в гардероб'}</button>
-          <button type="button" className="profile-reset" onClick={onCancel}>Отмена</button>
+          <button className="primary" type="submit" disabled={!file || analysing || editing}>{saving ? 'Saving…' : analysing ? 'Analyzing…' : 'Add to wardrobe'}</button>
+          <button type="button" className="profile-reset" onClick={onCancel}>Cancel</button>
         </div>
       </fieldset>
     </form>
