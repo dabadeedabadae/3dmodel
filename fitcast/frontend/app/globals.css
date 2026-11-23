@@ -1036,7 +1036,7 @@ a.landing-secondary { font: 12px var(--font-mono), monospace; letter-spacing: .0
 .fit-views { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 4px; padding: 4px; background: #fffe; border: 1px solid var(--rule); border-radius: 8px; }
 .fit-views button, .fit-presets button { border: 0; background: transparent; border-radius: 6px; padding: 8px 12px; font: 12px var(--font-mono), monospace; color: var(--muted); cursor: pointer; white-space: nowrap; }
 .fit-views button.is-active, .fit-presets button.is-active { background: var(--blue); color: #fff; }
-.fit-panel { display: grid; gap: 16px; }
+.fit-panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .fit-panel .profile-panel { padding: 22px; }
 .fit-panel h2 { font-weight: 400; font-size: 21px; margin: 0 0 14px; }
 .fit-panel-head { display: flex; align-items: baseline; justify-content: space-between; }
@@ -1049,7 +1049,7 @@ a.landing-secondary { font: 12px var(--font-mono), monospace; letter-spacing: .0
 .fit-slider { display: block; margin-bottom: 12px; }
 .fit-slider span { display: flex; justify-content: space-between; font: 12px var(--font-mono), monospace; color: var(--muted); margin-bottom: 4px; }
 .fit-slider b { font-weight: 500; color: var(--ink); }
-.fit-slider input { width: 100%; accent-color: var(--blue); height: 24px; }
+.fit-slider input { width: 100%; min-width: 0; accent-color: var(--blue); height: 24px; }
 .fit-items { margin-bottom: 14px; }
 .fit-items ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
 .fit-items li button { position: relative; width: 62px; height: 76px; padding: 0; border: 2px solid transparent; border-radius: 8px; overflow: hidden; cursor: pointer; background: var(--paper); box-shadow: 0 0 0 1px var(--rule); }
@@ -1060,7 +1060,7 @@ a.landing-secondary { font: 12px var(--font-mono), monospace; letter-spacing: .0
 .fit-hint a, .fit-link { color: var(--blue); font-size: 13px; }
 .fit-note { margin: 10px 0 0; font: 11px/1.6 var(--font-mono), monospace; color: var(--muted); }
 @media (max-width: 900px) {
-  .fit-layout { grid-template-columns: 1fr; }
+  .fit-layout { grid-template-columns: minmax(0, 1fr); }
   .fit-canvas { height: 62vh; min-height: 360px; }
   /* one column: the figure pins to the top at a smaller height and the settings scroll under it */
   .fit-stage { top: 0; box-shadow: 0 6px 18px #0000001a; }
