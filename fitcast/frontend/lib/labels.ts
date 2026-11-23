@@ -57,23 +57,38 @@ export const COLORS: { id: string; label: string; hex: string }[] = [
 ];
 export const colorById = (id: string) => COLORS.find((c) => c.id === id);
 
-/** Nearest palette colour to an sRGB hex (redmean distance), e.g. the median colour of a garment mask. */
-export function nearestPaletteColor(hex: string): string {
-  const px = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+/** sRGB 0–255 → CIE Lab (D65): distances in Lab follow perceived colour difference */
+function toLab([r, g, b]: number[]): [number, number, number] {
+  const lin = (v: number) => { const c = v / 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  const [R, G, B] = [lin(r!), lin(g!), lin(b!)];
+  const f = (t: number) => (t > 216 / 24389 ? Math.cbrt(t) : (24389 / 27 * t + 16) / 116);
+  const x = f((0.4124 * R + 0.3576 * G + 0.1805 * B) / 0.95047), y = f(0.2126 * R + 0.7152 * G + 0.0722 * B), z = f((0.0193 * R + 0.1192 * G + 0.9505 * B) / 1.08883);
+  return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
+}
+
+/**
+ * Nearest palette colour to an sRGB triple in Lab. The earlier redmean RGB distance weighted green 4× and sent
+ * desaturated colours to green (washed jeans #606b7a came out "Green"); in Lab they go to gray.
+ */
+function nearestRgb(px: number[]): string {
+  const p = toLab(px);
   let best = COLORS[0]!.id, bestD = Infinity;
   for (const c of COLORS) {
-    const q = [1, 3, 5].map((i) => parseInt(c.hex.slice(i, i + 2), 16));
-    const rm = (px[0]! + q[0]!) / 2;
-    const d = (2 + rm / 256) * (px[0]! - q[0]!) ** 2 + 4 * (px[1]! - q[1]!) ** 2 + (2 + (255 - rm) / 256) * (px[2]! - q[2]!) ** 2;
+    const q = toLab([1, 3, 5].map((i) => parseInt(c.hex.slice(i, i + 2), 16)));
+    const d = (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2 + (p[2] - q[2]) ** 2;
     if (d < bestD) { bestD = d; best = c.id; }
   }
   return best;
 }
 
+/** Nearest palette colour to an sRGB hex, e.g. the median colour of a garment mask. */
+export function nearestPaletteColor(hex: string): string {
+  return nearestRgb([1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)));
+}
+
 /**
  * Suggests the palette colour of a garment photo: median of the centre region
- * (the garment usually fills it), snapped to the nearest palette colour in Lab-ish
- * space. A hint for the user, not recognition — the user confirms or changes it.
+ * (the garment usually fills it), snapped to the nearest palette colour in Lab. A hint for the user, not recognition — the user confirms or changes it.
  */
 export async function suggestColor(file: Blob): Promise<string | null> {
   const bitmap = await createImageBitmap(file).catch(() => null);
@@ -90,13 +105,5 @@ export async function suggestColor(file: Blob): Promise<string | null> {
   for (let i = 0; i < data.length; i += 4) { r.push(data[i]); g.push(data[i + 1]); b.push(data[i + 2]); }
   const median = (a: number[]) => a.sort((x, y) => x - y)[a.length >> 1];
   const px = [median(r), median(g), median(b)];
-  const hexRgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-  let best: string | null = null, bestD = Infinity;
-  for (const c of COLORS) {
-    const [cr, cg, cb] = hexRgb(c.hex);
-    const rm = (px[0] + cr) / 2; // "redmean" perceptual approximation
-    const d = (2 + rm / 256) * (px[0] - cr) ** 2 + 4 * (px[1] - cg) ** 2 + (2 + (255 - rm) / 256) * (px[2] - cb) ** 2;
-    if (d < bestD) { bestD = d; best = c.id; }
-  }
-  return best;
+  return nearestRgb(px);
 }

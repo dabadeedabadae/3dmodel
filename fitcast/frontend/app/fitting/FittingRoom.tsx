@@ -17,6 +17,11 @@ const FigureViewer = dynamic(() => import('./FigureViewer'), { ssr: false, loadi
 
 const TOPS: GarmentType[] = ['TSHIRT', 'SHIRT', 'SWEATER', 'HOODIE', 'CARDIGAN', 'BLAZER', 'JACKET', 'COAT', 'DRESS'];
 const BOTTOMS: GarmentType[] = ['PANTS', 'JEANS', 'SHORTS', 'SKIRT'];
+/**
+ * Whether a figure garment can carry an item of this type. Jeans are trousers in cut: there is no separate jeans
+ * figure, so a jeans photo goes onto the trousers (its front and colour come from the photo).
+ */
+const wears = (figureType: string | undefined, itemType: string) => figureType === itemType || (itemType === 'JEANS' && figureType === 'PANTS');
 
 const SLIDERS: { key: keyof Weights; label: string }[] = [
   { key: 'chest', label: 'Chest' }, { key: 'waist', label: 'Waist' }, { key: 'hip', label: 'Hips' },
@@ -85,12 +90,12 @@ export default function FittingRoom() {
   // hoodie photo onto a shirt or hoodie (I-63), trouser photos onto trousers
   const topPrint = ownPrint && cur?.garments.top === ownPrint.type ? ownPrint : cur?.garments.top === 'TSHIRT' && !ownPrint ? samplePrint : null;
   const bottomCandidate = ownBottomPrint ?? bottomSamplePrint;
-  const bottomPrint = bottomCandidate && cur?.garments.bottom === bottomCandidate.type ? bottomCandidate : null;
+  const bottomPrint = bottomCandidate && wears(cur?.garments.bottom, bottomCandidate.type) ? bottomCandidate : null;
   const prints = useMemo(() => [topPrint, bottomPrint].filter((p): p is Print => !!p), [topPrint, bottomPrint]);
   const [notice, setNotice] = useState('');
   /** the figure for a garment type: the current one if it matches, otherwise the first that does */
   const figureFor = (slot: 'top' | 'bottom', type: string) =>
-    cur?.garments[slot] === type ? cur : figures.find((f) => sameSex(f) && f.garments[slot] === type) ?? figures.find((f) => f.garments[slot] === type) ?? null;
+    wears(cur?.garments[slot], type) ? cur : figures.find((f) => sameSex(f) && wears(f.garments[slot], type)) ?? figures.find((f) => wears(f.garments[slot], type)) ?? null;
   const availableTypes = (slot: 'top' | 'bottom') => Array.from(new Set(figures.map((f) => f.garments[slot]))).map((t) => GARMENT_LABELS[t as GarmentType]?.toLowerCase() ?? t).join(', ');
 
   useEffect(() => {
@@ -115,8 +120,8 @@ export default function FittingRoom() {
   useEffect(() => {
     const g = samples.find((x) => x.id === bottomSampleId);
     if (!g) { setBottomSamplePrint(null); return; }
-    const fit = figures.find((f) => sameSex(f) && f.garments.bottom === g.type) ?? figures.find((f) => f.garments.bottom === g.type);
-    if (fit && fit.garments.bottom !== cur?.garments.bottom) setFigureId(fit.id);
+    const fit = figures.find((f) => sameSex(f) && wears(f.garments.bottom, g.type)) ?? figures.find((f) => wears(f.garments.bottom, g.type));
+    if (fit && !wears(cur?.garments.bottom, g.type)) setFigureId(fit.id);
     let active = true;
     fetch(g.url).then((r) => r.json()).then((pkg: { anchors: PantsAnchors; textureUrl: string; baseColor: string }) => {
       if (!active) return;
@@ -133,7 +138,7 @@ export default function FittingRoom() {
     const top = wardrobe.find((i) => i.id === topId);
     if (top && top.type !== cur.garments.top) { setTopId(null); setOwnPrint(null); setTopColor(DEFAULT_PALETTE.top); }
     const bottom = wardrobe.find((i) => i.id === bottomId);
-    if (bottom && bottom.type !== cur.garments.bottom) { setBottomId(null); setOwnBottomPrint(null); setBottomColor(DEFAULT_PALETTE.bottom); }
+    if (bottom && !wears(cur.garments.bottom, bottom.type)) { setBottomId(null); setOwnBottomPrint(null); setBottomColor(DEFAULT_PALETTE.bottom); }
     if (cur.garments.top !== 'TSHIRT') setPrintId(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [figureId]);
@@ -238,7 +243,7 @@ export default function FittingRoom() {
       if ((topId && !top) || (bottomId && !bottom)) setNotice('Some items of this outfit were not found in your wardrobe.');
       if (top && TOPS.includes(top.type)) pickItem(top, 'top');
       if (bottom && BOTTOMS.includes(bottom.type)) pickItem(bottom, 'bottom');
-      const both = top && bottom && figures.find((f) => f.garments.top === top.type && f.garments.bottom === bottom.type);
+      const both = top && bottom && figures.find((f) => sameSex(f) && f.garments.top === top.type && wears(f.garments.bottom, bottom.type));
       if (both) setFigureId(both.id);
       return;
     }
@@ -316,7 +321,7 @@ export default function FittingRoom() {
             </section>
           )}
 
-          {samples.some((g) => !g.needsReview && g.category === 'pants' && figures.some((f) => f.garments.bottom === g.type)) && (
+          {samples.some((g) => !g.needsReview && g.category === 'pants' && figures.some((f) => wears(f.garments.bottom, g.type))) && (
             <section className="profile-panel">
               <div className="fit-panel-head">
                 <h2>Photo on pants</h2>
@@ -324,7 +329,7 @@ export default function FittingRoom() {
               </div>
               <div className="fit-items">
                 <ul>
-                  {samples.filter((g) => !g.needsReview && g.category === 'pants' && figures.some((f) => f.garments.bottom === g.type)).map((g) => (
+                  {samples.filter((g) => !g.needsReview && g.category === 'pants' && figures.some((f) => wears(f.garments.bottom, g.type))).map((g) => (
                     <li key={g.id}>
                       <button type="button" className={bottomSampleId === g.id ? 'is-active' : ''} aria-pressed={bottomSampleId === g.id} onClick={() => { setOwnBottomPrint(null); setBottomId(null); setBottomSampleId(g.id); }} title="Photo from an open dataset (CC0)">
                         {/* eslint-disable-next-line @next/next/no-img-element -- local sample texture */}
@@ -334,7 +339,7 @@ export default function FittingRoom() {
                   ))}
                 </ul>
               </div>
-              <p className="fit-note">The pants front comes from the photo, using the mask and landmarks: waistband, crotch and leg hems. The back and sides use the main color. Jeans only go on a model wearing jeans.</p>
+              <p className="fit-note">The pants front comes from the photo, using the mask and landmarks: waistband, crotch and leg hems. The back and sides use the main color. Jeans go onto the trousers.</p>
             </section>
           )}
 
@@ -344,7 +349,7 @@ export default function FittingRoom() {
               wardrobe === null ? <p className="fit-hint">Loading wardrobe…</p> : (
                 <>
                   <ItemRow title="Top" items={tops} selected={topId} onPick={(i) => pickItem(i, 'top')} hasModel={(t) => figures.some((f) => f.garments.top === t)} empty="No tops in your wardrobe: T-shirts, sweaters, jackets." />
-                  <ItemRow title="Bottom" items={bottoms} selected={bottomId} onPick={(i) => pickItem(i, 'bottom')} hasModel={(t) => figures.some((f) => f.garments.bottom === t)} empty="No bottoms in your wardrobe: pants, jeans, skirts." />
+                  <ItemRow title="Bottom" items={bottoms} selected={bottomId} onPick={(i) => pickItem(i, 'bottom')} hasModel={(t) => figures.some((f) => wears(f.garments.bottom, t))} empty="No bottoms in your wardrobe: pants, jeans, skirts." />
                   {notice && <p className="fit-notice" role="status">{notice}</p>}
                   {(!tops.length || !bottoms.length) && <Link className="fit-link" href="/profile">Add items to your wardrobe →</Link>}
                 </>
