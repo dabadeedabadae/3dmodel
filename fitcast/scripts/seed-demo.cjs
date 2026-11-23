@@ -1,6 +1,7 @@
 // Demo data for local testing: one regular user with a small wardrobe and one admin.
 // Photos: the CC0 clothing-dataset fixtures copied to scripts/demo-photos (originals in ../fixtures/photos); the outer
-// layers (blazer, cardigan, jacket, coat, zip hoodie) use the 3D catalogue pictures from frontend/public/catalog.
+// layers (blazer, cardigan, jacket, coat, zip hoodie) use the 3D catalogue pictures, copied to demo-photos/catalog
+// so the seed also works inside the API container (which has no frontend/).
 // Re-running is safe: an item is added only when the user has none of that type and colour, events only when none.
 // Credentials are written to .demo-accounts.local.json (git-ignored), never printed or committed.
 const { PrismaClient } = require('@prisma/client');
@@ -10,7 +11,6 @@ const { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } = req
 const { extname, join, resolve } = require('node:path');
 
 const FIXTURES = resolve(process.env.FIXTURES_DIR ?? join(__dirname, 'demo-photos'));
-const CATALOG = resolve(__dirname, '../frontend/public/catalog');
 const CREDS = process.env.DEMO_CREDS_FILE ?? '.demo-accounts.local.json';
 const ITEMS = [
   ['tshirt_8f0cd82c.jpg', 'TSHIRT', 'gray', 'GOOD'],
@@ -55,7 +55,7 @@ async function main() {
     mkdirSync('uploads/wardrobe', { recursive: true });
     for (const [file, type, dominantColor, fitTag] of ITEMS) {
       if (await prisma.wardrobeItem.count({ where: { userId: user.id, type, dominantColor } })) continue;
-      const src = file.startsWith('catalog:') ? join(CATALOG, file.slice(8)) : join(FIXTURES, file);
+      const src = join(FIXTURES, file.replace(/^catalog:/, 'catalog/'));
       if (!existsSync(src)) { console.warn('skip, no picture:', file); continue; }
       const name = randomUUID() + extname(src);
       copyFileSync(src, join('uploads/wardrobe', name));
