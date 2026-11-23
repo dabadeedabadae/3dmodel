@@ -12,9 +12,9 @@ const INNER_TOPS = ['TSHIRT', 'SHIRT', 'SWEATER', 'HOODIE', 'CARDIGAN', 'DRESS']
 const LAYERS = ['BLAZER', 'JACKET', 'COAT'];
 const BOTTOMS = ['PANTS', 'JEANS', 'SHORTS', 'SKIRT'];
 
-/** /fitting shows one top and one bottom: the inner top (or the layer when there is none) and the bottom. */
+/** /fitting shows one top and one bottom: the outer layer when there is one (its 3D figures carry a T-shirt underneath), else the inner top, and the bottom. */
 export function fittingHref(items: OutfitItem[]) {
-  const top = items.find((i) => INNER_TOPS.includes(i.type)) ?? items.find((i) => LAYERS.includes(i.type));
+  const top = items.find((i) => LAYERS.includes(i.type)) ?? items.find((i) => INNER_TOPS.includes(i.type));
   const bottom = items.find((i) => BOTTOMS.includes(i.type));
   const q = new URLSearchParams();
   if (top) q.set('top', top.id);

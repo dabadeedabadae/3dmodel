@@ -1,6 +1,6 @@
 # FitCast — team onboarding
 
-What's in the project, where things live, how to run it, and how not to break the 3D part. Current as of 2026-11-19.
+What's in the project, where things live, how to run it, and how not to break the 3D part. Current as of 2026-11-23.
 
 Everything is in a single `3dmodel` repository:
 - the root is the 3D module (figures, FBX, photo transfer);
@@ -103,17 +103,21 @@ fitcast/
 │   ├── wardrobe/             GET/POST /wardrobe, PATCH/DELETE /wardrobe/:id
 │   │   └── garment3d.ts      strict validation of the client's "3D garment package" — do not loosen
 │   ├── admin/                /admin/* for isAdmin only, recommendation bench
+│   ├── events/               GET/POST /events, GET/PATCH/DELETE /events/:id (+ forecast per event)
+│   ├── weather/              GET /weather[?city=] via Open-Meteo (no key, in-memory cache)
+│   ├── recommendations/      POST /recommendations, PUT /recommendations/feedback, GET/POST/DELETE /outfits
 │   └── prisma/               PrismaService
-├── prisma/schema.prisma      User, WardrobeItem (garment3d JSON, textureUrl), SavedOutfit, OutfitItem
+├── prisma/schema.prisma      User, UserEvent, WardrobeItem (garment3d JSON, textureUrl), SavedOutfit, OutfitItem,
+│                             OutfitFeedback
 ├── prisma/migrations/        migrations; create new ones with `npx prisma migrate dev --name ...`
-├── test/*.e2e.cjs            API e2e: `npm run test:wardrobe`, `npm run test:admin` (need a database)
+├── test/*.e2e.cjs            API e2e: `npm run test:wardrobe`, `test:admin`, `test:events`, `test:recommendations`
 ├── scripts/
 │   ├── seed-demo.cjs         demo accounts and items (photos in scripts/demo-photos, CC0)
 │   ├── set-admin.cjs         grant or revoke admin rights: `npm run admin:set -- email [revoke]`
 │   ├── sync-figure.cjs       ../imported-body/out → frontend/public/models (update the site's figures)
 │   ├── sync-garments.cjs     sample garments from ../imported-body/out/photo
 │   └── sync-ml.cjs           onnxruntime runtime → frontend/public/ort
-├── recommendation-service/   FastAPI; the recommendation engine is NOT implemented yet (returns 501)
+├── recommendation-service/   FastAPI, Python 3.10+; rule-based outfit engine in app/engine, tests in tests/
 └── frontend/                 Next.js 16 (App Router), React 19, three.js
     ├── app/
     │   ├── page.tsx, components/Landing.tsx    landing page
@@ -123,7 +127,8 @@ fitcast/
     │   ├── profile/settings/                   name, city, bio, password change
     │   ├── profile/Wardrobe.tsx                wardrobe + photo upload + point editor
     │   ├── fitting/                            3D fitting room (FittingRoom.tsx, FigureViewer.tsx)
-    │   ├── admin/                              admin panel
+    │   ├── events/                             events, "What to wear today", outfit suggestions (Outfits.tsx)
+    │   ├── admin/                              admin panel (+ Garments3D.tsx, RecommendationBench.tsx)
     │   └── globals.css                         all styles (single file)
     ├── lib/
     │   ├── api.ts            all API requests, token in localStorage, types
@@ -131,7 +136,8 @@ fitcast/
     │   ├── garment/*         in-browser photo analysis (mask, points, color)
     │   └── figure/*          3D: figure loading, slider deformation, photo transfer (photoMap.ts)
     └── public/
-        ├── models/           PREBUILT 3D figures: figures.json + figure-01..04.json
+        ├── models/           PREBUILT 3D figures: figures.json + figure-01..11.json
+        ├── catalog/          garment catalog for the admin panel (`npm run catalog:sync` in the root)
         ├── ml/u2netp.onnx    mask model (Apache-2.0, license alongside)
         ├── garments/         sample garments from photos (CC0)
         └── ort/              onnxruntime runtime (not in git, `npm run ml:sync`)
@@ -145,10 +151,18 @@ fitcast/
   3D module (`npm run ib:outfits` at the repository root), then run `npm run figure:sync` in `fitcast/`.
 - **What's available.** `figures.json` lists the figures and the clothing type on each:
   - 01 — T-shirt + pants;
-  - 02 — hoodie + pants;
-  - 03 and 04 — shirt + pants.
-- **Rule I-54.** An item only goes on a figure wearing the same clothing type. There are no figures for jackets,
-  skirts, shorts or dresses, and the site says so.
+  - 02 and 07 — hoodie / zip hoodie + pants;
+  - 03 and 04 — shirt + pants;
+  - 05 — V-neck sweater, 06 — cardigan, 08 — blazer, 09 — jacket, 10 — coat (all + pants);
+  - 11 — women's figure, T-shirt + pants (`sex: 'female'` in `figures.json`).
+- **Men / Women.** The fitting room has a Men / Women switch (shown when a women's figure exists). "Realistic
+  proportions" (height and weight drive the whole body) use men's ANSUR II measurements only, so on the women's
+  figure that option is disabled and the shape is set with the sliders directly.
+- **Rule I-54.** An item only goes on a figure wearing the same clothing type. There are no figures for skirts,
+  shorts or dresses, and the site says so.
+- **Admin "3D garments".** `/admin` → "3D garments" (`app/admin/Garments3D.tsx`) shows every figure from
+  `figures.json` and the garment catalog from `public/catalog` (rebuilt with `npm run catalog:sync` in the
+  repository root).
 - **Photo → 3D.** The full path from upload to garment on the body is described in `imported-body/docs/PIPELINE.md`
   (repository root). In short:
   1. U²-Netp builds the mask in the browser;
@@ -209,26 +223,45 @@ fitcast/
 - **Next 16.** This is not the Next.js from older tutorials (see `frontend/AGENTS.md`). The docs for this version are
   in `frontend/node_modules/next/dist/docs/`.
 
-## 6. Checks before pushing
+## 6. Events, weather and outfit recommendations
+
+- **Events and weather.** `/events` (`app/events/page.tsx`): the user creates events with an occasion, a start time
+  and an optional city (empty = profile city). The API (`src/events`, `src/weather`) attaches the
+  [Open-Meteo](https://open-meteo.com) forecast for the event's hour and city (no API key; up to 16 days ahead,
+  otherwise a reason such as `TOO_FAR` or `NO_CITY`).
+- **"What to wear today".** Pick an occasion and get outfits for the current weather in the profile city.
+- **Outfit suggestions.** `src/recommendations` sends the user's wardrobe (type, color, fit, id only) plus weather and
+  occasion to `recommendation-service`. Its rule-based engine (`app/engine/catalog.py`, `recommend.py`, no ML)
+  combines items with hard rules per occasion and weather and returns 3–5 outfits with a short reason. The user can
+  like / dislike an outfit (`PUT /recommendations/feedback`; disliked outfits are hidden for that event) and save it
+  (`/outfits`, shown on `/events` as saved outfits).
+- **"Try on in 3D".** Each suggested or saved outfit links to `/fitting?top=&bottom=` with its items.
+- **Running the service.** It needs Python 3.10+ (the code uses `X | None` type syntax). Locally the easiest way is
+  Docker: `docker compose up -d recommendation` (port 8010). Its tests: `cd recommendation-service && python -m pytest`.
+
+## 7. Checks before pushing
 
 ```bash
 npm run test:wardrobe
 npm run test:admin
+npm run test:events            # events + weather against a local Open-Meteo mock, no internet needed
+npm run test:recommendations   # needs recommendation-service running (e.g. the docker container on :8010)
 cd frontend
 npx tsc --noEmit
 npx next build
 ```
 
-`test:wardrobe` and `test:admin` need a database: `docker compose up -d postgres` and a `.env` with `DATABASE_URL`.
+The `test:*` commands need a database: `docker compose up -d postgres` and a `.env` with `DATABASE_URL`.
 
 `npm run lint` doesn't work in the frontend: Next 16 has no `next lint` command. If you need a linter, set it up
 separately (ESLint 9, flat config).
 
-## 7. Known debt
+## 8. Known debt
 
-- The recommendation engine isn't implemented: the service returns 501, and the admin bench shows it.
+- Recommendations are rules only: garment formality and warmth come from the item type (`catalog.py`); per-item
+  style, season or warmth aren't stored yet. The recommendation service has no authentication of its own.
 - Photo analysis runs on the main thread, freezing the UI for about 2 s. A candidate for a Web Worker.
 - No manual point editing for pants (tops have it).
 - Photos are stored on the API's disk (`uploads/`, the `uploads` volume in Docker), not in the cloud.
-- The wardrobe palette has 16 colors; the exact garment color is stored only in the 3D package.
+- The wardrobe palette has 13 colors (the recommendation contract palette); the exact garment color is stored only in the 3D package.
 - The root `README.md` is partly outdated (Windows instructions, MVP plan). This file is more up to date.

@@ -38,7 +38,8 @@
     "ib:outfit-render": "IB_A=outfit01 node imported-body/scripts/render.mjs ofit outfit",
     "ib:outfit-viewer": "vite --port 5176 --open \"/imported-body/viewer/index.html?asset=outfit01\"",
     "ib:outfits": "node imported-body/scripts/prepare-outfits.mjs",
-    "ib:photo": "node --import tsx imported-body/scripts/photo-garment.ts"
+    "ib:photo": "node --import tsx imported-body/scripts/photo-garment.ts",
+    "catalog:sync": "node imported-body/scripts/catalog-sync.mjs"
   },
   "dependencies": {
     "onnxruntime-web": "^1.31.1",

@@ -65,7 +65,7 @@ const hemFraction = Number(opt('hem', '0.416'));
 let bodyTop = -Infinity;
 for (let i = 0; i < pose.positions.length / 3; i++) bodyTop = Math.max(bodyTop, pose.positions[i * 3 + 1]!);
 const k = bodyTop / asset.landmarks.height;
-const bodyChestGirth = measureImported(asset, body).chest_cm / 100;
+const bodyChestGirth = measureImported(asset, body, shape.h ? 'proportional' : 'keep_girths').chest_cm / 100;
 const yChest = asset.landmarks.chest * k;
 const chestRing = colliders.torso.reduce((best, r) => (Math.abs(r.y - yChest) < Math.abs(best.y - yChest) ? r : best));
 let gzSum = 0, gzN = 0;

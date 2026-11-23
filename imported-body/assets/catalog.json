@@ -1,0 +1,22 @@
+{
+  "_note": "Garment catalog (docs/GARMENT_FORMAT.md). figure is the outfit in outfits.json where the item is already on the mannequin; the reference picture is assets/ref/<id>.png. To the site: npm run catalog:sync.",
+  "items": [
+    { "id": "m-tshirt", "label": "T-shirt", "layer": "1", "type": "TSHIRT", "figure": "outfit01" },
+    { "id": "m-shirt", "label": "Shirt", "layer": "1", "type": "SHIRT", "figure": "outfit03" },
+    { "id": "m-shirt-classic", "label": "Dress shirt", "layer": "1", "type": "SHIRT", "figure": "outfit04" },
+    { "id": "m-tank", "label": "Tank top", "layer": "1", "type": "TSHIRT" },
+    { "id": "m-longsleeve", "label": "Long-sleeve tee", "layer": "1", "type": "TSHIRT" },
+    { "id": "m-polo", "label": "Polo", "layer": "1", "type": "TSHIRT" },
+    { "id": "m-turtleneck", "label": "Turtleneck", "layer": "1", "type": "SWEATER" },
+    { "id": "m-hoodie", "label": "Hoodie", "layer": "2", "type": "HOODIE", "figure": "outfit02" },
+    { "id": "m-sweater", "label": "Sweatshirt", "layer": "2", "type": "SWEATER" },
+    { "id": "m-sweater-v", "label": "V-neck sweater", "layer": "2", "type": "SWEATER", "figure": "outfit05" },
+    { "id": "m-cardigan", "label": "Cardigan", "layer": "2", "type": "CARDIGAN", "figure": "outfit06" },
+    { "id": "m-zip-hoodie", "label": "Zip hoodie", "layer": "2", "type": "HOODIE", "figure": "outfit07" },
+    { "id": "m-blazer", "label": "Blazer", "layer": "2", "type": "BLAZER", "figure": "outfit08" },
+    { "id": "m-pants", "label": "Pants", "layer": "bottom", "type": "PANTS", "figure": "outfit01" },
+    { "id": "m-shorts", "label": "Shorts", "layer": "bottom", "type": "SHORTS" },
+    { "id": "m-jacket", "label": "Jacket", "layer": "outer", "type": "JACKET", "figure": "outfit09" },
+    { "id": "m-coat", "label": "Coat", "layer": "outer", "type": "COAT", "figure": "outfit10" }
+  ]
+}

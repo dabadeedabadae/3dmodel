@@ -1,102 +1,120 @@
 {
-  "generatedAt": "2026-11-19T11:23:41.600Z",
+  "generatedAt": "2026-11-23T16:18:04.745Z",
   "asset": "outfit-outfit04",
   "shells": 8,
   "boundaryEdges": 319,
-  "sourceAsymmetry_mm": 20.1,
+  "sourceAsymmetry_mm": 15.4,
   "usableSliderRange": {
-    "chest": 0.45,
+    "chest": 0.7,
     "waist": 0.81,
-    "hip": 0.9,
-    "shoulders": 0.45,
-    "arms": 0.9,
-    "thighs": 0.9
+    "hip": 1,
+    "shoulders": 1,
+    "arms": 1,
+    "thighs": 1
   },
+  "flipBudget": 9,
   "results": [
     {
       "label": "base",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
-      "label": "chest=-0.45",
+      "label": "chest=-0.7",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 8
     },
     {
-      "label": "chest=0.45",
+      "label": "chest=0.7",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
       "label": "waist=-0.81",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
       "label": "waist=0.81",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
-      "label": "hip=-0.9",
+      "label": "hip=-1",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
-      "label": "hip=0.9",
+      "label": "hip=1",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
-      "label": "shoulders=-0.45",
+      "label": "shoulders=-1",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
-      "label": "shoulders=0.45",
+      "label": "shoulders=1",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
-      "label": "arms=-0.9",
+      "label": "arms=-1",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
-      "label": "arms=0.9",
+      "label": "arms=1",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
-      "label": "thighs=-0.9",
+      "label": "thighs=-1",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
-      "label": "thighs=0.9",
+      "label": "thighs=1",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
       "label": "все по максимуму",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
       "label": "все по минимуму",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 9
     },
     {
       "label": "height 150",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     },
     {
       "label": "height 200 proportional",
       "ok": true,
-      "fails": []
+      "fails": [],
+      "flipped": 0
     }
   ]
 }

@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ApiError, GarmentType, WardrobeItem, getToken, getWardrobe, mediaUrl } from '../../lib/api';
 import { COLORS, GARMENT_LABELS, colorById } from '../../lib/labels';
-import { WEIGHT_NAMES, ZERO, type Weights } from '../../lib/figure/deform';
+import { GAIN, WEIGHT_NAMES, ZERO, type Weights } from '../../lib/figure/deform';
 import { listFigures, loadFigure, type Figure, type FigureEntry } from '../../lib/figure/figure';
+import { BODY_TYPES, describeZ, pinFromSlider, solveShape, type Girth, type ShapeState } from '../../lib/figure/proportions';
 import type { Palette, Print, View } from './FigureViewer';
 import type { PantsAnchors, PhotoAnchors } from '../../lib/figure/photoMap';
 
@@ -46,6 +47,10 @@ export default function FittingRoom() {
   const [figureError, setFigureError] = useState('');
   const [weights, setWeights] = useState<Weights>(ZERO);
   const [heightCm, setHeightCm] = useState(175);
+  /** linked proportions (I-68): height and weight size the whole figure, girth sliders shape it at that weight */
+  const [linkedPref, setLinked] = useState(true);
+  const [weightZ, setWeightZ] = useState(0);
+  const [pins, setPins] = useState<ShapeState['pins']>({});
   const [view, setView] = useState<View>('threequarter');
   const [viewNonce, setViewNonce] = useState(0);
   const [wardrobe, setWardrobe] = useState<WardrobeItem[] | null>(null);
@@ -64,6 +69,18 @@ export default function FittingRoom() {
   const [bottomSampleId, setBottomSampleId] = useState<string | null>(null);
   const [bottomSamplePrint, setBottomSamplePrint] = useState<(Print & { type: string }) | null>(null);
   const cur = figures.find((f) => f.id === figureId) ?? null;
+  /** men's and women's figures; linked proportions come from men's measurements (ANSUR II men), so women's figures use the sliders alone */
+  const sex = cur?.sex ?? 'male';
+  const linked = linkedPref && sex === 'male';
+  const sameSex = (f: FigureEntry) => (f.sex ?? 'male') === sex;
+  function switchSex(to: 'male' | 'female') {
+    if (to === sex) return;
+    const next = figures.find((f) => (f.sex ?? 'male') === to && f.garments.top === cur?.garments.top && f.garments.bottom === cur?.garments.bottom) ?? figures.find((f) => (f.sex ?? 'male') === to);
+    if (!next) return;
+    setFigureId(next.id);
+  }
+  // the default height follows the mannequin: 175 cm for men, 165 cm for women (also when opened by a link)
+  useEffect(() => { setHeightCm(sex === 'female' ? 165 : 175); }, [sex]);
   // a print goes only onto the same garment type of the figure (I-54): T-shirt photos onto a T-shirt, a shirt or
   // hoodie photo onto a shirt or hoodie (I-63), trouser photos onto trousers
   const topPrint = ownPrint && cur?.garments.top === ownPrint.type ? ownPrint : cur?.garments.top === 'TSHIRT' && !ownPrint ? samplePrint : null;
@@ -73,7 +90,7 @@ export default function FittingRoom() {
   const [notice, setNotice] = useState('');
   /** the figure for a garment type: the current one if it matches, otherwise the first that does */
   const figureFor = (slot: 'top' | 'bottom', type: string) =>
-    cur?.garments[slot] === type ? cur : figures.find((f) => f.garments[slot] === type) ?? null;
+    cur?.garments[slot] === type ? cur : figures.find((f) => sameSex(f) && f.garments[slot] === type) ?? figures.find((f) => f.garments[slot] === type) ?? null;
   const availableTypes = (slot: 'top' | 'bottom') => Array.from(new Set(figures.map((f) => f.garments[slot]))).map((t) => GARMENT_LABELS[t as GarmentType]?.toLowerCase() ?? t).join(', ');
 
   useEffect(() => {
@@ -83,7 +100,7 @@ export default function FittingRoom() {
     const g = samples.find((x) => x.id === printId);
     if (!g) { setPrint(null); return; }
     // sample photos are T-shirts: show them on the T-shirt figure
-    const tee = figures.find((f) => f.garments.top === 'TSHIRT');
+    const tee = figures.find((f) => sameSex(f) && f.garments.top === 'TSHIRT') ?? figures.find((f) => f.garments.top === 'TSHIRT');
     if (tee && tee.id !== figureId) setFigureId(tee.id);
     let active = true;
     fetch(g.url).then((r) => r.json()).then((pkg: { anchors: PhotoAnchors; textureUrl: string; baseColor: string }) => {
@@ -98,7 +115,7 @@ export default function FittingRoom() {
   useEffect(() => {
     const g = samples.find((x) => x.id === bottomSampleId);
     if (!g) { setBottomSamplePrint(null); return; }
-    const fit = figures.find((f) => f.garments.bottom === g.type);
+    const fit = figures.find((f) => sameSex(f) && f.garments.bottom === g.type) ?? figures.find((f) => f.garments.bottom === g.type);
     if (fit && fit.garments.bottom !== cur?.garments.bottom) setFigureId(fit.id);
     let active = true;
     fetch(g.url).then((r) => r.json()).then((pkg: { anchors: PantsAnchors; textureUrl: string; baseColor: string }) => {
@@ -122,7 +139,13 @@ export default function FittingRoom() {
   }, [figureId]);
 
   useEffect(() => {
-    listFigures().then((list) => { setFigures(list); if (list.length && !list.some((f) => f.id === 'figure-01')) setFigureId(list[0].id); })
+    listFigures().then((list) => {
+      setFigures(list);
+      // /fitting?figure=<id> (the admin's 3D catalogue): open that figure
+      const asked = new URLSearchParams(window.location.search).get('figure');
+      if (asked && list.some((f) => f.id === asked)) setFigureId(asked);
+      else if (list.length && !list.some((f) => f.id === 'figure-01')) setFigureId(list[0].id);
+    })
       .catch((e: unknown) => setFigureError(e instanceof Error ? e.message : 'Could not load the model list.'));
   }, []);
 
@@ -157,6 +180,20 @@ export default function FittingRoom() {
     const r = figure?.range[k] ?? 1;
     return Math.max(-r, Math.min(r, v));
   };
+  const shapeState: ShapeState = { heightCm, weightZ, pins };
+  const shape = useMemo(() => solveShape({ heightCm, weightZ, pins }), [heightCm, weightZ, pins]);
+  /** what the figure shows: linked values clamped to the figure's working range, or the sliders as they are */
+  const shown = useMemo<Weights>(() => (linked
+    ? Object.fromEntries(WEIGHT_NAMES.map((k) => [k, clampTo(k, shape.weights[k])])) as unknown as Weights
+    : weights),
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [linked, shape, weights, figure]);
+  function resetShape() { applyPreset({}); setHeightCm(sex === 'female' ? 165 : 175); setWeightZ(0); setPins({}); }
+  function toggleLinked(on: boolean) {
+    // the figure does not jump: switching off keeps what was shown, switching on starts from the usual shape
+    if (!on) setWeights(shown); else { setPins({}); setWeightZ(0); }
+    setLinked(on);
+  }
   function applyPreset(w: Partial<Weights>) {
     const next = { ...ZERO };
     for (const k of WEIGHT_NAMES) next[k] = clampTo(k, w[k] ?? 0);
@@ -214,6 +251,8 @@ export default function FittingRoom() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wardrobe, figures]);
   const presetActive = (w: Partial<Weights>) => WEIGHT_NAMES.every((k) => Math.abs(weights[k] - clampTo(k, w[k] ?? 0)) < 1e-6);
+  const typeActive = (t: (typeof BODY_TYPES)[number]) => Math.abs(t.weightZ - weightZ) < 1e-9
+    && WEIGHT_NAMES.every((k) => (t.pins[k] ?? null) === (pins[k] ?? null));
 
   return (
     <main className="fit-main">
@@ -228,7 +267,7 @@ export default function FittingRoom() {
       <div className="fit-layout">
         <section className="fit-stage" aria-label="Mannequin">
           {figureError ? <div className="fit-canvas fit-loading" role="alert">{figureError}</div>
-            : figure ? <FigureViewer figure={figure} weights={weights} heightCm={heightCm} palette={palette} view={view} viewNonce={viewNonce} prints={prints} />
+            : figure ? <FigureViewer figure={figure} weights={shown} heightCm={heightCm} palette={palette} view={view} viewNonce={viewNonce} prints={prints} />
               : <div className="fit-canvas fit-loading">Loading model…</div>}
           {((topPrint && ownPrint?.needsReview) || (bottomPrint && ownBottomPrint?.needsReview)) && <p className="fit-warning" role="status">The points on this item's photo were detected with low confidence, so the print may be slightly off.</p>}
           <div className="fit-views" role="group" aria-label="View">
@@ -242,8 +281,13 @@ export default function FittingRoom() {
           {figures.length > 1 && (
             <section className="profile-panel">
               <h2>Outfit</h2>
+              {figures.some((f) => f.sex === 'female') && (
+                <div className="fit-sex" role="group" aria-label="Mannequin">
+                  {([['male', 'Men'], ['female', 'Women']] as const).map(([v, l]) => <button key={v} type="button" className={sex === v ? 'is-active' : ''} aria-pressed={sex === v} onClick={() => switchSex(v)}>{l}</button>)}
+                </div>
+              )}
               <div className="fit-presets" role="group" aria-label="Outfit">
-                {figures.map((f) => (
+                {figures.filter(sameSex).map((f) => (
                   <button key={f.id} type="button" className={figureId === f.id ? 'is-active' : ''} aria-pressed={figureId === f.id} onClick={() => setFigureId(f.id)}>{f.label}</button>
                 ))}
               </div>
@@ -318,29 +362,57 @@ export default function FittingRoom() {
           <section className="profile-panel">
             <div className="fit-panel-head">
               <h2>Figure</h2>
-              <button type="button" className="profile-reset" onClick={() => { applyPreset({}); setHeightCm(175); }}>Reset</button>
+              <button type="button" className="profile-reset" onClick={resetShape}>Reset</button>
             </div>
+            <label className="fit-linked">
+              <input type="checkbox" checked={linked} disabled={sex === 'female'} onChange={(e) => toggleLinked(e.target.checked)} />
+              <span>Realistic proportions</span>
+            </label>
+            {sex === 'female' && <p className="fit-note">Linked proportions are built from men&apos;s measurements, so the women&apos;s figure is shaped with the sliders directly.</p>}
             <div className="fit-presets" role="group" aria-label="Body type">
-              {PRESETS.map((p) => (
-                <button key={p.id} type="button" className={presetActive(p.w) ? 'is-active' : ''} aria-pressed={presetActive(p.w)} onClick={() => applyPreset(p.w)}>{p.label}</button>
-              ))}
+              {linked
+                ? BODY_TYPES.map((t) => (
+                  <button key={t.id} type="button" className={typeActive(t) ? 'is-active' : ''} aria-pressed={typeActive(t)} onClick={() => { setWeightZ(t.weightZ); setPins(t.pins); }}>{t.label}</button>
+                ))
+                : PRESETS.map((p) => (
+                  <button key={p.id} type="button" className={presetActive(p.w) ? 'is-active' : ''} aria-pressed={presetActive(p.w)} onClick={() => applyPreset(p.w)}>{p.label}</button>
+                ))}
             </div>
             <label className="fit-slider">
               <span>Height <b>{heightCm} cm</b></span>
               <input type="range" min={150} max={200} step={1} value={heightCm} onChange={(e) => setHeightCm(Number(e.target.value))} />
             </label>
+            {linked && (
+              <label className="fit-slider">
+                <span>Weight <b>{signed(shape.weightRatio)}</b></span>
+                <input type="range" min={-2} max={2.5} step={0.05} value={weightZ} onChange={(e) => setWeightZ(Number(e.target.value))} />
+                <small className="fit-z">{describeZ(weightZ)} for this height</small>
+              </label>
+            )}
             {SLIDERS.map(({ key, label }) => {
               const r = figure?.range[key] ?? 1;
+              const v = shown[key];
+              const atLimit = linked && Math.abs(shape.weights[key]) > r + 1e-6;
               return (
                 <label key={key} className="fit-slider">
-                  <span>{label} <b>{signed(weights[key] / r)}</b></span>
+                  <span>{label} <b>{signed(GAIN[key] * v)}</b></span>
                   <input
-                    type="range" min={-r} max={r} step={r / 50} value={weights[key]} disabled={!figure}
-                    onChange={(e) => setWeights((w) => ({ ...w, [key]: Number(e.target.value) }))}
+                    type="range" min={-r} max={r} step={r / 50} value={v} disabled={!figure}
+                    onChange={(e) => {
+                      const nv = Number(e.target.value);
+                      if (linked) setPins((p) => ({ ...p, [key]: pinFromSlider(shapeState, key as Girth, nv) }));
+                      else setWeights((w) => ({ ...w, [key]: nv }));
+                    }}
                   />
+                  {linked && (
+                    <small className="fit-z">
+                      {describeZ(shape.z[key as Girth])}{pins[key as Girth] === undefined ? ' · auto' : ''}{atLimit ? ' · model limit' : ''}
+                    </small>
+                  )}
                 </label>
               );
             })}
+            {linked && <p className="fit-note">Height and weight change the whole figure, the sliders change the shape at the same weight; the rest follows the measurements of 4,000 men (ANSUR II). “Typical” means typical for this height and weight. Percentages are relative to the base figure, not centimeters.</p>}
             <p className="fit-note">The sliders are limited to the range where the model stays correct. They are proportions, not measurements in centimeters.</p>
           </section>
         </aside>

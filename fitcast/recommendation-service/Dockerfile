@@ -1,4 +1,4 @@
-# FitCast recommendation service (FastAPI). The engine is not implemented yet: /recommendations answers 501.
+# FitCast recommendation service (FastAPI, rule-based outfit engine in app/engine).
 FROM python:3.12-slim
 WORKDIR /app
 COPY requirements.txt ./

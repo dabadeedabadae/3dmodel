@@ -6,8 +6,12 @@
     "before": 4758,
     "after": 4758,
     "triangles": 9183,
-    "seamSnapped": 44,
-    "mirrorPaired": 4149
+    "refusedNonManifold": 0,
+    "seamSnapped": 43,
+    "mirrorPaired": 4149,
+    "zeroAreaDropped": 0,
+    "nonManifoldDropped": 0,
+    "windingFixed": 0
   },
   "symmetry_mm": {
     "mean": 0.22,
@@ -74,7 +78,7 @@
       "triangles": 7532,
       "y_cm": [
         79.2,
-        157.8
+        154.4
       ]
     },
     {
@@ -82,8 +86,8 @@
       "vertices": 85,
       "triangles": 144,
       "y_cm": [
-        149.7,
-        150.9
+        147.3,
+        148.3
       ]
     }
   ],

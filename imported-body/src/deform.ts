@@ -67,6 +67,10 @@ export function deform(asset: BodyAsset, weightsIn: Partial<Weights>, height?: H
 
   // torso girth profile: each weight owns a level and fades into its neighbours
   const g = (k: keyof Weights) => 1 + GAIN[k] * w[k];
+  // the knots must rise: on the T-pose figures the neck base (141.7 cm) lies BELOW the shoulder line (143.3 cm),
+  // and the out-of-order knot made the profile jump at the shoulder height — a sleeve-top triangle there folded
+  // at any shoulder setting, which capped the T-shirt's shoulder slider at ±0.1 (I-67)
+  const neckY = Math.max(L.neck_base, L.shoulder_level + 0.01);
   const sX: [number, number][] = [
     [0, g('hip')],
     [L.crotch, g('hip')],
@@ -77,8 +81,8 @@ export function deform(asset: BodyAsset, weightsIn: Partial<Weights>, height?: H
     [L.chest, g('chest')],
     [L.armpit, 1 + GAIN.chest * w.chest * 0.85 + GAIN.shoulders * w.shoulders * 0.6],
     [L.shoulder_level, 1 + GAIN.shoulders * w.shoulders],
-    [L.neck_base, 1 + GAIN.shoulders * w.shoulders * 0.35],
-    [L.neck_base + (L.height - L.neck_base) * 0.25, 1],
+    [neckY, 1 + GAIN.shoulders * w.shoulders * 0.35],
+    [neckY + (L.height - neckY) * 0.25, 1],
     [L.height, 1],
   ];
   // depth follows width but softer: a wider chest is mostly frontal, a wider waist is all round
@@ -134,17 +138,48 @@ export function deform(asset: BodyAsset, weightsIn: Partial<Weights>, height?: H
   return out;
 }
 
-/** stature: mode A scales lengths only; mode B scales everything (the figure keeps its proportions) */
+/**
+ * Stature. Mode B ('proportional') scales everything: the figure keeps its proportions.
+ * Mode A ('keep_girths') lengthens the legs and the torso only (I-67). The head and the T-pose arms with the hands
+ * move as rigid pieces: scaling them along y stretched the head and thickened the sleeves and the hands by the same
+ * 14 % as the legs, which read as a distorted figure, not a taller one. Below the neck base y scales by k; above it
+ * the head is lifted unchanged; the arms ride their own axis. k is chosen so the crown still lands on the stature.
+ */
 function applyHeight(p: Float32Array, asset: BodyAsset, h: HeightMode): void {
-  const k = h.height_cm / 100 / asset.landmarks.height;
-  if (Math.abs(k - 1) < 1e-9) return;
-  for (let i = 0; i < p.length / 3; i++) {
-    p[i * 3 + 1] = p[i * 3 + 1]! * k;
-    if (h.mode === 'proportional') {
-      p[i * 3] = p[i * 3]! * k;
-      p[i * 3 + 2] = p[i * 3 + 2]! * k;
-    }
+  const L = asset.landmarks;
+  const target = h.height_cm / 100;
+  if (Math.abs(target - L.height) < 1e-9) return;
+  if (h.mode === 'proportional') {
+    const k = target / L.height;
+    for (let i = 0; i < p.length; i++) p[i] = p[i]! * k;
+    return;
   }
+  const nb = L.neck_base;
+  const k = (target - (L.height - nb)) / nb;
+  const armLow = asset.armBand.low, armHigh = asset.armBand.high;
+  const armY = (armLow + armHigh) / 2;
+  const armIn = profileHalfX(asset, L.armpit) * 1.02;
+  const armOut = armIn * 1.6;
+  for (let i = 0; i < p.length / 3; i++) {
+    const x = p[i * 3]!, y = p[i * 3 + 1]!;
+    const body = y <= nb ? y * k : y + nb * (k - 1);
+    // the gate reaches lower than the girth fields': a hanging thumb sits below the arm band and must move with the
+    // hand; torso vertices this wide and this low differ between the two maps by millimetres
+    const wArm = smooth(armIn, armOut, Math.abs(x)) * smooth(armLow - 0.2, armLow - 0.08, y);
+    p[i * 3 + 1] = body + wArm * (y + armY * (k - 1) - body);
+  }
+}
+
+/**
+ * Where a canonical TORSO level ends up after the stature change: measurements slice at landmark levels and must
+ * follow the same map as applyHeight (a uniform y·k sent the 150 cm chest slice through the arms). `maxY` is the
+ * crown of the deformed mesh, which applyHeight places on the requested stature.
+ */
+export function statureLevel(asset: BodyAsset, y: number, maxY: number, mode: HeightMode['mode'] = 'keep_girths'): number {
+  const L = asset.landmarks;
+  if (mode === 'proportional') return y * (maxY / L.height);
+  const k = (maxY - (L.height - L.neck_base)) / L.neck_base;
+  return y <= L.neck_base ? y * k : y + L.neck_base * (k - 1);
 }
 
 function axisCz(a: BodyAsset, y: number): number {

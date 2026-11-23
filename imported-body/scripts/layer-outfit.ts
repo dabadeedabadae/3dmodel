@@ -15,6 +15,10 @@
  *
  *   node --import tsx imported-body/scripts/layer-outfit.ts <base id> <top source id> <bottom source id> <out file>
  *   e.g. outfit01 raw-outfit03 raw-outfit03 imported-body/out/layered-outfit03.json
+ *
+ * IB_INNER=1 — inner layer: the base's T-shirt is part of the result (its vertices are listed as `inner`), so an
+ * open neckline (a V-neck sweater, an open cardigan) shows a T-shirt under it instead of the garment's own inside.
+ * The upper garment must then not cross it either; it is checked like a visible part.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { bboxOf, closestPoint, countIntersections, windingNumber, type Soup } from '../src/layers';
@@ -32,6 +36,7 @@ const B = load(baseId);
 /** distance kept between a garment and the body under it */
 const GAP = 0.006;
 const VISIBLE = new Set(['head', 'arm_left', 'arm_right', 'shoe_left', 'shoe_right']);
+const INNER = process.env.IB_INNER === '1';
 const kindOf = (p: Prepared) => {
   const k = new Array<string>(p.base.length / 3).fill('other');
   for (const part of p.partsIndex) for (const v of part.vertices) k[v] = part.kind;
@@ -161,6 +166,17 @@ function alignedGarment(srcId: string, layer: 'top' | 'bottom'): Layer {
       const armpitY = B.landmarks.armpit!;
       let s0 = 0;
       for (let i = 0; i < nS; i++) if (sKind[i] === 'top' && Math.abs(sp[i * 3 + 1]! - (armpitY - 0.04)) < 0.015) s0 = Math.max(s0, Math.abs(sp[i * 3]!));
+      /**
+       * A garment-only source is placed on this base, so its trunk is as wide as the base's at the armpit. Its own
+       * section there is not: a sleeve that slopes down (blazer, coat) passes through that height, and the "trunk"
+       * reached 47 cm (blazer) or the cuff itself (coat: 65.7 cm = sleeve end, the sleeve was never stretched and the
+       * forearm showed bare). The base's T-shirt half-width is taken instead.
+       */
+      if (prealigned) {
+        let b0 = 0;
+        for (let i = 0; i < nB; i++) if (bKind[i] === 'top' && Math.abs(bp[i * 3 + 1]! - (armpitY - 0.04)) < 0.015) b0 = Math.max(b0, Math.abs(bp[i * 3]!));
+        if (b0 > 0) s0 = b0;
+      }
       const sleeveEnd = Math.max(...ids(nS, (i) => sKind[i] === 'top' && sp[i * 3 + 1]! > armpitY - 0.1).map((i) => Math.abs(sp[i * 3]!)));
       const sReach = reach(sp, nS), bReach = reach(bp, nB);
       /**
@@ -653,6 +669,7 @@ function residual(g: Layer, proxy: Soup, visible: Soup) {
   let inside = 0;
   for (let i = 0; i < g.n; i++) if (windingNumber(proxy, g.p[i * 3]!, g.p[i * 3 + 1]!, g.p[i * 3 + 2]!, bb) > 0.5) inside++;
   const ci = countIntersections({ p: g.p, tris: g.tris }, visible);
+  if (process.env.IB_DEBUG) { const cv = countIntersections(visible, { p: g.p, tris: g.tris }); console.error('visible verts', [...cv.aVerts].map((v) => [0, 1, 2].map((k) => visible.p[v * 3 + k]!.toFixed(3)).join(',') + (v < bKind.length ? ':' + bKind[v] : ':bottom')).join(' | ')); }
   if (process.env.IB_DEBUG) console.error('crossing verts', [...ci.aVerts].map((v) => [0, 1, 2].map((k) => g.p[v * 3 + k]!.toFixed(3)).join(',')).join(' | '));
   return { verticesInsideBody: inside, crossingsWithVisible: ci.crossings };
 }
@@ -704,6 +721,108 @@ const sleevesFloored = topId === baseId || process.env.IB_NO_FLOOR ? 0 : floorSl
 if (topId !== baseId && top.report.prealigned) smoothSleeves(top);
 spike('floor');
 const collarHugged = topId === baseId ? 0 : hugCollar(top, topId);
+/**
+ * Collar clearance (I-70, jacket and blazer): their collar base is narrower than where the mannequin's neck widens
+ * into the shoulders (the base head part reaches |x| 11.6 cm at 147 cm), and the long collar triangles cross it even
+ * after the per-vertex push. With IB_COLLAR_CLEAR=1 (`"collarClear": true`) each top vertex above 145 cm near the neck
+ * is moved out from the neck axis to the largest neck radius within ±2 cm of its height and ±1 of 24 directions,
+ * plus 1 cm; faces whose centre is still inside the neck (chords across it) are dropped — they are inside the head.
+ */
+let collarCleared = 0, collarChords = 0;
+const COLLAR_MARGIN = Number(process.env.IB_COLLAR_MARGIN ?? 0.01);
+function clearCollar(smoothRounds: number) {
+  const needAt = new Map<number, [number, number]>();
+  const Y0 = 1.44, NY = 30, NA = 24;
+  const rad = new Float64Array(NY * NA), cz = new Float64Array(NY);
+  for (let h = 0; h < NY; h++) {
+    // the head is low-poly: its section is a few long segments, so the radius per direction is where a ray from
+    // the neck axis meets them, not the nearest section point (most of 24 directions had none)
+    const y = Y0 + h * 0.01, segs: number[][] = [];
+    for (let t = 0; t < B.index.length; t += 3) {
+      const v = [B.index[t]!, B.index[t + 1]!, B.index[t + 2]!];
+      if (!v.every((i) => bKind[i] === 'head')) continue;
+      const pts: number[] = [];
+      for (let e = 0; e < 3; e++) {
+        const a = v[e]! * 3, b = v[(e + 1) % 3]! * 3;
+        if ((bp[a + 1]! - y) * (bp[b + 1]! - y) > 0 || bp[a + 1] === bp[b + 1]) continue;
+        const f = (y - bp[a + 1]!) / (bp[b + 1]! - bp[a + 1]!);
+        pts.push(bp[a]! + f * (bp[b]! - bp[a]!), bp[a + 2]! + f * (bp[b + 2]! - bp[a + 2]!));
+      }
+      if (pts.length >= 4) segs.push(pts.slice(0, 4));
+    }
+    if (!segs.length) continue;
+    const zs = segs.flatMap((q) => [q[1]!, q[3]!]);
+    cz[h] = (Math.min(...zs) + Math.max(...zs)) / 2;
+    for (let k = 0; k < NA; k++) {
+      for (const da of [0.25, 0.5, 0.75]) {
+        const ang = ((k + da) / NA) * 2 * Math.PI - Math.PI, dx = Math.cos(ang), dz = Math.sin(ang);
+        for (const [x1, z1, x2, z2] of segs) {
+          // ray (0, cz) + s·(dx, dz) against segment (x1, z1)–(x2, z2)
+          const ex = x2! - x1!, ez = z2! - z1!, den = dx * ez - dz * ex;
+          if (Math.abs(den) < 1e-12) continue;
+          const wx = x1!, wz = z1! - cz[h]!;
+          const sRay = (wx * ez - wz * ex) / den, u = (wx * dz - wz * dx) / den;
+          if (sRay > 0 && u >= 0 && u <= 1) rad[h * NA + k] = Math.max(rad[h * NA + k]!, sRay);
+        }
+      }
+    }
+  }
+  for (let i = 0; i < top.n; i++) {
+    const x = top.p[i * 3]!, y = top.p[i * 3 + 1]!, z = top.p[i * 3 + 2]!;
+    if (y < 1.45 || Math.abs(x) > 0.16) continue;
+    const h0 = Math.round((y - Y0) / 0.01);
+    if (h0 < 0 || h0 >= NY) continue;
+    const c = cz[h0]!, r = Math.hypot(x, z - c);
+    if (r < 1e-6) continue;
+    const k0 = Math.floor(((Math.atan2(z - c, x) + Math.PI) / (2 * Math.PI)) * NA) % NA;
+    let need = 0;
+    for (let h = Math.max(0, h0 - 2); h <= Math.min(NY - 1, h0 + 2); h++) for (const dk of [-1, 0, 1]) need = Math.max(need, rad[h * NA + ((k0 + dk + NA) % NA)]!);
+    if (!(need > 0)) continue;
+    needAt.set(i, [need + COLLAR_MARGIN, c]);
+    if (r >= need + COLLAR_MARGIN) continue;
+    const s = (need + COLLAR_MARGIN) / r;
+    top.p[i * 3] = x * s; top.p[i * 3 + 2] = c + (z - c) * s;
+    collarCleared++;
+  }
+  /**
+   * Every vertex took the radius of its own direction and height, so the collar came out crumpled (jacket stand collar,
+   * close-up). A few rounds of neighbour averaging over the collar smooth it; after each round a vertex that went back
+   * inside its neck radius is put on it again.
+   */
+  const nb = new Map<number, Set<number>>();
+  for (let t = 0; t < top.tris.length; t += 3) for (let e = 0; e < 3; e++) {
+    const a = top.tris[t + e]!, b = top.tris[t + (e + 1) % 3]!;
+    if (!needAt.has(a) || !needAt.has(b)) continue;
+    if (!nb.has(a)) nb.set(a, new Set()); if (!nb.has(b)) nb.set(b, new Set());
+    nb.get(a)!.add(b); nb.get(b)!.add(a);
+  }
+  for (let round = 0; round < smoothRounds; round++) {
+    const q = Float64Array.from(top.p);
+    for (const [i, ns] of nb) {
+      for (const k of [0, 1, 2]) q[i * 3 + k] = 0.5 * top.p[i * 3 + k]! + 0.5 * [...ns].reduce((u, j) => u + top.p[j * 3 + k]!, 0) / ns.size;
+      const [need, c] = needAt.get(i)!, r = Math.hypot(q[i * 3]!, q[i * 3 + 2]! - c);
+      if (r < need && r > 1e-6) { q[i * 3] = q[i * 3]! * need / r; q[i * 3 + 2] = c + (q[i * 3 + 2]! - c) * need / r; }
+    }
+    top.p.set(q);
+  }
+  // chords: faces that run across the neck from one side of the collar to the other (jacket: side of the collar to
+  // the back centre) lie inside the head and cross it whatever the radius of their vertices; they cannot be seen
+  const keep: number[] = [];
+  for (let t = 0; t < top.tris.length; t += 3) {
+    const v = [top.tris[t]!, top.tris[t + 1]!, top.tris[t + 2]!];
+    const x = (top.p[v[0]! * 3]! + top.p[v[1]! * 3]! + top.p[v[2]! * 3]!) / 3;
+    const y = (top.p[v[0]! * 3 + 1]! + top.p[v[1]! * 3 + 1]! + top.p[v[2]! * 3 + 1]!) / 3;
+    const z = (top.p[v[0]! * 3 + 2]! + top.p[v[1]! * 3 + 2]! + top.p[v[2]! * 3 + 2]!) / 3;
+    const h = Math.round((y - Y0) / 0.01);
+    if (h >= 0 && h < NY && Math.abs(x) < 0.16 && cz[h] !== 0) {
+      const k = Math.floor(((Math.atan2(z - cz[h]!, x) + Math.PI) / (2 * Math.PI)) * NA) % NA;
+      if (Math.hypot(x, z - cz[h]!) < rad[h * NA + k]!) { collarChords++; continue; }
+    }
+    keep.push(...v);
+  }
+  top.tris.length = 0; top.tris.push(...keep);
+}
+if (topId !== baseId && process.env.IB_COLLAR_CLEAR === '1') clearCollar(Number(process.env.IB_COLLAR_SMOOTH ?? 20));
 const merged = (a: Float64Array, aTris: number[], b: Layer): Soup => {
   const p = new Float64Array(a.length + b.p.length);
   p.set(a); p.set(b.p, a.length);
@@ -711,29 +830,88 @@ const merged = (a: Float64Array, aTris: number[], b: Layer): Soup => {
   return { p, tris: [...aTris, ...b.tris.map((v) => v + off)] };
 };
 const topProxy = merged(bp, baseTris((k) => k !== 'other'), bottom);
-const topVisible = merged(bp, visibleTris, bottom);
+const innerTris = INNER ? baseTris((k) => k === 'top') : [];
+/**
+ * The inner T-shirt is written narrower than the base (SHRINK below, about its own centre); the upper garment is
+ * pushed off and checked against it as it is written, not as it was before (jacket: 7 crossings with the unshrunk
+ * T-shirt at 91–115 cm, 0 with the one in the figure).
+ */
+const SHRINK = Number(process.env.IB_INNER_SHRINK ?? 0.94);
+const innerSet = new Set(innerTris);
+const innerCz = innerSet.size ? [...innerSet].reduce((acc, v) => acc + bp[v * 3 + 2]!, 0) / innerSet.size : 0;
+const bpInner = Float64Array.from(bp);
+if (SHRINK !== 1) for (const v of innerSet) { bpInner[v * 3] = bp[v * 3]! * SHRINK; bpInner[v * 3 + 2] = innerCz + (bp[v * 3 + 2]! - innerCz) * SHRINK; }
+const topVisible = merged(bpInner, INNER ? [...visibleTris, ...innerTris] : visibleTris, bottom);
 const topPush = topId === baseId ? null : pushOut(top, topProxy, topVisible);
 spikeVis = topVisible;
 spike('push');
 const topRelax = topId === baseId ? null : relaxSquashed(top, topSrc, topProxy, topVisible);
 spike('relax');
 const topCarried = topId === baseId ? 0 : carrySmallShells(top, topSrc);
+// again after the push and relaxation: the relaxation smooths the collar back towards the neck
+if (topId !== baseId && process.env.IB_COLLAR_CLEAR === '1') clearCollar(0);
 const topLeft = residual(top, topProxy, topVisible);
 
-// result: visible base verbatim + lower garment + upper garment
-const out: number[] = [], outIndex: number[] = [], fixed: number[] = [];
+// result: visible base verbatim (+ its T-shirt as the inner layer) + lower garment + upper garment
+const out: number[] = [], outIndex: number[] = [], fixed: number[] = [], inner: number[] = [];
 const remapB = new Int32Array(nB).fill(-1);
-for (let i = 0; i < nB; i++) if (VISIBLE.has(bKind[i]!)) { remapB[i] = out.length / 3; fixed.push(remapB[i]!); out.push(bp[i * 3]!, bp[i * 3 + 1]!, bp[i * 3 + 2]!); }
-for (let t = 0; t < visibleTris.length; t++) outIndex.push(remapB[visibleTris[t]!]!);
+for (let i = 0; i < nB; i++) {
+  const isInner = INNER && bKind[i] === 'top';
+  if (!VISIBLE.has(bKind[i]!) && !isInner) continue;
+  remapB[i] = out.length / 3; fixed.push(remapB[i]!); if (isInner) inner.push(remapB[i]!);
+  out.push(bp[i * 3]!, bp[i * 3 + 1]!, bp[i * 3 + 2]!);
+}
+for (const v of visibleTris) outIndex.push(remapB[v]!);
+/**
+ * The inner T-shirt is subdivided (IB_INNER_SUBDIV rounds of 1 → 4, default 2; I-70). The sliders scale every
+ * height by its own factor, so a surface bends, but a triangle stays flat: the base T-shirt's faces are up to 23 cm
+ * tall, their middles lagged behind the bent garment 6 mm outside, and the T-shirt came through the zip hoodie
+ * (check-outfit: 31 crossings at chest −1). The shape at rest is unchanged — new vertices lie on the old faces.
+ * The T-shirt is its own shell, so splitting its edges leaves no crack against another part.
+ */
+let innerIdx = innerTris.map((v) => remapB[v]!);
+for (let round = 0; round < Number(process.env.IB_INNER_SUBDIV ?? 2); round++) {
+  const mid = new Map<string, number>(), next: number[] = [];
+  const m = (a: number, b: number) => {
+    const key = a < b ? `${a},${b}` : `${b},${a}`;
+    let v = mid.get(key);
+    if (v === undefined) {
+      v = out.length / 3; for (let k = 0; k < 3; k++) out.push((out[a * 3 + k]! + out[b * 3 + k]!) / 2);
+      mid.set(key, v); fixed.push(v); inner.push(v);
+    }
+    return v;
+  };
+  for (let t = 0; t < innerIdx.length; t += 3) {
+    const a = innerIdx[t]!, b = innerIdx[t + 1]!, c = innerIdx[t + 2]!, ab = m(a, b), bc = m(b, c), ca = m(c, a);
+    next.push(a, ab, ca, ab, b, bc, ca, bc, c, ab, bc, ca);
+  }
+  innerIdx = next;
+}
+/**
+ * …and shrunk horizontally about the trunk axis by IB_INNER_SHRINK (default 0.94: about 1 cm at the waist). Only its
+ * opening (the V of a sweater, the open front of a cardigan or a zip hoodie) is ever seen, and there a centimetre is
+ * invisible; but it is the slack the sliders need: at a 6 mm gap the sweater's back already touched it at rest
+ * (12 crossings) and every slider made it worse. An offset along the normals was tried first and creased the
+ * low-poly T-shirt at its side edges (25–56 flipped triangles at the waist slider); a scaling cannot fold anything.
+ * Its sleeves get shorter by the same share, under the garment's sleeves.
+ */
+if (SHRINK !== 1 && inner.length) {
+  for (const v of inner) { out[v * 3] = out[v * 3]! * SHRINK; out[v * 3 + 2] = innerCz + (out[v * 3 + 2]! - innerCz) * SHRINK; }
+}
+outIndex.push(...innerIdx);
+// the upper garment's vertices (I-70): prepare-outfit labels its shells 'top' by this, not by height — the coat
+// reaches below the crotch and was labelled as trousers
+const upper: number[] = [];
 for (const g of [bottom, top]) {
   const off = out.length / 3;
   for (let i = 0; i < g.p.length; i++) out.push(g.p[i]!);
   for (const v of g.tris) outIndex.push(v + off);
+  if (g === top && topId !== baseId) for (let i = 0; i < g.n; i++) upper.push(off + i);
 }
-writeFileSync(outFile, JSON.stringify({ base: out.map((v) => Number(v.toFixed(6))), index: outIndex, fixed }));
+writeFileSync(outFile, JSON.stringify({ base: out.map((v) => Number(v.toFixed(6))), index: outIndex, fixed, ...(INNER ? { inner } : {}), ...(upper.length ? { upper } : {}) }));
 const result = {
-  base: baseId, top: top.report, bottom: bottom.report, vertices: out.length / 3, triangles: outIndex.length / 3,
-  cuffVerticesTightened: cuffs, sleeveVerticesFloored: sleevesFloored, collarVerticesHugged: collarHugged, bottomPush, topPush, bottomRelax, topRelax, smallShellVerticesCarried: bottomCarried + topCarried, bottomResidual: bottomLeft, topResidual: topLeft,
+  base: baseId, innerLayer: INNER, top: top.report, bottom: bottom.report, vertices: out.length / 3, triangles: outIndex.length / 3,
+  cuffVerticesTightened: cuffs, sleeveVerticesFloored: sleevesFloored, collarVerticesHugged: collarHugged, collarVerticesCleared: collarCleared, collarChordFacesDropped: collarChords, bottomPush, topPush, bottomRelax, topRelax, smallShellVerticesCarried: bottomCarried + topCarried, bottomResidual: bottomLeft, topResidual: topLeft,
 };
 console.log(JSON.stringify(result));
 /**

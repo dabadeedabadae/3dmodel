@@ -22,10 +22,17 @@ export interface Figure extends BodyAsset {
   range: Record<keyof Weights, number>;
 }
 
-export const PART = { head: 0, arms: 1, top: 2, bottom: 3, shoes: 4 } as const;
+export const PART = { head: 0, arms: 1, top: 2, bottom: 3, shoes: 4, inner: 5 } as const;
 
 /** garment types worn by the figure (GarmentType of the API); a wardrobe item goes only onto the same type */
-export interface FigureEntry { id: string; url: string; vertices: number; triangles: number; label: string; garments: { top: string; bottom: string } }
+export interface FigureEntry {
+  id: string; url: string; vertices: number; triangles: number; label: string; garments: { top: string; bottom: string };
+  /** a T-shirt shown under an open neckline (I-70) */
+  inner?: string;
+  /** women's figures; absent means a men's figure */
+  sex?: 'female';
+  range?: Record<string, number>;
+}
 
 /** Figures available to the client (written by `npm run figure:sync`). */
 export async function listFigures(): Promise<FigureEntry[]> {

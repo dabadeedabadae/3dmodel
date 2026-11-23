@@ -6,8 +6,12 @@
     "before": 5763,
     "after": 993,
     "triangles": 1921,
+    "refusedNonManifold": 0,
     "seamSnapped": 17,
-    "mirrorPaired": 979
+    "mirrorPaired": 979,
+    "zeroAreaDropped": 0,
+    "nonManifoldDropped": 0,
+    "windingFixed": 0
   },
   "symmetry_mm": {
     "mean": 0.25,

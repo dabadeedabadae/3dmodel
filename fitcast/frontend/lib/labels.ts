@@ -27,14 +27,14 @@ export const EVENT_HINTS: Record<EventType, string> = {
 
 /** A symbol for a WMO weather code (Open-Meteo `weather_code`). */
 export function weatherIcon(code: number): string {
-  if (code === 0 || code === 1) return '☀';
+  if (code === 0 || code === 1) return '☀\uFE0F';
   if (code === 2) return '⛅';
-  if (code === 3) return '☁';
+  if (code === 3) return '☁\uFE0F';
   if (code === 45 || code === 48) return '🌫';
-  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return '❄';
-  if (code >= 95) return '⛈';
+  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return '❄\uFE0F';
+  if (code >= 95) return '⛈\uFE0F';
   if (code >= 51) return '🌧';
-  return '☁';
+  return '☁\uFE0F';
 }
 
 export const formatTemp = (c: number) => `${c > 0 ? '+' : ''}${Math.round(c)}°`;

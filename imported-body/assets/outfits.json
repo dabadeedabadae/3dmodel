@@ -3,5 +3,12 @@
   "outfit01": { "label": "T-shirt and pants", "top": "TSHIRT", "bottom": "PANTS" },
   "outfit02": { "label": "Hoodie and pants", "top": "HOODIE", "bottom": "PANTS" },
   "outfit03": { "label": "Shirt and pants", "top": "SHIRT", "bottom": "PANTS" },
-  "outfit04": { "label": "Dress shirt and pants", "top": "SHIRT", "bottom": "PANTS", "topMesh": "imported-body/assets/shirt01.fbx" }
+  "outfit04": { "label": "Dress shirt and pants", "top": "SHIRT", "bottom": "PANTS", "topMesh": "imported-body/assets/shirt01.fbx" },
+  "outfit05": { "label": "V-neck sweater and pants", "top": "SWEATER", "bottom": "PANTS", "topMesh": "imported-body/assets/m-sweater-v.fbx", "inner": true, "ease": 1.14 },
+  "outfit06": { "label": "Cardigan and pants", "top": "CARDIGAN", "bottom": "PANTS", "topMesh": "imported-body/assets/m-cardigan.fbx", "inner": true, "ease": 1.14, "cuffCut": 0.06, "hemCut": 0.18 },
+  "outfit07": { "label": "Zip hoodie and pants", "top": "HOODIE", "bottom": "PANTS", "topMesh": "imported-body/assets/m-zip-hoodie.fbx", "inner": true, "ease": 1.17, "hemCut": 0.22 },
+  "outfit08": { "label": "Blazer and pants", "top": "BLAZER", "bottom": "PANTS", "topMesh": "imported-body/assets/m-blazer.fbx", "inner": true, "ease": 1.14, "cuffCut": 0.10, "hemCut": 0.32, "deepCut": 0.5, "collarClear": true },
+  "outfit09": { "label": "Jacket and pants", "top": "JACKET", "bottom": "PANTS", "topMesh": "imported-body/assets/m-jacket.fbx", "inner": true, "dropDetails": true, "ease": 1.10, "cuffCut": 0.08, "hemCut": 0.25, "deepCut": 0.5, "collarClear": true },
+  "outfit10": { "label": "Coat and pants", "top": "COAT", "bottom": "PANTS", "topMesh": "imported-body/assets/m-coat.fbx", "inner": true, "dropDetails": true, "ease": 1.14, "cuffCut": 0.10, "hemCut": 0.25, "deepCut": 0.5, "collarClear": true },
+  "outfit11": { "label": "T-shirt and pants", "top": "TSHIRT", "bottom": "PANTS", "sex": "female", "base": true }
 }

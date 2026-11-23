@@ -21,7 +21,7 @@ const files = readdirSync(DIR).filter((f) => /^outfit-\d+\.(fbx|glb|gltf|obj)$/i
 const garmentOnly = Object.entries(JSON.parse(readFileSync(`${DIR}/outfits.json`, 'utf8'))).filter(([, m]) => m?.topMesh).map(([id]) => id);
 const REQUIRED = ['top', 'bottom', 'head', 'arm_left', 'arm_right', 'shoe_left', 'shoe_right'];
 // garment types per outfit (I-54): without them the site cannot know what may be put on this figure
-const TYPES = ['TSHIRT', 'SHIRT', 'JACKET', 'COAT', 'SWEATER', 'HOODIE', 'PANTS', 'JEANS', 'SHORTS', 'SKIRT', 'DRESS'];
+const TYPES = ['TSHIRT', 'SHIRT', 'JACKET', 'COAT', 'SWEATER', 'HOODIE', 'CARDIGAN', 'BLAZER', 'PANTS', 'JEANS', 'SHORTS', 'SKIRT', 'DRESS'];
 const manifest = JSON.parse(readFileSync(`${DIR}/outfits.json`, 'utf8'));
 const rows = [];
 const run = (args, env = {}) => spawnSync(process.execPath, ['--import', 'tsx', ...args], { encoding: 'utf8', env: { ...process.env, ...env } });
@@ -37,21 +37,26 @@ for (const f of [...files, ...garmentOnly]) {
     row.status = 'FAIL'; row.notes.push(`нет типа верха/низа в ${DIR}/outfits.json — впишите { "label", "top", "bottom" } для ${id}`); continue;
   }
   row.garments = { top: m.top, bottom: m.bottom, label: m.label };
+  // a second base figure (e.g. the women's reference) is prepared as is, like REF; its garments name it in "ref"
+  const ref = m.ref ?? REF;
   let prep;
   if (only) {
     const mesh = `imported-body/out/layered-${id}.json`;
-    const src = run(['imported-body/scripts/garment-source.ts', m.topMesh, `garment-${id}`, REF, 'top']);
-    const comp = src.status !== 0 ? src : run(['imported-body/scripts/layer-outfit.ts', REF, `garment-${id}`, REF, mesh]);
+    // ease (I-70): width over the base trunk; a layer worn over the T-shirt needs more than the default 1.06
+    const src = run(['imported-body/scripts/garment-source.ts', m.topMesh, `garment-${id}`, ref, 'top'], {
+      ...(m.ease ? { IB_EASE: String(m.ease) } : {}), ...(m.cuffCut ? { IB_CUFF_CUT: String(m.cuffCut) } : {}), ...(m.hemCut ? { IB_HEM_CUT: String(m.hemCut) } : {}), ...(m.deepCut ? { IB_DEEP_CUT: String(m.deepCut) } : {}), ...(m.dropDetails ? { IB_DROP_DETAILS: '1' } : {}),
+    });
+    const comp = src.status !== 0 ? src : run(['imported-body/scripts/layer-outfit.ts', ref, `garment-${id}`, ref, mesh], { ...(m.inner ? { IB_INNER: '1' } : {}), ...(m.collarClear ? { IB_COLLAR_CLEAR: '1' } : {}), ...(m.innerShrink ? { IB_INNER_SHRINK: String(m.innerShrink) } : {}) });
     row.assembly = 'garment-only';
     if (comp.status === 0) { try { row.compose = JSON.parse(comp.stdout.trim().split('\n').pop()); } catch { /* report only */ } }
     prep = comp.status === 0 ? run(['imported-body/scripts/prepare-outfit.ts', mesh, id, STATURE]) : comp;
-  } else if (id === REF) prep = run(['imported-body/scripts/prepare-outfit.ts', `${DIR}/${f}`, id, STATURE]);
+  } else if (id === REF || m.base) prep = run(['imported-body/scripts/prepare-outfit.ts', `${DIR}/${f}`, id, STATURE]);
   else {
     const raw = run(['imported-body/scripts/prepare-outfit.ts', `${DIR}/${f}`, `raw-${id}`, STATURE]);
     const mesh = `imported-body/out/${ASSEMBLY === 'compose' ? 'composed' : 'layered'}-${id}.json`;
     const comp = raw.status !== 0 ? raw : ASSEMBLY === 'compose'
-      ? run(['imported-body/scripts/compose-outfit.ts', `raw-${id}`, REF, mesh])
-      : run(['imported-body/scripts/layer-outfit.ts', REF, `raw-${id}`, `raw-${id}`, mesh]);
+      ? run(['imported-body/scripts/compose-outfit.ts', `raw-${id}`, ref, mesh])
+      : run(['imported-body/scripts/layer-outfit.ts', ref, `raw-${id}`, `raw-${id}`, mesh]);
     row.assembly = ASSEMBLY;
     if (comp.status === 0) { try { row.compose = JSON.parse(comp.stdout.trim().split('\n').pop()); } catch { /* report only */ } }
     prep = comp.status === 0 ? run(['imported-body/scripts/prepare-outfit.ts', mesh, id, STATURE]) : comp;

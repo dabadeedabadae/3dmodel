@@ -88,6 +88,47 @@ const geo = await load(file);
 let p = Float64Array.from(geo.attributes.position!.array as ArrayLike<number>);
 let index = Array.from(geo.index!.array as ArrayLike<number>);
 /**
+ * Stray sheets (I-70). A generated mesh can carry a separate piece of 3–8 vertices spanning half the garment: flat
+ * triangles left over from the input views (the low-collar jacket had one above the collar and one below the hem,
+ * 5 vertices from 0 to 54 cm). Such a component is dropped before the bounding box is taken; small parts that stay
+ * small (zip pulls, buttons) are kept.
+ */
+let strayVertices = 0;
+{
+  const nv = p.length / 3, par = Int32Array.from({ length: nv }, (_, i) => i);
+  const find = (x: number): number => { while (par[x] !== x) { par[x] = par[par[x]!]!; x = par[x]!; } return x; };
+  for (let t = 0; t < index.length; t += 3) { par[find(index[t]!)] = find(index[t + 1]!); par[find(index[t + 1]!)] = find(index[t + 2]!); }
+  const comps = new Map<number, number[]>();
+  for (let i = 0; i < nv; i++) { const r = find(i); let c = comps.get(r); if (!c) comps.set(r, (c = [])); c.push(i); }
+  let H = 0, yLo = 0; { let lo = Infinity, hi = -Infinity; for (let i = 0; i < nv; i++) { lo = Math.min(lo, p[i * 3 + 1]!); hi = Math.max(hi, p[i * 3 + 1]!); } H = hi - lo; yLo = lo; }
+  const drop = new Uint8Array(nv);
+  /**
+   * IB_DROP_DETAILS (`"dropDetails"`): small separate parts on the centre line are dropped as well. The low-collar
+   * jacket's zip pulls (16–121 vertices, 2 cm) sit on x = 0; the symmetrisation in prepare-outfit merged each with its
+   * mirror image into 22 non-manifold edges.
+   */
+  const details = process.env.IB_DROP_DETAILS === '1';
+  for (const vs of comps.values()) {
+    const ys = vs.map((v) => p[v * 3 + 1]!), yMin = Math.min(...ys);
+    // a separate collar ring on the centre line, wholly in the top 15 % (jacket: it floated above the shoulders once the
+    // collar was pushed off the neck); the trunk's own neckline is kept as the collar
+    const ring = details && vs.length < 0.8 * nv && yMin > yLo + 0.85 * H;
+    if (vs.length > (details ? 200 : 8) && !ring) continue;
+    const ext = [0, 1, 2].map((k) => Math.max(...vs.map((v) => p[v * 3 + k]!)) - Math.min(...vs.map((v) => p[v * 3 + k]!)));
+    const xs = vs.map((v) => p[v * 3]!), onCentre = Math.min(...xs) < 0.002 * H && Math.max(...xs) > -0.002 * H;
+    if (ring && onCentre) { for (const v of vs) drop[v] = 1; strayVertices += vs.length; continue; }
+    if ((vs.length <= 8 && Math.max(...ext) > 0.25 * H) || (details && onCentre && Math.max(...ext) < 0.08 * H)) { for (const v of vs) drop[v] = 1; strayVertices += vs.length; }
+  }
+  if (strayVertices) {
+    const out: number[] = [];
+    for (let t = 0; t < index.length; t += 3) if (!drop[index[t]!] && !drop[index[t + 1]!] && !drop[index[t + 2]!]) out.push(index[t]!, index[t + 1]!, index[t + 2]!);
+    index = out;
+    // unreferenced vertices would still count in the bounding box: move them onto a kept vertex
+    const keep = index[0]!;
+    for (let i = 0; i < nv; i++) if (drop[i]) for (let k = 0; k < 3; k++) p[i * 3 + k] = p[keep * 3 + k]!;
+  }
+}
+/**
  * Sleeve ends cut off. The generated sleeve is a closed tube: its end is a slanted, recessed lid with a narrow inner
  * tube, and the base wrist ran through those faces (shirt01: every crossing left at the cuff). Every face with a
  * vertex in the last IB_CUFF_CUT (default 4 %) of the span at either end is dropped; the cuff is an open ring.
@@ -108,6 +149,130 @@ if (layer === 'top') {
   const remap = new Int32Array(p.length / 3).fill(-1), q: number[] = [];
   index = keep.map((v) => { if (remap[v] === -1) { remap[v] = q.length / 3; q.push(p[v * 3]!, p[v * 3 + 1]!, p[v * 3 + 2]!); } return remap[v]!; });
   p = Float64Array.from(q);
+}
+/**
+ * Hem lid cut off (I-70, cardigan). Some generated tops are closed at the bottom: the hem is a horizontal lid across
+ * the body plus a second lid 5 cm up inside the trunk (cardigan: crossings and stuck vertices at 90–95 cm). Off by
+ * default; with IB_HEM_CUT (`"hemCut"` in outfits.json, cardigan 0.18) faces in that lowest share of the height whose normal is near vertical (|n.y| > 0.6; the zip hoodie lid is sloped, n.y −0.7) or faces the trunk axis (the rolled-in rib,
+ * 3 cm deep, went into the trouser waist) are dropped — only if the face is inside: 1.2 cm closer to the axis than the
+ * garment's outer contour at its height and direction, and covered by the garment (ray test below). The outer step between body and hem rib is kept (without this test the zip
+ * hoodie got a slit above the rib with the inner T-shirt showing through).
+ */
+let hemFaces = 0, deepFaces = 0;
+const hemCut = Number(process.env.IB_HEM_CUT ?? 0);
+if (layer === 'top' && hemCut > 0) {
+  let yl = Infinity, yh = -Infinity, xl = Infinity, xh = -Infinity, zl = Infinity, zh = -Infinity;
+  for (let i = 0; i < p.length; i += 3) {
+    xl = Math.min(xl, p[i]!); xh = Math.max(xh, p[i]!); yl = Math.min(yl, p[i + 1]!); yh = Math.max(yh, p[i + 1]!); zl = Math.min(zl, p[i + 2]!); zh = Math.max(zh, p[i + 2]!);
+  }
+  const lim = yl + (yh - yl) * hemCut, ox = (xl + xh) / 2, oz = (zl + zh) / 2;
+  /**
+   * Outer contour: the largest distance from the trunk axis per height band (2 % of the height) and direction
+   * (32 sectors), over the band and its neighbours. A face is inside when it lies IN_MARGIN closer to the axis than
+   * the contour in its sector. A horizontal ray test was tried first: on the blazer the lid sits at the hem rim, the
+   * rays grazed the rim and missed, and the open front let them out.
+   */
+  const HB = 50, AB = 32, IN_MARGIN = 0.012;
+  const contour = new Float64Array(HB * AB);
+  const hb = (y: number) => Math.min(HB - 1, Math.max(0, Math.floor(((y - yl) / (yh - yl)) * HB)));
+  const ab = (x: number, z: number) => ((Math.floor(((Math.atan2(z - oz, x - ox) + Math.PI) / (2 * Math.PI)) * AB) % AB) + AB) % AB;
+  const addContour = (x: number, y: number, z: number) => {
+    const h = hb(y), a = ab(x, z), r = Math.hypot(x - ox, z - oz);
+    for (const dh of [-1, 0, 1]) {
+      const hh = h + dh;
+      if (hh >= 0 && hh < HB) contour[hh * AB + a] = Math.max(contour[hh * AB + a]!, r);
+    }
+  };
+  for (let i = 0; i < p.length; i += 3) addContour(p[i]!, p[i + 1]!, p[i + 2]!);
+  /**
+   * Points along the edges too: the coat's 1000 polygons left whole height bands without a vertex in most sectors
+   * (contour 1 cm at the front of the hip), and a cone of faces from a ring at the crotch to a point inside the
+   * trunk was not "inside" anything — it crossed the trousers 26 times.
+   */
+  const step = (yh - yl) / HB / 2;
+  for (let t = 0; t < index.length; t += 3) for (let e = 0; e < 3; e++) {
+    const A = index[t + e]! * 3, Bv = index[t + (e + 1) % 3]! * 3;
+    const len = Math.hypot(p[Bv]! - p[A]!, p[Bv + 1]! - p[A + 1]!, p[Bv + 2]! - p[A + 2]!), m = Math.ceil(len / step);
+    for (let j = 1; j < m; j++) { const f = j / m; addContour(p[A]! + f * (p[Bv]! - p[A]!), p[A + 1]! + f * (p[Bv + 1]! - p[A + 1]!), p[A + 2]! + f * (p[Bv + 2]! - p[A + 2]!)); }
+  }
+  // a low-poly garment leaves some sectors of a band without a vertex (jacket: contour 0 there, its lid at the waist was
+  // kept): the contour of a sector is the largest over it and two sectors either side
+  const contourAt = (y: number, x: number, z: number) => {
+    const h = hb(y), a0 = ab(x, z);
+    let m = 0;
+    for (let d = -2; d <= 2; d++) m = Math.max(m, contour[h * AB + ((a0 + d + AB) % AB)]!);
+    return m;
+  };
+  const deepLim = yl + (yh - yl) * Number(process.env.IB_DEEP_CUT ?? 0);
+  /**
+   * Covered: a horizontal ray from the face centre outwards hits another face of the garment at least 2 mm away, or
+   * (an open front lets that ray out) both rays across it do. The contour alone cut outer faces at the blazer's back
+   * hem — its flared skirt and vent widen the contour of the neighbouring sectors — and left a notch over the trousers.
+   */
+  const rayHits = (skip: number, x: number, y: number, z: number, dx: number, dz: number) => {
+    for (let t = 0; t < index.length; t += 3) {
+      if (t === skip) continue;
+      const A = index[t]! * 3, Bv = index[t + 1]! * 3, Cv = index[t + 2]! * 3;
+      const e1 = [p[Bv]! - p[A]!, p[Bv + 1]! - p[A + 1]!, p[Bv + 2]! - p[A + 2]!], e2 = [p[Cv]! - p[A]!, p[Cv + 1]! - p[A + 1]!, p[Cv + 2]! - p[A + 2]!];
+      const h = [-dz * e2[1]!, dz * e2[0]! - dx * e2[2]!, dx * e2[1]!];
+      const det = e1[0]! * h[0]! + e1[1]! * h[1]! + e1[2]! * h[2]!;
+      if (Math.abs(det) < 1e-12) continue;
+      const f = 1 / det, sv = [x - p[A]!, y - p[A + 1]!, z - p[A + 2]!];
+      const u = f * (sv[0]! * h[0]! + sv[1]! * h[1]! + sv[2]! * h[2]!);
+      if (u < 0 || u > 1) continue;
+      const q = [sv[1]! * e1[2]! - sv[2]! * e1[1]!, sv[2]! * e1[0]! - sv[0]! * e1[2]!, sv[0]! * e1[1]! - sv[1]! * e1[0]!];
+      const w = f * (dx * q[0]! + dz * q[2]!);
+      if (w < 0 || u + w > 1) continue;
+      if (f * (e2[0]! * q[0]! + e2[1]! * q[1]! + e2[2]! * q[2]!) > 0.002) return true;
+    }
+    return false;
+  };
+  const covered = (t: number, x: number, y: number, z: number) => {
+    const r = Math.hypot(x - ox, z - oz) || 1, ux = (x - ox) / r, uz = (z - oz) / r;
+    return rayHits(t, x, y, z, ux, uz) || (rayHits(t, x, y, z, -uz, ux) && rayHits(t, x, y, z, uz, -ux));
+  };
+  const keep: number[] = [];
+  for (let t = 0; t < index.length; t += 3) {
+    const [a, b, c] = [index[t]!, index[t + 1]!, index[t + 2]!];
+    // by the centroid: the blazer's lid is a cone of 20 cm slivers from the hem ring up to a point inside the trunk
+    if ((p[a * 3 + 1]! + p[b * 3 + 1]! + p[c * 3 + 1]!) / 3 < lim) {
+      const u = [0, 1, 2].map((k) => p[b * 3 + k]! - p[a * 3 + k]!), w = [0, 1, 2].map((k) => p[c * 3 + k]! - p[a * 3 + k]!);
+      const n = [u[1]! * w[2]! - u[2]! * w[1]!, u[2]! * w[0]! - u[0]! * w[2]!, u[0]! * w[1]! - u[1]! * w[0]!];
+      const len = Math.hypot(n[0]!, n[1]!, n[2]!);
+      const cx = (p[a * 3]! + p[b * 3]! + p[c * 3]!) / 3 - ox, cy = (p[a * 3 + 1]! + p[b * 3 + 1]! + p[c * 3 + 1]!) / 3, cz = (p[a * 3 + 2]! + p[b * 3 + 2]! + p[c * 3 + 2]!) / 3 - oz;
+      const r = Math.hypot(cx, cz) || 1;
+      const inward = (n[0]! * cx + n[2]! * cz) / (r * len) < -0.3;
+      const inside = Math.hypot(cx, cz) < contourAt(cy, cx + ox, cz + oz) - IN_MARGIN;
+      if ((Math.abs(n[1]!) > 0.6 * len || inward) && inside && covered(t, cx + ox, cy, cz + oz)) { hemFaces++; continue; }
+    }
+    // deep inside (IB_DEEP_CUT, `"deepCut"`: share of the height): a face with a vertex 3 cm or more inside the
+    // contour is internal structure — the blazer's cone of slivers from the hem ring to a point inside the trunk at
+    // 95 cm, which hung as a grey tongue between the open fronts; a single-layer shell has no vertex that deep
+    if (deepLim > yl && [a, b, c].some((v) => p[v * 3 + 1]! < deepLim && Math.hypot(p[v * 3]! - ox, p[v * 3 + 2]! - oz) < contourAt(p[v * 3 + 1]!, p[v * 3]!, p[v * 3 + 2]!) - 0.03)
+      && covered(t, (p[a * 3]! + p[b * 3]! + p[c * 3]!) / 3, (p[a * 3 + 1]! + p[b * 3 + 1]! + p[c * 3 + 1]!) / 3, (p[a * 3 + 2]! + p[b * 3 + 2]! + p[c * 3 + 2]!) / 3)) { deepFaces++; continue; }
+    keep.push(a, b, c);
+  }
+  if (hemFaces || deepFaces) {
+    const remap = new Int32Array(p.length / 3).fill(-1), q: number[] = [];
+    index = keep.map((v) => { if (remap[v] === -1) { remap[v] = q.length / 3; q.push(p[v * 3]!, p[v * 3 + 1]!, p[v * 3 + 2]!); } return remap[v]!; });
+    p = Float64Array.from(q);
+  }
+}
+/**
+ * Zero-area faces (I-70: blazer 3, coat 3 — a quad split across three collinear vertices) carry no surface; the
+ * subdivision turned each into 4 and `check-outfit` blocks on degenerate triangles. They are dropped here.
+ */
+let zeroFaces = 0;
+{
+  const keep: number[] = [];
+  for (let t = 0; t < index.length; t += 3) {
+    const [a, b, c] = [index[t]! * 3, index[t + 1]! * 3, index[t + 2]! * 3];
+    const ux = p[b]! - p[a]!, uy = p[b + 1]! - p[a + 1]!, uz = p[b + 2]! - p[a + 2]!;
+    const vx = p[c]! - p[a]!, vy = p[c + 1]! - p[a + 1]!, vz = p[c + 2]! - p[a + 2]!;
+    if (Math.hypot(uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx) < 1e-10) { zeroFaces++; continue; }
+    keep.push(index[t]!, index[t + 1]!, index[t + 2]!);
+  }
+  index = keep;
 }
 /**
  * Midpoint subdivision (1 → 4 triangles, IB_SUBDIV rounds, default 1). A 1000-polygon garment has sleeve faces
@@ -189,6 +354,33 @@ const zMid = (pos: ArrayLike<number>, idx: ArrayLike<number>, keep: (v: number) 
 };
 const dz = zMid(B.base, B.index, bTop) - zMid(p, index, all);
 for (let i = 0; i < n; i++) p[i * 3 + 2] += dz;
+/**
+ * 3b. Shoulder line (I-70). The uniform scale fits the trunk width (× EASE) and the armpit height; what is above the
+ * armpit grows with it, and generated tops have tall shoulders anyway: their shoulder line sat 3–9 cm above the base
+ * T-shirt's (149–156 cm against 146.6) and the collars reached the chin (155–165 cm; the base chin starts at 152).
+ * Above the armpit the trunk is compressed in height so the shoulder (highest point 14–21 cm from the centre) lies
+ * SHOULDER_ALLOW above the base T-shirt's; the compression fades out over 20–30 cm from the centre, the sleeves keep
+ * their shape. Off with IB_SHOULDER_FIT=0.
+ */
+let shoulderFit = 1;
+if (layer === 'top' && process.env.IB_SHOULDER_FIT !== '0') {
+  const SHOULDER_ALLOW = 0.01;
+  const shoulderY = (pos: ArrayLike<number>, keep: (v: number) => boolean, count: number) => {
+    let m = -Infinity;
+    for (let i = 0; i < count; i++) if (keep(i) && Math.abs(pos[i * 3]!) >= 0.14 && Math.abs(pos[i * 3]!) < 0.21) m = Math.max(m, pos[i * 3 + 1]!);
+    return m;
+  };
+  const bSh = shoulderY(B.base, bTop, B.base.length / 3), gSh = shoulderY(p, all, n);
+  if (Number.isFinite(bSh) && Number.isFinite(gSh) && gSh > bSh + SHOULDER_ALLOW) {
+    shoulderFit = (bSh + SHOULDER_ALLOW - bArm) / (gSh - bArm);
+    for (let i = 0; i < n; i++) {
+      const y = p[i * 3 + 1]!;
+      if (y <= bArm) continue;
+      const ax = Math.abs(p[i * 3]!), w = ax <= 0.2 ? 1 : ax >= 0.3 ? 0 : 1 - ((ax - 0.2) / 0.1) ** 2 * (3 - 2 * (ax - 0.2) / 0.1);
+      p[i * 3 + 1] = bArm + (y - bArm) * (1 - w * (1 - shoulderFit));
+    }
+  }
+}
 
 /**
  * 4. Sleeves on the base arm axis. The generated sleeve hung 2–3 cm behind the arm; the low-poly forearm then
@@ -277,7 +469,7 @@ const out: Prepared = {
 } as Prepared & { prealigned: string };
 writeFileSync(`imported-body/out/outfit-${id}.json`, JSON.stringify(out));
 console.log(JSON.stringify({
-  id, source: file.split("/").pop(), cuffFacesCut: capFaces, vertices: n, triangles: index.length / 3, flipped, scale: Number(k.toFixed(4)), sleeveCentred_cm: Number((sleeveShift * 100).toFixed(1)), cuffVerticesClamped: cuffClamped,
+  id, source: file.split("/").pop(), cuffFacesCut: capFaces, hemFacesCut: hemFaces, strayVertices, shoulderFit: Number(shoulderFit.toFixed(3)), deepFacesCut: deepFaces, zeroAreaFacesDropped: zeroFaces, vertices: n, triangles: index.length / 3, flipped, scale: Number(k.toFixed(4)), sleeveCentred_cm: Number((sleeveShift * 100).toFixed(1)), cuffVerticesClamped: cuffClamped,
   hem_cm: Number((lo[1]! * 100).toFixed(1)), top_cm: Number((hi[1]! * 100).toFixed(1)), reach_cm: Number((hi[0]! * 100).toFixed(1)),
   trunkHalf_cm: { base: Number((med(bHalf) * 100).toFixed(1)), garment: Number((med(sHalf) * k * 100).toFixed(1)) },
 }));

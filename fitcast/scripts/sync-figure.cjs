@@ -8,7 +8,8 @@ const { resolve, dirname } = require('node:path');
 
 const SRC = resolve(process.env.FIGURE_SRC ?? '../imported-body/out');
 const OUT_DIR = resolve('frontend/public/models');
-const PART_CODES = { head: 0, arm_left: 1, arm_right: 1, top: 2, bottom: 3, shoe_left: 4, shoe_right: 4, other: 0 };
+// inner: the base T-shirt shown under an open neckline (I-70), its own colour, never textured from a photo
+const PART_CODES = { head: 0, arm_left: 1, arm_right: 1, top: 2, bottom: 3, shoe_left: 4, shoe_right: 4, inner: 5, other: 0 };
 const r = (x) => Math.round(x * 1e5) / 1e5;
 
 // garment types per outfit (I-54): the site puts a wardrobe item only on the figure wearing the same kind of garment
@@ -32,14 +33,14 @@ for (const num of ids) {
   const id = `figure-${num}`;
   writeFileSync(resolve(OUT_DIR, `${id}.json`), JSON.stringify({
     id, version: asset.version, topologyVersion: `${id}-topo-1`,
-    /** part codes per vertex: 0 head/skin, 1 arms/skin, 2 top garment, 3 bottom garment, 4 shoes */
-    partNames: ['head', 'arms', 'top', 'bottom', 'shoes'],
+    /** part codes per vertex: 0 head/skin, 1 arms/skin, 2 top garment, 3 bottom garment, 4 shoes, 5 inner layer */
+    partNames: ['head', 'arms', 'top', 'bottom', 'shoes', 'inner'],
     landmarks: asset.landmarks, armBand: asset.armBand, axis: asset.axis, legAxis: asset.legAxis,
     usableSliderRange: asset.usableSliderRange, base: asset.base.map(r), index: asset.index, part,
   }));
   const m = manifest[`outfit${num}`];
   if (!m?.top || !m?.bottom) throw new Error(`figure ${num}: no garment types in ${MANIFEST}`);
-  list.push({ id, url: `/models/${id}.json`, vertices: n, triangles: asset.index.length / 3, label: m.label, garments: { top: m.top, bottom: m.bottom } });
+  list.push({ id, url: `/models/${id}.json`, vertices: n, triangles: asset.index.length / 3, label: m.label, garments: { top: m.top, bottom: m.bottom }, ...(m.inner ? { inner: 'TSHIRT' } : {}), ...(m.sex === 'female' ? { sex: 'female' } : {}), range: asset.usableSliderRange });
   console.log(`${id}: ${n} vertices, ${asset.index.length / 3} triangles`);
 }
 writeFileSync(resolve(OUT_DIR, 'figures.json'), JSON.stringify(list, null, 2));

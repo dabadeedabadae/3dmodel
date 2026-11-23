@@ -39,7 +39,7 @@ const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v);
 
 function measureFor(asset: BodyAsset, w: Weights, height_cm: number, mode: 'keep_girths' | 'proportional') {
   const p = deform(asset, w, { mode, height_cm });
-  const m = measureImported(asset, p);
+  const m = measureImported(asset, p, mode);
   return { chest: m.chest_cm, waist: m.waist_cm, hip: m.hip_cm, thigh: m.thigh_cm, bicep: m.bicep_cm, height: m.height_cm };
 }
 

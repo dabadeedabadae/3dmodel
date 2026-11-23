@@ -32,7 +32,7 @@ const photos = process.argv.slice(2).length
   : readdirSync(path.join(ROOT, 'fixtures/photos')).filter((f) => /^(tshirt|longsleeve|pants)_.*\.jpe?g$/i.test(f)).sort().map((f) => path.join(ROOT, 'fixtures/photos', f));
 
 // long-sleeved tops (I-63): the same points and mapping as the T-shirt, shown only on figures wearing one of these
-const LONG_TOPS = ['SHIRT', 'HOODIE', 'SWEATER'];
+const LONG_TOPS = ['SHIRT', 'HOODIE', 'SWEATER', 'CARDIGAN'];
 const PART = { head: 0, arm_left: 1, arm_right: 1, top: 2, bottom: 3, shoe_left: 4, shoe_right: 4, other: 0 } as Record<string, number>;
 const figures = readdirSync(path.join(ROOT, 'imported-body/out')).map((f) => f.match(/^asset-(outfit\d+)\.json$/)?.[1]).filter(Boolean).sort() as string[];
 // garment types per outfit (I-54): a T-shirt photo is only ever shown on a figure that wears a T-shirt
