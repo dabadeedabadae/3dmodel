@@ -181,7 +181,10 @@ async function main() {
           for (let k = 0; k < 3; k++) {
             const x = fig.base[c[k]! * 3]!, y = fig.base[c[k]! * 3 + 1]!;
             const u = m.uv[j * 6 + k * 2]!, v = m.uv[j * 6 + k * 2 + 1]!;
-            if (Math.abs(x) <= s0) { fx.push(x); fy.push(y); ix.push(u); iy.push(v); }
+            // torso vs sleeve exactly as mapPhotoToTop splits them (I-76): beyond s0 AND above armpit − 3 cm. The
+            // women's hips are wider than the chest under the armhole, so a width-only test called the hips a sleeve
+            // (vertices 26–36 cm below the armpit on figures 11 and 21) and failed sleeves that were mapped right.
+            if (Math.abs(x) <= s0 || y <= armpitY - 0.03) { fx.push(x); fy.push(y); ix.push(u); iy.push(v); }
             else {
               // distance from the body along the sleeve vs position along the photo's sleeve axis (middle of the
               // armhole → middle of the cuff); the across-sleeve direction (shoulder → armpit) is not part of it
