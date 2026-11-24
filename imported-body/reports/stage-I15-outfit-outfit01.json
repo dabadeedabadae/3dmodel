@@ -9,13 +9,15 @@
     "refusedNonManifold": 0,
     "seamSnapped": 17,
     "mirrorPaired": 979,
+    "surfaceSymmetrised": 153,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
-    "windingFixed": 0
+    "windingFixed": 0,
+    "windingDropped": 0
   },
   "symmetry_mm": {
-    "mean": 0.25,
-    "max": 8.11
+    "mean": 0.26,
+    "max": 7.99
   },
   "parts": [
     {

@@ -7,15 +7,17 @@
     "after": 4758,
     "triangles": 9183,
     "refusedNonManifold": 0,
-    "seamSnapped": 43,
-    "mirrorPaired": 4149,
+    "seamSnapped": 52,
+    "mirrorPaired": 4150,
+    "surfaceSymmetrised": 3678,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
-    "windingFixed": 0
+    "windingFixed": 0,
+    "windingDropped": 0
   },
   "symmetry_mm": {
-    "mean": 0.22,
-    "max": 14.4
+    "mean": 0.07,
+    "max": 14.04
   },
   "parts": [
     {
@@ -77,8 +79,8 @@
       "vertices": 3889,
       "triangles": 7532,
       "y_cm": [
-        79.2,
-        154.4
+        80,
+        154.5
       ]
     },
     {
@@ -96,24 +98,24 @@
     "ankle": 13.3,
     "crotch": 77.3,
     "waistband": 99.9,
-    "hip": 92,
+    "hip": 92.5,
     "chest": 128,
     "armpit": 132.4,
     "shoulder": 143.3,
     "neck_base": 141.7,
-    "topHem": 79.2
+    "topHem": 80
   },
   "fractions_of_H": {
     "height": 1,
     "ankle": 0.076,
     "crotch": 0.442,
     "waistband": 0.571,
-    "hip": 0.526,
+    "hip": 0.528,
     "chest": 0.731,
     "armpit": 0.756,
     "shoulder": 0.819,
     "neck_base": 0.81,
-    "topHem": 0.452
+    "topHem": 0.457
   },
   "note": "Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: она сгенерирована одетой."
 }

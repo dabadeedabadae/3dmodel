@@ -1,0 +1,120 @@
+{
+  "generatedAt": "2026-11-24T01:05:01.635Z",
+  "asset": "outfit-outfit15",
+  "shells": 8,
+  "boundaryEdges": 192,
+  "sourceAsymmetry_mm": 16.8,
+  "usableSliderRange": {
+    "chest": 1,
+    "waist": 1,
+    "hip": 0.32,
+    "shoulders": 1,
+    "arms": 1,
+    "thighs": 1
+  },
+  "flipBudget": 13,
+  "results": [
+    {
+      "label": "base",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "chest=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0.125
+    },
+    {
+      "label": "chest=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "waist=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 2.625
+    },
+    {
+      "label": "waist=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0.1875
+    },
+    {
+      "label": "hip=-0.32",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "hip=0.32",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "shoulders=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 3
+    },
+    {
+      "label": "shoulders=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "arms=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "arms=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "все по максимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 0.25
+    },
+    {
+      "label": "все по минимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 6
+    },
+    {
+      "label": "height 150",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "height 200 proportional",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    }
+  ]
+}

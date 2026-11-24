@@ -145,6 +145,12 @@ function alignedGarment(srcId: string, layer: 'top' | 'bottom'): Layer {
     // 1. heights
     const knots = (p: Prepared, pos: ArrayLike<number>) => { const L = p.landmarks; return [0, L.ankle!, L.crotch!, L.armpit!, necklineFront(p, pos), L.height!]; };
     const from = knots(S, sp), to = knots(B, bp);
+    // a deep V (women's cardigan) drops the front neckline below the armhole: that knot then says nothing about the
+    // shoulders, so it is placed where the base's neckline sits between the armhole and the top of the head
+    if (!(from[4]! > from[3]!)) {
+      report.necklineKnot = 'below the armhole, taken from the base proportions';
+      from[4] = from[3]! + ((to[4]! - to[3]!) / (to[5]! - to[3]!)) * (from[5]! - from[3]!);
+    }
     for (let i = 1; i < from.length; i++) if (!(from[i]! > from[i - 1]!) || !(to[i]! > to[i - 1]!)) throw new Error(`${srcId}: landmarks out of order at knot ${i}`);
     const mapY = (y: number) => {
       for (let i = 1; i < from.length; i++) if (y <= from[i]! || i === from.length - 1) {

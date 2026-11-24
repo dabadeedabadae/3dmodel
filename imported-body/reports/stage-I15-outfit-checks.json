@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-11-23T16:16:05.578Z",
+  "generatedAt": "2026-11-23T23:21:34.320Z",
   "asset": "outfit-outfit01",
   "shells": 7,
   "boundaryEdges": 45,
-  "sourceAsymmetry_mm": 16.7,
+  "sourceAsymmetry_mm": 14.1,
   "usableSliderRange": {
     "chest": 0.72,
     "waist": 0.72,
     "hip": 1,
     "shoulders": 1,
     "arms": 1,
-    "thighs": 0.72
+    "thighs": 0.64
   },
   "flipBudget": 2,
   "results": [
@@ -81,13 +81,13 @@
       "flipped": 0
     },
     {
-      "label": "thighs=-0.72",
+      "label": "thighs=-0.64",
       "ok": true,
       "fails": [],
       "flipped": 0
     },
     {
-      "label": "thighs=0.72",
+      "label": "thighs=0.64",
       "ok": true,
       "fails": [],
       "flipped": 0

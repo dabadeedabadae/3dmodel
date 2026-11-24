@@ -204,6 +204,10 @@ if (layer === 'top' && hemCut > 0) {
     return m;
   };
   const deepLim = yl + (yh - yl) * Number(process.env.IB_DEEP_CUT ?? 0);
+  // IB_DEEP_X (`"deepCutX"`, metres from the centre line, I-73): the deep cut only within the trunk. The women's
+  // V-neck sweater needs it up to the neck (an inner lid there crossed the neck), but at that height the T-pose
+  // sleeves also have faces 3 cm inside the contour, and cutting them left holes all along the arms
+  const deepX = Number(process.env.IB_DEEP_X ?? Infinity);
   /**
    * Covered: a horizontal ray from the face centre outwards hits another face of the garment at least 2 mm away, or
    * (an open front lets that ray out) both rays across it do. The contour alone cut outer faces at the blazer's back
@@ -248,7 +252,7 @@ if (layer === 'top' && hemCut > 0) {
     // deep inside (IB_DEEP_CUT, `"deepCut"`: share of the height): a face with a vertex 3 cm or more inside the
     // contour is internal structure — the blazer's cone of slivers from the hem ring to a point inside the trunk at
     // 95 cm, which hung as a grey tongue between the open fronts; a single-layer shell has no vertex that deep
-    if (deepLim > yl && [a, b, c].some((v) => p[v * 3 + 1]! < deepLim && Math.hypot(p[v * 3]! - ox, p[v * 3 + 2]! - oz) < contourAt(p[v * 3 + 1]!, p[v * 3]!, p[v * 3 + 2]!) - 0.03)
+    if (deepLim > yl && [a, b, c].every((v) => Math.abs(p[v * 3]! - ox) < deepX) && [a, b, c].some((v) => p[v * 3 + 1]! < deepLim && Math.hypot(p[v * 3]! - ox, p[v * 3 + 2]! - oz) < contourAt(p[v * 3 + 1]!, p[v * 3]!, p[v * 3 + 2]!) - 0.03)
       && covered(t, (p[a * 3]! + p[b * 3]! + p[c * 3]!) / 3, (p[a * 3 + 1]! + p[b * 3 + 1]! + p[c * 3 + 1]!) / 3, (p[a * 3 + 2]! + p[b * 3 + 2]! + p[c * 3 + 2]!) / 3)) { deepFaces++; continue; }
     keep.push(a, b, c);
   }

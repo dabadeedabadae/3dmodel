@@ -9,12 +9,14 @@
     "refusedNonManifold": 0,
     "seamSnapped": 40,
     "mirrorPaired": 2188,
+    "surfaceSymmetrised": 885,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
-    "windingFixed": 0
+    "windingFixed": 0,
+    "windingDropped": 0
   },
   "symmetry_mm": {
-    "mean": 0.05,
+    "mean": 0.04,
     "max": 3.02
   },
   "parts": [
@@ -65,19 +67,19 @@
     },
     {
       "kind": "top",
-      "vertices": 587,
-      "triangles": 1132,
+      "vertices": 588,
+      "triangles": 1136,
       "y_cm": [
         86.6,
-        150.1
+        150.2
       ]
     },
     {
       "kind": "head",
-      "vertices": 256,
-      "triangles": 514,
+      "vertices": 255,
+      "triangles": 510,
       "y_cm": [
-        150.3,
+        151,
         175
       ]
     },
@@ -190,7 +192,7 @@
     "chest": 129.4,
     "armpit": 133.8,
     "shoulder": 141.8,
-    "neck_base": 150.3,
+    "neck_base": 151,
     "topHem": 86.6
   },
   "fractions_of_H": {
@@ -202,7 +204,7 @@
     "chest": 0.74,
     "armpit": 0.765,
     "shoulder": 0.81,
-    "neck_base": 0.859,
+    "neck_base": 0.863,
     "topHem": 0.495
   },
   "note": "Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: она сгенерирована одетой."

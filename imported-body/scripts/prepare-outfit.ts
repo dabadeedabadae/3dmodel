@@ -144,6 +144,134 @@ paired = mirrorPass(0.03);
 paired = Math.max(paired, mirrorPass(0.012));
 for (let i = 0; i < n; i++) if (Math.abs(pos[i * 3]!) < 1e-4) { pos[i * 3] = 0; snapped++; }
 /**
+ * 1b. Symmetrise the SURFACE (I-73). The vertex pass above only moves a vertex that has a mirror partner within
+ * 3 cm; a generated mesh is not mirror-topological, so the rest kept their asymmetry: the base trousers stayed up
+ * to 3 cm wider on one leg, and every garment-only figure inherits that base. Here each free vertex is pulled
+ * halfway to the nearest point of the mirrored surface of its own shell (connected piece), over a few rounds, so
+ * the shape becomes symmetric whatever the triangulation. Guards: the partner must face the same way (normals),
+ * be within IB_SURF_TOL (default 2 cm, so a wrap-over front or an open collar is not folded onto the other side),
+ * and vertices within IB_SURF_BAND of the centre line (default 3 cm) are left alone — a closure overlaps there.
+ */
+// tolerances are in metres of the 175 cm figure; a raw generated mesh is in its own units (outfit-01: 0.99 tall)
+let unit = 1;
+{
+  let y0 = Infinity, y1 = -Infinity;
+  for (let i = 0; i < n; i++) { y0 = Math.min(y0, pos[i * 3 + 1]!); y1 = Math.max(y1, pos[i * 3 + 1]!); }
+  unit = (y1 - y0) / (heightCm / 100);
+}
+const SURF_TOL = Number(process.env.IB_SURF_TOL ?? 0.02) * unit;
+const SURF_BAND = Number(process.env.IB_SURF_BAND ?? 0.03) * unit;
+const SURF_ROUNDS = Number(process.env.IB_SURF_ROUNDS ?? 4);
+// only vertices below this share of the height (IB_SURF_YMAX; 1 = all). The base figure uses 0.5: its trousers
+// were the crooked part, and moving its torso cut the chest slider at the all-sliders corner from ±0.72 to ±0.19
+const SURF_YMAX = Number(process.env.IB_SURF_YMAX ?? 1);
+let surfY0 = Infinity, surfY1 = -Infinity;
+for (let i = 0; i < n; i++) { surfY0 = Math.min(surfY0, pos[i * 3 + 1]!); surfY1 = Math.max(surfY1, pos[i * 3 + 1]!); }
+const surfYLimit = surfY0 + SURF_YMAX * (surfY1 - surfY0);
+let surfMoved = 0;
+if (SURF_ROUNDS > 0) {
+  // shells by union-find over the triangles
+  const parent = new Int32Array(n).map((_, i) => i);
+  const find = (a: number): number => { while (parent[a] !== a) { parent[a] = parent[parent[a]!]!; a = parent[a]!; } return a; };
+  for (let t = 0; t < index.length; t += 3) {
+    const a = find(index[t]!), b = find(index[t + 1]!), c = find(index[t + 2]!);
+    parent[b] = a; parent[find(c)] = a;
+  }
+  const shell = new Int32Array(n); for (let i = 0; i < n; i++) shell[i] = find(i);
+  const nT = index.length / 3;
+  const cell = SURF_TOL;
+  // closest point on triangle (Ericson, Real-Time Collision Detection 5.1.5)
+  const closest = (px: number, py: number, pz: number, a: number[], b: number[], c: number[]): [number, number, number] => {
+    const ab = [b[0]! - a[0]!, b[1]! - a[1]!, b[2]! - a[2]!], ac = [c[0]! - a[0]!, c[1]! - a[1]!, c[2]! - a[2]!];
+    const ap = [px - a[0]!, py - a[1]!, pz - a[2]!];
+    const dot = (u: number[], v: number[]) => u[0]! * v[0]! + u[1]! * v[1]! + u[2]! * v[2]!;
+    const d1 = dot(ab, ap), d2 = dot(ac, ap);
+    if (d1 <= 0 && d2 <= 0) return [a[0]!, a[1]!, a[2]!];
+    const bp = [px - b[0]!, py - b[1]!, pz - b[2]!], d3 = dot(ab, bp), d4 = dot(ac, bp);
+    if (d3 >= 0 && d4 <= d3) return [b[0]!, b[1]!, b[2]!];
+    const vc = d1 * d4 - d3 * d2;
+    if (vc <= 0 && d1 >= 0 && d3 <= 0) { const v = d1 / (d1 - d3); return [a[0]! + v * ab[0]!, a[1]! + v * ab[1]!, a[2]! + v * ab[2]!]; }
+    const cp = [px - c[0]!, py - c[1]!, pz - c[2]!], d5 = dot(ab, cp), d6 = dot(ac, cp);
+    if (d6 >= 0 && d5 <= d6) return [c[0]!, c[1]!, c[2]!];
+    const vb = d5 * d2 - d1 * d6;
+    if (vb <= 0 && d2 >= 0 && d6 <= 0) { const w = d2 / (d2 - d6); return [a[0]! + w * ac[0]!, a[1]! + w * ac[1]!, a[2]! + w * ac[2]!]; }
+    const va = d3 * d6 - d5 * d4;
+    if (va <= 0 && d4 - d3 >= 0 && d5 - d6 >= 0) { const w = (d4 - d3) / (d4 - d3 + (d5 - d6)); return [b[0]! + w * (c[0]! - b[0]!), b[1]! + w * (c[1]! - b[1]!), b[2]! + w * (c[2]! - b[2]!)]; }
+    const den = 1 / (va + vb + vc), v = vb * den, w = vc * den;
+    return [a[0]! + ab[0]! * v + ac[0]! * w, a[1]! + ab[1]! * v + ac[1]! * w, a[2]! + ab[2]! * v + ac[2]! * w];
+  };
+  const moved = new Uint8Array(n);
+  // triangles around each vertex: a move that flattens or turns one of them is refused (side-seam slivers flipped
+  // at the all-sliders corner and cut the chest slider from ±0.72 to ±0.19)
+  const around: number[][] = Array.from({ length: n }, () => []);
+  for (let t = 0; t < nT; t++) for (let e = 0; e < 3; e++) around[index[t * 3 + e]!]!.push(t);
+  const triN = (t: number) => {
+    const a = index[t * 3]! * 3, b = index[t * 3 + 1]! * 3, c = index[t * 3 + 2]! * 3;
+    const ux = pos[b]! - pos[a]!, uy = pos[b + 1]! - pos[a + 1]!, uz = pos[b + 2]! - pos[a + 2]!;
+    const wx = pos[c]! - pos[a]!, wy = pos[c + 1]! - pos[a + 1]!, wz = pos[c + 2]! - pos[a + 2]!;
+    return [uy * wz - uz * wy, uz * wx - ux * wz, ux * wy - uy * wx] as const;
+  };
+  const before0 = Array.from({ length: nT }, (_, t) => triN(t));
+  for (let round = 0; round < SURF_ROUNDS; round++) {
+    const src = new Float32Array(pos);
+    // vertex normals of the current shape
+    const vn = new Float32Array(n * 3), fnrm = new Float32Array(nT * 3);
+    for (let t = 0; t < nT; t++) {
+      const a = index[t * 3]! * 3, b = index[t * 3 + 1]! * 3, c = index[t * 3 + 2]! * 3;
+      const ux = src[b]! - src[a]!, uy = src[b + 1]! - src[a + 1]!, uz = src[b + 2]! - src[a + 2]!;
+      const wx = src[c]! - src[a]!, wy = src[c + 1]! - src[a + 1]!, wz = src[c + 2]! - src[a + 2]!;
+      const nx = uy * wz - uz * wy, ny = uz * wx - ux * wz, nz = ux * wy - uy * wx, l = Math.hypot(nx, ny, nz) || 1;
+      fnrm[t * 3] = nx / l; fnrm[t * 3 + 1] = ny / l; fnrm[t * 3 + 2] = nz / l;
+      for (const v of [a, b, c]) { vn[v] += nx; vn[v + 1] += ny; vn[v + 2] += nz; }
+    }
+    // grid of MIRRORED triangles (x → −x; the mirrored normal is (−nx, ny, nz))
+    const grid = new Map<string, number[]>();
+    for (let t = 0; t < nT; t++) {
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+      for (let e = 0; e < 3; e++) { const v = index[t * 3 + e]! * 3; const x = -src[v]!, y = src[v + 1]!, z = src[v + 2]!; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); z0 = Math.min(z0, z); z1 = Math.max(z1, z); }
+      for (let gx = Math.floor(x0 / cell); gx <= Math.floor(x1 / cell); gx++) for (let gy = Math.floor(y0 / cell); gy <= Math.floor(y1 / cell); gy++) for (let gz = Math.floor(z0 / cell); gz <= Math.floor(z1 / cell); gz++) {
+        const k = `${gx},${gy},${gz}`; let l = grid.get(k); if (!l) grid.set(k, (l = [])); l.push(t);
+      }
+    }
+    for (let i = 0; i < n; i++) {
+      if (fixed[i]) continue;
+      const px = src[i * 3]!, py = src[i * 3 + 1]!, pz = src[i * 3 + 2]!;
+      if (Math.abs(px) < SURF_BAND || py > surfYLimit) continue;
+      const nl = Math.hypot(vn[i * 3]!, vn[i * 3 + 1]!, vn[i * 3 + 2]!) || 1;
+      const nx = vn[i * 3]! / nl, ny = vn[i * 3 + 1]! / nl, nz = vn[i * 3 + 2]! / nl;
+      let bd = SURF_TOL * SURF_TOL, best: [number, number, number] | null = null;
+      const cx = Math.floor(px / cell), cy = Math.floor(py / cell), cz = Math.floor(pz / cell);
+      const seen = new Set<number>();
+      for (let gx = cx - 1; gx <= cx + 1; gx++) for (let gy = cy - 1; gy <= cy + 1; gy++) for (let gz = cz - 1; gz <= cz + 1; gz++) {
+        for (const t of grid.get(`${gx},${gy},${gz}`) ?? []) {
+          if (seen.has(t)) continue; seen.add(t);
+          const a0 = index[t * 3]!, b0 = index[t * 3 + 1]!, c0 = index[t * 3 + 2]!;
+          if (shell[a0] !== shell[i]) continue;
+          if (a0 === i || b0 === i || c0 === i) continue;
+          // the mirrored face must face the same way as this vertex
+          if (-fnrm[t * 3]! * nx + fnrm[t * 3 + 1]! * ny + fnrm[t * 3 + 2]! * nz < 0.5) continue;
+          const A = [-src[a0 * 3]!, src[a0 * 3 + 1]!, src[a0 * 3 + 2]!], B = [-src[b0 * 3]!, src[b0 * 3 + 1]!, src[b0 * 3 + 2]!], C = [-src[c0 * 3]!, src[c0 * 3 + 1]!, src[c0 * 3 + 2]!];
+          const q = closest(px, py, pz, A, B, C);
+          const d = (q[0] - px) ** 2 + (q[1] - py) ** 2 + (q[2] - pz) ** 2;
+          if (d < bd) { bd = d; best = q; }
+        }
+      }
+      if (!best) continue;
+      const ox = pos[i * 3]!, oy = pos[i * 3 + 1]!, oz = pos[i * 3 + 2]!;
+      pos[i * 3] = (px + best[0]) / 2; pos[i * 3 + 1] = (py + best[1]) / 2; pos[i * 3 + 2] = (pz + best[2]) / 2;
+      // compared with the ORIGINAL triangles, so small steps cannot add up to a fold
+      const ok = around[i]!.every((t) => {
+        const A = before0[t]!, B = triN(t), la = Math.hypot(...A), lb = Math.hypot(...B);
+        if (la < 1e-14) return true;
+        return lb >= 0.5 * la && (A[0] * B[0] + A[1] * B[1] + A[2] * B[2]) / (la * lb) > 0.8;
+      });
+      if (!ok) { pos[i * 3] = ox; pos[i * 3 + 1] = oy; pos[i * 3 + 2] = oz; continue; }
+      moved[i] = 1;
+    }
+  }
+  for (let i = 0; i < n; i++) surfMoved += moved[i]!;
+}
+/**
  * Faces the symmetrisation folded into a line (I-70, coat: two slivers at the back at 117 cm — three vertices of a
  * vertical seam each averaged with the same mirror partner, so they share x and z) have no area and no normal;
  * check-outfit blocks on them. They are dropped and counted in the report.
@@ -215,6 +343,35 @@ for (let round = 0; round < 10; round++) {
   if (!flip.length) flip = [...new Set(pairs.map(([x, y]) => (area(x) < area(y) ? x : y)))];
   for (const t of flip) { const b = index[t + 1]!; index[t + 1] = index[t + 2]!; index[t + 2] = b; windingFixed++; }
 }
+/**
+ * What the turning cannot settle (I-73, sweatshirt: two twists of the generated mesh, at the front hem and under the
+ * left arm, where turning one face makes its neighbour disagree, round after round) is dropped: of each pair of faces
+ * still sharing an edge in the same direction, the smaller one. Counted in the report.
+ */
+let windingDropped = 0;
+for (let round = 0; round < 5; round++) {
+  const dir = new Map<string, number[]>();
+  for (let t = 0; t < index.length; t += 3) for (let e = 0; e < 3; e++) {
+    const k = `${index[t + e]!},${index[t + (e + 1) % 3]!}`;
+    let f = dir.get(k); if (!f) dir.set(k, (f = [])); f.push(t);
+  }
+  const area = (t: number) => {
+    const a = index[t]! * 3, b = index[t + 1]! * 3, c = index[t + 2]! * 3;
+    const ux = pos[b]! - pos[a]!, uy = pos[b + 1]! - pos[a + 1]!, uz = pos[b + 2]! - pos[a + 2]!;
+    const vx = pos[c]! - pos[a]!, vy = pos[c + 1]! - pos[a + 1]!, vz = pos[c + 2]! - pos[a + 2]!;
+    return Math.hypot(uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx);
+  };
+  const drop = new Set<number>();
+  for (const f of dir.values()) if (f.length > 1) {
+    const live = f.filter((t) => !drop.has(t)).sort((x, y) => area(x) - area(y));
+    for (let i = 0; i < live.length - 1; i++) drop.add(live[i]!);
+  }
+  if (!drop.size) break;
+  const keep: number[] = [];
+  for (let t = 0; t < index.length; t += 3) if (!drop.has(t)) keep.push(index[t]!, index[t + 1]!, index[t + 2]!);
+  index = Uint32Array.from(keep);
+  windingDropped += drop.size;
+}
 // residual asymmetry, in millimetres of the normalised figure
 let asymMax = 0, asymSum = 0;
 for (let i = 0; i < n; i++) {
@@ -238,6 +395,12 @@ for (let i = 0; i < n; i++) { minY = Math.min(minY, pos[i * 3 + 1]!); maxY = Mat
 const inReferenceFrame = fixed.some((f) => f > 0);
 const k = inReferenceFrame ? 1 : heightCm / 100 / (maxY - minY);
 sx /= n; sz /= n;
+/**
+ * Not re-centred sideways (I-73): the figure was just symmetrised about x = 0, and the vertex mean is not on that
+ * plane when one side has more vertices — outfit-01 moved 4 mm sideways off its own mirror plane, and the hip slider,
+ * which pushes each leg from x = 0, turned that into 22 mm.
+ */
+sx = 0;
 if (inReferenceFrame) { sx = 0; sz = 0; minY = 0; }
 for (let i = 0; i < n; i++) {
   pos[i * 3] = (pos[i * 3]! - sx) * k;
@@ -390,7 +553,7 @@ if (bottom) {
 const cm = (m: number) => Number((m * 100).toFixed(1));
 const report = {
   id, source: file, statureGiven_cm: heightCm,
-  weld: { before, after: n, triangles: index.length / 3, refusedNonManifold: weldRefused, seamSnapped: snapped, mirrorPaired: paired, zeroAreaDropped, nonManifoldDropped, windingFixed },
+  weld: { before, after: n, triangles: index.length / 3, refusedNonManifold: weldRefused, seamSnapped: snapped, mirrorPaired: paired, surfaceSymmetrised: surfMoved, zeroAreaDropped, nonManifoldDropped, windingFixed, windingDropped },
   symmetry_mm: { mean: Number(((asymSum / n) * heightCm).toFixed(2)), max: Number((asymMax * heightCm).toFixed(2)) },
   parts: parts.map((p) => ({ kind: p.kind, vertices: p.vertices.length, triangles: p.triangles.length, y_cm: [cm(p.bbox.min[1]), cm(p.bbox.max[1])] })),
   landmarks_cm: Object.fromEntries(Object.entries(landmarks).map(([key, v]) => [key, cm(v)])),

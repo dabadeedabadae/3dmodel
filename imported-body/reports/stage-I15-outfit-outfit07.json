@@ -7,15 +7,17 @@
     "after": 8647,
     "triangles": 16815,
     "refusedNonManifold": 0,
-    "seamSnapped": 77,
-    "mirrorPaired": 4720,
+    "seamSnapped": 97,
+    "mirrorPaired": 4722,
+    "surfaceSymmetrised": 3365,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
-    "windingFixed": 0
+    "windingFixed": 0,
+    "windingDropped": 0
   },
   "symmetry_mm": {
-    "mean": 0.66,
-    "max": 14.4
+    "mean": 0.38,
+    "max": 14.04
   },
   "parts": [
     {
@@ -86,8 +88,8 @@
       "vertices": 3457,
       "triangles": 6732,
       "y_cm": [
-        96.6,
-        149.1
+        97.1,
+        149.3
       ]
     },
     {
@@ -95,8 +97,8 @@
       "vertices": 189,
       "triangles": 304,
       "y_cm": [
-        95.1,
-        99.6
+        95.7,
+        100.1
       ]
     },
     {
@@ -104,8 +106,8 @@
       "vertices": 144,
       "triangles": 268,
       "y_cm": [
-        142.7,
-        144.2
+        142.9,
+        144.4
       ]
     },
     {
@@ -113,8 +115,8 @@
       "vertices": 140,
       "triangles": 236,
       "y_cm": [
-        94.9,
-        98.9
+        95.5,
+        99.5
       ]
     },
     {
@@ -122,8 +124,8 @@
       "vertices": 120,
       "triangles": 204,
       "y_cm": [
-        97.6,
-        99.6
+        98.2,
+        100.2
       ]
     },
     {
@@ -131,8 +133,8 @@
       "vertices": 136,
       "triangles": 252,
       "y_cm": [
-        142.7,
-        144.2
+        142.9,
+        144.4
       ]
     },
     {
@@ -140,8 +142,8 @@
       "vertices": 231,
       "triangles": 448,
       "y_cm": [
-        124.8,
-        144.2
+        124.9,
+        144.4
       ]
     },
     {
@@ -149,8 +151,8 @@
       "vertices": 132,
       "triangles": 240,
       "y_cm": [
-        118.5,
-        144.2
+        118.7,
+        144.4
       ]
     }
   ],
@@ -164,7 +166,7 @@
     "armpit": 132.4,
     "shoulder": 143.3,
     "neck_base": 141.7,
-    "topHem": 96.6
+    "topHem": 97.1
   },
   "fractions_of_H": {
     "height": 1,
@@ -176,7 +178,7 @@
     "armpit": 0.756,
     "shoulder": 0.819,
     "neck_base": 0.81,
-    "topHem": 0.552
+    "topHem": 0.555
   },
   "note": "Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: она сгенерирована одетой."
 }
