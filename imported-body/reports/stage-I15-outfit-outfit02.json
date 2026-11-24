@@ -7,15 +7,17 @@
     "after": 1483,
     "triangles": 2840,
     "refusedNonManifold": 0,
-    "seamSnapped": 44,
-    "mirrorPaired": 889,
+    "seamSnapped": 50,
+    "mirrorPaired": 888,
+    "surfaceSymmetrised": 818,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
-    "windingFixed": 0
+    "windingFixed": 0,
+    "windingDropped": 0
   },
   "symmetry_mm": {
-    "mean": 0.62,
-    "max": 6.78
+    "mean": 0.13,
+    "max": 7
   },
   "parts": [
     {
@@ -68,7 +70,7 @@
       "vertices": 225,
       "triangles": 436,
       "y_cm": [
-        7.6,
+        7.7,
         92.2
       ]
     },

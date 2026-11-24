@@ -1,6 +1,6 @@
 {
   "_note": "The top and bottom type of each outfit reflects what the model actually wears, checked by eye. Values are FitCast client GarmentTypes. A wardrobe item only goes on an outfit of the same type (I-54).",
-  "outfit01": { "label": "T-shirt and pants", "top": "TSHIRT", "bottom": "PANTS" },
+  "outfit01": { "label": "T-shirt and pants", "top": "TSHIRT", "bottom": "PANTS", "surfYMax": 0.5 },
   "outfit02": { "label": "Hoodie and pants", "top": "HOODIE", "bottom": "PANTS" },
   "outfit03": { "label": "Shirt and pants", "top": "SHIRT", "bottom": "PANTS" },
   "outfit04": { "label": "Dress shirt and pants", "top": "SHIRT", "bottom": "PANTS", "topMesh": "imported-body/assets/shirt01.fbx" },
@@ -10,7 +10,10 @@
   "outfit08": { "label": "Blazer and pants", "top": "BLAZER", "bottom": "PANTS", "topMesh": "imported-body/assets/m-blazer.fbx", "inner": true, "ease": 1.14, "cuffCut": 0.10, "hemCut": 0.32, "deepCut": 0.5, "collarClear": true },
   "outfit09": { "label": "Jacket and pants", "top": "JACKET", "bottom": "PANTS", "topMesh": "imported-body/assets/m-jacket.fbx", "inner": true, "dropDetails": true, "ease": 1.10, "cuffCut": 0.08, "hemCut": 0.25, "deepCut": 0.5, "collarClear": true },
   "outfit10": { "label": "Coat and pants", "top": "COAT", "bottom": "PANTS", "topMesh": "imported-body/assets/m-coat.fbx", "inner": true, "dropDetails": true, "ease": 1.14, "cuffCut": 0.10, "hemCut": 0.25, "deepCut": 0.5, "collarClear": true },
+  "outfit14": { "label": "Sweatshirt and pants", "top": "SWEATER", "bottom": "PANTS", "topMesh": "imported-body/assets/m-sweater.fbx", "inner": true, "ease": 1.18, "cuffCut": 0.08, "hemCut": 0.15, "collarClear": true, "collarMargin": 0.005 },
+  "outfit15": { "label": "Long-sleeve tee and pants", "top": "TSHIRT", "bottom": "PANTS", "topMesh": "imported-body/assets/m-longsleeve.fbx", "inner": true, "ease": 1.20, "cuffCut": 0.08, "hemCut": 0.1, "collarClear": true, "collarMargin": 0.005, "collarSmooth": 40 },
   "outfit11": { "label": "T-shirt and pants", "top": "TSHIRT", "bottom": "PANTS", "sex": "female", "base": true },
   "outfit12": { "label": "Blazer and pants", "top": "BLAZER", "bottom": "PANTS", "sex": "female", "ref": "outfit11", "topMesh": "imported-body/assets/f-blazer.fbx", "inner": true, "dropDetails": true, "ease": 1.14, "cuffCut": 0.10, "hemCut": 0.32, "deepCut": 0.5, "collarClear": true },
-  "outfit13": { "label": "Cardigan and pants", "top": "CARDIGAN", "bottom": "PANTS", "sex": "female", "ref": "outfit11", "topMesh": "imported-body/assets/f-cardigan.fbx", "inner": true, "dropDetails": true, "ease": 1.14, "cuffCut": 0.06, "hemCut": 0.18 }
+  "outfit13": { "label": "Cardigan and pants", "top": "CARDIGAN", "bottom": "PANTS", "sex": "female", "ref": "outfit11", "topMesh": "imported-body/assets/f-cardigan.fbx", "inner": true, "dropDetails": true, "ease": 1.14, "cuffCut": 0.06, "hemCut": 0.18 },
+  "outfit16": { "label": "V-neck sweater and pants", "top": "SWEATER", "bottom": "PANTS", "sex": "female", "ref": "outfit11", "topMesh": "imported-body/assets/f-sweater.fbx", "inner": true, "dropDetails": true, "ease": 1.14, "cuffCut": 0.06, "hemCut": 0.18, "deepCut": 1, "deepCutX": 0.12 }
 }

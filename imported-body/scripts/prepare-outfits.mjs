@@ -24,7 +24,10 @@ const REQUIRED = ['top', 'bottom', 'head', 'arm_left', 'arm_right', 'shoe_left',
 const TYPES = ['TSHIRT', 'SHIRT', 'JACKET', 'COAT', 'SWEATER', 'HOODIE', 'CARDIGAN', 'BLAZER', 'PANTS', 'JEANS', 'SHORTS', 'SKIRT', 'DRESS'];
 const manifest = JSON.parse(readFileSync(`${DIR}/outfits.json`, 'utf8'));
 const rows = [];
-const run = (args, env = {}) => spawnSync(process.execPath, ['--import', 'tsx', ...args], { encoding: 'utf8', env: { ...process.env, ...env } });
+// per-figure settings for every step of that figure (I-73: surfYMax = share of the height that the surface
+// symmetrisation may move; outfit01 0.5, its trousers; a figure whose sliders it narrows sets 0)
+let figureEnv = {};
+const run = (args, env = {}) => spawnSync(process.execPath, ['--import', 'tsx', ...args], { encoding: 'utf8', env: { ...process.env, ...figureEnv, ...env } });
 
 for (const f of [...files, ...garmentOnly]) {
   const only = garmentOnly.includes(f);
@@ -33,6 +36,7 @@ for (const f of [...files, ...garmentOnly]) {
   rows.push(row);
   if (!only && !f.toLowerCase().endsWith('.fbx')) { row.status = 'SKIP'; row.notes.push('формат не поддерживается, нужен FBX'); continue; }
   const m = manifest[id];
+  figureEnv = m?.surfYMax !== undefined ? { IB_SURF_YMAX: String(m.surfYMax) } : {};
   if (!m || !TYPES.includes(m.top) || !TYPES.includes(m.bottom) || !m.label) {
     row.status = 'FAIL'; row.notes.push(`нет типа верха/низа в ${DIR}/outfits.json — впишите { "label", "top", "bottom" } для ${id}`); continue;
   }
@@ -44,9 +48,9 @@ for (const f of [...files, ...garmentOnly]) {
     const mesh = `imported-body/out/layered-${id}.json`;
     // ease (I-70): width over the base trunk; a layer worn over the T-shirt needs more than the default 1.06
     const src = run(['imported-body/scripts/garment-source.ts', m.topMesh, `garment-${id}`, ref, 'top'], {
-      ...(m.ease ? { IB_EASE: String(m.ease) } : {}), ...(m.cuffCut ? { IB_CUFF_CUT: String(m.cuffCut) } : {}), ...(m.hemCut ? { IB_HEM_CUT: String(m.hemCut) } : {}), ...(m.deepCut ? { IB_DEEP_CUT: String(m.deepCut) } : {}), ...(m.dropDetails ? { IB_DROP_DETAILS: '1' } : {}),
+      ...(m.ease ? { IB_EASE: String(m.ease) } : {}), ...(m.cuffCut ? { IB_CUFF_CUT: String(m.cuffCut) } : {}), ...(m.hemCut ? { IB_HEM_CUT: String(m.hemCut) } : {}), ...(m.deepCut ? { IB_DEEP_CUT: String(m.deepCut) } : {}), ...(m.deepCutX ? { IB_DEEP_X: String(m.deepCutX) } : {}), ...(m.dropDetails ? { IB_DROP_DETAILS: '1' } : {}),
     });
-    const comp = src.status !== 0 ? src : run(['imported-body/scripts/layer-outfit.ts', ref, `garment-${id}`, ref, mesh], { ...(m.inner ? { IB_INNER: '1' } : {}), ...(m.collarClear ? { IB_COLLAR_CLEAR: '1' } : {}), ...(m.innerShrink ? { IB_INNER_SHRINK: String(m.innerShrink) } : {}), ...(m.collarMargin ? { IB_COLLAR_MARGIN: String(m.collarMargin) } : {}) });
+    const comp = src.status !== 0 ? src : run(['imported-body/scripts/layer-outfit.ts', ref, `garment-${id}`, ref, mesh], { ...(m.inner ? { IB_INNER: '1' } : {}), ...(m.collarClear ? { IB_COLLAR_CLEAR: '1' } : {}), ...(m.innerShrink ? { IB_INNER_SHRINK: String(m.innerShrink) } : {}), ...(m.collarMargin ? { IB_COLLAR_MARGIN: String(m.collarMargin) } : {}), ...(m.collarSmooth ? { IB_COLLAR_SMOOTH: String(m.collarSmooth) } : {}) });
     row.assembly = 'garment-only';
     if (comp.status === 0) { try { row.compose = JSON.parse(comp.stdout.trim().split('\n').pop()); } catch { /* report only */ } }
     prep = comp.status === 0 ? run(['imported-body/scripts/prepare-outfit.ts', mesh, id, STATURE]) : comp;

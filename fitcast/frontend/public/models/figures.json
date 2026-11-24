@@ -15,7 +15,7 @@
       "hip": 1,
       "shoulders": 1,
       "arms": 1,
-      "thighs": 0.72
+      "thighs": 0.64
     }
   },
   {
@@ -29,7 +29,7 @@
       "bottom": "PANTS"
     },
     "range": {
-      "chest": 0.9,
+      "chest": 1,
       "waist": 1,
       "hip": 1,
       "shoulders": 0.5,
@@ -40,16 +40,16 @@
   {
     "id": "figure-03",
     "url": "/models/figure-03.json",
-    "vertices": 1505,
-    "triangles": 2805,
+    "vertices": 1506,
+    "triangles": 2807,
     "label": "Shirt and pants",
     "garments": {
       "top": "SHIRT",
       "bottom": "PANTS"
     },
     "range": {
-      "chest": 0.45,
-      "waist": 1,
+      "chest": 1,
+      "waist": 0.72,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,
@@ -67,8 +67,8 @@
       "bottom": "PANTS"
     },
     "range": {
-      "chest": 0.7,
-      "waist": 0.81,
+      "chest": 1,
+      "waist": 1,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,
@@ -88,7 +88,7 @@
     "inner": "TSHIRT",
     "range": {
       "chest": 1,
-      "waist": 0.11,
+      "waist": 0.08,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,
@@ -108,7 +108,7 @@
     "inner": "TSHIRT",
     "range": {
       "chest": 1,
-      "waist": 0.64,
+      "waist": 1,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,
@@ -128,7 +128,7 @@
     "inner": "TSHIRT",
     "range": {
       "chest": 1,
-      "waist": 0.72,
+      "waist": 0.4,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,
@@ -139,7 +139,7 @@
     "id": "figure-08",
     "url": "/models/figure-08.json",
     "vertices": 8207,
-    "triangles": 15979,
+    "triangles": 15981,
     "label": "Blazer and pants",
     "garments": {
       "top": "BLAZER",
@@ -148,7 +148,7 @@
     "inner": "TSHIRT",
     "range": {
       "chest": 1,
-      "waist": 0.81,
+      "waist": 1,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,
@@ -167,8 +167,8 @@
     },
     "inner": "TSHIRT",
     "range": {
-      "chest": 0.51,
-      "waist": 0.8,
+      "chest": 0.4,
+      "waist": 1,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,
@@ -179,7 +179,7 @@
     "id": "figure-10",
     "url": "/models/figure-10.json",
     "vertices": 6179,
-    "triangles": 12119,
+    "triangles": 12121,
     "label": "Coat and pants",
     "garments": {
       "top": "COAT",
@@ -187,7 +187,7 @@
     },
     "inner": "TSHIRT",
     "range": {
-      "chest": 0.28,
+      "chest": 0.36,
       "waist": 0.1,
       "hip": 1,
       "shoulders": 1,
@@ -218,7 +218,7 @@
   {
     "id": "figure-12",
     "url": "/models/figure-12.json",
-    "vertices": 8463,
+    "vertices": 8467,
     "triangles": 16425,
     "label": "Blazer and pants",
     "garments": {
@@ -239,11 +239,72 @@
   {
     "id": "figure-13",
     "url": "/models/figure-13.json",
-    "vertices": 7646,
+    "vertices": 7650,
     "triangles": 14821,
     "label": "Cardigan and pants",
     "garments": {
       "top": "CARDIGAN",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-14",
+    "url": "/models/figure-14.json",
+    "vertices": 6792,
+    "triangles": 13115,
+    "label": "Sweatshirt and pants",
+    "garments": {
+      "top": "SWEATER",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-15",
+    "url": "/models/figure-15.json",
+    "vertices": 6693,
+    "triangles": 13196,
+    "label": "Long-sleeve tee and pants",
+    "garments": {
+      "top": "TSHIRT",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 0.32,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-16",
+    "url": "/models/figure-16.json",
+    "vertices": 8043,
+    "triangles": 15557,
+    "label": "V-neck sweater and pants",
+    "garments": {
+      "top": "SWEATER",
       "bottom": "PANTS"
     },
     "inner": "TSHIRT",

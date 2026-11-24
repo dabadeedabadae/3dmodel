@@ -4,17 +4,19 @@
   "statureGiven_cm": 175,
   "weld": {
     "before": 7729,
-    "after": 7646,
+    "after": 7650,
     "triangles": 14821,
     "refusedNonManifold": 0,
-    "seamSnapped": 195,
+    "seamSnapped": 194,
     "mirrorPaired": 3048,
+    "surfaceSymmetrised": 2623,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
-    "windingFixed": 0
+    "windingFixed": 0,
+    "windingDropped": 0
   },
   "symmetry_mm": {
-    "mean": 0.1,
+    "mean": 0.09,
     "max": 2.74
   },
   "parts": [
@@ -38,7 +40,7 @@
     },
     {
       "kind": "head",
-      "vertices": 241,
+      "vertices": 240,
       "triangles": 461,
       "y_cm": [
         143.5,
@@ -65,7 +67,7 @@
     },
     {
       "kind": "inner",
-      "vertices": 3812,
+      "vertices": 3817,
       "triangles": 7408,
       "y_cm": [
         100.3,
@@ -86,7 +88,7 @@
       "vertices": 2812,
       "triangles": 5476,
       "y_cm": [
-        92.2,
+        92.3,
         148.6
       ]
     }
@@ -101,7 +103,7 @@
     "armpit": 133.4,
     "shoulder": 143.5,
     "neck_base": 143.5,
-    "topHem": 92.2
+    "topHem": 92.3
   },
   "fractions_of_H": {
     "height": 1,
