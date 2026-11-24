@@ -1,0 +1,120 @@
+{
+  "generatedAt": "2026-11-24T15:02:53.163Z",
+  "asset": "outfit-outfit20",
+  "shells": 8,
+  "boundaryEdges": 273,
+  "sourceAsymmetry_mm": 16.8,
+  "usableSliderRange": {
+    "chest": 0.63,
+    "waist": 0.06,
+    "hip": 1,
+    "shoulders": 1,
+    "arms": 1,
+    "thighs": 1
+  },
+  "flipBudget": 12,
+  "results": [
+    {
+      "label": "base",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "chest=-0.63",
+      "ok": true,
+      "fails": [],
+      "flipped": 3.8125
+    },
+    {
+      "label": "chest=0.63",
+      "ok": true,
+      "fails": [],
+      "flipped": 5.1875
+    },
+    {
+      "label": "waist=-0.06",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "waist=0.06",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "hip=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0.1875
+    },
+    {
+      "label": "hip=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0.0625
+    },
+    {
+      "label": "shoulders=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 9
+    },
+    {
+      "label": "shoulders=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 2
+    },
+    {
+      "label": "arms=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "arms=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "все по максимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 7.625
+    },
+    {
+      "label": "все по минимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 11.5625
+    },
+    {
+      "label": "height 150",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "height 200 proportional",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    }
+  ]
+}

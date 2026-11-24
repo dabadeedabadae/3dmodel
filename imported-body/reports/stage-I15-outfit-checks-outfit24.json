@@ -1,0 +1,120 @@
+{
+  "generatedAt": "2026-11-24T15:06:29.999Z",
+  "asset": "outfit-outfit24",
+  "shells": 8,
+  "boundaryEdges": 622,
+  "sourceAsymmetry_mm": 16.8,
+  "usableSliderRange": {
+    "chest": 0.9,
+    "waist": 0.3,
+    "hip": 1,
+    "shoulders": 0.72,
+    "arms": 1,
+    "thighs": 1
+  },
+  "flipBudget": 13,
+  "results": [
+    {
+      "label": "base",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "chest=-0.9",
+      "ok": true,
+      "fails": [],
+      "flipped": 9
+    },
+    {
+      "label": "chest=0.9",
+      "ok": true,
+      "fails": [],
+      "flipped": 2
+    },
+    {
+      "label": "waist=-0.3",
+      "ok": true,
+      "fails": [],
+      "flipped": 3.625
+    },
+    {
+      "label": "waist=0.3",
+      "ok": true,
+      "fails": [],
+      "flipped": 1.5
+    },
+    {
+      "label": "hip=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0.0625
+    },
+    {
+      "label": "hip=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0.0625
+    },
+    {
+      "label": "shoulders=-0.72",
+      "ok": true,
+      "fails": [],
+      "flipped": 1
+    },
+    {
+      "label": "shoulders=0.72",
+      "ok": true,
+      "fails": [],
+      "flipped": 2
+    },
+    {
+      "label": "arms=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "arms=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "все по максимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 6.9375
+    },
+    {
+      "label": "все по минимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 12.375
+    },
+    {
+      "label": "height 150",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "height 200 proportional",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    }
+  ]
+}
