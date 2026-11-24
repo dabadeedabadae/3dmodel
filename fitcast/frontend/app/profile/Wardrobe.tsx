@@ -8,14 +8,15 @@ import {
 } from '../../lib/api';
 import { COLORS, FIT_LABELS, GARMENT_LABELS, colorById, nearestPaletteColor, suggestColor } from '../../lib/labels';
 import type { Analysis } from '../../lib/garment/analyze';
+import type { TypeSuggestion } from '../../lib/garment/garmentType';
 import type { PhotoPointName } from '../../lib/figure/photoMap';
 
 const MAX_BYTES = 8 * 1024 * 1024;
 /** garment types whose photo is turned into a 3D print on the figure */
-const ANALYSABLE: GarmentType[] = ['TSHIRT', 'SHIRT', 'HOODIE', 'SWEATER', 'CARDIGAN', 'PANTS', 'JEANS'];
-const LONG_TOPS: GarmentType[] = ['SHIRT', 'HOODIE', 'SWEATER', 'CARDIGAN'];
+const ANALYSABLE: GarmentType[] = ['TSHIRT', 'SHIRT', 'HOODIE', 'SWEATER', 'CARDIGAN', 'BLAZER', 'JACKET', 'COAT', 'PANTS', 'JEANS'];
+const LONG_TOPS: GarmentType[] = ['SHIRT', 'HOODIE', 'SWEATER', 'CARDIGAN', 'BLAZER', 'JACKET', 'COAT'];
 /** what the form says it is recognising */
-const ANALYSING_LABEL: Partial<Record<GarmentType, string>> = { TSHIRT: 'T-shirt', SHIRT: 'shirt', HOODIE: 'hoodie', SWEATER: 'sweater', CARDIGAN: 'cardigan', PANTS: 'pants', JEANS: 'jeans' };
+const ANALYSING_LABEL: Partial<Record<GarmentType, string>> = { TSHIRT: 'T-shirt', SHIRT: 'shirt', HOODIE: 'hoodie', SWEATER: 'sweater', CARDIGAN: 'cardigan', BLAZER: 'blazer', JACKET: 'jacket', COAT: 'coat', PANTS: 'pants', JEANS: 'jeans' };
 const ACCEPT = 'image/jpeg,image/png,image/webp';
 
 type Filter = 'ALL' | GarmentType;
@@ -219,7 +220,13 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
   const [analysing, setAnalysing] = useState(false);
   const [analysisError, setAnalysisError] = useState('');
   const [editing, setEditing] = useState(false);
+  // garment type suggested from the photo on this device (I-75): pre-selected, labelled as a suggestion, with
+  // the next likely types as one-tap buttons; once the person picks a type themselves the suggestion is theirs
+  const [typeHint, setTypeHint] = useState<TypeSuggestion | null>(null);
+  const [typeSource, setTypeSource] = useState<'photo' | 'user' | null>(null);
+  const [classifying, setClassifying] = useState(false);
   const runId = useRef(0);
+  const pickId = useRef(0);
   const input = useRef<HTMLInputElement>(null);
 
   // photo → mask, points, base colour and texture, on this device: T-shirts (I-52), trousers and jeans (I-53),
@@ -227,7 +234,7 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
   useEffect(() => {
     const id = ++runId.current;
     setAnalysis(null); setAnalysisError(''); setEditing(false);
-    if (!file || !ANALYSABLE.includes(type)) { setAnalysing(false); return; }
+    if (!file || classifying || !ANALYSABLE.includes(type)) { setAnalysing(false); return; }
     setAnalysing(true);
     import('../../lib/garment/analyze').then((m) => (type === 'TSHIRT' ? m.analyzeTShirtPhoto(file) : LONG_TOPS.includes(type) ? m.analyzeTShirtPhoto(file, 'top') : m.analyzePantsPhoto(file))).then((a) => {
       if (id !== runId.current) return;
@@ -237,7 +244,7 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
     }).catch((e: unknown) => {
       if (id === runId.current) setAnalysisError(e instanceof Error ? e.message : 'Could not analyze the photo.');
     }).finally(() => { if (id === runId.current) setAnalysing(false); });
-  }, [file, type]);
+  }, [file, type, classifying]);
 
   // Object URLs must be released when the preview changes or the form closes.
   useEffect(() => () => { if (preview) URL.revokeObjectURL(preview); }, [preview]);
@@ -247,11 +254,23 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
     if (!next) return;
     if (!ACCEPT.split(',').includes(next.type)) { setError('Please use a JPEG, PNG or WebP file.'); return; }
     if (next.size > MAX_BYTES) { setError('The photo is larger than 8 MB. Make it smaller and try again.'); return; }
+    const id = ++pickId.current;
     setFile(next);
     setPreview(URL.createObjectURL(next));
-    const suggested = await suggestColor(next);
-    if (suggested) { setColor(suggested); setColorHint(suggested); }
+    setTypeHint(null); setTypeSource(null); setClassifying(true);
+    const [suggested] = await Promise.all([
+      suggestColor(next),
+      import('../../lib/garment/category').then((m) => m.suggestTypeFromPhoto(next)).then((s) => {
+        if (id !== pickId.current) return;
+        setTypeHint(s);
+        if (s.type) { setType(s.type); setTypeSource('photo'); }
+      }).catch(() => { /* no suggestion: the person picks the type, as before */ })
+        .finally(() => { if (id === pickId.current) setClassifying(false); }),
+    ]);
+    if (suggested && id === pickId.current) { setColor(suggested); setColorHint(suggested); }
   }
+
+  function chooseType(t: GarmentType) { setType(t); setTypeSource('user'); }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -286,9 +305,22 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
           <div className="wardrobe-form-fields">
             <div className="field">
               <label htmlFor="new-type">Item type</label>
-              <select id="new-type" value={type} onChange={(e) => setType(e.target.value as GarmentType)}>
+              <select id="new-type" value={type} onChange={(e) => chooseType(e.target.value as GarmentType)} aria-describedby="new-type-hint">
                 {(Object.keys(GARMENT_LABELS) as GarmentType[]).map((t) => <option key={t} value={t}>{GARMENT_LABELS[t]}</option>)}
               </select>
+              <small id="new-type-hint" className="wardrobe-type-hint" role="status" aria-live="polite">
+                {classifying && 'Recognizing the item in the photo…'}
+                {!classifying && typeSource === 'photo' && typeHint?.type && (
+                  <>
+                    {typeHint.confident ? 'Recognized from the photo, please check.' : 'Best guess from the photo, not sure. Please check.'}
+                    {typeHint.alternatives.length > 0 && <span className="wardrobe-type-alts"> Or:{typeHint.alternatives.map((t) => (
+                      <button key={t} type="button" onClick={() => chooseType(t)}>{GARMENT_LABELS[t]}</button>
+                    ))}</span>}
+                  </>
+                )}
+                {!classifying && file && typeHint && !typeHint.type && 'Could not recognize the item. Please choose the type.'}
+                {!classifying && typeSource === 'user' && 'Chosen by you.'}
+              </small>
             </div>
             <div className="field">
               <span className="wardrobe-label" id="new-color-label">Main color</span>
@@ -344,7 +376,7 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
         )}
         {error && <p className="error" role="alert">{error}</p>}
         <div className="profile-save-row">
-          <button className="primary" type="submit" disabled={!file || analysing || editing}>{saving ? 'Saving…' : analysing ? 'Analyzing…' : 'Add to wardrobe'}</button>
+          <button className="primary" type="submit" disabled={!file || analysing || editing || classifying}>{saving ? 'Saving…' : classifying ? 'Recognizing…' : analysing ? 'Analyzing…' : 'Add to wardrobe'}</button>
           <button type="button" className="profile-reset" onClick={onCancel}>Cancel</button>
         </div>
       </fieldset>

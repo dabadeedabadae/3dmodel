@@ -191,8 +191,14 @@ function alignedGarment(srcId: string, layer: 'top' | 'bottom'): Layer {
        * thumb, and the hoodie's cuff crossed the hand. The sleeve ends 1 cm short of it.
        */
       const bWrist = baseWrist() - Number(process.env.IB_CUFF_GAP ?? 0.01);
-      const long = sReach - sleeveEnd < 0.25;
-      const k = long ? (bWrist - s0) / (sleeveEnd - s0) : (bReach - s0) / (sReach - s0);
+      /**
+       * A garment-only source has no hands, so its reach IS its sleeve end and every sleeve looked long: the polo's
+       * short sleeve was stretched to the wrist. IB_SLEEVE=short (`"sleeve": "short"` in outfits.json) keeps a short
+       * sleeve; on a garment-only source it keeps its own length (it is already placed on this base, k = 1).
+       */
+      const sleeveMode = process.env.IB_SLEEVE;
+      const long = sleeveMode === 'short' ? false : sleeveMode === 'long' ? true : sReach - sleeveEnd < 0.25;
+      const k = long ? (bWrist - s0) / (sleeveEnd - s0) : prealigned && sleeveMode === 'short' ? 1 : (bReach - s0) / (sReach - s0);
       for (let i = 0; i < nS; i++) {
         const ax = Math.abs(sp[i * 3]!);
         if (ax <= s0) continue;

@@ -1,0 +1,837 @@
+{
+  "generatedAt": "2026-11-24T10:22:10.509Z",
+  "model": "mobilenetv2-12.onnx",
+  "tally": {
+    "photo": {
+      "n": 26,
+      "top1": 21,
+      "offered": 22
+    },
+    "catalog": {
+      "n": 12,
+      "top1": 8,
+      "offered": 10
+    }
+  },
+  "rows": [
+    {
+      "set": "photo",
+      "file": "dress_6b779a54.jpg",
+      "want": [
+        "DRESS"
+      ],
+      "got": "DRESS",
+      "score": 0.6,
+      "confident": true,
+      "alternatives": [
+        "SKIRT",
+        "COAT"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "gown 0.54",
+        "academic gown 0.13",
+        "velvet 0.07"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "dress_b2279dec.jpg",
+      "want": [
+        "DRESS"
+      ],
+      "got": "TSHIRT",
+      "score": 0.66,
+      "confident": true,
+      "alternatives": [
+        "SWEATER",
+        "SHIRT"
+      ],
+      "top1": false,
+      "offered": false,
+      "rawTop": [
+        "jersey 0.66",
+        "sweatshirt 0.23",
+        "velvet 0.04"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "longsleeve_107dd572.jpg",
+      "want": [
+        "SWEATER",
+        "SHIRT",
+        "HOODIE",
+        "CARDIGAN"
+      ],
+      "got": "SWEATER",
+      "score": 0.67,
+      "confident": true,
+      "alternatives": [
+        "TSHIRT",
+        "HOODIE",
+        "CARDIGAN"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "sweatshirt 0.65",
+        "jersey 0.31",
+        "poncho 0.02"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "longsleeve_582f7f10.jpg",
+      "want": [
+        "SWEATER",
+        "SHIRT",
+        "HOODIE",
+        "CARDIGAN"
+      ],
+      "got": "SWEATER",
+      "score": 0.69,
+      "confident": true,
+      "alternatives": [
+        "CARDIGAN",
+        "HOODIE"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "sweatshirt 0.51",
+        "cardigan 0.23",
+        "wool 0.13"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "pants_4cc4e673.jpg",
+      "want": [
+        "PANTS",
+        "JEANS"
+      ],
+      "got": "JEANS",
+      "score": 1,
+      "confident": true,
+      "alternatives": [
+        "PANTS",
+        "SHORTS"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jean 1.00",
+        "pajama 0.00",
+        "suit 0.00"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "pants_9cb9ae19.jpg",
+      "want": [
+        "PANTS",
+        "JEANS"
+      ],
+      "got": "JEANS",
+      "score": 0.81,
+      "confident": true,
+      "alternatives": [
+        "BLAZER",
+        "PANTS",
+        "SHORTS"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jean 0.81",
+        "suit 0.10",
+        "trench coat 0.02"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "pants_e0dc1f06.jpg",
+      "want": [
+        "PANTS",
+        "JEANS"
+      ],
+      "got": "JEANS",
+      "score": 0.21,
+      "confident": false,
+      "alternatives": [
+        "SKIRT",
+        "PANTS",
+        "COAT"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jean 0.21",
+        "sarong 0.16",
+        "pajama 0.10"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "shoes_bf583ce5.jpg",
+      "want": [
+        "SHOES"
+      ],
+      "got": "SHOES",
+      "score": 0.96,
+      "confident": true,
+      "alternatives": [],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "sandal 0.45",
+        "Loafer 0.44",
+        "clog 0.04"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "shoes_c8582c70.jpg",
+      "want": [
+        "SHOES"
+      ],
+      "got": "SHOES",
+      "score": 0.84,
+      "confident": true,
+      "alternatives": [],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "clog 0.71",
+        "sandal 0.06",
+        "sock 0.04"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "skirt_26921ddb.jpg",
+      "want": [
+        "SKIRT"
+      ],
+      "got": "SKIRT",
+      "score": 0.98,
+      "confident": true,
+      "alternatives": [
+        "DRESS",
+        "SHORTS"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "hoopskirt 0.82",
+        "overskirt 0.15",
+        "gown 0.01"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "skirt_4d4f6900.jpg",
+      "want": [
+        "SKIRT"
+      ],
+      "got": "JEANS",
+      "score": 0.97,
+      "confident": true,
+      "alternatives": [
+        "PANTS",
+        "SHORTS"
+      ],
+      "top1": false,
+      "offered": false,
+      "rawTop": [
+        "jean 0.97",
+        "handkerchief 0.02",
+        "wallet 0.00"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "skirt_910268c2.jpg",
+      "want": [
+        "SKIRT"
+      ],
+      "got": "SKIRT",
+      "score": 0.95,
+      "confident": true,
+      "alternatives": [
+        "DRESS",
+        "SHORTS"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "hoopskirt 0.80",
+        "overskirt 0.10",
+        "miniskirt 0.05"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_0fc3fbae.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 1,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 1.00",
+        "sweatshirt 0.00",
+        "plastic bag 0.00"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_29d44695.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 0.99,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 0.99",
+        "sweatshirt 0.01",
+        "envelope 0.00"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_2aff1c58.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 1,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 1.00",
+        "sweatshirt 0.00",
+        "velvet 0.00"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_2df565b9.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "SKIRT",
+      "score": 0.22,
+      "confident": false,
+      "alternatives": [
+        "SHORTS",
+        "TSHIRT",
+        "DRESS"
+      ],
+      "top1": false,
+      "offered": true,
+      "rawTop": [
+        "sarong 0.11",
+        "shower curtain 0.11",
+        "swimming trunks 0.10"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_58e51574.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "DRESS",
+      "score": 0.26,
+      "confident": false,
+      "alternatives": [
+        "SKIRT",
+        "COAT"
+      ],
+      "top1": false,
+      "offered": false,
+      "rawTop": [
+        "sleeping bag 0.45",
+        "gown 0.26",
+        "sarong 0.08"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_5aee6e35.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 0.99,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 0.99",
+        "sweatshirt 0.00",
+        "packet 0.00"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_5d9384e4.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 1,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 1.00",
+        "sweatshirt 0.00",
+        "diaper 0.00"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_8f0cd82c.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "JEANS",
+      "score": 0.53,
+      "confident": true,
+      "alternatives": [
+        "PANTS",
+        "SHORTS"
+      ],
+      "top1": false,
+      "offered": false,
+      "rawTop": [
+        "jean 0.53",
+        "buckle 0.05",
+        "diaper 0.04"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_91ebc326.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 0.91,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 0.90",
+        "sweatshirt 0.04",
+        "jean 0.03"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_99fdccb7.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 0.71,
+      "confident": true,
+      "alternatives": [
+        "SWEATER",
+        "SHIRT"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 0.70",
+        "plastic bag 0.07",
+        "sweatshirt 0.06"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_b40637fa.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 0.98,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 0.94",
+        "bulletproof vest 0.04",
+        "sweatshirt 0.01"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_bb140894.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 0.92,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 0.92",
+        "sweatshirt 0.04",
+        "sleeping bag 0.01"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_e330e5fa.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 0.99,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 0.99",
+        "sweatshirt 0.00",
+        "tray 0.00"
+      ]
+    },
+    {
+      "set": "photo",
+      "file": "tshirt_fbb96cbf.jpg",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 1,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 1.00",
+        "sweatshirt 0.00",
+        "maillot 0.00"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-blazer.webp",
+      "want": [
+        "BLAZER"
+      ],
+      "got": "BLAZER",
+      "score": 0.33,
+      "confident": false,
+      "alternatives": [
+        "SHIRT",
+        "JACKET",
+        "COAT"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "suit 0.33",
+        "hatchet 0.27",
+        "Windsor tie 0.15"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-cardigan.webp",
+      "want": [
+        "CARDIGAN"
+      ],
+      "got": "SHIRT",
+      "score": 0.68,
+      "confident": true,
+      "alternatives": [
+        "SWEATER",
+        "BLAZER",
+        "CARDIGAN"
+      ],
+      "top1": false,
+      "offered": true,
+      "rawTop": [
+        "Windsor tie 0.68",
+        "wool 0.07",
+        "suit 0.07"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-coat.webp",
+      "want": [
+        "COAT"
+      ],
+      "got": "COAT",
+      "score": 0.78,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "JACKET",
+        "BLAZER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "trench coat 0.77",
+        "Windsor tie 0.18",
+        "suit 0.03"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-jacket.webp",
+      "want": [
+        "JACKET"
+      ],
+      "got": "SWEATER",
+      "score": 0.37,
+      "confident": false,
+      "alternatives": [
+        "TSHIRT",
+        "HOODIE",
+        "CARDIGAN"
+      ],
+      "top1": false,
+      "offered": false,
+      "rawTop": [
+        "sweatshirt 0.34",
+        "jersey 0.18",
+        "vestment 0.06"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-longsleeve.webp",
+      "want": [
+        "TSHIRT",
+        "SWEATER",
+        "SHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 0.55,
+      "confident": true,
+      "alternatives": [
+        "SWEATER",
+        "SHIRT"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 0.46",
+        "bulletproof vest 0.08",
+        "sweatshirt 0.07"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-polo.webp",
+      "want": [
+        "TSHIRT",
+        "SHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 0.35,
+      "confident": false,
+      "alternatives": [
+        "SHIRT",
+        "BLAZER",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 0.30",
+        "sewing machine 0.20",
+        "Kerry blue terrier 0.07"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-shorts.webp",
+      "want": [
+        "SHORTS"
+      ],
+      "got": "SHORTS",
+      "score": 0.59,
+      "confident": true,
+      "alternatives": [
+        "SKIRT",
+        "PANTS"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "swimming trunks 0.59",
+        "sarong 0.10",
+        "pajama 0.06"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-sweater-v.webp",
+      "want": [
+        "SWEATER"
+      ],
+      "got": "SHIRT",
+      "score": 0.29,
+      "confident": false,
+      "alternatives": [
+        "BLAZER",
+        "TSHIRT",
+        "SWEATER"
+      ],
+      "top1": false,
+      "offered": true,
+      "rawTop": [
+        "Windsor tie 0.23",
+        "suit 0.20",
+        "bulletproof vest 0.10"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-sweater.webp",
+      "want": [
+        "SWEATER",
+        "HOODIE"
+      ],
+      "got": "SWEATER",
+      "score": 0.37,
+      "confident": false,
+      "alternatives": [
+        "TSHIRT",
+        "SHIRT",
+        "HOODIE"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "sweatshirt 0.35",
+        "bulletproof vest 0.29",
+        "jersey 0.07"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-tank.webp",
+      "want": [
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 0.8,
+      "confident": true,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "bulletproof vest 0.79",
+        "breastplate 0.05",
+        "cuirass 0.05"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-turtleneck.webp",
+      "want": [
+        "SWEATER",
+        "TSHIRT"
+      ],
+      "got": "TSHIRT",
+      "score": 0.84,
+      "confident": true,
+      "alternatives": [
+        "SWEATER",
+        "SHIRT"
+      ],
+      "top1": true,
+      "offered": true,
+      "rawTop": [
+        "jersey 0.75",
+        "bulletproof vest 0.10",
+        "sweatshirt 0.05"
+      ]
+    },
+    {
+      "set": "catalog",
+      "file": "m-zip-hoodie.webp",
+      "want": [
+        "HOODIE",
+        "JACKET"
+      ],
+      "got": "TSHIRT",
+      "score": 0.22,
+      "confident": false,
+      "alternatives": [
+        "SHIRT",
+        "SWEATER",
+        "COAT"
+      ],
+      "top1": false,
+      "offered": false,
+      "rawTop": [
+        "velvet 0.19",
+        "bulletproof vest 0.15",
+        "Windsor tie 0.11"
+      ]
+    }
+  ]
+}

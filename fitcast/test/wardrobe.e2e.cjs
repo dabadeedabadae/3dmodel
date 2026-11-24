@@ -119,7 +119,7 @@ test('wardrobe CRUD is per-owner, validates input, and the admin recommendation 
     const okTop = await post(with3d(pkg({ category: 'top' }), 'SHIRT'));
     assert.equal(okTop.status, 201, await okTop.clone().text());
     assert.equal((await okTop.json()).garment3d.category, 'top');
-    for (const t of ['HOODIE', 'SWEATER']) assert.equal((await post(with3d(pkg({ category: 'top' }), t))).status, 201, `top package for ${t}`);
+    for (const t of ['HOODIE', 'SWEATER', 'BLAZER', 'JACKET', 'COAT']) assert.equal((await post(with3d(pkg({ category: 'top' }), t))).status, 201, `top package for ${t}`);
     assert.equal((await post(with3d(pkg({ category: 'top' }), 'TSHIRT'))).status, 400, 'long-sleeve package not for a T-shirt');
     assert.equal((await post(with3d(pkg(), 'SHIRT'))).status, 400, 'T-shirt package not for a shirt');
     assert.equal((await post(with3d(pkg({ category: 'dress' }), 'SHIRT'))).status, 400, 'unknown category');

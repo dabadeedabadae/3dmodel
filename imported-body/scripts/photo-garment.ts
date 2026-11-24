@@ -23,7 +23,7 @@ import { U2NetpSegmentationProvider } from '../../src/providers/SegmentationProv
 import { estimateTShirtLandmarks } from '../../src/shape/landmarks';
 import { estimateBaseColor } from '../../src/image/color';
 import type { RasterImage } from '../../src/image/raster';
-import { anchorIssues, anchorsFromLandmarks, estimatePantsLandmarks, mapPhotoToBottom, mapPhotoToTop, type PhotoAnchors, type PhotoPointName } from '../src/photoMap';
+import { anchorIssues, anchorsFromLandmarks, estimatePantsLandmarks, mapPhotoToBottom, mapPhotoToTop, torsoHalfWidth, type PhotoAnchors, type PhotoPointName } from '../src/photoMap';
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, 'imported-body/out/photo');
@@ -173,8 +173,8 @@ async function main() {
         const fx: number[] = [], fy: number[] = [], ix: number[] = [], iy: number[] = [];
         const sAlong: number[] = [], sImg: number[] = [];
         const armpitY = fig.armpit;
-        let s0 = 0;
-        for (let i = 0; i < fig.part.length; i++) if (fig.part[i] === 2 && fig.base[i * 3 + 1]! > armpitY - 0.06 && fig.base[i * 3 + 1]! < armpitY - 0.015) s0 = Math.max(s0, Math.abs(fig.base[i * 3]!));
+        // the same torso/sleeve split as the mapping (I-75: vertices alone gave the coarse women's base too narrow a torso)
+        const s0 = torsoHalfWidth(fig);
         let folded = 0;
         m.photoTriangles.forEach((t, j) => {
           const c = [0, 1, 2].map((k) => fig.index[t * 3 + k]!);

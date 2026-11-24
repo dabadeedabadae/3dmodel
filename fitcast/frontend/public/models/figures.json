@@ -9,6 +9,9 @@
       "top": "TSHIRT",
       "bottom": "PANTS"
     },
+    "look": {
+      "sleeve": "short"
+    },
     "range": {
       "chest": 0.72,
       "waist": 0.72,
@@ -206,6 +209,9 @@
       "bottom": "PANTS"
     },
     "sex": "female",
+    "look": {
+      "sleeve": "short"
+    },
     "range": {
       "chest": 1,
       "waist": 1,
@@ -288,6 +294,9 @@
       "bottom": "PANTS"
     },
     "inner": "TSHIRT",
+    "look": {
+      "sleeve": "long"
+    },
     "range": {
       "chest": 1,
       "waist": 1,
@@ -305,6 +314,49 @@
     "label": "V-neck sweater and pants",
     "garments": {
       "top": "SWEATER",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-17",
+    "url": "/models/figure-17.json",
+    "vertices": 4937,
+    "triangles": 9371,
+    "label": "Polo and pants",
+    "garments": {
+      "top": "TSHIRT",
+      "bottom": "PANTS"
+    },
+    "look": {
+      "sleeve": "short"
+    },
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-18",
+    "url": "/models/figure-18.json",
+    "vertices": 8454,
+    "triangles": 16229,
+    "label": "Coat and pants",
+    "garments": {
+      "top": "COAT",
       "bottom": "PANTS"
     },
     "inner": "TSHIRT",

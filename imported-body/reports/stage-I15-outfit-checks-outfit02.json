@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T23:21:40.421Z",
+  "generatedAt": "2026-11-24T08:54:09.773Z",
   "asset": "outfit-outfit02",
   "shells": 7,
   "boundaryEdges": 114,
@@ -24,7 +24,7 @@
       "label": "chest=-1",
       "ok": true,
       "fails": [],
-      "flipped": 0
+      "flipped": 1
     },
     {
       "label": "chest=1",
@@ -102,7 +102,7 @@
       "label": "все по минимуму",
       "ok": true,
       "fails": [],
-      "flipped": 1
+      "flipped": 2
     },
     {
       "label": "height 150",

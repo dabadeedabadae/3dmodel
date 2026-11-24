@@ -57,10 +57,11 @@ export class WardrobeController {
     if (!!tex !== (garment3dRaw !== undefined)) throw new BadRequestException('The texture and the 3D garment package must be sent together.');
     const garment3d = garment3dRaw !== undefined ? parseGarment3d(garment3dRaw) : null;
     // a package describes one kind of garment: a T-shirt package only for T-shirts, a long-sleeved top package for
-    // shirts, hoodies and sweaters, a trousers package for trousers and jeans (I-53, I-63)
-    const PACKAGE_TYPES: Record<string, string[]> = { tshirt: ['TSHIRT'], top: ['SHIRT', 'HOODIE', 'SWEATER', 'CARDIGAN'], pants: ['PANTS', 'JEANS'] };
+    // shirts, hoodies, sweaters and the outer layers that have a 3D figure (blazer, jacket, coat, I-75), a trousers
+    // package for trousers and jeans (I-53, I-63)
+    const PACKAGE_TYPES: Record<string, string[]> = { tshirt: ['TSHIRT'], top: ['SHIRT', 'HOODIE', 'SWEATER', 'CARDIGAN', 'BLAZER', 'JACKET', 'COAT'], pants: ['PANTS', 'JEANS'] };
     if (garment3d && !PACKAGE_TYPES[garment3d.category]!.includes(dto.type)) {
-      throw new BadRequestException('The 3D garment package does not match the item type: a T-shirt photo is only for T-shirts, a long-sleeve top photo is for shirts, hoodies and sweaters, and a pants photo is for pants and jeans.');
+      throw new BadRequestException('The 3D garment package does not match the item type: a T-shirt photo is only for T-shirts, a long-sleeve top photo is for shirts, hoodies, sweaters, cardigans, blazers, jackets and coats, and a pants photo is for pants and jeans.');
     }
     const texKind = tex ? sniff(tex.buffer) : null;
     if (tex && !texKind) throw new BadRequestException('The texture must be JPEG, PNG or WebP.');

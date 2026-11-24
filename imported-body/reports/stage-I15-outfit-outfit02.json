@@ -8,15 +8,15 @@
     "triangles": 2840,
     "refusedNonManifold": 0,
     "seamSnapped": 50,
-    "mirrorPaired": 888,
-    "surfaceSymmetrised": 818,
+    "mirrorPaired": 886,
+    "surfaceSymmetrised": 819,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
     "windingFixed": 0,
     "windingDropped": 0
   },
   "symmetry_mm": {
-    "mean": 0.13,
+    "mean": 0.14,
     "max": 7
   },
   "parts": [

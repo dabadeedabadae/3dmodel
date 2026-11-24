@@ -1089,6 +1089,9 @@ a.landing-secondary { font: 12px var(--font-mono), monospace; letter-spacing: .0
 .point-editor circle { fill: #1f3ff0; stroke: #fff; stroke-width: 2; vector-effect: non-scaling-stroke; cursor: grab; }
 .point-editor circle.is-drag { fill: #ff7a1a; cursor: grabbing; }
 .point-editor-lines line { stroke: #fff; stroke-opacity: .75; stroke-width: 1.5; vector-effect: non-scaling-stroke; stroke-dasharray: 4 3; pointer-events: none; }
+.wardrobe-type-hint { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; line-height: 1.5; min-height: 1.5em; }
+.wardrobe-type-alts button { margin-left: 6px; padding: 2px 10px; font-size: 13px; border: 1px solid var(--blue); color: var(--blue); background: transparent; border-radius: 999px; cursor: pointer; }
+.wardrobe-type-alts button:hover, .wardrobe-type-alts button:focus-visible { background: var(--blue); color: #fff; }
 .wardrobe-edit-points { display: block; margin-top: 8px; padding: 6px 10px; font-size: 13px; border: 1px solid var(--blue); color: var(--blue); background: transparent; border-radius: 6px; cursor: pointer; }
 .wardrobe-try { display: block; width: fit-content; margin-top: 8px; font-size: 13px; color: var(--blue); text-decoration: none; }
 .wardrobe-try:hover { text-decoration: underline; }

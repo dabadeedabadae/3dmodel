@@ -10,6 +10,7 @@ import { listFigures, loadFigure, type Figure, type FigureEntry } from '../../li
 import { BODY_TYPES, describeZ, pinFromSlider, solveShape, type Girth, type ShapeState } from '../../lib/figure/proportions';
 import type { Palette, Print, View } from './FigureViewer';
 import type { PantsAnchors, PhotoAnchors } from '../../lib/figure/photoMap';
+import { sleeveFromAnchors } from '../../lib/garment/look';
 
 interface SampleGarment { id: string; category: 'tshirt' | 'pants'; type: string; url: string; textureUrl: string; baseColor: string; needsReview: boolean }
 
@@ -93,9 +94,18 @@ export default function FittingRoom() {
   const bottomPrint = bottomCandidate && wears(cur?.garments.bottom, bottomCandidate.type) ? bottomCandidate : null;
   const prints = useMemo(() => [topPrint, bottomPrint].filter((p): p is Print => !!p), [topPrint, bottomPrint]);
   const [notice, setNotice] = useState('');
-  /** the figure for a garment type: the current one if it matches, otherwise the first that does */
-  const figureFor = (slot: 'top' | 'bottom', type: string) =>
-    wears(cur?.garments[slot], type) ? cur : figures.find((f) => sameSex(f) && wears(f.garments[slot], type)) ?? figures.find((f) => wears(f.garments[slot], type)) ?? null;
+  /**
+   * The figure for a garment type: the current one if it matches, otherwise the first that does. Where several
+   * figures wear the same type (T-shirt, long-sleeve tee, polo), a photographed top goes onto the one whose sleeve
+   * length matches the photo (I-75); same sex first.
+   */
+  const figureFor = (slot: 'top' | 'bottom', type: string, item?: WardrobeItem) => {
+    const sleeve = slot === 'top' && item?.garment3d && item.garment3d.category !== 'pants' ? sleeveFromAnchors(item.garment3d.anchors as PhotoAnchors) : null;
+    const fits = (f: FigureEntry | null | undefined) => !!f && wears(f.garments[slot], type) && (!sleeve || !f.look?.sleeve || f.look.sleeve === sleeve);
+    if (fits(cur)) return cur;
+    return figures.find((f) => sameSex(f) && fits(f)) ?? figures.find((f) => sameSex(f) && wears(f.garments[slot], type))
+      ?? figures.find((f) => wears(f.garments[slot], type)) ?? null;
+  };
   const availableTypes = (slot: 'top' | 'bottom') => Array.from(new Set(figures.map((f) => f.garments[slot]))).map((t) => GARMENT_LABELS[t as GarmentType]?.toLowerCase() ?? t).join(', ');
 
   useEffect(() => {
@@ -206,7 +216,7 @@ export default function FittingRoom() {
   }
   function pickItem(item: WardrobeItem, slot: 'top' | 'bottom') {
     const hex = colorById(item.dominantColor)?.hex ?? '#888';
-    const target = figureFor(slot, item.type);
+    const target = figureFor(slot, item.type, item);
     if (!target) {
       setNotice(`There's no 3D model for "${GARMENT_LABELS[item.type].toLowerCase()}" yet, so it can't be dressed. Available ${slot === 'top' ? 'tops' : 'bottoms'}: ${availableTypes(slot)}.`);
       return;
