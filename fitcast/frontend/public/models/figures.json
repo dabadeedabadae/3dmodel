@@ -610,8 +610,8 @@
   {
     "id": "figure-29",
     "url": "/models/figure-29.json",
-    "vertices": 6480,
-    "triangles": 12241,
+    "vertices": 6620,
+    "triangles": 12721,
     "label": "Bomber jacket and pants",
     "garments": {
       "top": "JACKET",
@@ -623,7 +623,7 @@
       "sleeve": "long"
     },
     "range": {
-      "chest": 0.4,
+      "chest": 0.28,
       "waist": 1,
       "hip": 1,
       "shoulders": 1,
@@ -634,8 +634,8 @@
   {
     "id": "figure-30",
     "url": "/models/figure-30.json",
-    "vertices": 8358,
-    "triangles": 15785,
+    "vertices": 8359,
+    "triangles": 15797,
     "label": "Pea coat and pants",
     "garments": {
       "top": "COAT",
@@ -699,6 +699,72 @@
       "waist": 0.9,
       "hip": 1,
       "shoulders": 0.7,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-33",
+    "url": "/models/figure-33.json",
+    "vertices": 7491,
+    "triangles": 14321,
+    "label": "Long cardigan and pants",
+    "garments": {
+      "top": "CARDIGAN",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-34",
+    "url": "/models/figure-34.json",
+    "vertices": 7716,
+    "triangles": 14761,
+    "label": "Cropped cardigan and pants",
+    "garments": {
+      "top": "CARDIGAN",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "range": {
+      "chest": 0.5,
+      "waist": 0.4,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-35",
+    "url": "/models/figure-35.json",
+    "vertices": 8106,
+    "triangles": 15617,
+    "label": "Biker jacket and pants",
+    "garments": {
+      "top": "JACKET",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "look": {
+      "sleeve": "long"
+    },
+    "range": {
+      "chest": 0.05,
+      "waist": 0.4,
+      "hip": 1,
+      "shoulders": 1,
       "arms": 1,
       "thighs": 1
     }

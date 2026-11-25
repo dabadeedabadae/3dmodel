@@ -1,0 +1,120 @@
+{
+  "generatedAt": "2026-11-25T18:36:43.036Z",
+  "asset": "outfit-outfit35",
+  "shells": 18,
+  "boundaryEdges": 627,
+  "sourceAsymmetry_mm": 10.7,
+  "usableSliderRange": {
+    "chest": 0.05,
+    "waist": 0.4,
+    "hip": 1,
+    "shoulders": 1,
+    "arms": 1,
+    "thighs": 1
+  },
+  "flipBudget": 16,
+  "results": [
+    {
+      "label": "base",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "chest=-0.05",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "chest=0.05",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "waist=-0.4",
+      "ok": true,
+      "fails": [],
+      "flipped": 14
+    },
+    {
+      "label": "waist=0.4",
+      "ok": true,
+      "fails": [],
+      "flipped": 8
+    },
+    {
+      "label": "hip=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "hip=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "shoulders=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "shoulders=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "arms=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "arms=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "все по максимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 10
+    },
+    {
+      "label": "все по минимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 16
+    },
+    {
+      "label": "height 150",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "height 200 proportional",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    }
+  ]
+}
