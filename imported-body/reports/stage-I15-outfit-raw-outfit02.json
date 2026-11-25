@@ -8,7 +8,7 @@
     "triangles": 3922,
     "refusedNonManifold": 0,
     "seamSnapped": 0,
-    "mirrorPaired": 1948,
+    "mirrorPaired": 1940,
     "surfaceSymmetrised": 1312,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
@@ -16,7 +16,7 @@
     "windingDropped": 0
   },
   "symmetry_mm": {
-    "mean": 3.84,
+    "mean": 3.85,
     "max": 241.31
   },
   "parts": [
@@ -180,8 +180,8 @@
     "crotch": 78.6,
     "waistband": 93,
     "hip": 84.7,
-    "chest": 127.7,
-    "armpit": 132.1,
+    "chest": 126.9,
+    "armpit": 131.3,
     "shoulder": 139.8,
     "neck_base": 140.2,
     "topHem": 90.9
@@ -192,8 +192,8 @@
     "crotch": 0.449,
     "waistband": 0.532,
     "hip": 0.484,
-    "chest": 0.73,
-    "armpit": 0.755,
+    "chest": 0.725,
+    "armpit": 0.75,
     "shoulder": 0.799,
     "neck_base": 0.801,
     "topHem": 0.519

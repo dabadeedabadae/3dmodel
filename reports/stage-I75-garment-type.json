@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-24T10:22:10.509Z",
+  "generatedAt": "2026-11-25T13:12:02.400Z",
   "model": "mobilenetv2-12.onnx",
   "tally": {
     "photo": {
       "n": 26,
-      "top1": 21,
-      "offered": 22
+      "top1": 23,
+      "offered": 25
     },
     "catalog": {
       "n": 12,
@@ -42,7 +42,7 @@
         "DRESS"
       ],
       "got": "TSHIRT",
-      "score": 0.66,
+      "score": 0.76,
       "confident": true,
       "alternatives": [
         "SWEATER",
@@ -113,7 +113,7 @@
         "JEANS"
       ],
       "got": "JEANS",
-      "score": 1,
+      "score": 3,
       "confident": true,
       "alternatives": [
         "PANTS",
@@ -135,10 +135,9 @@
         "JEANS"
       ],
       "got": "JEANS",
-      "score": 0.81,
+      "score": 2.44,
       "confident": true,
       "alternatives": [
-        "BLAZER",
         "PANTS",
         "SHORTS"
       ],
@@ -158,12 +157,11 @@
         "JEANS"
       ],
       "got": "JEANS",
-      "score": 0.21,
-      "confident": false,
+      "score": 0.64,
+      "confident": true,
       "alternatives": [
-        "SKIRT",
         "PANTS",
-        "COAT"
+        "SHORTS"
       ],
       "top1": true,
       "offered": true,
@@ -182,7 +180,9 @@
       "got": "SHOES",
       "score": 0.96,
       "confident": true,
-      "alternatives": [],
+      "alternatives": [
+        "TSHIRT"
+      ],
       "top1": true,
       "offered": true,
       "rawTop": [
@@ -216,7 +216,7 @@
         "SKIRT"
       ],
       "got": "SKIRT",
-      "score": 0.98,
+      "score": 1.28,
       "confident": true,
       "alternatives": [
         "DRESS",
@@ -236,15 +236,16 @@
       "want": [
         "SKIRT"
       ],
-      "got": "JEANS",
-      "score": 0.97,
-      "confident": true,
+      "got": "SKIRT",
+      "score": 0.3,
+      "confident": false,
       "alternatives": [
-        "PANTS",
+        "JEANS",
+        "DRESS",
         "SHORTS"
       ],
-      "top1": false,
-      "offered": false,
+      "top1": true,
+      "offered": true,
       "rawTop": [
         "jean 0.97",
         "handkerchief 0.02",
@@ -258,7 +259,7 @@
         "SKIRT"
       ],
       "got": "SKIRT",
-      "score": 0.95,
+      "score": 1.25,
       "confident": true,
       "alternatives": [
         "DRESS",
@@ -279,7 +280,7 @@
         "TSHIRT"
       ],
       "got": "TSHIRT",
-      "score": 1,
+      "score": 1.1,
       "confident": true,
       "alternatives": [
         "SHIRT",
@@ -300,7 +301,7 @@
         "TSHIRT"
       ],
       "got": "TSHIRT",
-      "score": 0.99,
+      "score": 1.09,
       "confident": true,
       "alternatives": [
         "SHIRT",
@@ -321,7 +322,7 @@
         "TSHIRT"
       ],
       "got": "TSHIRT",
-      "score": 1,
+      "score": 1.1,
       "confident": true,
       "alternatives": [
         "SHIRT",
@@ -345,9 +346,9 @@
       "score": 0.22,
       "confident": false,
       "alternatives": [
-        "SHORTS",
         "TSHIRT",
-        "DRESS"
+        "DRESS",
+        "SHORTS"
       ],
       "top1": false,
       "offered": true,
@@ -367,11 +368,12 @@
       "score": 0.26,
       "confident": false,
       "alternatives": [
+        "TSHIRT",
         "SKIRT",
         "COAT"
       ],
       "top1": false,
-      "offered": false,
+      "offered": true,
       "rawTop": [
         "sleeping bag 0.45",
         "gown 0.26",
@@ -385,7 +387,7 @@
         "TSHIRT"
       ],
       "got": "TSHIRT",
-      "score": 0.99,
+      "score": 1.09,
       "confident": true,
       "alternatives": [
         "SHIRT",
@@ -406,7 +408,7 @@
         "TSHIRT"
       ],
       "got": "TSHIRT",
-      "score": 1,
+      "score": 1.1,
       "confident": true,
       "alternatives": [
         "SHIRT",
@@ -426,15 +428,16 @@
       "want": [
         "TSHIRT"
       ],
-      "got": "JEANS",
-      "score": 0.53,
-      "confident": true,
+      "got": "TSHIRT",
+      "score": 0.12,
+      "confident": false,
       "alternatives": [
-        "PANTS",
-        "SHORTS"
+        "JEANS",
+        "SHIRT",
+        "SWEATER"
       ],
-      "top1": false,
-      "offered": false,
+      "top1": true,
+      "offered": true,
       "rawTop": [
         "jean 0.53",
         "buckle 0.05",
@@ -469,7 +472,7 @@
         "TSHIRT"
       ],
       "got": "TSHIRT",
-      "score": 0.71,
+      "score": 0.81,
       "confident": true,
       "alternatives": [
         "SWEATER",
@@ -490,7 +493,7 @@
         "TSHIRT"
       ],
       "got": "TSHIRT",
-      "score": 0.98,
+      "score": 1.08,
       "confident": true,
       "alternatives": [
         "SHIRT",
@@ -532,7 +535,7 @@
         "TSHIRT"
       ],
       "got": "TSHIRT",
-      "score": 0.99,
+      "score": 1.09,
       "confident": true,
       "alternatives": [
         "SHIRT",
@@ -553,7 +556,7 @@
         "TSHIRT"
       ],
       "got": "TSHIRT",
-      "score": 1,
+      "score": 1.1,
       "confident": true,
       "alternatives": [
         "SHIRT",
@@ -578,8 +581,8 @@
       "confident": false,
       "alternatives": [
         "SHIRT",
-        "JACKET",
-        "COAT"
+        "SWEATER",
+        "JACKET"
       ],
       "top1": true,
       "offered": true,
@@ -622,8 +625,8 @@
       "confident": true,
       "alternatives": [
         "SHIRT",
-        "JACKET",
-        "BLAZER"
+        "SWEATER",
+        "JACKET"
       ],
       "top1": true,
       "offered": true,
@@ -640,8 +643,8 @@
         "JACKET"
       ],
       "got": "SWEATER",
-      "score": 0.37,
-      "confident": false,
+      "score": 0.47,
+      "confident": true,
       "alternatives": [
         "TSHIRT",
         "HOODIE",
@@ -689,9 +692,9 @@
       "score": 0.35,
       "confident": false,
       "alternatives": [
+        "SWEATER",
         "SHIRT",
-        "BLAZER",
-        "SWEATER"
+        "BLAZER"
       ],
       "top1": true,
       "offered": true,
@@ -708,11 +711,12 @@
         "SHORTS"
       ],
       "got": "SHORTS",
-      "score": 0.59,
+      "score": 3.53,
       "confident": true,
       "alternatives": [
-        "SKIRT",
-        "PANTS"
+        "PANTS",
+        "JEANS",
+        "SKIRT"
       ],
       "top1": true,
       "offered": true,
@@ -732,9 +736,9 @@
       "score": 0.29,
       "confident": false,
       "alternatives": [
+        "SWEATER",
         "BLAZER",
-        "TSHIRT",
-        "SWEATER"
+        "TSHIRT"
       ],
       "top1": false,
       "offered": true,
@@ -752,7 +756,7 @@
         "HOODIE"
       ],
       "got": "SWEATER",
-      "score": 0.37,
+      "score": 0.47,
       "confident": false,
       "alternatives": [
         "TSHIRT",
@@ -821,8 +825,8 @@
       "score": 0.22,
       "confident": false,
       "alternatives": [
-        "SHIRT",
         "SWEATER",
+        "SHIRT",
         "COAT"
       ],
       "top1": false,

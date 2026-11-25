@@ -1,0 +1,120 @@
+{
+  "generatedAt": "2026-11-25T14:44:14.963Z",
+  "asset": "outfit-outfit28",
+  "shells": 12,
+  "boundaryEdges": 665,
+  "sourceAsymmetry_mm": 10.7,
+  "usableSliderRange": {
+    "chest": 0.08,
+    "waist": 0.5,
+    "hip": 1,
+    "shoulders": 1,
+    "arms": 1,
+    "thighs": 1
+  },
+  "flipBudget": 15,
+  "results": [
+    {
+      "label": "base",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "chest=-0.08",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "chest=0.08",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "waist=-0.5",
+      "ok": true,
+      "fails": [],
+      "flipped": 4.375
+    },
+    {
+      "label": "waist=0.5",
+      "ok": true,
+      "fails": [],
+      "flipped": 0.0625
+    },
+    {
+      "label": "hip=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "hip=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "shoulders=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "shoulders=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "arms=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "arms=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "все по максимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 0.0625
+    },
+    {
+      "label": "все по минимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 4.5
+    },
+    {
+      "label": "height 150",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "height 200 proportional",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    }
+  ]
+}

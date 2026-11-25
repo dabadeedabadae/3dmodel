@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-25T11:05:55.890Z",
+  "generatedAt": "2026-11-25T15:16:29.810Z",
   "figures": [
     "outfit01",
     "outfit02",
@@ -25,7 +25,14 @@
     "outfit22",
     "outfit23",
     "outfit24",
-    "outfit25"
+    "outfit25",
+    "outfit26",
+    "outfit27",
+    "outfit28",
+    "outfit29",
+    "outfit30",
+    "outfit31",
+    "outfit32"
   ],
   "photos": [
     {
@@ -38,28 +45,28 @@
       "baseColor": "#3d5e53",
       "outfit02": {
         "verdict": "WARN",
-        "front": 320,
-        "sleeves": 153,
-        "base": 942,
-        "corrX": 0.958,
+        "front": 312,
+        "sleeves": 147,
+        "base": 950,
+        "corrX": 0.959,
         "corrY": 0.818,
-        "corrSleeve": 0.044,
-        "folded": 2,
+        "corrSleeve": -0.019,
+        "folded": 0,
         "errors": [
-          "рукав развёрнут не от плеча к манжете: corr = 0.04"
+          "рукав развёрнут не от плеча к манжете: corr = -0.02"
         ]
       },
       "outfit03": {
         "verdict": "WARN",
-        "front": 511,
-        "sleeves": 140,
-        "base": 690,
-        "corrX": 0.946,
-        "corrY": 0.819,
-        "corrSleeve": 0.43,
-        "folded": 3,
+        "front": 503,
+        "sleeves": 141,
+        "base": 692,
+        "corrX": 0.95,
+        "corrY": 0.814,
+        "corrSleeve": 0.355,
+        "folded": 2,
         "errors": [
-          "рукав развёрнут не от плеча к манжете: corr = 0.43"
+          "рукав развёрнут не от плеча к манжете: corr = 0.35"
         ]
       },
       "outfit04": {
@@ -195,6 +202,19 @@
         "errors": [
           "рукав развёрнут не от плеча к манжете: corr = 0.12"
         ]
+      },
+      "outfit31": {
+        "verdict": "WARN",
+        "front": 1126,
+        "sleeves": 202,
+        "base": 2490,
+        "corrX": 0.959,
+        "corrY": 0.856,
+        "corrSleeve": 0.116,
+        "folded": 17,
+        "errors": [
+          "рукав развёрнут не от плеча к манжете: corr = 0.12"
+        ]
       }
     },
     {
@@ -205,20 +225,20 @@
       "baseColor": "#9dbc98",
       "outfit02": {
         "verdict": "PASS",
-        "front": 320,
-        "sleeves": 153,
-        "base": 942,
-        "corrX": 0.982,
+        "front": 312,
+        "sleeves": 147,
+        "base": 950,
+        "corrX": 0.983,
         "corrY": 0.988,
-        "corrSleeve": 0.982,
-        "folded": 2,
+        "corrSleeve": 0.987,
+        "folded": 0,
         "errors": []
       },
       "outfit03": {
         "verdict": "PASS",
-        "front": 511,
-        "sleeves": 140,
-        "base": 690,
+        "front": 503,
+        "sleeves": 141,
+        "base": 692,
         "corrX": 0.979,
         "corrY": 0.988,
         "corrSleeve": 0.984,
@@ -334,6 +354,17 @@
         "corrSleeve": 0.973,
         "folded": 12,
         "errors": []
+      },
+      "outfit31": {
+        "verdict": "PASS",
+        "front": 1126,
+        "sleeves": 202,
+        "base": 2490,
+        "corrX": 0.972,
+        "corrY": 0.998,
+        "corrSleeve": 0.924,
+        "folded": 21,
+        "errors": []
       }
     },
     {
@@ -365,11 +396,11 @@
       },
       "outfit03": {
         "verdict": "PASS",
-        "front": 133,
-        "legs": 99,
-        "base": 331,
+        "front": 137,
+        "legs": 103,
+        "base": 327,
         "corrX": 0.973,
-        "corrY": 0.989,
+        "corrY": 0.988,
         "folded": 0,
         "errors": []
       },
@@ -592,6 +623,76 @@
         "corrY": 0.977,
         "folded": 0,
         "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.984,
+        "corrY": 0.977,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit27": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.984,
+        "corrY": 0.977,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit28": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.984,
+        "corrY": 0.977,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit29": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.984,
+        "corrY": 0.977,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit30": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.984,
+        "corrY": 0.977,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit31": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.984,
+        "corrY": 0.977,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.984,
+        "corrY": 0.977,
+        "folded": 0,
+        "errors": []
       }
     },
     {
@@ -617,17 +718,17 @@
         "legs": 96,
         "base": 312,
         "corrX": 0.998,
-        "corrY": 0.963,
+        "corrY": 0.964,
         "folded": 0,
         "errors": []
       },
       "outfit03": {
         "verdict": "PASS",
-        "front": 133,
-        "legs": 99,
-        "base": 331,
+        "front": 137,
+        "legs": 103,
+        "base": 327,
         "corrX": 0.996,
-        "corrY": 0.978,
+        "corrY": 0.977,
         "folded": 0,
         "errors": []
       },
@@ -850,6 +951,76 @@
         "corrY": 0.964,
         "folded": 0,
         "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.998,
+        "corrY": 0.964,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit27": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.998,
+        "corrY": 0.964,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit28": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.998,
+        "corrY": 0.964,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit29": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.998,
+        "corrY": 0.964,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit30": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.998,
+        "corrY": 0.964,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit31": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.998,
+        "corrY": 0.964,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.998,
+        "corrY": 0.964,
+        "folded": 0,
+        "errors": []
       }
     },
     {
@@ -881,9 +1052,9 @@
       },
       "outfit03": {
         "verdict": "PASS",
-        "front": 133,
-        "legs": 99,
-        "base": 331,
+        "front": 137,
+        "legs": 103,
+        "base": 327,
         "corrX": 0.987,
         "corrY": 0.999,
         "folded": 0,
@@ -1108,6 +1279,76 @@
         "corrY": 0.995,
         "folded": 0,
         "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.986,
+        "corrY": 0.995,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit27": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.986,
+        "corrY": 0.995,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit28": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.986,
+        "corrY": 0.995,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit29": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.986,
+        "corrY": 0.995,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit30": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.986,
+        "corrY": 0.995,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit31": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.986,
+        "corrY": 0.995,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.986,
+        "corrY": 0.995,
+        "folded": 0,
+        "errors": []
       }
     },
     {
@@ -1169,6 +1410,28 @@
         "corrY": 0.996,
         "corrSleeve": 0.912,
         "folded": 19,
+        "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.969,
+        "corrY": 0.995,
+        "corrSleeve": 0.936,
+        "folded": 2,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.959,
+        "corrY": 0.995,
+        "corrSleeve": 0.97,
+        "folded": 0,
         "errors": []
       }
     },
@@ -1232,6 +1495,28 @@
         "corrSleeve": 0.995,
         "folded": 25,
         "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.971,
+        "corrY": 0.997,
+        "corrSleeve": 0.993,
+        "folded": 1,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.961,
+        "corrY": 0.985,
+        "corrSleeve": 0.978,
+        "folded": 0,
+        "errors": []
       }
     },
     {
@@ -1293,6 +1578,28 @@
         "corrY": 0.995,
         "corrSleeve": 0.934,
         "folded": 21,
+        "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.974,
+        "corrY": 0.994,
+        "corrSleeve": 0.959,
+        "folded": 1,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.965,
+        "corrY": 0.994,
+        "corrSleeve": 0.962,
+        "folded": 0,
         "errors": []
       }
     },
@@ -1365,6 +1672,32 @@
         "errors": [
           "рукав развёрнут не от плеча к манжете: corr = 0.49"
         ]
+      },
+      "outfit26": {
+        "verdict": "WARN",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.921,
+        "corrY": 0.907,
+        "corrSleeve": 0.499,
+        "folded": 39,
+        "errors": [
+          "рукав развёрнут не от плеча к манжете: corr = 0.50"
+        ]
+      },
+      "outfit32": {
+        "verdict": "WARN",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.872,
+        "corrY": 0.912,
+        "corrSleeve": 0.702,
+        "folded": 38,
+        "errors": [
+          "рукав развёрнут не от плеча к манжете: corr = 0.70"
+        ]
       }
     },
     {
@@ -1426,6 +1759,28 @@
         "corrY": 0.998,
         "corrSleeve": 0.925,
         "folded": 21,
+        "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.972,
+        "corrY": 0.998,
+        "corrSleeve": 0.927,
+        "folded": 2,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.962,
+        "corrY": 0.99,
+        "corrSleeve": 0.969,
+        "folded": 0,
         "errors": []
       }
     },
@@ -1499,6 +1854,28 @@
         "errors": [
           "рукав развёрнут не от плеча к манжете: corr = 0.75"
         ]
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.987,
+        "corrY": 0.992,
+        "corrSleeve": 0.834,
+        "folded": 4,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.984,
+        "corrY": 0.96,
+        "corrSleeve": 0.856,
+        "folded": 1,
+        "errors": []
       }
     },
     {
@@ -1561,6 +1938,28 @@
         "corrSleeve": 0.997,
         "folded": 19,
         "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.981,
+        "corrY": 0.994,
+        "corrSleeve": 0.996,
+        "folded": 1,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.973,
+        "corrY": 0.989,
+        "corrSleeve": 0.986,
+        "folded": 0,
+        "errors": []
       }
     },
     {
@@ -1622,6 +2021,28 @@
         "corrY": 0.995,
         "corrSleeve": 0.999,
         "folded": 22,
+        "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.971,
+        "corrY": 0.997,
+        "corrSleeve": 0.999,
+        "folded": 1,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.961,
+        "corrY": 0.976,
+        "corrSleeve": 0.999,
+        "folded": 0,
         "errors": []
       }
     },
@@ -1695,6 +2116,32 @@
         "errors": [
           "перевёрнутых треугольников в развёртке: 22.4 %"
         ]
+      },
+      "outfit26": {
+        "verdict": "WARN",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.967,
+        "corrY": 0.996,
+        "corrSleeve": 0.91,
+        "folded": 505,
+        "errors": [
+          "перевёрнутых треугольников в развёртке: 26.2 %"
+        ]
+      },
+      "outfit32": {
+        "verdict": "WARN",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.958,
+        "corrY": 0.973,
+        "corrSleeve": 0.96,
+        "folded": 274,
+        "errors": [
+          "перевёрнутых треугольников в развёртке: 15.1 %"
+        ]
       }
     },
     {
@@ -1757,6 +2204,28 @@
         "corrSleeve": 0.993,
         "folded": 14,
         "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.97,
+        "corrY": 0.996,
+        "corrSleeve": 0.988,
+        "folded": 4,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.955,
+        "corrY": 0.999,
+        "corrSleeve": 0.969,
+        "folded": 0,
+        "errors": []
       }
     },
     {
@@ -1818,6 +2287,28 @@
         "corrY": 0.994,
         "corrSleeve": 0.956,
         "folded": 11,
+        "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.978,
+        "corrY": 0.993,
+        "corrSleeve": 0.965,
+        "folded": 5,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.968,
+        "corrY": 0.998,
+        "corrSleeve": 0.957,
+        "folded": 0,
         "errors": []
       }
     },
@@ -1889,6 +2380,32 @@
         "errors": [
           "рукав развёрнут не от плеча к манжете: corr = 0.35"
         ]
+      },
+      "outfit26": {
+        "verdict": "WARN",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.979,
+        "corrY": 0.992,
+        "corrSleeve": 0.565,
+        "folded": 1,
+        "errors": [
+          "рукав развёрнут не от плеча к манжете: corr = 0.56"
+        ]
+      },
+      "outfit32": {
+        "verdict": "WARN",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.97,
+        "corrY": 0.989,
+        "corrSleeve": 0.547,
+        "folded": 0,
+        "errors": [
+          "рукав развёрнут не от плеча к манжете: corr = 0.55"
+        ]
       }
     },
     {
@@ -1951,6 +2468,28 @@
         "corrSleeve": 0.972,
         "folded": 20,
         "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.971,
+        "corrY": 0.998,
+        "corrSleeve": 0.97,
+        "folded": 1,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.961,
+        "corrY": 0.99,
+        "corrSleeve": 0.963,
+        "folded": 0,
+        "errors": []
       }
     },
     {
@@ -2012,6 +2551,28 @@
         "corrY": 0.997,
         "corrSleeve": 0.965,
         "folded": 20,
+        "errors": []
+      },
+      "outfit26": {
+        "verdict": "PASS",
+        "front": 1926,
+        "sleeves": 546,
+        "base": 3994,
+        "corrX": 0.97,
+        "corrY": 0.995,
+        "corrSleeve": 0.968,
+        "folded": 2,
+        "errors": []
+      },
+      "outfit32": {
+        "verdict": "PASS",
+        "front": 1819,
+        "sleeves": 338,
+        "base": 3095,
+        "corrX": 0.96,
+        "corrY": 0.995,
+        "corrSleeve": 0.96,
+        "folded": 0,
         "errors": []
       }
     }
