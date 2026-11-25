@@ -16,6 +16,8 @@
     "check:tshirt": "vitest run tests/tshirt.geometry.test.ts && node --import tsx scripts/check-tshirt.ts",
     "render": "node scripts/render.mjs",
     "eval:fixtures": "node --import tsx scripts/eval-fixtures.ts",
+    "eval:type": "node --import tsx scripts/eval-garment-type.ts",
+    "eval:attributes": "node --import tsx scripts/eval-attributes.ts",
     "e2e:pipeline": "node scripts/e2e-pipeline.mjs",
     "e2e:fit": "node scripts/e2e-fit.mjs",
     "e2e:chain": "node scripts/e2e-chain.mjs",

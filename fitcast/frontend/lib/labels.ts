@@ -67,7 +67,7 @@ function toLab([r, g, b]: number[]): [number, number, number] {
 }
 
 const NEUTRALS = new Set(['black', 'white', 'gray']);
-const lch = (lab: number[]) => [lab[0]!, Math.hypot(lab[1]!, lab[2]!), (Math.atan2(lab[2]!, lab[1]!) * 180 / Math.PI + 360) % 360];
+const lch = (lab: number[]): [number, number, number] => [lab[0]!, Math.hypot(lab[1]!, lab[2]!), (Math.atan2(lab[2]!, lab[1]!) * 180 / Math.PI + 360) % 360];
 
 /**
  * Nearest palette colour to an sRGB triple. A garment colour with little chroma (C < 13 in Lab: washed denim
@@ -76,7 +76,7 @@ const lch = (lab: number[]) => [lab[0]!, Math.hypot(lab[1]!, lab[2]!), (Math.ata
  * palette, and plain Lab distance sent a dark green sweater (#3d5e53) to gray. Redmean RGB, used before, sent the
  * washed denim to green.
  */
-function nearestRgb(px: number[]): string {
+export function nearestRgb(px: number[]): string {
   const p = toLab(px), [L, C, h] = lch(p);
   let best = COLORS[0]!.id, bestD = Infinity;
   for (const c of COLORS) {
@@ -114,8 +114,8 @@ export async function suggestColor(file: Blob): Promise<string | null> {
   bitmap.close();
   const { data } = ctx.getImageData(size * 0.3, size * 0.3, size * 0.4, size * 0.4);
   const r: number[] = [], g: number[] = [], b: number[] = [];
-  for (let i = 0; i < data.length; i += 4) { r.push(data[i]); g.push(data[i + 1]); b.push(data[i + 2]); }
-  const median = (a: number[]) => a.sort((x, y) => x - y)[a.length >> 1];
+  for (let i = 0; i < data.length; i += 4) { r.push(data[i]!); g.push(data[i + 1]!); b.push(data[i + 2]!); }
+  const median = (a: number[]) => a.sort((x, y) => x - y)[a.length >> 1] ?? 128;
   const px = [median(r), median(g), median(b)];
   return nearestRgb(px);
 }

@@ -558,7 +558,7 @@ const report = {
   parts: parts.map((p) => ({ kind: p.kind, vertices: p.vertices.length, triangles: p.triangles.length, y_cm: [cm(p.bbox.min[1]), cm(p.bbox.max[1])] })),
   landmarks_cm: Object.fromEntries(Object.entries(landmarks).map(([key, v]) => [key, cm(v)])),
   fractions_of_H: Object.fromEntries(Object.entries(landmarks).map(([key, v]) => [key, Number((v / H).toFixed(3))])),
-  note: 'Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: она сгенерирована одетой.',
+  note: 'Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: исходная модель сделана одетой.',
 };
 mkdirSync('imported-body/out', { recursive: true });
 // the same shape the naked mannequin's asset has, so deformation, measurement and rendering take it unchanged

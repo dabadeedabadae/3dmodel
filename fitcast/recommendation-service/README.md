@@ -35,17 +35,27 @@ Service access control must be decided before deployment.
 ```
 
 - `id`: UUID, matching Prisma's generated string IDs; unique within the request.
-- `type`: TSHIRT, SHIRT, JACKET, COAT, SWEATER, HOODIE, PANTS, JEANS,
+- `type`: TSHIRT, SHIRT, JACKET, COAT, SWEATER, HOODIE, CARDIGAN, BLAZER, PANTS, JEANS,
   SHORTS, SKIRT, DRESS, SHOES, ACCESSORY.
+- `pattern` (optional, I-77): solid | pattern; `secondaryColor` (optional): a palette color; `sleeve` (optional):
+  short | long — read from the photo on the device.
 - `fitTag`: GOOD, TIGHT, LOOSE. All three are valid input; filtering is a later engine responsibility.
 - `dominantColor`: black, white, gray, beige, brown, red, orange, yellow,
   green, blue, navy, purple, pink. Whitespace and case are normalized;
   grey is accepted as gray. HEX/RGB are not accepted in this MVP contract.
-- `eventType`: CASUAL, GYM, BUSINESS, FORMAL, OUTDOOR.
+- `eventType`: CASUAL, GYM, BUSINESS, FORMAL, OUTDOOR, DATE, WEDDING_GUEST, INTERVIEW, PARTY, THEATER, TRAVEL,
+  STUDY, FAMILY_WALK.
 - `temperatureC`: finite JSON number from -90 to 60 Celsius. This is an input
   validity bound, not a claim that recommendations are suitable across this range.
 - `precipitation`: NONE, RAIN, SNOW, MIXED. Required; missing weather is not silently treated as dry.
-- `limit`: integer 1–5, default 5.
+- `limit`: integer 1–10, default 5 (10 is used by the swipe feed).
+- `taste` (optional, I-77): `{types: {GarmentType: w}, colors: {color: w}}`, w in −1…+1, learned by the API from likes
+  and dislikes; shifts each outfit by up to ±10 points and is reported in `breakdown.taste`.
+- `exclude` (optional): outfits already judged, each a list of item ids — never returned again.
+- `suggest` (optional, default false): add `suggestion` to each outfit — the one not-owned item (type + colour)
+  that raises its score most (at least 3 points), or shoes when the outfit has none; disliked types/colours and
+  `avoidTypes` are never suggested.
+- `avoidTypes` (optional): garment types the user does not wear (the API sends SKIRT, DRESS for a men's feed).
 - `wardrobe`: required list, empty allowed, maximum 200 items. This provisional
   bound limits input size; generation will need its own computation budget.
 - Unknown fields and enum values are rejected with HTTP 422.
@@ -120,19 +130,24 @@ These are recorded decisions to discuss; phases 1–2 do not claim team agreemen
 
 ## Local setup
 
-Run from `recommendation-service/` with Python 3.11 or newer:
+Run from `recommendation-service/` with Python 3.10 or newer (the Docker image uses 3.12):
 
 ```sh
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-dev.txt
 python -m pytest -q
-python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8010
 ```
 
 - GET /health: HTTP 200, `{"status":"ok"}`; reports scaffold availability only.
 - GET /docs: interactive contract documentation.
-- POST /recommendations: validates input, then returns HTTP 501 until engine modules exist.
+- POST /recommendations: validates input and returns the ranked outfits (rules v1, `app/engine/recommend.py`).
+- I-79, all optional: `weather.windKph`, `hour` (local hour 0–23), `history` (every swipe: `{items, liked}` — the
+  taste model `app/engine/learn.py` is trained on it from 8 swipes with both verdicts), `recentItems` (items of
+  outfits saved this week). Each outfit's `breakdown` gains `style` (±12 points) and `factors` (`key`, `points`,
+  `note`: harmony, coherence, contrast, evening, freshness, wind — `app/engine/factors.py`); the response gains
+  `tasteModel` (`examples`, `likes`, `prefers`, `avoids`) once a model was trained.
 - Invalid input: HTTP 422 with Pydantic validation details.
 
 Dependencies have bounded compatible ranges; a reproducible lock remains a deployment task.
@@ -141,4 +156,5 @@ Dependencies have bounded compatible ranges; a reproducible lock remains a deplo
 
 Implement and test color matching independently in `app/engine/`, including
 explicit palette RGB values, neutral handling, hue distances and outfit aggregation.
-Then add generation, eligibility rules, scoring and ranking before replacing HTTP 501.
+Generation, eligibility rules, scoring and ranking are done (phases 1–2); taste, exclusions and purchase
+suggestions were added in I-77.

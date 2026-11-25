@@ -156,6 +156,7 @@ export interface WardrobeItem {
   id: string; type: GarmentType; dominantColor: string; fitTag: FitTag; imageUrl: string;
   /** photo → 3D package (on-device analysis), with the texture; null when the photo was not analysed */
   garment3d: GarmentPackage | null; textureUrl: string | null;
+  attributes?: ItemAttributes | null;
   createdAt: string; updatedAt: string;
 }
 
@@ -178,13 +179,21 @@ async function authed<T>(path: string, init: RequestInit = {}, fallback = 'The r
 
 export const getWardrobe = () => authed<WardrobeItem[]>('/wardrobe', {}, 'Could not load your wardrobe.');
 
-export function addWardrobeItem(image: Blob, fields: { type: GarmentType; dominantColor: string; fitTag: FitTag }, model?: { pkg: GarmentPackage; texture: Blob }) {
+/** what the photo says beyond type and main colour (I-77), read on the device; used by the recommendations */
+export interface ItemAttributes { pattern?: 'solid' | 'pattern'; secondaryColor?: string; sleeve?: 'short' | 'long'; tone?: 'light' | 'mid' | 'dark' }
+
+export function addWardrobeItem(image: Blob, fields: { type: GarmentType; dominantColor: string; fitTag: FitTag }, model?: { pkg: GarmentPackage; texture: Blob }, attributes?: ItemAttributes) {
   const body = new FormData();
   body.append('type', fields.type);
   body.append('dominantColor', fields.dominantColor);
   body.append('fitTag', fields.fitTag);
   body.append('image', image, 'garment');
   if (model) { body.append('garment3d', JSON.stringify(model.pkg)); body.append('texture', model.texture, 'texture.jpg'); }
+  // only the known keys with a value: the API rejects anything else
+  if (attributes) {
+    const clean = Object.fromEntries(Object.entries(attributes).filter(([, v]) => v !== undefined));
+    if (Object.keys(clean).length) body.append('attributes', JSON.stringify(clean));
+  }
   return authed<WardrobeItem>('/wardrobe', { method: 'POST', body }, 'Could not add the item.');
 }
 
@@ -260,26 +269,46 @@ export const deleteEvent = (id: string) =>
 
 /* ---------- Recommendations, feedback, saved outfits ---------- */
 
-export type OutfitItem = Pick<WardrobeItem, 'id' | 'type' | 'dominantColor' | 'fitTag' | 'imageUrl'>;
+export type OutfitItem = Pick<WardrobeItem, 'id' | 'type' | 'dominantColor' | 'fitTag' | 'imageUrl'> & Partial<Pick<WardrobeItem, 'garment3d' | 'textureUrl'>>;
 export type Verdict = 'LIKE' | 'DISLIKE';
+/** an item the user does not own that would make the outfit better (I-77) */
+export interface PurchaseSuggestion {
+  type: GarmentType; dominantColor: string; replaces: string | null; score: number; gain: number; reason: string;
+}
 export interface RecommendedOutfit {
   key: string; items: OutfitItem[]; score: number; explanation: string;
-  breakdown: { occasion: number; weather: number; color: number; fit: number | null };
-  feedback: Verdict | null; savedOutfitId: string | null;
+  breakdown: {
+    occasion: number; weather: number; color: number; fit: number | null; taste?: number | null;
+    /** style factors (I-79): harmony, coherence, contrast, evening, freshness, wind — points and a short note */
+    style?: number | null; factors?: StyleFactor[];
+  };
+  feedback: Verdict | null; savedOutfitId: string | null; suggestion?: PurchaseSuggestion | null;
 }
+export interface StyleFactor { key: string; points: number; note: string }
+/** the model trained on the user's swipes (I-79): null until there are 8 with both likes and dislikes */
+export interface TasteModelInfo { examples: number; likes: number; prefers: string[]; avoids: string[] }
+/** learned from likes and dislikes: −1 … +1 per garment type and colour */
+export interface Taste { types: Partial<Record<GarmentType, number>>; colors: Record<string, number>; votes: number }
 export interface RecommendationContext {
   eventId: string | null; eventTitle: string | null; startsAt: string | null; eventType: EventType; location: string;
-  weather: { temperatureC: number; precipitation: Precipitation; description: string };
+  weather: { temperatureC: number; precipitation: Precipitation; description: string; windKph?: number | null; hour?: number };
 }
 export interface Recommendations {
   context: RecommendationContext; status: 'OK' | 'NO_VALID_OUTFITS'; outfits: RecommendedOutfit[];
-  hiddenDisliked: number; warnings: string[];
+  hiddenDisliked: number; warnings: string[]; taste?: Taste; tasteModel?: TasteModelInfo | null;
 }
 /** for an event (its forecast), or for an occasion with the current weather in the profile city */
 export const getRecommendations = (target: { eventId: string } | { eventType: EventType }, limit = 3) =>
   authed<Recommendations>('/recommendations', {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...target, limit }),
   }, 'Could not get outfit suggestions.');
+
+/** the swipe feed: up to 10 outfits not judged yet for this occasion, each with a purchase suggestion */
+export type Wear = 'men' | 'women' | 'all';
+export const getOutfitFeed = (eventType: EventType, wear: Wear = 'all') =>
+  authed<Recommendations>('/recommendations', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ eventType, feed: true, wear }),
+  }, 'Could not get outfits.');
 
 export const sendOutfitFeedback = (ctx: RecommendationContext, outfit: RecommendedOutfit, verdict: Verdict | null) =>
   authed<{ outfitKey: string; verdict: Verdict | null }>('/recommendations/feedback', {

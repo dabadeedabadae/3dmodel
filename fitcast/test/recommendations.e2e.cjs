@@ -95,7 +95,10 @@ test('recommendations follow the occasion and the weather, feedback hides dislik
     const rec = await r1.json();
     assert.equal(rec.status, 'OK');
     assert.equal(rec.context.eventType, 'INTERVIEW');
-    assert.deepEqual(rec.context.weather, { temperatureC: 8, precipitation: 'RAIN', description: 'Rain' });
+    // I-79: the weather also carries the wind (null here: the stub forecast has none) and the local hour
+    const { hour, ...weather } = rec.context.weather;
+    assert.deepEqual(weather, { temperatureC: 8, precipitation: 'RAIN', description: 'Rain', windKph: null });
+    assert.ok(Number.isInteger(hour) && hour >= 0 && hour <= 23, `hour ${hour}`);
     assert.ok(rec.outfits.length >= 1 && rec.outfits.length <= 5);
     assert.ok(rec.warnings.some((w) => w.includes('too tight or too loose')), 'the TIGHT cardigan is skipped');
     for (const o of rec.outfits) {

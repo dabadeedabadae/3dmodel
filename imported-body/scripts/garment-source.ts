@@ -307,7 +307,9 @@ const bbox = () => {
 // 1. orientation: up is the bbox axis that is neither the widest (sleeve span) nor the thinnest (depth); the generated meshes come +Y up
 let { lo, hi } = bbox();
 const span = [0, 1, 2].map((k) => hi[k]! - lo[k]!);
-if (layer === 'top' && !(span[0]! >= span[1]! && span[1]! >= span[2]!)) {
+// a knee-length coat in a T-pose is a little taller than its sleeve span (women's coat: 0.83 × 0.88); the sleeves
+// still run along x and the depth is the thinnest, so up to 1/0.85 of the span in height is accepted
+if (layer === 'top' && !(span[0]! >= span[1]! * 0.85 && span[1]! >= span[2]! && span[0]! >= span[2]!)) {
   throw new Error(`unexpected orientation, bbox ${span.map((s) => s.toFixed(3))} — expected x (sleeves) ≥ y ≥ z`);
 }
 // centre x/z, floor y at 0 for now

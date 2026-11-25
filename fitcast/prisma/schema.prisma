@@ -133,6 +133,8 @@ model WardrobeItem {
   garment3d     Json?       @map("garment_3d")
   /// photo with the background replaced by the base colour; the texture of the 3D garment
   textureUrl    String?     @map("texture_url")
+  /// what the photo says beyond type and main colour (I-77): pattern, second colour, sleeve, light/dark tone
+  attributes    Json?
   createdAt     DateTime    @default(now()) @map("created_at")
   updatedAt     DateTime    @updatedAt @map("updated_at")
 

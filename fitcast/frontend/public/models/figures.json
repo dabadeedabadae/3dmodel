@@ -9,6 +9,9 @@
       "top": "TSHIRT",
       "bottom": "PANTS"
     },
+    "look": {
+      "sleeve": "short"
+    },
     "range": {
       "chest": 0.72,
       "waist": 0.72,
@@ -118,8 +121,8 @@
   {
     "id": "figure-07",
     "url": "/models/figure-07.json",
-    "vertices": 8647,
-    "triangles": 16815,
+    "vertices": 8593,
+    "triangles": 16679,
     "label": "Zip hoodie and pants",
     "garments": {
       "top": "HOODIE",
@@ -127,10 +130,10 @@
     },
     "inner": "TSHIRT",
     "range": {
-      "chest": 1,
-      "waist": 0.4,
+      "chest": 0.81,
+      "waist": 0.27,
       "hip": 1,
-      "shoulders": 1,
+      "shoulders": 0.4,
       "arms": 1,
       "thighs": 1
     }
@@ -158,8 +161,8 @@
   {
     "id": "figure-09",
     "url": "/models/figure-09.json",
-    "vertices": 5415,
-    "triangles": 10599,
+    "vertices": 5387,
+    "triangles": 10507,
     "label": "Jacket and pants",
     "garments": {
       "top": "JACKET",
@@ -167,7 +170,7 @@
     },
     "inner": "TSHIRT",
     "range": {
-      "chest": 0.4,
+      "chest": 0.22,
       "waist": 1,
       "hip": 1,
       "shoulders": 1,
@@ -206,6 +209,9 @@
       "bottom": "PANTS"
     },
     "sex": "female",
+    "look": {
+      "sleeve": "short"
+    },
     "range": {
       "chest": 1,
       "waist": 1,
@@ -288,6 +294,9 @@
       "bottom": "PANTS"
     },
     "inner": "TSHIRT",
+    "look": {
+      "sleeve": "long"
+    },
     "range": {
       "chest": 1,
       "waist": 1,
@@ -309,6 +318,214 @@
     },
     "inner": "TSHIRT",
     "sex": "female",
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-17",
+    "url": "/models/figure-17.json",
+    "vertices": 4937,
+    "triangles": 9371,
+    "label": "Polo and pants",
+    "garments": {
+      "top": "TSHIRT",
+      "bottom": "PANTS"
+    },
+    "look": {
+      "sleeve": "short"
+    },
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-18",
+    "url": "/models/figure-18.json",
+    "vertices": 8454,
+    "triangles": 16229,
+    "label": "Coat and pants",
+    "garments": {
+      "top": "COAT",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-19",
+    "url": "/models/figure-19.json",
+    "vertices": 5829,
+    "triangles": 11493,
+    "label": "Turtleneck and pants",
+    "garments": {
+      "top": "SWEATER",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "look": {
+      "sleeve": "long"
+    },
+    "range": {
+      "chest": 0.11,
+      "waist": 0.6,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-20",
+    "url": "/models/figure-20.json",
+    "vertices": 6076,
+    "triangles": 11893,
+    "label": "Denim jacket and pants",
+    "garments": {
+      "top": "JACKET",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "look": {
+      "sleeve": "long"
+    },
+    "range": {
+      "chest": 0.04,
+      "waist": 0.28,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-21",
+    "url": "/models/figure-21.json",
+    "vertices": 8356,
+    "triangles": 16193,
+    "label": "Fitted T-shirt and pants",
+    "garments": {
+      "top": "TSHIRT",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "look": {
+      "sleeve": "short"
+    },
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-22",
+    "url": "/models/figure-22.json",
+    "vertices": 6534,
+    "triangles": 12576,
+    "label": "Blouse and pants",
+    "garments": {
+      "top": "SHIRT",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "look": {
+      "sleeve": "long"
+    },
+    "range": {
+      "chest": 0.7,
+      "waist": 0.36,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-23",
+    "url": "/models/figure-23.json",
+    "vertices": 7660,
+    "triangles": 14617,
+    "label": "Crew sweater and pants",
+    "garments": {
+      "top": "SWEATER",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "look": {
+      "sleeve": "long"
+    },
+    "range": {
+      "chest": 1,
+      "waist": 1,
+      "hip": 1,
+      "shoulders": 1,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-24",
+    "url": "/models/figure-24.json",
+    "vertices": 6862,
+    "triangles": 13226,
+    "label": "Bomber jacket and pants",
+    "garments": {
+      "top": "JACKET",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "look": {
+      "sleeve": "long"
+    },
+    "range": {
+      "chest": 0.45,
+      "waist": 0.32,
+      "hip": 1,
+      "shoulders": 0.4,
+      "arms": 1,
+      "thighs": 1
+    }
+  },
+  {
+    "id": "figure-25",
+    "url": "/models/figure-25.json",
+    "vertices": 7837,
+    "triangles": 15141,
+    "label": "Denim jacket and pants",
+    "garments": {
+      "top": "JACKET",
+      "bottom": "PANTS"
+    },
+    "inner": "TSHIRT",
+    "sex": "female",
+    "look": {
+      "sleeve": "long"
+    },
     "range": {
       "chest": 1,
       "waist": 1,

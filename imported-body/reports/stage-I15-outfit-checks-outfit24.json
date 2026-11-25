@@ -1,0 +1,120 @@
+{
+  "generatedAt": "2026-11-25T03:06:51.951Z",
+  "asset": "outfit-outfit24",
+  "shells": 8,
+  "boundaryEdges": 628,
+  "sourceAsymmetry_mm": 16.8,
+  "usableSliderRange": {
+    "chest": 0.45,
+    "waist": 0.32,
+    "hip": 1,
+    "shoulders": 0.4,
+    "arms": 1,
+    "thighs": 1
+  },
+  "flipBudget": 13,
+  "results": [
+    {
+      "label": "base",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "chest=-0.45",
+      "ok": true,
+      "fails": [],
+      "flipped": 4
+    },
+    {
+      "label": "chest=0.45",
+      "ok": true,
+      "fails": [],
+      "flipped": 3
+    },
+    {
+      "label": "waist=-0.32",
+      "ok": true,
+      "fails": [],
+      "flipped": 10
+    },
+    {
+      "label": "waist=0.32",
+      "ok": true,
+      "fails": [],
+      "flipped": 9
+    },
+    {
+      "label": "hip=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 9
+    },
+    {
+      "label": "hip=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 4
+    },
+    {
+      "label": "shoulders=-0.4",
+      "ok": true,
+      "fails": [],
+      "flipped": 1
+    },
+    {
+      "label": "shoulders=0.4",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "arms=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "arms=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=-1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "thighs=1",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "все по максимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 3.0625
+    },
+    {
+      "label": "все по минимуму",
+      "ok": true,
+      "fails": [],
+      "flipped": 11.1875
+    },
+    {
+      "label": "height 150",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    },
+    {
+      "label": "height 200 proportional",
+      "ok": true,
+      "fails": [],
+      "flipped": 0
+    }
+  ]
+}

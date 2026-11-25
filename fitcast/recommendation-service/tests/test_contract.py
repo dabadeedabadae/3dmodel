@@ -48,7 +48,7 @@ def test_invalid_temperature(payload, temperature):
         RecommendationRequest.model_validate(payload)
 
 
-@pytest.mark.parametrize("limit", [0, 6, 1.5, True])
+@pytest.mark.parametrize("limit", [0, 11, 1.5, True])
 def test_invalid_limit(payload, limit):
     payload["limit"] = limit
     with pytest.raises(ValidationError):

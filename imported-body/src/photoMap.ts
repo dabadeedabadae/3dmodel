@@ -134,6 +134,40 @@ export interface PhotoMapping {
  * Image position of every vertex of the upper garment, then UVs per front-facing triangle. Vertices are mapped
  * once, so neighbouring photo triangles share their corners and the print stays continuous.
  */
+/**
+ * Torso half-width just below the armhole: beyond it, at arm height, are the sleeves. Shared by the mapping and
+ * its check (scripts/photo-garment.ts) so both split torso and sleeve at the same place.
+ */
+export function torsoHalfWidth(fig: FigureTop): number {
+  const { base, index, part, topCode } = fig;
+  const n = base.length / 3;
+  const X = (i: number) => base[i * 3]!, Y = (i: number) => base[i * 3 + 1]!;
+  const armpit = fig.armpit;
+  const top: number[] = [];
+  for (let i = 0; i < n; i++) if (part[i] === topCode) top.push(i);
+  let s0 = 0;
+  for (const i of top) if (Y(i) > armpit - 0.06 && Y(i) < armpit - 0.015) s0 = Math.max(s0, Math.abs(X(i)));
+  /**
+   * On a coarse shell (women's base, I-75) few vertices fall into that band and the torso came out too narrow
+   * (0.14 m against ~0.2): shoulder and side vertices were mapped as sleeve and the sleeve ran the wrong way.
+   * The section of the top's triangles at the same heights is measured as well; s0 only grows, so a figure whose
+   * vertices already gave the width keeps it.
+   */
+  for (const yc of [armpit - 0.05, armpit - 0.035, armpit - 0.02]) {
+    for (let t = 0; t < index.length; t += 3) {
+      const v = [index[t]!, index[t + 1]!, index[t + 2]!];
+      if (!v.every((k) => part[k] === topCode)) continue;
+      for (let e = 0; e < 3; e++) {
+        const p = v[e]!, q = v[(e + 1) % 3]!;
+        if ((Y(p) - yc) * (Y(q) - yc) > 0 || Y(p) === Y(q)) continue;
+        const x = X(p) + ((yc - Y(p)) / (Y(q) - Y(p))) * (X(q) - X(p));
+        s0 = Math.max(s0, Math.abs(x));
+      }
+    }
+  }
+  return s0;
+}
+
 export function mapPhotoToTop(fig: FigureTop, photo: PhotoAnchors): PhotoMapping {
   const { base, index, part, topCode } = fig;
   const n = base.length / 3;
@@ -144,8 +178,7 @@ export function mapPhotoToTop(fig: FigureTop, photo: PhotoAnchors): PhotoMapping
   const hem = Math.min(...top.map(Y));
   const armpit = fig.armpit;
   // torso half-width just below the armhole: beyond it, at arm height, are the sleeves
-  let s0 = 0;
-  for (const i of top) if (Y(i) > armpit - 0.06 && Y(i) < armpit - 0.015) s0 = Math.max(s0, Math.abs(X(i)));
+  const s0 = torsoHalfWidth(fig);
   if (!(s0 > 0)) throw new Error('cannot measure the torso width under the armhole');
   // neck half-width from the head's neck ring (the collar sits around it)
   let nh = 0;

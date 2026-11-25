@@ -1,0 +1,260 @@
+{
+  "patternRight": 15,
+  "labelled": 19,
+  "rows": [
+    {
+      "photo": "longsleeve_107dd572",
+      "truth": "solid",
+      "pattern": "solid",
+      "tone": "mid",
+      "shares": {
+        "main": "green",
+        "mainShare": 0.6,
+        "second": "black",
+        "secondShare": 0.4,
+        "texture": 16.7
+      }
+    },
+    {
+      "photo": "longsleeve_582f7f10",
+      "truth": "solid",
+      "pattern": "solid",
+      "tone": "light",
+      "shares": {
+        "main": "green",
+        "mainShare": 0.76,
+        "second": "green",
+        "secondShare": 0.24,
+        "texture": 22.9
+      }
+    },
+    {
+      "photo": "pants_4cc4e673",
+      "truth": "solid",
+      "pattern": "solid",
+      "tone": "mid",
+      "shares": {
+        "main": "gray",
+        "mainShare": 0.53,
+        "second": "black",
+        "secondShare": 0.47,
+        "texture": 20
+      }
+    },
+    {
+      "photo": "pants_9cb9ae19",
+      "truth": "solid",
+      "pattern": "solid",
+      "tone": "dark",
+      "shares": {
+        "main": "black",
+        "mainShare": 0.94,
+        "second": "gray",
+        "secondShare": 0.06,
+        "texture": 38.7
+      }
+    },
+    {
+      "photo": "pants_e0dc1f06",
+      "truth": "solid",
+      "pattern": "solid",
+      "tone": "mid",
+      "shares": {
+        "main": "red",
+        "mainShare": 0.53,
+        "second": "pink",
+        "secondShare": 0.47,
+        "texture": 9.6
+      }
+    },
+    {
+      "photo": "tshirt_0fc3fbae",
+      "truth": "pattern",
+      "pattern": "pattern",
+      "tone": "light",
+      "secondaryColor": "brown",
+      "shares": {
+        "main": "white",
+        "mainShare": 0.94,
+        "second": "brown",
+        "secondShare": 0.06,
+        "texture": 44.6
+      }
+    },
+    {
+      "photo": "tshirt_29d44695",
+      "truth": "pattern",
+      "pattern": "solid",
+      "tone": "light",
+      "shares": {
+        "main": "gray",
+        "mainShare": 0.91,
+        "second": "gray",
+        "secondShare": 0.09,
+        "texture": 37
+      }
+    },
+    {
+      "photo": "tshirt_2aff1c58",
+      "truth": "pattern",
+      "pattern": "solid",
+      "tone": "light",
+      "shares": {
+        "main": "white",
+        "mainShare": 0.78,
+        "second": "gray",
+        "secondShare": 0.22,
+        "texture": 17.1
+      }
+    },
+    {
+      "photo": "tshirt_2df565b9",
+      "truth": "solid",
+      "pattern": "solid",
+      "tone": "mid",
+      "shares": {
+        "main": "orange",
+        "mainShare": 0.96,
+        "second": "brown",
+        "secondShare": 0.04,
+        "texture": 27.8
+      }
+    },
+    {
+      "photo": "tshirt_58e51574",
+      "truth": "solid",
+      "pattern": "solid",
+      "tone": "light",
+      "shares": {
+        "main": "green",
+        "mainShare": 0.63,
+        "second": "green",
+        "secondShare": 0.37,
+        "texture": 23.7
+      }
+    },
+    {
+      "photo": "tshirt_5aee6e35",
+      "truth": "pattern",
+      "pattern": "pattern",
+      "tone": "mid",
+      "secondaryColor": "black",
+      "shares": {
+        "main": "gray",
+        "mainShare": 0.83,
+        "second": "black",
+        "secondShare": 0.17,
+        "texture": 40.6
+      }
+    },
+    {
+      "photo": "tshirt_5d9384e4",
+      "truth": "pattern",
+      "pattern": "solid",
+      "tone": "light",
+      "shares": {
+        "main": "beige",
+        "mainShare": 0.67,
+        "second": "beige",
+        "secondShare": 0.33,
+        "texture": 14.7
+      }
+    },
+    {
+      "photo": "tshirt_8f0cd82c",
+      "truth": "pattern",
+      "pattern": "pattern",
+      "tone": "mid",
+      "secondaryColor": "black",
+      "shares": {
+        "main": "gray",
+        "mainShare": 0.54,
+        "second": "black",
+        "secondShare": 0.46,
+        "texture": 40.2
+      }
+    },
+    {
+      "photo": "tshirt_91ebc326",
+      "truth": "pattern",
+      "pattern": "pattern",
+      "tone": "dark",
+      "secondaryColor": "white",
+      "shares": {
+        "main": "navy",
+        "mainShare": 0.94,
+        "second": "white",
+        "secondShare": 0.06,
+        "texture": 75.5
+      }
+    },
+    {
+      "photo": "tshirt_99fdccb7",
+      "truth": "pattern",
+      "pattern": "solid",
+      "tone": "mid",
+      "shares": {
+        "main": "gray",
+        "mainShare": 0.82,
+        "second": "gray",
+        "secondShare": 0.18,
+        "texture": 22.5
+      }
+    },
+    {
+      "photo": "tshirt_b40637fa",
+      "truth": "pattern",
+      "pattern": "pattern",
+      "tone": "dark",
+      "secondaryColor": "white",
+      "shares": {
+        "main": "black",
+        "mainShare": 0.93,
+        "second": "white",
+        "secondShare": 0.07,
+        "texture": 54.8
+      }
+    },
+    {
+      "photo": "tshirt_bb140894",
+      "truth": "solid",
+      "pattern": "solid",
+      "tone": "mid",
+      "shares": {
+        "main": "gray",
+        "mainShare": 0.62,
+        "second": "gray",
+        "secondShare": 0.38,
+        "texture": 12.9
+      }
+    },
+    {
+      "photo": "tshirt_e330e5fa",
+      "truth": "pattern",
+      "pattern": "pattern",
+      "tone": "dark",
+      "secondaryColor": "blue",
+      "shares": {
+        "main": "black",
+        "mainShare": 0.77,
+        "second": "blue",
+        "secondShare": 0.23,
+        "texture": 45.6
+      }
+    },
+    {
+      "photo": "tshirt_fbb96cbf",
+      "truth": "pattern",
+      "pattern": "pattern",
+      "tone": "mid",
+      "secondaryColor": "pink",
+      "shares": {
+        "main": "red",
+        "mainShare": 0.93,
+        "second": "pink",
+        "secondShare": 0.07,
+        "texture": 42.4
+      }
+    }
+  ]
+}
