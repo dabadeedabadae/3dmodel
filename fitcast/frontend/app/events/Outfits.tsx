@@ -7,14 +7,17 @@ import {
   getRecommendations, getSavedOutfits, mediaUrl, saveOutfit, sendOutfitFeedback,
 } from '../../lib/api';
 import { EVENT_LABELS, GARMENT_LABELS, colorById, formatTemp } from '../../lib/labels';
+import OutfitFigure from '../looks/OutfitFigure';
 
-const INNER_TOPS = ['TSHIRT', 'SHIRT', 'SWEATER', 'HOODIE', 'CARDIGAN', 'DRESS'];
-const LAYERS = ['BLAZER', 'JACKET', 'COAT'];
+const INNER_TOPS = ['TSHIRT', 'SHIRT', 'SWEATER', 'HOODIE', 'DRESS'];
+/** outermost first; a cardigan is a layer since I-77 (the engine puts it over a top) */
+const LAYERS = ['COAT', 'JACKET', 'BLAZER', 'CARDIGAN'];
 const BOTTOMS = ['PANTS', 'JEANS', 'SHORTS', 'SKIRT'];
 
 /** /fitting shows one top and one bottom: the outer layer when there is one (its 3D figures carry a T-shirt underneath), else the inner top, and the bottom. */
 export function fittingHref(items: OutfitItem[]) {
-  const top = items.find((i) => LAYERS.includes(i.type)) ?? items.find((i) => INNER_TOPS.includes(i.type));
+  const layer = LAYERS.map((t) => items.find((i) => i.type === t)).find(Boolean);
+  const top = layer ?? items.find((i) => INNER_TOPS.includes(i.type));
   const bottom = items.find((i) => BOTTOMS.includes(i.type));
   const q = new URLSearchParams();
   if (top) q.set('top', top.id);
@@ -96,9 +99,12 @@ export function OutfitSuggestions({ target, onAuthExpired, onSaved }: {
       <Link href="/profile">Add items →</Link></p>
       : <ol className="outfit-list">{data.outfits.map((o, n) => <li key={o.key} className={`outfit-card${busy === o.key ? ' is-busy' : ''}`}>
         <div className="outfit-head"><span className="outfit-rank">#{n + 1}</span><span className="outfit-score" title="Rule-based match score, not a guarantee">{Math.round(o.score)}<small>/100</small></span></div>
+        {/* the outfit on the 3D mannequin (I-77); the item photos stay below it */}
+        <div className="outfit-figure"><OutfitFigure items={o.items} wear="all" view="threequarter" /></div>
         <ItemStrip items={o.items} />
         <p className="outfit-why">{o.explanation}</p>
-        <p className="outfit-breakdown"><span>Occasion {Math.round(o.breakdown.occasion)}</span><span>Weather {Math.round(o.breakdown.weather)}</span><span>Colors {Math.round(o.breakdown.color)}</span></p>
+        <p className="outfit-breakdown"><span>Occasion {Math.round(o.breakdown.occasion)}</span><span>Weather {Math.round(o.breakdown.weather)}</span><span>Colors {Math.round(o.breakdown.color)}</span>
+          {(o.breakdown.factors ?? []).map((f) => <span key={f.key}>{f.points ? `${f.points > 0 ? '+' : '−'}${Math.abs(f.points)} ` : ''}{f.note}</span>)}</p>
         <div className="outfit-actions">
           <button type="button" disabled={!!busy} aria-pressed={o.feedback === 'LIKE'} className={o.feedback === 'LIKE' ? 'is-like' : ''} onClick={() => vote(o, 'LIKE')}>👍 Fits</button>
           <button type="button" disabled={!!busy} onClick={() => vote(o, 'DISLIKE')}>👎 Doesn&apos;t fit</button>

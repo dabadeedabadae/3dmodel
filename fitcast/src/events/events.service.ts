@@ -17,6 +17,8 @@ const MAX_AHEAD_MS = 2 * 365 * 24 * 3600_000;
 export type EventWeather =
   | { status: 'FORECAST'; city: string; cityFromProfile: boolean; location: string; temperatureC: number;
       precipitation: Precipitation; weatherCode: number; description: string;
+      /** wind, km/h, and the local hour of the event in its city (I-79) */
+      windKph?: number; localHour: number;
       /** the request the recommendation service will get for this event (contract: weather + eventType) */
       recommendationInput: { weather: { temperatureC: number; precipitation: Precipitation }; eventType: EventType } }
   | { status: 'PAST' | 'TOO_FAR'; city: string; cityFromProfile: boolean; location: string; forecastFrom?: string }
@@ -52,6 +54,7 @@ export class EventsService {
       return {
         status: 'FORECAST', city, cityFromProfile, location, temperatureC: w.temperatureC,
         precipitation: w.precipitation, weatherCode: w.weatherCode, description: w.description,
+        ...(w.windKph !== undefined ? { windKph: w.windKph } : {}), localHour: w.localHour,
         recommendationInput: {
           weather: { temperatureC: w.temperatureC, precipitation: w.precipitation }, eventType: event.eventType,
         },

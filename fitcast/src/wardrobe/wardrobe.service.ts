@@ -1,13 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import type { Garment3d } from './garment3d';
+import type { ItemAttributes } from './attributes';
 import { unlink } from 'node:fs/promises';
 import { join } from 'node:path';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateWardrobeItemDto, UpdateWardrobeItemDto } from './dto/wardrobe-item.dto';
 
 const itemSelect = {
-  id: true, type: true, dominantColor: true, fitTag: true, imageUrl: true, garment3d: true, textureUrl: true,
+  id: true, type: true, dominantColor: true, fitTag: true, imageUrl: true, garment3d: true, textureUrl: true, attributes: true,
   createdAt: true, updatedAt: true,
 } as const;
 
@@ -21,11 +22,13 @@ export class WardrobeService {
     });
   }
 
-  create(userId: string, dto: CreateWardrobeItemDto, imageUrl: string, garment3d: Garment3d | null = null, textureUrl: string | null = null) {
+  create(userId: string, dto: CreateWardrobeItemDto, imageUrl: string, garment3d: Garment3d | null = null, textureUrl: string | null = null,
+    attributes: ItemAttributes | null = null) {
     return this.prisma.wardrobeItem.create({
       data: {
         userId, type: dto.type, dominantColor: dto.dominantColor, fitTag: dto.fitTag, imageUrl, textureUrl,
         garment3d: garment3d ? (garment3d as unknown as Prisma.InputJsonValue) : Prisma.JsonNull,
+        attributes: attributes && Object.keys(attributes).length ? (attributes as Prisma.InputJsonValue) : Prisma.JsonNull,
       },
       select: itemSelect,
     });

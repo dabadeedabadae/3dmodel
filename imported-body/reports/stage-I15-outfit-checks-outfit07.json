@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-11-24T14:50:00.913Z",
+  "generatedAt": "2026-11-25T02:50:16.127Z",
   "asset": "outfit-outfit07",
   "shells": 15,
-  "boundaryEdges": 475,
+  "boundaryEdges": 495,
   "sourceAsymmetry_mm": 16.8,
   "usableSliderRange": {
-    "chest": 1,
-    "waist": 0.4,
+    "chest": 0.81,
+    "waist": 0.27,
     "hip": 1,
-    "shoulders": 1,
+    "shoulders": 0.4,
     "arms": 1,
     "thighs": 1
   },
@@ -21,52 +21,52 @@
       "flipped": 0
     },
     {
-      "label": "chest=-1",
+      "label": "chest=-0.81",
       "ok": true,
       "fails": [],
-      "flipped": 2.375
+      "flipped": 7.125
     },
     {
-      "label": "chest=1",
+      "label": "chest=0.81",
       "ok": true,
       "fails": [],
-      "flipped": 6.0625
+      "flipped": 3
     },
     {
-      "label": "waist=-0.4",
+      "label": "waist=-0.27",
       "ok": true,
       "fails": [],
-      "flipped": 1.3125
+      "flipped": 3
     },
     {
-      "label": "waist=0.4",
-      "ok": true,
-      "fails": [],
-      "flipped": 0.0625
-    },
-    {
-      "label": "hip=-1",
-      "ok": true,
-      "fails": [],
-      "flipped": 0.125
-    },
-    {
-      "label": "hip=1",
+      "label": "waist=0.27",
       "ok": true,
       "fails": [],
       "flipped": 1
     },
     {
-      "label": "shoulders=-1",
+      "label": "hip=-1",
       "ok": true,
       "fails": [],
-      "flipped": 14
+      "flipped": 3
     },
     {
-      "label": "shoulders=1",
+      "label": "hip=1",
       "ok": true,
       "fails": [],
-      "flipped": 7
+      "flipped": 2
+    },
+    {
+      "label": "shoulders=-0.4",
+      "ok": true,
+      "fails": [],
+      "flipped": 1
+    },
+    {
+      "label": "shoulders=0.4",
+      "ok": true,
+      "fails": [],
+      "flipped": 2
     },
     {
       "label": "arms=-1",
@@ -96,13 +96,13 @@
       "label": "все по максимуму",
       "ok": true,
       "fails": [],
-      "flipped": 10.8125
+      "flipped": 3
     },
     {
       "label": "все по минимуму",
       "ok": true,
       "fails": [],
-      "flipped": 16
+      "flipped": 16.3125
     },
     {
       "label": "height 150",

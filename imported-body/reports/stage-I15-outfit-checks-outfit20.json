@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-11-24T15:02:53.163Z",
+  "generatedAt": "2026-11-25T03:00:45.437Z",
   "asset": "outfit-outfit20",
   "shells": 8,
-  "boundaryEdges": 273,
+  "boundaryEdges": 269,
   "sourceAsymmetry_mm": 16.8,
   "usableSliderRange": {
-    "chest": 0.63,
-    "waist": 0.06,
+    "chest": 0.04,
+    "waist": 0.28,
     "hip": 1,
     "shoulders": 1,
     "arms": 1,
@@ -21,52 +21,52 @@
       "flipped": 0
     },
     {
-      "label": "chest=-0.63",
-      "ok": true,
-      "fails": [],
-      "flipped": 3.8125
-    },
-    {
-      "label": "chest=0.63",
-      "ok": true,
-      "fails": [],
-      "flipped": 5.1875
-    },
-    {
-      "label": "waist=-0.06",
+      "label": "chest=-0.04",
       "ok": true,
       "fails": [],
       "flipped": 0
     },
     {
-      "label": "waist=0.06",
+      "label": "chest=0.04",
       "ok": true,
       "fails": [],
       "flipped": 0
+    },
+    {
+      "label": "waist=-0.28",
+      "ok": true,
+      "fails": [],
+      "flipped": 1.1875
+    },
+    {
+      "label": "waist=0.28",
+      "ok": true,
+      "fails": [],
+      "flipped": 0.875
     },
     {
       "label": "hip=-1",
       "ok": true,
       "fails": [],
-      "flipped": 0.1875
+      "flipped": 2.5625
     },
     {
       "label": "hip=1",
       "ok": true,
       "fails": [],
-      "flipped": 0.0625
+      "flipped": 0
     },
     {
       "label": "shoulders=-1",
       "ok": true,
       "fails": [],
-      "flipped": 9
+      "flipped": 7.0625
     },
     {
       "label": "shoulders=1",
       "ok": true,
       "fails": [],
-      "flipped": 2
+      "flipped": 6
     },
     {
       "label": "arms=-1",
@@ -96,13 +96,13 @@
       "label": "все по максимуму",
       "ok": true,
       "fails": [],
-      "flipped": 7.625
+      "flipped": 7.0625
     },
     {
       "label": "все по минимуму",
       "ok": true,
       "fails": [],
-      "flipped": 11.5625
+      "flipped": 11.875
     },
     {
       "label": "height 150",

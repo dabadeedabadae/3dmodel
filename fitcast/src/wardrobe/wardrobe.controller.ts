@@ -13,6 +13,7 @@ import { CreateWardrobeItemDto, UpdateWardrobeItemDto } from './dto/wardrobe-ite
 import { IMAGE_MIME, MAX_IMAGE_BYTES, WARDROBE_UPLOAD_DIR } from './wardrobe.constants';
 import { WardrobeService, removeUpload } from './wardrobe.service';
 import { parseGarment3d } from './garment3d';
+import { parseAttributes } from './attributes';
 
 interface UploadedImage { buffer: Buffer; mimetype: string; size: number }
 
@@ -49,6 +50,7 @@ export class WardrobeController {
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: CreateWardrobeItemDto,
     @Body('garment3d') garment3dRaw: string | undefined,
+    @Body('attributes') attributesRaw: string | undefined,
     @UploadedFiles() files: { image?: UploadedImage[]; texture?: UploadedImage[] } = {},
   ) {
     const file = files.image?.[0], tex = files.texture?.[0];
@@ -56,6 +58,8 @@ export class WardrobeController {
     if (!file || !kind) throw new BadRequestException('Add a photo of the item (JPEG, PNG or WebP, up to 8 MB).');
     if (!!tex !== (garment3dRaw !== undefined)) throw new BadRequestException('The texture and the 3D garment package must be sent together.');
     const garment3d = garment3dRaw !== undefined ? parseGarment3d(garment3dRaw) : null;
+    // optional: what the photo says beyond type and colour (I-77)
+    const attributes = attributesRaw !== undefined ? parseAttributes(attributesRaw) : null;
     // a package describes one kind of garment: a T-shirt package only for T-shirts, a long-sleeved top package for
     // shirts, hoodies, sweaters and the outer layers that have a 3D figure (blazer, jacket, coat, I-75), a trousers
     // package for trousers and jeans (I-53, I-63)
@@ -76,7 +80,7 @@ export class WardrobeController {
     try {
       const imageUrl = await save(file.buffer, kind);
       const textureUrl = tex && texKind ? await save(tex.buffer, texKind) : null;
-      return await this.wardrobe.create(user.id, dto, imageUrl, garment3d, textureUrl);
+      return await this.wardrobe.create(user.id, dto, imageUrl, garment3d, textureUrl, attributes);
     } catch (err) {
       for (const u of saved) await removeUpload(u);
       throw err;

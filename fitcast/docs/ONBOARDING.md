@@ -110,7 +110,7 @@ fitcast/
 ├── prisma/schema.prisma      User, UserEvent, WardrobeItem (garment3d JSON, textureUrl), SavedOutfit, OutfitItem,
 │                             OutfitFeedback
 ├── prisma/migrations/        migrations; create new ones with `npx prisma migrate dev --name ...`
-├── test/*.e2e.cjs            API e2e: `npm run test:wardrobe`, `test:admin`, `test:events`, `test:recommendations`
+├── test/*.e2e.cjs            API e2e: `npm run test:wardrobe`, `test:admin`, `test:events`, `test:recommendations`, `test:feed`
 ├── scripts/
 │   ├── seed-demo.cjs         demo accounts and items (photos in scripts/demo-photos, CC0)
 │   ├── set-admin.cjs         grant or revoke admin rights: `npm run admin:set -- email [revoke]`
@@ -133,10 +133,12 @@ fitcast/
     ├── lib/
     │   ├── api.ts            all API requests, token in localStorage, types
     │   ├── labels.ts         labels for types, colors, fit
-    │   ├── garment/*         in-browser photo analysis (mask, points, color)
+    │   ├── garment/*         in-browser photo analysis: mask, points, color (analyze), garment type (category,
+    │   │                     MobileNetV2), pattern / second color / tone (attributes)
     │   └── figure/*          3D: figure loading, slider deformation, photo transfer (photoMap.ts)
     └── public/
-        ├── models/           PREBUILT 3D figures: figures.json + figure-01..11.json
+        ├── models/           PREBUILT 3D figures: figures.json + figure-01..25.json
+        ├── shop/             product pictures per garment type for "Complete the look" (tinted on the page)
         ├── catalog/          garment catalog for the admin panel (`npm run catalog:sync` in the root)
         ├── ml/u2netp.onnx    mask model (Apache-2.0, license alongside)
         ├── garments/         sample garments from photos (CC0)
@@ -150,11 +152,11 @@ fitcast/
   the output (`frontend/public/models`). Never edit these JSON files by hand: rebuild them only in the
   3D module (`npm run ib:outfits` at the repository root), then run `npm run figure:sync` in `fitcast/`.
 - **What's available.** `figures.json` lists the figures and the clothing type on each:
-  - 01 — T-shirt + pants;
-  - 02 and 07 — hoodie / zip hoodie + pants;
-  - 03 and 04 — shirt + pants;
-  - 05 — V-neck sweater, 06 — cardigan, 08 — blazer, 09 — jacket, 10 — coat (all + pants);
-  - 11 — women's figure, T-shirt + pants (`sex: 'female'` in `figures.json`).
+  - men (16): 01 T-shirt, 02 hoodie, 03 and 04 shirts, 05 V-neck sweater, 06 cardigan, 07 zip hoodie, 08 blazer,
+    09 jacket, 10 coat, 14 sweatshirt, 15 long-sleeve tee, 17 polo, 19 turtleneck, 20 denim jacket, 24 bomber;
+  - women (9, `sex: 'female'` in `figures.json`): 11 T-shirt (the base), 12 blazer, 13 cardigan, 16 V-neck
+    sweater, 18 coat, 21 fitted T-shirt, 22 blouse, 23 crew sweater, 25 denim jacket;
+  - every figure wears pants; the full list with labels is `imported-body/assets/outfits.json`.
 - **Men / Women.** The fitting room has a Men / Women switch (shown when a women's figure exists). "Realistic
   proportions" (height and weight drive the whole body) use men's ANSUR II measurements only, so on the women's
   figure that option is disabled and the shape is set with the sliders directly.
@@ -231,7 +233,7 @@ fitcast/
   otherwise a reason such as `TOO_FAR` or `NO_CITY`).
 - **"What to wear today".** Pick an occasion and get outfits for the current weather in the profile city.
 - **Outfit suggestions.** `src/recommendations` sends the user's wardrobe (type, color, fit, id only) plus weather and
-  occasion to `recommendation-service`. Its rule-based engine (`app/engine/catalog.py`, `recommend.py`, no ML)
+  occasion to `recommendation-service`. Its rule-based engine (`app/engine/catalog.py`, `recommend.py`, `factors.py`; `learn.py` trains a small per-user taste model on the swipes)
   combines items with hard rules per occasion and weather and returns 3–5 outfits with a short reason. The user can
   like / dislike an outfit (`PUT /recommendations/feedback`; disliked outfits are hidden for that event) and save it
   (`/outfits`, shown on `/events` as saved outfits).
@@ -246,6 +248,9 @@ npm run test:wardrobe
 npm run test:admin
 npm run test:events            # events + weather against a local Open-Meteo mock, no internet needed
 npm run test:recommendations   # needs recommendation-service running (e.g. the docker container on :8010)
+npm run test:feed              # the swipe feed, taste and the men filter; same requirement
+# all e2e inside the API container (its native modules are built for Linux):
+#   docker compose cp test api:/app/test && docker compose exec api sh -c 'touch .env && node --test test/*.e2e.cjs'
 cd frontend
 npx tsc --noEmit
 npx next build
@@ -260,6 +265,10 @@ separately (ESLint 9, flat config).
 
 - Recommendations are rules only: garment formality and warmth come from the item type (`catalog.py`); per-item
   style, season or warmth aren't stored yet. The recommendation service has no authentication of its own.
+- The swipe feed (`/looks`, I-77) learns taste per garment type and colour only; "complete the look" suggests a
+  type + colour with a catalogue picture, not a real product — there is no shop integration. The shopping list
+  lives in the browser (localStorage). "Men / Women" is a feed filter, not a profile field (the profile is the
+  teammates' zone).
 - Photo analysis runs on the main thread, freezing the UI for about 2 s. A candidate for a Web Worker.
 - No manual point editing for pants (tops have it).
 - Photos are stored on the API's disk (`uploads/`, the `uploads` volume in Docker), not in the cloud.

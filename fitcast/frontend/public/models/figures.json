@@ -121,8 +121,8 @@
   {
     "id": "figure-07",
     "url": "/models/figure-07.json",
-    "vertices": 8647,
-    "triangles": 16815,
+    "vertices": 8593,
+    "triangles": 16679,
     "label": "Zip hoodie and pants",
     "garments": {
       "top": "HOODIE",
@@ -130,10 +130,10 @@
     },
     "inner": "TSHIRT",
     "range": {
-      "chest": 1,
-      "waist": 0.4,
+      "chest": 0.81,
+      "waist": 0.27,
       "hip": 1,
-      "shoulders": 1,
+      "shoulders": 0.4,
       "arms": 1,
       "thighs": 1
     }
@@ -161,8 +161,8 @@
   {
     "id": "figure-09",
     "url": "/models/figure-09.json",
-    "vertices": 5415,
-    "triangles": 10599,
+    "vertices": 5387,
+    "triangles": 10507,
     "label": "Jacket and pants",
     "garments": {
       "top": "JACKET",
@@ -170,7 +170,7 @@
     },
     "inner": "TSHIRT",
     "range": {
-      "chest": 0.4,
+      "chest": 0.22,
       "waist": 1,
       "hip": 1,
       "shoulders": 1,
@@ -373,8 +373,8 @@
   {
     "id": "figure-19",
     "url": "/models/figure-19.json",
-    "vertices": 5830,
-    "triangles": 11495,
+    "vertices": 5829,
+    "triangles": 11493,
     "label": "Turtleneck and pants",
     "garments": {
       "top": "SWEATER",
@@ -385,8 +385,8 @@
       "sleeve": "long"
     },
     "range": {
-      "chest": 0.72,
-      "waist": 0.25,
+      "chest": 0.11,
+      "waist": 0.6,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,
@@ -408,8 +408,8 @@
       "sleeve": "long"
     },
     "range": {
-      "chest": 0.63,
-      "waist": 0.06,
+      "chest": 0.04,
+      "waist": 0.28,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,
@@ -443,8 +443,8 @@
   {
     "id": "figure-22",
     "url": "/models/figure-22.json",
-    "vertices": 6558,
-    "triangles": 12624,
+    "vertices": 6534,
+    "triangles": 12576,
     "label": "Blouse and pants",
     "garments": {
       "top": "SHIRT",
@@ -456,8 +456,8 @@
       "sleeve": "long"
     },
     "range": {
-      "chest": 0.8,
-      "waist": 0.18,
+      "chest": 0.7,
+      "waist": 0.36,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,
@@ -491,7 +491,7 @@
   {
     "id": "figure-24",
     "url": "/models/figure-24.json",
-    "vertices": 6860,
+    "vertices": 6862,
     "triangles": 13226,
     "label": "Bomber jacket and pants",
     "garments": {
@@ -503,10 +503,10 @@
       "sleeve": "long"
     },
     "range": {
-      "chest": 0.9,
-      "waist": 0.3,
+      "chest": 0.45,
+      "waist": 0.32,
       "hip": 1,
-      "shoulders": 0.72,
+      "shoulders": 0.4,
       "arms": 1,
       "thighs": 1
     }
@@ -515,7 +515,7 @@
     "id": "figure-25",
     "url": "/models/figure-25.json",
     "vertices": 7837,
-    "triangles": 15143,
+    "triangles": 15141,
     "label": "Denim jacket and pants",
     "garments": {
       "top": "JACKET",

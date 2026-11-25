@@ -1,4 +1,4 @@
-"""Coarse knowledge about garment types, colours and occasions (rules v1, no machine learning).
+"""Coarse knowledge about garment types, colours and occasions (the rules; the trained taste model is learn.py).
 
 Everything here is inferred from the garment *type* only: the wardrobe has no per-item style, season or warmth yet,
 so a light jacket and a down jacket look the same to the engine. These tables are the place to tune the rules.
@@ -28,7 +28,8 @@ GARMENTS: dict[GarmentType, GarmentInfo] = {
     G.SHIRT: GarmentInfo(TOP, 4, 1, frozenset({"CLASSIC", "CASUAL"}), "shirt"),
     G.SWEATER: GarmentInfo(TOP, 3, 2, frozenset({"CASUAL", "CLASSIC"}), "sweater"),
     G.HOODIE: GarmentInfo(TOP, 1, 2, frozenset({"SPORT", "CASUAL"}), "hoodie"),
-    G.CARDIGAN: GarmentInfo(TOP, 3, 2, frozenset({"CASUAL", "CLASSIC"}), "cardigan"),
+    # I-77: a cardigan is a layer over a T-shirt, shirt or sweater, not the only top
+    G.CARDIGAN: GarmentInfo(OUTER, 3, 2, frozenset({"CASUAL", "CLASSIC"}), "cardigan"),
     G.BLAZER: GarmentInfo(OUTER, 5, 0,frozenset({"CLASSIC"}), "blazer"),
     G.JACKET: GarmentInfo(OUTER, 2, 2, frozenset({"CASUAL", "SPORT"}), "jacket"),
     G.COAT: GarmentInfo(OUTER, 4, 3, frozenset({"CLASSIC"}), "coat"),
@@ -51,6 +52,9 @@ BRIGHT = frozenset(set(C) - NEUTRAL - MUTED)
 CALM = frozenset({C.NAVY, C.GRAY, C.BLACK, C.BEIGE, C.WHITE, C.BROWN})
 #: shoes in these colours show dirt in rain and snow
 LIGHT = frozenset({C.WHITE, C.BEIGE, C.YELLOW, C.PINK})
+#: dark and light tones (I-79): the balance of an outfit, and what suits an evening
+DARK = frozenset({C.BLACK, C.NAVY, C.BROWN, C.PURPLE})
+LIGHT_TONE = frozenset({C.WHITE, C.BEIGE, C.YELLOW, C.PINK})
 
 # ---- occasions ------------------------------------------------------------------------------------------------
 
@@ -88,7 +92,7 @@ EVENTS: dict[EventType, EventRules] = {
     E.WEDDING_GUEST: EventRules("Wedding (guest)", 5, forbidden=SMART_ONLY | {G.TSHIRT, G.JEANS, G.JACKET},
                                 preferred=frozenset({G.BLAZER, G.SHIRT, G.DRESS}),
                                 forbidden_colors=frozenset({C.WHITE}), bright_ok=True, styles=frozenset({"CLASSIC"})),
-    E.INTERVIEW: EventRules("Job interview", 4.5, forbidden=SMART_ONLY | {G.TSHIRT},
+    E.INTERVIEW: EventRules("Job interview", 4.5, forbidden=SMART_ONLY | {G.TSHIRT, G.JEANS},
                             preferred=frozenset({G.BLAZER, G.SHIRT, G.PANTS}), palette=CALM, styles=frozenset({"CLASSIC"})),
     E.PARTY: EventRules("Party", 3, forbidden=frozenset({G.SHORTS}), bright_ok=True, styles=frozenset({"CASUAL", "CLASSIC"})),
     E.THEATER: EventRules("Theater or restaurant", 4, forbidden=SMART_ONLY, preferred=frozenset({G.SHIRT, G.DRESS, G.BLAZER}),

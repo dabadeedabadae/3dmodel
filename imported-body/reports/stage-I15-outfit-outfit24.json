@@ -3,16 +3,16 @@
   "source": "imported-body/out/layered-outfit24.json",
   "statureGiven_cm": 175,
   "weld": {
-    "before": 6860,
-    "after": 6860,
+    "before": 6862,
+    "after": 6862,
     "triangles": 13226,
     "refusedNonManifold": 0,
     "seamSnapped": 81,
-    "mirrorPaired": 2935,
-    "surfaceSymmetrised": 1223,
+    "mirrorPaired": 2939,
+    "surfaceSymmetrised": 1225,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
-    "windingFixed": 699,
+    "windingFixed": 714,
     "windingDropped": 89
   },
   "symmetry_mm": {
@@ -85,10 +85,10 @@
     },
     {
       "kind": "top",
-      "vertices": 2762,
+      "vertices": 2764,
       "triangles": 5095,
       "y_cm": [
-        99.2,
+        87.4,
         151.1
       ]
     }
@@ -103,7 +103,7 @@
     "armpit": 132.4,
     "shoulder": 143.3,
     "neck_base": 141.7,
-    "topHem": 99.2
+    "topHem": 87.4
   },
   "fractions_of_H": {
     "height": 1,
@@ -115,7 +115,7 @@
     "armpit": 0.756,
     "shoulder": 0.819,
     "neck_base": 0.81,
-    "topHem": 0.567
+    "topHem": 0.5
   },
-  "note": "Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: она сгенерирована одетой."
+  "note": "Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: исходная модель сделана одетой."
 }

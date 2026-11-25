@@ -26,6 +26,8 @@ interface Props {
   prints?: Print[];
   /** false in a scrolling grid of cards (admin): the wheel scrolls the page instead of zooming the model */
   zoom?: boolean;
+  /** false: no orbiting — drags go to the page (the swipe card of /looks moves instead, I-77) */
+  interactive?: boolean;
 }
 
 const VIEW_DIR: Record<View, [number, number]> = {
@@ -37,7 +39,7 @@ const VIEW_DIR: Record<View, [number, number]> = {
  * shadow-only floor, filmic tone mapping, flat-shaded faceted surface. Positions are re-derived from the
  * canonical base on every slider change; GPU resources are released on unmount.
  */
-export default function FigureViewer({ figure, weights, heightCm, palette, view, viewNonce, prints = [], zoom = true }: Props) {
+export default function FigureViewer({ figure, weights, heightCm, palette, view, viewNonce, prints = [], zoom = true, interactive = true }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const ctx = useRef<{
     renderer: THREE.WebGLRenderer; scene: THREE.Scene; camera: THREE.PerspectiveCamera;
@@ -99,6 +101,8 @@ export default function FigureViewer({ figure, weights, heightCm, palette, view,
     controls.maxDistance = 8;
     controls.maxPolarAngle = Math.PI * 0.55;
     controls.enableZoom = zoom;
+    controls.enabled = interactive;
+    if (!interactive) renderer.domElement.style.touchAction = 'pan-y';
 
     let frame = 0;
     const render = () => {

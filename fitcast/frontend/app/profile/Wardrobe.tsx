@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import {
-  ApiError, FitTag, GarmentType, WardrobeItem, addWardrobeItem, deleteWardrobeItem, getWardrobe, mediaUrl,
+  ApiError, FitTag, GarmentType, ItemAttributes, WardrobeItem, addWardrobeItem, deleteWardrobeItem, getWardrobe, mediaUrl,
   updateWardrobeItem,
 } from '../../lib/api';
 import { COLORS, FIT_LABELS, GARMENT_LABELS, colorById, nearestPaletteColor, suggestColor } from '../../lib/labels';
 import type { Analysis } from '../../lib/garment/analyze';
 import type { TypeSuggestion } from '../../lib/garment/garmentType';
-import type { PhotoPointName } from '../../lib/figure/photoMap';
+import type { PhotoAnchors, PhotoPointName } from '../../lib/figure/photoMap';
+import { sleeveFromAnchors } from '../../lib/garment/look';
 
 const MAX_BYTES = 8 * 1024 * 1024;
 /** garment types whose photo is turned into a 3D print on the figure */
@@ -129,6 +130,10 @@ export default function Wardrobe({ onCountChange, onAuthExpired }: {
                   <div className="wardrobe-info">
                     <strong>{GARMENT_LABELS[item.type]}</strong>
                     <span className="wardrobe-color"><i style={{ background: color?.hex ?? '#ccc' }} aria-hidden />{color?.label ?? item.dominantColor}</span>
+                    {item.attributes && (item.attributes.pattern === 'pattern' || item.attributes.sleeve) && <span className="wardrobe-attr-line">
+                      {[item.attributes.pattern === 'pattern' && `pattern${item.attributes.secondaryColor ? ` with ${colorById(item.attributes.secondaryColor)?.label.toLowerCase() ?? item.attributes.secondaryColor}` : ''}`,
+                        item.attributes.sleeve && `${item.attributes.sleeve} sleeve`].filter(Boolean).join(' · ')}
+                    </span>}
                     <Link className="wardrobe-try" href={`/fitting?item=${encodeURIComponent(item.id)}`}>Try on in 3D →</Link>
                   </div>
                   <div className="wardrobe-actions">
@@ -225,6 +230,8 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
   const [typeHint, setTypeHint] = useState<TypeSuggestion | null>(null);
   const [typeSource, setTypeSource] = useState<'photo' | 'user' | null>(null);
   const [classifying, setClassifying] = useState(false);
+  /** what the photo says beyond type and colour (I-77): pattern, second colour, sleeve, tone — for the recommendations */
+  const [attrs, setAttrs] = useState<ItemAttributes | null>(null);
   const runId = useRef(0);
   const pickId = useRef(0);
   const input = useRef<HTMLInputElement>(null);
@@ -245,6 +252,20 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
       if (id === runId.current) setAnalysisError(e instanceof Error ? e.message : 'Could not analyze the photo.');
     }).finally(() => { if (id === runId.current) setAnalysing(false); });
   }, [file, type, classifying]);
+
+  // pattern, second colour and tone from the photo: from the cut-out texture when the photo was analysed (the
+  // background cannot leak in), else from the photo with its border colour as the background; the sleeve from the
+  // analysed points of a top
+  useEffect(() => {
+    if (!file || analysing || classifying) { if (!file) setAttrs(null); return; }
+    let active = true;
+    import('../../lib/garment/attributes').then((m) => m.describePhoto(file, analysis ? { blob: analysis.texture, baseColor: analysis.pkg.baseColor } : undefined)).then((a) => {
+      if (!active || !a) return;
+      const sleeve = analysis && analysis.pkg.category !== 'pants' && !['BLAZER', 'JACKET', 'COAT'].includes(type) ? sleeveFromAnchors(analysis.pkg.anchors as PhotoAnchors) ?? undefined : undefined;
+      setAttrs({ pattern: a.pattern, tone: a.tone, ...(a.secondaryColor ? { secondaryColor: a.secondaryColor } : {}), ...(sleeve ? { sleeve } : {}) });
+    }).catch(() => { if (active) setAttrs(null); });
+    return () => { active = false; };
+  }, [file, analysis, analysing, classifying, type]);
 
   // Object URLs must be released when the preview changes or the form closes.
   useEffect(() => () => { if (preview) URL.revokeObjectURL(preview); }, [preview]);
@@ -278,7 +299,7 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
     setSaving(true); setError('');
     try {
       const model = analysis && ANALYSABLE.includes(type) ? { pkg: analysis.pkg, texture: analysis.texture } : undefined;
-      onAdded(await addWardrobeItem(file, { type, dominantColor: color, fitTag }, model));
+      onAdded(await addWardrobeItem(file, { type, dominantColor: color, fitTag }, model, attrs ?? undefined));
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) { onAuthExpired(); return; }
       setError(err instanceof Error ? err.message : 'Could not add the item.');
@@ -337,6 +358,19 @@ function AddItemForm({ onCancel, onAdded, onAuthExpired }: {
                 {colorHint && colorHint === color ? ' (suggested from the photo, please check)' : ''}
               </small>
             </div>
+            {attrs && <div className="field wardrobe-attrs">
+              <span className="wardrobe-label" id="new-attrs-label">Also from the photo</span>
+              <div className="wardrobe-segment" role="radiogroup" aria-labelledby="new-attrs-label">
+                {(['solid', 'pattern'] as const).map((p) => <button type="button" key={p} role="radio" aria-checked={attrs.pattern === p}
+                  className={attrs.pattern === p ? 'is-active' : ''} onClick={() => setAttrs({ ...attrs, pattern: p, ...(p === 'solid' ? { secondaryColor: undefined } : {}) })}>
+                  {p === 'solid' ? 'One color' : 'Pattern / print'}</button>)}
+              </div>
+              <small>
+                {[attrs.pattern === 'pattern' && attrs.secondaryColor && `with ${colorById(attrs.secondaryColor)?.label.toLowerCase()}`,
+                  attrs.sleeve && `${attrs.sleeve} sleeve`, attrs.tone && `${attrs.tone} tone`].filter(Boolean).join(' · ')}
+                {' '}— used to match outfits; please check.
+              </small>
+            </div>}
             <div className="field">
               <span className="wardrobe-label" id="new-fit-label">How it fits</span>
               <div className="wardrobe-segment" role="radiogroup" aria-labelledby="new-fit-label">

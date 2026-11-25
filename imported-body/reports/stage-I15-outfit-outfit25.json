@@ -5,11 +5,11 @@
   "weld": {
     "before": 7916,
     "after": 7837,
-    "triangles": 15143,
+    "triangles": 15141,
     "refusedNonManifold": 0,
-    "seamSnapped": 211,
+    "seamSnapped": 212,
     "mirrorPaired": 3235,
-    "surfaceSymmetrised": 2826,
+    "surfaceSymmetrised": 2819,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
     "windingFixed": 0,
@@ -86,10 +86,10 @@
     {
       "kind": "top",
       "vertices": 2999,
-      "triangles": 5798,
+      "triangles": 5796,
       "y_cm": [
-        106.6,
-        152.3
+        100.7,
+        152.2
       ]
     }
   ],
@@ -103,7 +103,7 @@
     "armpit": 133.4,
     "shoulder": 143.5,
     "neck_base": 143.5,
-    "topHem": 106.6
+    "topHem": 100.7
   },
   "fractions_of_H": {
     "height": 1,
@@ -115,7 +115,7 @@
     "armpit": 0.762,
     "shoulder": 0.82,
     "neck_base": 0.82,
-    "topHem": 0.609
+    "topHem": 0.575
   },
-  "note": "Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: она сгенерирована одетой."
+  "note": "Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: исходная модель сделана одетой."
 }

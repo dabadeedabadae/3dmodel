@@ -145,3 +145,121 @@ def test_http_endpoint_returns_recommendations(wardrobe):
     assert data["status"] == "OK" and len(data["outfits"]) == 3
     ids = {i["id"] for i in wardrobe}
     assert all(set(o["items"]) <= ids for o in data["outfits"])
+
+
+# ---- I-77: layers, taste, exclusions, purchase suggestions ----------------------------------------------------------
+
+def run_req(wardrobe, event, t, p="NONE", limit=5, **extra):
+    req = RecommendationRequest.model_validate(
+        {"wardrobe": wardrobe, "weather": {"temperatureC": t, "precipitation": p}, "eventType": event, "limit": limit,
+         **extra})
+    res = recommend(req)
+    by_id = {str(i["id"]): i for i in wardrobe}
+    return res, [[by_id[str(x)] for x in o.items] for o in res.outfits]
+
+
+def test_cardigan_is_a_layer_over_a_top_not_the_only_top():
+    w = [item("CARDIGAN", "gray"), item("TSHIRT", "white"), item("JEANS", "blue"), item("SHOES", "black")]
+    _, outfits = run_req(w, "CASUAL", 15, limit=10)
+    assert outfits
+    for o in outfits:
+        assert types(o) & {"TSHIRT"}, "every outfit has a real top under the cardigan"
+
+
+def test_casual_jacket_never_goes_over_a_blazer():
+    w = [item("SHIRT", "white"), item("PANTS", "gray"), item("BLAZER", "navy"), item("JACKET", "black"),
+         item("COAT", "beige"), item("CARDIGAN", "gray"), item("SHOES", "black")]
+    _, outfits = run_req(w, "INTERVIEW", 2, limit=10)
+    assert outfits
+    for o in outfits:
+        assert not {"BLAZER", "JACKET"} <= types(o)
+
+
+def test_interview_has_no_jeans(wardrobe):
+    _, outfits = run_req(wardrobe, "INTERVIEW", 18, limit=10)
+    assert all("JEANS" not in types(o) for o in outfits)
+
+
+def test_taste_moves_liked_colors_up():
+    w = [item("TSHIRT", "navy"), item("TSHIRT", "gray"), item("JEANS", "blue"), item("SHOES", "black")]
+    res_plain, plain = run_req(w, "CASUAL", 18)
+    res_taste, liked = run_req(w, "CASUAL", 18, taste={"colors": {"gray": 1.0}, "types": {}})
+    assert any(i["dominantColor"] == "gray" and i["type"] == "TSHIRT" for i in liked[0])
+    assert res_taste.outfits[0].breakdown.taste is not None and res_taste.outfits[0].breakdown.taste > 0
+    assert res_plain.outfits[0].breakdown.taste is None
+
+
+def test_excluded_outfits_are_not_returned_again():
+    w = [item("TSHIRT", "navy"), item("TSHIRT", "gray"), item("JEANS", "blue"), item("SHOES", "black")]
+    res, outfits = run_req(w, "CASUAL", 18, limit=10)
+    first = [str(x) for x in res.outfits[0].items]
+    res2, _ = run_req(w, "CASUAL", 18, limit=10, exclude=[first])
+    assert all(sorted(str(x) for x in o.items) != sorted(first) for o in res2.outfits)
+
+
+def test_purchase_suggestion_raises_the_score_and_is_not_owned():
+    # two bright colours clash on a date: a neutral item should be suggested
+    w = [item("TSHIRT", "red"), item("JEANS", "green"), item("SHOES", "orange")]
+    res, _ = run_req(w, "BUSINESS", 18, suggest=True)
+    s = res.outfits[0].suggestion
+    assert s is not None and s.gain >= 3 and s.score > res.outfits[0].score
+    assert (s.type, s.dominantColor) not in {(i["type"], i["dominantColor"]) for i in w}
+    assert s.reason
+
+
+def test_suggestion_adds_shoes_when_there_are_none():
+    w = [item("SHIRT", "white"), item("PANTS", "gray")]
+    res, _ = run_req(w, "BUSINESS", 18, suggest=True)
+    s = res.outfits[0].suggestion
+    assert s is not None
+
+
+def test_suggestion_skips_disliked_types_and_colors():
+    w = [item("TSHIRT", "red"), item("JEANS", "green"), item("SHOES", "orange")]
+    res, _ = run_req(w, "BUSINESS", 18, suggest=True,
+                     taste={"types": {"PANTS": -0.5, "SHIRT": -0.5}, "colors": {"black": -0.4, "white": -0.4}})
+    for o in res.outfits:
+        s = o.suggestion
+        if s is not None:
+            assert s.type not in ("PANTS", "SHIRT") and s.dominantColor not in ("black", "white")
+
+
+def test_avoided_types_are_never_used_or_suggested():
+    w = [item("TSHIRT", "white"), item("SKIRT", "beige"), item("JEANS", "blue"), item("SHOES", "black")]
+    res, outfits = run_req(w, "DATE", 18, limit=10, suggest=True, avoidTypes=["SKIRT", "DRESS"])
+    assert outfits
+    for o, rec in zip(outfits, res.outfits):
+        assert "SKIRT" not in types(o)
+        assert rec.suggestion is None or rec.suggestion.type not in ("SKIRT", "DRESS")
+
+
+def item_x(type_, color, **extra):
+    it = item(type_, color); it.update(extra); return it
+
+
+def test_two_patterns_lose_to_one_pattern():
+    w = [item_x("SHIRT", "white", pattern="pattern", secondaryColor="blue"), item_x("SHIRT", "white"),
+         item_x("PANTS", "gray", pattern="pattern", secondaryColor="black"), item_x("SHOES", "black")]
+    res, outfits = run_req(w, "CASUAL", 18, limit=10)
+    best = outfits[0]
+    assert sum(1 for i in best if i.get("pattern") == "pattern") <= 1
+
+
+def test_short_sleeve_in_the_cold_prefers_long_sleeve():
+    w = [item_x("TSHIRT", "white", sleeve="short"), item_x("TSHIRT", "gray", sleeve="long"), item("JEANS", "blue"),
+         item("SHOES", "black")]
+    _, outfits = run_req(w, "CASUAL", 9)
+    assert any(i.get("sleeve") == "long" for i in outfits[0])
+
+
+def test_pattern_costs_a_formal_occasion():
+    w = [item_x("SHIRT", "white", pattern="pattern", secondaryColor="navy"), item_x("SHIRT", "blue"),
+         item("PANTS", "gray"), item("BLAZER", "navy"), item("SHOES", "black")]
+    _, outfits = run_req(w, "INTERVIEW", 18)
+    assert not any(i.get("pattern") == "pattern" for i in outfits[0])
+
+
+def test_unknown_attribute_values_are_rejected():
+    with pytest.raises(Exception):
+        RecommendationRequest.model_validate({"wardrobe": [item_x("SHIRT", "white", pattern="paisley")],
+                                             "weather": {"temperatureC": 18, "precipitation": "NONE"}, "eventType": "CASUAL"})

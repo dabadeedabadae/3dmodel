@@ -1,0 +1,15 @@
+{
+ "TSHIRT": "/shop/tshirt.webp",
+ "SHIRT": "/shop/shirt.webp",
+ "SWEATER": "/shop/sweater.webp",
+ "HOODIE": "/shop/hoodie.webp",
+ "CARDIGAN": "/shop/cardigan.webp",
+ "BLAZER": "/shop/blazer.webp",
+ "JACKET": "/shop/jacket.webp",
+ "COAT": "/shop/coat.webp",
+ "PANTS": "/shop/pants.webp",
+ "JEANS": "/shop/jeans.webp",
+ "SHORTS": "/shop/shorts.webp",
+ "SKIRT": "/shop/skirt.webp",
+ "DRESS": "/shop/dress.webp"
+}

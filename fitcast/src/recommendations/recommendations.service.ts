@@ -9,7 +9,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Precipitation, WeatherService } from '../weather/weather.service';
 import { FeedbackDto, RecommendDto, SaveOutfitDto } from './dto';
 
-const itemSelect = { id: true, type: true, dominantColor: true, fitTag: true, imageUrl: true } as const;
+// garment3d and textureUrl: the photo print, so an outfit can be shown on the 3D mannequin (I-77)
+const itemSelect = { id: true, type: true, dominantColor: true, fitTag: true, imageUrl: true, garment3d: true, textureUrl: true, attributes: true } as const;
 const outfitSelect = {
   id: true, name: true, eventType: true, explanation: true, createdAt: true,
   event: { select: { id: true, title: true, startsAt: true } },
@@ -20,11 +21,50 @@ const outfitSelect = {
 export const outfitKey = (ids: string[]) => [...ids].sort().join(',');
 const contextOf = (eventId: string | null | undefined, eventType: EventType) => (eventId ? `event:${eventId}` : `type:${eventType}`);
 
+export interface PurchaseSuggestion {
+  type: string; dominantColor: string; replaces: string | null; score: number; gain: number; reason: string;
+}
 interface ServiceOutfit {
   items: string[]; score: number; explanation: string;
-  breakdown: { occasion: number; weather: number; color: number; fit: number | null };
+  breakdown: {
+    occasion: number; weather: number; color: number; fit: number | null; taste?: number | null;
+    style?: number | null; factors?: { key: string; points: number; note: string }[];
+  };
+  suggestion?: PurchaseSuggestion | null;
 }
-interface ServiceResponse { status: 'OK' | 'NO_VALID_OUTFITS'; outfits: ServiceOutfit[]; warnings: string[] }
+/** −1 (avoids) … +1 (loves), per garment type and colour */
+export interface Taste { types: Record<string, number>; colors: Record<string, number> }
+
+/**
+ * The user's taste from every like and dislike (I-77): each judged outfit adds ±1 to the types and colours of its
+ * items; a weight is the sum over (count + 2), so one swipe moves it a little and many agreeing swipes a lot.
+ * Items deleted since are skipped.
+ */
+export function tasteFrom(feedback: { itemIds: string[]; verdict: 'LIKE' | 'DISLIKE' }[],
+  items: Map<string, { type: string; dominantColor: string }>): { taste: Taste; votes: number } {
+  const acc = { types: new Map<string, [number, number]>(), colors: new Map<string, [number, number]>() };
+  const add = (m: Map<string, [number, number]>, k: string, v: number) => {
+    const [sum, n] = m.get(k) ?? [0, 0]; m.set(k, [sum + v, n + 1]);
+  };
+  for (const f of feedback) {
+    const v = f.verdict === 'LIKE' ? 1 : -1;
+    for (const id of f.itemIds) {
+      const it = items.get(id);
+      if (!it) continue;
+      add(acc.types, it.type, v); add(acc.colors, it.dominantColor, v);
+    }
+  }
+  const norm = (m: Map<string, [number, number]>) => Object.fromEntries([...m].map(([k, [sum, n]]) =>
+    [k, Math.max(-1, Math.min(1, Number((sum / (n + 2)).toFixed(3))))]).filter(([, w]) => w !== 0));
+  return { taste: { types: norm(acc.types), colors: norm(acc.colors) }, votes: feedback.length };
+}
+/** the taste model trained on the user's swipes (I-79); null until there are enough of them */
+export interface TasteModelInfo { examples: number; likes: number; prefers: string[]; avoids: string[] }
+interface ServiceResponse {
+  status: 'OK' | 'NO_VALID_OUTFITS'; outfits: ServiceOutfit[]; warnings: string[]; tasteModel?: TasteModelInfo | null;
+}
+/** outfits saved within this many days count as "worn this week" */
+const RECENT_DAYS = 7;
 
 const NO_FORECAST: Record<string, string> = {
   TOO_FAR: 'The forecast for this event is not available yet (it covers the next 16 days).',
@@ -54,6 +94,7 @@ export class RecommendationsService {
       return {
         eventId: event.id, eventTitle: event.title, startsAt: event.startsAt, eventType: event.eventType,
         location: w.location, temperatureC: w.temperatureC, precipitation: w.precipitation, description: w.description,
+        windKph: w.windKph, hour: w.localHour,
       };
     }
     let city = dto.city;
@@ -67,6 +108,7 @@ export class RecommendationsService {
       eventId: null, eventTitle: null, startsAt: null, eventType: dto.eventType!,
       location: [location.name, location.country].filter(Boolean).join(', '),
       temperatureC: current.temperatureC, precipitation: current.precipitation, description: current.description,
+      windKph: current.windKph, hour: current.localHour,
     };
   }
 
@@ -97,29 +139,60 @@ export class RecommendationsService {
       where: { userId }, take: 200, orderBy: { createdAt: 'desc' }, select: itemSelect,
     });
     const context = contextOf(ctx.eventId, ctx.eventType);
-    const [feedback, saved] = await Promise.all([
-      this.prisma.outfitFeedback.findMany({ where: { userId, context }, select: { outfitKey: true, verdict: true } }),
+    const [feedback, allFeedback, saved, recent] = await Promise.all([
+      this.prisma.outfitFeedback.findMany({ where: { userId, context }, select: { outfitKey: true, verdict: true, itemIds: true } }),
+      this.prisma.outfitFeedback.findMany({
+        where: { userId }, orderBy: { updatedAt: 'desc' }, take: 500, select: { itemIds: true, verdict: true },
+      }),
       this.prisma.savedOutfit.findMany({
         where: ctx.eventId ? { userId, eventId: ctx.eventId } : { userId, eventId: null, eventType: ctx.eventType },
+        select: { id: true, items: { select: { itemId: true } } },
+      }),
+      // what was saved (worn) in the last week, for any occasion: repeating it costs a little (I-79)
+      this.prisma.savedOutfit.findMany({
+        where: { userId, createdAt: { gte: new Date(Date.now() - RECENT_DAYS * 24 * 3600_000) } },
         select: { id: true, items: { select: { itemId: true } } },
       }),
     ]);
     const verdicts = new Map(feedback.map((f) => [f.outfitKey, f.verdict]));
     const savedIds = new Map(saved.map((s) => [outfitKey(s.items.map((i) => i.itemId)), s.id]));
 
+    const byId = new Map(wardrobe.map((i) => [i.id, i]));
+    const { taste, votes } = tasteFrom(allFeedback, byId);
+    const feed = dto.feed === true;
     // the service sees metadata only (no photos, e-mail or tokens), exactly the contract fields
     const result = await this.callService({
-      wardrobe: wardrobe.map(({ id, type, dominantColor, fitTag }) => ({ id, type, dominantColor, fitTag })),
-      weather: { temperatureC: ctx.temperatureC, precipitation: ctx.precipitation },
-      eventType: ctx.eventType, limit: 5,
+      wardrobe: wardrobe.map(({ id, type, dominantColor, fitTag, attributes }) => {
+        // what the photo said about the item (I-77): pattern, second colour, sleeve — only the contract's fields
+        const at = (attributes ?? {}) as { pattern?: string; secondaryColor?: string; sleeve?: string };
+        return { id, type, dominantColor, fitTag, ...(at.pattern ? { pattern: at.pattern } : {}),
+          ...(at.secondaryColor ? { secondaryColor: at.secondaryColor } : {}), ...(at.sleeve ? { sleeve: at.sleeve } : {}) };
+      }),
+      weather: {
+        temperatureC: ctx.temperatureC, precipitation: ctx.precipitation,
+        ...(ctx.windKph !== undefined ? { windKph: ctx.windKph } : {}),
+      },
+      hour: ctx.hour,
+      // every swipe whose items still exist: the taste model is trained on them (I-79)
+      history: allFeedback.filter((f) => f.itemIds.every((id) => byId.has(id)))
+        .map((f) => ({ items: f.itemIds, liked: f.verdict === 'LIKE' })),
+      // an outfit saved for this very context is the one being looked at, not a repeat
+      recentItems: [...new Set(recent.filter((s) => !saved.some((x) => x.id === s.id))
+        .flatMap((s) => s.items.map((i) => i.itemId)).filter((id) => byId.has(id)))].slice(0, 200),
+      // at least 5 so disliked outfits can be hidden and still leave `limit` to show; the feed asks for 10
+      eventType: ctx.eventType, limit: feed ? 10 : Math.min(10, Math.max(5, limit)),
+      ...(votes ? { taste } : {}),
+      ...(dto.wear === 'men' ? { avoidTypes: ['SKIRT', 'DRESS'] } : {}),
+      // the feed shows each outfit once: everything already swiped in this context is left out
+      ...(feed ? { exclude: feedback.map((f) => f.itemIds).filter((ids) => ids.every((id) => byId.has(id))), suggest: true } : {}),
     });
-    const byId = new Map(wardrobe.map((i) => [i.id, i]));
     const all = result.outfits
       .filter((o) => o.items.every((id) => byId.has(id)))
       .map((o) => {
         const key = outfitKey(o.items);
         return { key, items: o.items.map((id) => byId.get(id)!), score: o.score, breakdown: o.breakdown,
-          explanation: o.explanation, feedback: verdicts.get(key) ?? null, savedOutfitId: savedIds.get(key) ?? null };
+          explanation: o.explanation, feedback: verdicts.get(key) ?? null, savedOutfitId: savedIds.get(key) ?? null,
+          suggestion: o.suggestion ?? null };
       });
     // outfits the user said "doesn't fit" to, for this event or occasion, are not shown again
     const visible = all.filter((o) => o.feedback !== 'DISLIKE');
@@ -127,12 +200,17 @@ export class RecommendationsService {
       context: {
         eventId: ctx.eventId, eventTitle: ctx.eventTitle, startsAt: ctx.startsAt, eventType: ctx.eventType,
         location: ctx.location,
-        weather: { temperatureC: ctx.temperatureC, precipitation: ctx.precipitation as Precipitation, description: ctx.description },
+        weather: {
+          temperatureC: ctx.temperatureC, precipitation: ctx.precipitation as Precipitation, description: ctx.description,
+          windKph: ctx.windKph ?? null, hour: ctx.hour,
+        },
       },
       status: visible.length ? 'OK' : 'NO_VALID_OUTFITS',
-      outfits: visible.slice(0, limit),
+      outfits: visible.slice(0, feed ? 10 : limit),
       hiddenDisliked: all.length - visible.length,
       warnings: result.warnings,
+      taste: { ...taste, votes },
+      tasteModel: result.tasteModel ?? null,
     };
   }
 

@@ -19,19 +19,25 @@ export interface DailyWeather {
 }
 export interface CurrentWeather {
   time: string; temperatureC: number; weatherCode: number; precipitation: Precipitation; description: string;
+  /** wind at 10 m, km/h (I-79); absent when the weather service did not send it */
+  windKph?: number;
+  /** local hour in the city, 0–23 (I-79) */
+  localHour: number;
 }
 export interface Forecast {
   location: WeatherLocation;
   current: CurrentWeather;
   daily: DailyWeather[];
   /** hourly series in UTC milliseconds, used to find the weather at an event's time */
-  hourly: { utcMs: number[]; temperatureC: number[]; weatherCode: number[] };
+  hourly: { utcMs: number[]; temperatureC: number[]; weatherCode: number[]; windKph?: number[] };
+  /** the city's offset from UTC, to tell the local hour of an event */
+  utcOffsetMs: number;
 }
 
 /** Weather at a point in time, already in the shape the recommendation contract expects. */
 export type WeatherAt =
   | { status: 'FORECAST'; location: WeatherLocation; temperatureC: number; weatherCode: number;
-      precipitation: Precipitation; description: string }
+      precipitation: Precipitation; description: string; windKph?: number; localHour: number }
   | { status: 'PAST' | 'TOO_FAR'; location: WeatherLocation; forecastFrom?: string };
 
 /** WMO weather interpretation codes (Open-Meteo `weather_code`) → contract precipitation. */
@@ -126,8 +132,8 @@ export class WeatherService {
     if (cached) return cached;
     const params = new URLSearchParams({
       latitude: String(location.latitude), longitude: String(location.longitude),
-      current: 'temperature_2m,weather_code',
-      hourly: 'temperature_2m,weather_code',
+      current: 'temperature_2m,weather_code,wind_speed_10m',
+      hourly: 'temperature_2m,weather_code,wind_speed_10m',
       daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',
       timezone: 'auto', forecast_days: String(FORECAST_DAYS),
     });
@@ -136,6 +142,7 @@ export class WeatherService {
     // Open-Meteo returns local wall-clock times without an offset ("2026-11-23T14:00") when timezone=auto
     const toUtc = (local: string) => Date.parse(`${local}Z`) - offsetMs;
     const round = (n: number) => Math.round(n * 10) / 10;
+    const localHour = (utcMs: number) => new Date(utcMs + offsetMs).getUTCHours();
     try {
       const c = data.current, h = data.hourly, d = data.daily;
       const forecast: Forecast = {
@@ -144,6 +151,8 @@ export class WeatherService {
           time: new Date(toUtc(c.time)).toISOString(), temperatureC: round(c.temperature_2m),
           weatherCode: c.weather_code, precipitation: precipitationFromCode(c.weather_code),
           description: describeCode(c.weather_code),
+          ...(Number.isFinite(c.wind_speed_10m) ? { windKph: round(c.wind_speed_10m) } : {}),
+          localHour: localHour(toUtc(c.time)),
         },
         daily: (d.time as string[]).map((date, i) => ({
           date, minC: round(d.temperature_2m_min[i]), maxC: round(d.temperature_2m_max[i]),
@@ -155,7 +164,9 @@ export class WeatherService {
           utcMs: (h.time as string[]).map(toUtc),
           temperatureC: (h.temperature_2m as number[]).map(round),
           weatherCode: h.weather_code as number[],
+          ...(Array.isArray(h.wind_speed_10m) ? { windKph: (h.wind_speed_10m as number[]).map(round) } : {}),
         },
+        utcOffsetMs: offsetMs,
       };
       if (!Number.isFinite(forecast.current.temperatureC) || !forecast.hourly.utcMs.length) throw new Error('empty');
       this.forecastCache.set(key, forecast, FORECAST_TTL);
@@ -183,6 +194,8 @@ export class WeatherService {
     return {
       status: 'FORECAST', location: f.location, temperatureC: f.hourly.temperatureC[best]!, weatherCode: code,
       precipitation: precipitationFromCode(code), description: describeCode(code),
+      ...(Number.isFinite(f.hourly.windKph?.[best]) ? { windKph: f.hourly.windKph![best]! } : {}),
+      localHour: new Date(t + f.utcOffsetMs).getUTCHours(),
     };
   }
 }

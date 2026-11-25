@@ -1,6 +1,6 @@
 import { Transform, Type } from 'class-transformer';
 import {
-  ArrayMaxSize, ArrayMinSize, ArrayUnique, IsArray, IsEnum, IsIn, IsInt, IsNumber, IsOptional, IsString, IsUUID, Max,
+  ArrayMaxSize, ArrayMinSize, ArrayUnique, IsArray, IsBoolean, IsEnum, IsIn, IsInt, IsNumber, IsOptional, IsString, IsUUID, Max,
   MaxLength, Min, ValidateIf,
 } from 'class-validator';
 import { EventType, FeedbackVerdict } from '@prisma/client';
@@ -29,8 +29,18 @@ export class RecommendDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  @Max(5)
+  @Max(10)
   limit?: number;
+
+  /** the swipe feed (I-77): up to 10 outfits not judged yet in this context, each with a purchase suggestion */
+  @IsOptional()
+  @IsBoolean()
+  feed?: boolean;
+
+  /** whose clothes to suggest (I-77): "men" leaves out skirts and dresses, "women" and "all" leave nothing out */
+  @IsOptional()
+  @IsIn(['men', 'women', 'all'])
+  wear?: 'men' | 'women' | 'all';
 }
 
 export class FeedbackDto {
