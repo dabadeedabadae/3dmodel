@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-25T15:16:29.810Z",
+  "generatedAt": "2026-11-25T18:37:07.807Z",
   "figures": [
     "outfit01",
     "outfit02",
@@ -32,7 +32,10 @@
     "outfit29",
     "outfit30",
     "outfit31",
-    "outfit32"
+    "outfit32",
+    "outfit33",
+    "outfit34",
+    "outfit35"
   ],
   "photos": [
     {
@@ -215,6 +218,33 @@
         "errors": [
           "рукав развёрнут не от плеча к манжете: corr = 0.12"
         ]
+      },
+      "outfit33": {
+        "verdict": "WARN",
+        "front": 2237,
+        "sleeves": 504,
+        "base": 2739,
+        "corrX": 0.99,
+        "corrY": 0.751,
+        "corrSleeve": 0.191,
+        "folded": 12,
+        "errors": [
+          "снимок перевёрнут или смазан: corr(y, v) = 0.75",
+          "рукав развёрнут не от плеча к манжете: corr = 0.19"
+        ]
+      },
+      "outfit34": {
+        "verdict": "WARN",
+        "front": 2257,
+        "sleeves": 136,
+        "base": 3159,
+        "corrX": 0.961,
+        "corrY": 0.898,
+        "corrSleeve": 0.204,
+        "folded": 0,
+        "errors": [
+          "рукав развёрнут не от плеча к манжете: corr = 0.20"
+        ]
       }
     },
     {
@@ -364,6 +394,28 @@
         "corrY": 0.998,
         "corrSleeve": 0.924,
         "folded": 21,
+        "errors": []
+      },
+      "outfit33": {
+        "verdict": "PASS",
+        "front": 2237,
+        "sleeves": 504,
+        "base": 2739,
+        "corrX": 0.993,
+        "corrY": 0.991,
+        "corrSleeve": 0.971,
+        "folded": 13,
+        "errors": []
+      },
+      "outfit34": {
+        "verdict": "PASS",
+        "front": 2257,
+        "sleeves": 136,
+        "base": 3159,
+        "corrX": 0.986,
+        "corrY": 0.998,
+        "corrSleeve": 0.961,
+        "folded": 0,
         "errors": []
       }
     },
@@ -685,6 +737,36 @@
         "errors": []
       },
       "outfit32": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.984,
+        "corrY": 0.977,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit33": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.984,
+        "corrY": 0.977,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit34": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.984,
+        "corrY": 0.977,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit35": {
         "verdict": "PASS",
         "front": 113,
         "legs": 94,
@@ -1021,6 +1103,36 @@
         "corrY": 0.964,
         "folded": 0,
         "errors": []
+      },
+      "outfit33": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.998,
+        "corrY": 0.964,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit34": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.998,
+        "corrY": 0.964,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit35": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.998,
+        "corrY": 0.964,
+        "folded": 0,
+        "errors": []
       }
     },
     {
@@ -1341,6 +1453,36 @@
         "errors": []
       },
       "outfit32": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.986,
+        "corrY": 0.995,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit33": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.986,
+        "corrY": 0.995,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit34": {
+        "verdict": "PASS",
+        "front": 113,
+        "legs": 94,
+        "base": 325,
+        "corrX": 0.986,
+        "corrY": 0.995,
+        "folded": 0,
+        "errors": []
+      },
+      "outfit35": {
         "verdict": "PASS",
         "front": 113,
         "legs": 94,

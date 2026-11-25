@@ -3,13 +3,13 @@
   "source": "imported-body/out/layered-outfit29.json",
   "statureGiven_cm": 175,
   "weld": {
-    "before": 6559,
-    "after": 6480,
-    "triangles": 12241,
+    "before": 6699,
+    "after": 6620,
+    "triangles": 12721,
     "refusedNonManifold": 0,
-    "seamSnapped": 170,
-    "mirrorPaired": 1878,
-    "surfaceSymmetrised": 1553,
+    "seamSnapped": 175,
+    "mirrorPaired": 2018,
+    "surfaceSymmetrised": 1602,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
     "windingFixed": 0,
@@ -85,8 +85,8 @@
     },
     {
       "kind": "top",
-      "vertices": 1548,
-      "triangles": 2768,
+      "vertices": 1620,
+      "triangles": 3104,
       "y_cm": [
         107.3,
         149
@@ -94,20 +94,20 @@
     },
     {
       "kind": "top",
-      "vertices": 47,
-      "triangles": 64,
+      "vertices": 81,
+      "triangles": 136,
       "y_cm": [
-        117.1,
-        131.9
+        117.7,
+        131.2
       ]
     },
     {
       "kind": "top",
-      "vertices": 47,
-      "triangles": 64,
+      "vertices": 81,
+      "triangles": 136,
       "y_cm": [
-        117.1,
-        131.9
+        117.7,
+        131.2
       ]
     }
   ],

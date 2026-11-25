@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-25T03:07:53.742Z",
+  "generatedAt": "2026-11-25T18:36:44.797Z",
   "stature_cm": 175,
   "figures": [
     {
@@ -71,7 +71,7 @@
           "prealigned": false,
           "sleeve": "long",
           "armScale": 0.93,
-          "depthShift_cm": 0
+          "depthShift_cm": -0.1
         },
         "bottom": {
           "source": "raw-outfit02",
@@ -80,21 +80,21 @@
         },
         "vertices": 1483,
         "triangles": 2840,
-        "cuffVerticesTightened": 99,
-        "sleeveVerticesFloored": 170,
+        "cuffVerticesTightened": 98,
+        "sleeveVerticesFloored": 156,
         "collarVerticesHugged": 0,
         "collarVerticesCleared": 0,
         "collarChordFacesDropped": 0,
         "bottomPush": {
-          "pushedVertexMoves": 166,
+          "pushedVertexMoves": 165,
           "rounds": 5,
           "maxPush_cm": 5.8,
           "stuckVertices": 2
         },
         "topPush": {
-          "pushedVertexMoves": 367,
+          "pushedVertexMoves": 420,
           "rounds": 6,
-          "maxPush_cm": 5.4,
+          "maxPush_cm": 5.6,
           "stuckVertices": 0
         },
         "bottomRelax": {
@@ -102,8 +102,8 @@
           "squashedVerticesLeft": 0
         },
         "topRelax": {
-          "relaxedVertices": 226,
-          "squashedVerticesLeft": 14
+          "relaxedVertices": 294,
+          "squashedVerticesLeft": 18
         },
         "smallShellVerticesCarried": 0,
         "bottomResidual": {
@@ -127,18 +127,18 @@
       "landmarks_cm": {
         "height": 175,
         "ankle": 13.3,
-        "crotch": 77.4,
-        "waistband": 92.2,
-        "hip": 83.6,
+        "crotch": 77.2,
+        "waistband": 92.4,
+        "hip": 84,
         "chest": 128,
         "armpit": 132.4,
         "shoulder": 143.3,
         "neck_base": 141.7,
-        "topHem": 90
+        "topHem": 90.2
       },
       "symmetry_mm": {
-        "mean": 0.14,
-        "max": 7
+        "mean": 0.13,
+        "max": 6.86
       },
       "weld": {
         "before": 1483,
@@ -146,14 +146,14 @@
         "triangles": 2840,
         "refusedNonManifold": 0,
         "seamSnapped": 50,
-        "mirrorPaired": 886,
-        "surfaceSymmetrised": 819,
+        "mirrorPaired": 885,
+        "surfaceSymmetrised": 818,
         "zeroAreaDropped": 0,
         "nonManifoldDropped": 0,
         "windingFixed": 0,
         "windingDropped": 0
       },
-      "sliderRange": "chest ±1, waist ±1, hip ±1, shoulders ±0.5, arms ±1, thighs ±1"
+      "sliderRange": "chest ±0.81, waist ±1, hip ±1, shoulders ±0.5, arms ±1, thighs ±1"
     },
     {
       "file": "outfit-03.fbx",
@@ -173,7 +173,7 @@
           "source": "raw-outfit03",
           "prealigned": false,
           "sleeve": "long",
-          "armScale": 1.144,
+          "armScale": 1.148,
           "depthShift_cm": 1.4
         },
         "bottom": {
@@ -181,32 +181,32 @@
           "prealigned": false,
           "depthShift_cm": 1.9
         },
-        "vertices": 1513,
-        "triangles": 2807,
+        "vertices": 1510,
+        "triangles": 2801,
         "cuffVerticesTightened": 0,
-        "sleeveVerticesFloored": 122,
-        "collarVerticesHugged": 15,
+        "sleeveVerticesFloored": 152,
+        "collarVerticesHugged": 13,
         "collarVerticesCleared": 0,
         "collarChordFacesDropped": 0,
         "bottomPush": {
-          "pushedVertexMoves": 177,
-          "rounds": 5,
-          "maxPush_cm": 5.4,
+          "pushedVertexMoves": 180,
+          "rounds": 4,
+          "maxPush_cm": 5.8,
           "stuckVertices": 0
         },
         "topPush": {
-          "pushedVertexMoves": 550,
+          "pushedVertexMoves": 522,
           "rounds": 6,
           "maxPush_cm": 8.8,
           "stuckVertices": 0
         },
         "bottomRelax": {
-          "relaxedVertices": 61,
+          "relaxedVertices": 60,
           "squashedVerticesLeft": 0
         },
         "topRelax": {
-          "relaxedVertices": 653,
-          "squashedVerticesLeft": 79
+          "relaxedVertices": 620,
+          "squashedVerticesLeft": 76
         },
         "smallShellVerticesCarried": 87,
         "bottomResidual": {
@@ -214,7 +214,7 @@
           "crossingsWithVisible": 0
         },
         "topResidual": {
-          "verticesInsideBody": 3,
+          "verticesInsideBody": 4,
           "crossingsWithVisible": 0
         }
       },
@@ -225,38 +225,38 @@
         "shoe_left": 92,
         "arm_left": 138,
         "bottom": 251,
-        "top": 661
+        "top": 658
       },
       "landmarks_cm": {
         "height": 175,
         "ankle": 13.3,
-        "crotch": 77.1,
-        "waistband": 100,
-        "hip": 83.8,
+        "crotch": 77.3,
+        "waistband": 100.2,
+        "hip": 84,
         "chest": 128,
         "armpit": 132.4,
         "shoulder": 143.3,
         "neck_base": 141.7,
-        "topHem": 87.3
+        "topHem": 87.4
       },
       "symmetry_mm": {
-        "mean": 0.16,
-        "max": 6.9
+        "mean": 0.17,
+        "max": 6.06
       },
       "weld": {
-        "before": 1513,
-        "after": 1506,
-        "triangles": 2807,
+        "before": 1510,
+        "after": 1503,
+        "triangles": 2801,
         "refusedNonManifold": 0,
-        "seamSnapped": 43,
-        "mirrorPaired": 912,
-        "surfaceSymmetrised": 724,
+        "seamSnapped": 40,
+        "mirrorPaired": 906,
+        "surfaceSymmetrised": 714,
         "zeroAreaDropped": 0,
         "nonManifoldDropped": 0,
         "windingFixed": 0,
         "windingDropped": 0
       },
-      "sliderRange": "chest ±1, waist ±0.72, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+      "sliderRange": "chest ±1, waist ±0.51, hip ±1, shoulders ±1, arms ±1, thighs ±1"
     },
     {
       "file": "outfit-11.fbx",
@@ -2281,6 +2281,947 @@
         "windingDropped": 0
       },
       "sliderRange": "chest ±1, waist ±1, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+    },
+    {
+      "file": "outfit26 (garment only)",
+      "id": "outfit26",
+      "status": "PASS",
+      "notes": [],
+      "garments": {
+        "top": "TSHIRT",
+        "bottom": "PANTS",
+        "label": "Long-sleeve tee and pants"
+      },
+      "assembly": "garment-only",
+      "compose": {
+        "base": "outfit11",
+        "innerLayer": true,
+        "top": {
+          "source": "garment-outfit26",
+          "prealigned": true,
+          "sleeve": "long",
+          "armScale": 1.139,
+          "depthShift_cm": 0
+        },
+        "bottom": {
+          "source": "outfit11"
+        },
+        "vertices": 7957,
+        "triangles": 15265,
+        "cuffVerticesTightened": 0,
+        "sleeveVerticesFloored": 364,
+        "collarVerticesHugged": 0,
+        "collarVerticesCleared": 220,
+        "collarChordFacesDropped": 8,
+        "bottomPush": null,
+        "topPush": {
+          "pushedVertexMoves": 1471,
+          "rounds": 4,
+          "maxPush_cm": 5.9,
+          "stuckVertices": 0
+        },
+        "bottomRelax": null,
+        "topRelax": {
+          "relaxedVertices": 1889,
+          "squashedVerticesLeft": 311
+        },
+        "smallShellVerticesCarried": 0,
+        "bottomResidual": {
+          "verticesInsideBody": 12,
+          "crossingsWithVisible": 0
+        },
+        "topResidual": {
+          "verticesInsideBody": 0,
+          "crossingsWithVisible": 0
+        }
+      },
+      "parts": {
+        "arm_right": 176,
+        "arm_left": 174,
+        "head": 240,
+        "shoe_right": 96,
+        "shoe_left": 99,
+        "inner": 3817,
+        "bottom": 236,
+        "top": 3039
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 10.9,
+        "crotch": 88.1,
+        "waistband": 102.3,
+        "hip": 92.7,
+        "chest": 129,
+        "armpit": 133.4,
+        "shoulder": 143.5,
+        "neck_base": 143.5,
+        "topHem": 89
+      },
+      "symmetry_mm": {
+        "mean": 0.09,
+        "max": 3.4
+      },
+      "weld": {
+        "before": 7957,
+        "after": 7877,
+        "triangles": 15265,
+        "refusedNonManifold": 0,
+        "seamSnapped": 205,
+        "mirrorPaired": 3275,
+        "surfaceSymmetrised": 2957,
+        "zeroAreaDropped": 0,
+        "nonManifoldDropped": 0,
+        "windingFixed": 0,
+        "windingDropped": 0
+      },
+      "sliderRange": "chest ±1, waist ±0.72, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+    },
+    {
+      "file": "outfit27 (garment only)",
+      "id": "outfit27",
+      "status": "PASS",
+      "notes": [],
+      "garments": {
+        "top": "JACKET",
+        "bottom": "PANTS",
+        "label": "Puffer jacket and pants"
+      },
+      "assembly": "garment-only",
+      "compose": {
+        "base": "outfit11",
+        "innerLayer": true,
+        "top": {
+          "source": "garment-outfit27",
+          "prealigned": true,
+          "sleeve": "long",
+          "armScale": 1.402,
+          "depthShift_cm": 0
+        },
+        "bottom": {
+          "source": "outfit11"
+        },
+        "vertices": 8041,
+        "triangles": 15373,
+        "cuffVerticesTightened": 72,
+        "sleeveVerticesFloored": 3,
+        "collarVerticesHugged": 0,
+        "collarVerticesCleared": 353,
+        "collarChordFacesDropped": 4,
+        "bottomPush": null,
+        "topPush": {
+          "pushedVertexMoves": 145,
+          "rounds": 3,
+          "maxPush_cm": 1.8,
+          "stuckVertices": 0
+        },
+        "bottomRelax": null,
+        "topRelax": {
+          "relaxedVertices": 1340,
+          "squashedVerticesLeft": 110
+        },
+        "smallShellVerticesCarried": 0,
+        "bottomResidual": {
+          "verticesInsideBody": 12,
+          "crossingsWithVisible": 0
+        },
+        "topResidual": {
+          "verticesInsideBody": 0,
+          "crossingsWithVisible": 0
+        }
+      },
+      "parts": {
+        "arm_right": 176,
+        "arm_left": 174,
+        "head": 240,
+        "shoe_right": 96,
+        "shoe_left": 99,
+        "inner": 3817,
+        "bottom": 236,
+        "top": 3124
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 10.9,
+        "crotch": 88.1,
+        "waistband": 102.3,
+        "hip": 92.7,
+        "chest": 129,
+        "armpit": 133.4,
+        "shoulder": 143.5,
+        "neck_base": 143.5,
+        "topHem": 95.5
+      },
+      "symmetry_mm": {
+        "mean": 0.09,
+        "max": 4.61
+      },
+      "weld": {
+        "before": 8041,
+        "after": 7962,
+        "triangles": 15373,
+        "refusedNonManifold": 0,
+        "seamSnapped": 205,
+        "mirrorPaired": 3360,
+        "surfaceSymmetrised": 2823,
+        "zeroAreaDropped": 0,
+        "nonManifoldDropped": 0,
+        "windingFixed": 0,
+        "windingDropped": 0
+      },
+      "sliderRange": "chest ±1, waist ±1, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+    },
+    {
+      "file": "outfit28 (garment only)",
+      "id": "outfit28",
+      "status": "PASS",
+      "notes": [],
+      "garments": {
+        "top": "COAT",
+        "bottom": "PANTS",
+        "label": "Trench coat and pants"
+      },
+      "assembly": "garment-only",
+      "compose": {
+        "base": "outfit11",
+        "innerLayer": true,
+        "top": {
+          "source": "garment-outfit28",
+          "prealigned": true,
+          "sleeve": "long",
+          "armScale": 1.113,
+          "depthShift_cm": 0
+        },
+        "bottom": {
+          "source": "outfit11"
+        },
+        "vertices": 7758,
+        "triangles": 14729,
+        "cuffVerticesTightened": 152,
+        "sleeveVerticesFloored": 29,
+        "collarVerticesHugged": 0,
+        "collarVerticesCleared": 86,
+        "collarChordFacesDropped": 0,
+        "bottomPush": null,
+        "topPush": {
+          "pushedVertexMoves": 50,
+          "rounds": 2,
+          "maxPush_cm": 1,
+          "stuckVertices": 0
+        },
+        "bottomRelax": null,
+        "topRelax": {
+          "relaxedVertices": 1124,
+          "squashedVerticesLeft": 122
+        },
+        "smallShellVerticesCarried": 108,
+        "bottomResidual": {
+          "verticesInsideBody": 12,
+          "crossingsWithVisible": 0
+        },
+        "topResidual": {
+          "verticesInsideBody": 0,
+          "crossingsWithVisible": 0
+        }
+      },
+      "parts": {
+        "arm_right": 230,
+        "arm_left": 228,
+        "head": 240,
+        "shoe_right": 96,
+        "shoe_left": 99,
+        "inner": 3817,
+        "bottom": 236,
+        "top": 2733
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 10.9,
+        "crotch": 88.1,
+        "waistband": 102.3,
+        "hip": 92.7,
+        "chest": 128.8,
+        "armpit": 133.2,
+        "shoulder": 143.5,
+        "neck_base": 143.5,
+        "topHem": 60.4
+      },
+      "symmetry_mm": {
+        "mean": 0.09,
+        "max": 3.5
+      },
+      "weld": {
+        "before": 7758,
+        "after": 7679,
+        "triangles": 14729,
+        "refusedNonManifold": 0,
+        "seamSnapped": 226,
+        "mirrorPaired": 3077,
+        "surfaceSymmetrised": 2534,
+        "zeroAreaDropped": 0,
+        "nonManifoldDropped": 0,
+        "windingFixed": 0,
+        "windingDropped": 0
+      },
+      "sliderRange": "chest ±0.08, waist ±0.5, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+    },
+    {
+      "file": "outfit29 (garment only)",
+      "id": "outfit29",
+      "status": "PASS",
+      "notes": [],
+      "garments": {
+        "top": "JACKET",
+        "bottom": "PANTS",
+        "label": "Bomber jacket and pants"
+      },
+      "assembly": "garment-only",
+      "compose": {
+        "base": "outfit11",
+        "innerLayer": true,
+        "top": {
+          "source": "garment-outfit29",
+          "prealigned": true,
+          "sleeve": "long",
+          "armScale": 1.533,
+          "depthShift_cm": 0
+        },
+        "bottom": {
+          "source": "outfit11"
+        },
+        "vertices": 6699,
+        "triangles": 12721,
+        "cuffVerticesTightened": 0,
+        "sleeveVerticesFloored": 29,
+        "collarVerticesHugged": 0,
+        "collarVerticesCleared": 148,
+        "collarChordFacesDropped": 0,
+        "bottomPush": null,
+        "topPush": {
+          "pushedVertexMoves": 892,
+          "rounds": 3,
+          "maxPush_cm": 5.8,
+          "stuckVertices": 0
+        },
+        "bottomRelax": null,
+        "topRelax": {
+          "relaxedVertices": 2869,
+          "squashedVerticesLeft": 365
+        },
+        "smallShellVerticesCarried": 0,
+        "bottomResidual": {
+          "verticesInsideBody": 12,
+          "crossingsWithVisible": 0
+        },
+        "topResidual": {
+          "verticesInsideBody": 0,
+          "crossingsWithVisible": 0
+        }
+      },
+      "parts": {
+        "arm_right": 176,
+        "arm_left": 174,
+        "head": 240,
+        "shoe_right": 96,
+        "shoe_left": 99,
+        "inner": 3817,
+        "bottom": 236,
+        "top": 1782
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 10.9,
+        "crotch": 88.1,
+        "waistband": 102.3,
+        "hip": 92.7,
+        "chest": 129,
+        "armpit": 133.4,
+        "shoulder": 143.5,
+        "neck_base": 143.5,
+        "topHem": 107.3
+      },
+      "symmetry_mm": {
+        "mean": 0.1,
+        "max": 5.22
+      },
+      "weld": {
+        "before": 6699,
+        "after": 6620,
+        "triangles": 12721,
+        "refusedNonManifold": 0,
+        "seamSnapped": 175,
+        "mirrorPaired": 2018,
+        "surfaceSymmetrised": 1602,
+        "zeroAreaDropped": 0,
+        "nonManifoldDropped": 0,
+        "windingFixed": 0,
+        "windingDropped": 0
+      },
+      "sliderRange": "chest ±0.28, waist ±1, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+    },
+    {
+      "file": "outfit30 (garment only)",
+      "id": "outfit30",
+      "status": "PASS",
+      "notes": [],
+      "garments": {
+        "top": "COAT",
+        "bottom": "PANTS",
+        "label": "Pea coat and pants"
+      },
+      "assembly": "garment-only",
+      "compose": {
+        "base": "outfit11",
+        "innerLayer": true,
+        "top": {
+          "source": "garment-outfit30",
+          "prealigned": true,
+          "sleeve": "long",
+          "armScale": 1.367,
+          "depthShift_cm": 0
+        },
+        "bottom": {
+          "source": "outfit11"
+        },
+        "vertices": 8438,
+        "triangles": 15797,
+        "cuffVerticesTightened": 34,
+        "sleeveVerticesFloored": 14,
+        "collarVerticesHugged": 0,
+        "collarVerticesCleared": 221,
+        "collarChordFacesDropped": 0,
+        "bottomPush": null,
+        "topPush": {
+          "pushedVertexMoves": 131,
+          "rounds": 3,
+          "maxPush_cm": 3.6,
+          "stuckVertices": 0
+        },
+        "bottomRelax": null,
+        "topRelax": {
+          "relaxedVertices": 1161,
+          "squashedVerticesLeft": 150
+        },
+        "smallShellVerticesCarried": 0,
+        "bottomResidual": {
+          "verticesInsideBody": 12,
+          "crossingsWithVisible": 0
+        },
+        "topResidual": {
+          "verticesInsideBody": 0,
+          "crossingsWithVisible": 0
+        }
+      },
+      "parts": {
+        "arm_right": 176,
+        "arm_left": 174,
+        "head": 240,
+        "shoe_right": 96,
+        "shoe_left": 99,
+        "inner": 3817,
+        "bottom": 236,
+        "top": 3521
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 10.9,
+        "crotch": 88.1,
+        "waistband": 102.3,
+        "hip": 92.7,
+        "chest": 129,
+        "armpit": 133.4,
+        "shoulder": 143.5,
+        "neck_base": 143.5,
+        "topHem": 82.6
+      },
+      "symmetry_mm": {
+        "mean": 0.08,
+        "max": 4.63
+      },
+      "weld": {
+        "before": 8438,
+        "after": 8359,
+        "triangles": 15797,
+        "refusedNonManifold": 0,
+        "seamSnapped": 196,
+        "mirrorPaired": 3757,
+        "surfaceSymmetrised": 2014,
+        "zeroAreaDropped": 0,
+        "nonManifoldDropped": 0,
+        "windingFixed": 0,
+        "windingDropped": 0
+      },
+      "sliderRange": "chest ±0.11, waist ±0.4, hip ±0.7, shoulders ±1, arms ±1, thighs ±1"
+    },
+    {
+      "file": "outfit31 (garment only)",
+      "id": "outfit31",
+      "status": "PASS",
+      "notes": [],
+      "garments": {
+        "top": "SWEATER",
+        "bottom": "PANTS",
+        "label": "Sweatshirt and pants"
+      },
+      "assembly": "garment-only",
+      "compose": {
+        "base": "outfit11",
+        "innerLayer": true,
+        "top": {
+          "source": "garment-outfit31",
+          "prealigned": true,
+          "sleeve": "long",
+          "armScale": 1.62,
+          "depthShift_cm": 0
+        },
+        "bottom": {
+          "source": "outfit11"
+        },
+        "vertices": 6907,
+        "triangles": 12961,
+        "cuffVerticesTightened": 0,
+        "sleeveVerticesFloored": 23,
+        "collarVerticesHugged": 0,
+        "collarVerticesCleared": 134,
+        "collarChordFacesDropped": 0,
+        "bottomPush": null,
+        "topPush": {
+          "pushedVertexMoves": 939,
+          "rounds": 3,
+          "maxPush_cm": 6,
+          "stuckVertices": 0
+        },
+        "bottomRelax": null,
+        "topRelax": {
+          "relaxedVertices": 1986,
+          "squashedVerticesLeft": 165
+        },
+        "smallShellVerticesCarried": 0,
+        "bottomResidual": {
+          "verticesInsideBody": 12,
+          "crossingsWithVisible": 0
+        },
+        "topResidual": {
+          "verticesInsideBody": 0,
+          "crossingsWithVisible": 0
+        }
+      },
+      "parts": {
+        "arm_right": 176,
+        "arm_left": 174,
+        "head": 240,
+        "shoe_right": 96,
+        "shoe_left": 99,
+        "inner": 3817,
+        "bottom": 236,
+        "top": 1990
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 10.9,
+        "crotch": 88.1,
+        "waistband": 102.3,
+        "hip": 92.7,
+        "chest": 129,
+        "armpit": 133.4,
+        "shoulder": 143.5,
+        "neck_base": 143.5,
+        "topHem": 104.2
+      },
+      "symmetry_mm": {
+        "mean": 0.1,
+        "max": 4.77
+      },
+      "weld": {
+        "before": 6907,
+        "after": 6828,
+        "triangles": 12961,
+        "refusedNonManifold": 0,
+        "seamSnapped": 167,
+        "mirrorPaired": 2226,
+        "surfaceSymmetrised": 2085,
+        "zeroAreaDropped": 0,
+        "nonManifoldDropped": 0,
+        "windingFixed": 0,
+        "windingDropped": 0
+      },
+      "sliderRange": "chest ±0.9, waist ±0.2, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+    },
+    {
+      "file": "outfit32 (garment only)",
+      "id": "outfit32",
+      "status": "PASS",
+      "notes": [],
+      "garments": {
+        "top": "TSHIRT",
+        "bottom": "PANTS",
+        "label": "Polo and pants"
+      },
+      "assembly": "garment-only",
+      "compose": {
+        "base": "outfit11",
+        "innerLayer": true,
+        "top": {
+          "source": "garment-outfit32",
+          "prealigned": true,
+          "sleeve": "short",
+          "armScale": 1,
+          "depthShift_cm": 0
+        },
+        "bottom": {
+          "source": "outfit11"
+        },
+        "vertices": 7468,
+        "triangles": 14263,
+        "cuffVerticesTightened": 0,
+        "sleeveVerticesFloored": 171,
+        "collarVerticesHugged": 0,
+        "collarVerticesCleared": 850,
+        "collarChordFacesDropped": 2,
+        "bottomPush": null,
+        "topPush": {
+          "pushedVertexMoves": 378,
+          "rounds": 3,
+          "maxPush_cm": 5.4,
+          "stuckVertices": 0
+        },
+        "bottomRelax": null,
+        "topRelax": {
+          "relaxedVertices": 6021,
+          "squashedVerticesLeft": 1045
+        },
+        "smallShellVerticesCarried": 0,
+        "bottomResidual": {
+          "verticesInsideBody": 12,
+          "crossingsWithVisible": 0
+        },
+        "topResidual": {
+          "verticesInsideBody": 0,
+          "crossingsWithVisible": 0
+        }
+      },
+      "parts": {
+        "arm_right": 176,
+        "arm_left": 174,
+        "head": 240,
+        "shoe_right": 96,
+        "shoe_left": 99,
+        "inner": 3817,
+        "bottom": 236,
+        "top": 2551
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 10.9,
+        "crotch": 88.1,
+        "waistband": 102.3,
+        "hip": 92.7,
+        "chest": 129,
+        "armpit": 133.4,
+        "shoulder": 143.5,
+        "neck_base": 143.5,
+        "topHem": 100.1
+      },
+      "symmetry_mm": {
+        "mean": 0.09,
+        "max": 3.81
+      },
+      "weld": {
+        "before": 7468,
+        "after": 7389,
+        "triangles": 14259,
+        "refusedNonManifold": 0,
+        "seamSnapped": 190,
+        "mirrorPaired": 2787,
+        "surfaceSymmetrised": 2375,
+        "zeroAreaDropped": 0,
+        "nonManifoldDropped": 0,
+        "windingFixed": 23,
+        "windingDropped": 4
+      },
+      "sliderRange": "chest ±1, waist ±0.9, hip ±1, shoulders ±0.7, arms ±1, thighs ±1"
+    },
+    {
+      "file": "outfit33 (garment only)",
+      "id": "outfit33",
+      "status": "PASS",
+      "notes": [],
+      "garments": {
+        "top": "CARDIGAN",
+        "bottom": "PANTS",
+        "label": "Long cardigan and pants"
+      },
+      "assembly": "garment-only",
+      "compose": {
+        "base": "outfit11",
+        "innerLayer": true,
+        "top": {
+          "source": "garment-outfit33",
+          "necklineKnot": "below the armhole, taken from the base proportions",
+          "prealigned": true,
+          "sleeve": "long",
+          "armScale": 1.529,
+          "depthShift_cm": 0
+        },
+        "bottom": {
+          "source": "outfit11"
+        },
+        "vertices": 7570,
+        "triangles": 14321,
+        "cuffVerticesTightened": 70,
+        "sleeveVerticesFloored": 177,
+        "collarVerticesHugged": 0,
+        "collarVerticesCleared": 0,
+        "collarChordFacesDropped": 0,
+        "bottomPush": null,
+        "topPush": {
+          "pushedVertexMoves": 1209,
+          "rounds": 4,
+          "maxPush_cm": 7,
+          "stuckVertices": 0
+        },
+        "bottomRelax": null,
+        "topRelax": {
+          "relaxedVertices": 2012,
+          "squashedVerticesLeft": 225
+        },
+        "smallShellVerticesCarried": 0,
+        "bottomResidual": {
+          "verticesInsideBody": 12,
+          "crossingsWithVisible": 0
+        },
+        "topResidual": {
+          "verticesInsideBody": 0,
+          "crossingsWithVisible": 0
+        }
+      },
+      "parts": {
+        "arm_right": 176,
+        "arm_left": 174,
+        "head": 240,
+        "shoe_right": 96,
+        "shoe_left": 99,
+        "inner": 3817,
+        "bottom": 236,
+        "top": 2653
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 10.9,
+        "crotch": 88.1,
+        "waistband": 102.3,
+        "hip": 92.7,
+        "chest": 129,
+        "armpit": 133.4,
+        "shoulder": 143.5,
+        "neck_base": 143.5,
+        "topHem": 81.6
+      },
+      "symmetry_mm": {
+        "mean": 0.09,
+        "max": 3.28
+      },
+      "weld": {
+        "before": 7570,
+        "after": 7491,
+        "triangles": 14321,
+        "refusedNonManifold": 0,
+        "seamSnapped": 164,
+        "mirrorPaired": 2889,
+        "surfaceSymmetrised": 2747,
+        "zeroAreaDropped": 0,
+        "nonManifoldDropped": 0,
+        "windingFixed": 0,
+        "windingDropped": 0
+      },
+      "sliderRange": "chest ±1, waist ±1, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+    },
+    {
+      "file": "outfit34 (garment only)",
+      "id": "outfit34",
+      "status": "PASS",
+      "notes": [],
+      "garments": {
+        "top": "CARDIGAN",
+        "bottom": "PANTS",
+        "label": "Cropped cardigan and pants"
+      },
+      "assembly": "garment-only",
+      "compose": {
+        "base": "outfit11",
+        "innerLayer": true,
+        "top": {
+          "source": "garment-outfit34",
+          "prealigned": true,
+          "sleeve": "long",
+          "armScale": 1.536,
+          "depthShift_cm": 0
+        },
+        "bottom": {
+          "source": "outfit11"
+        },
+        "vertices": 7795,
+        "triangles": 14761,
+        "cuffVerticesTightened": 19,
+        "sleeveVerticesFloored": 29,
+        "collarVerticesHugged": 0,
+        "collarVerticesCleared": 0,
+        "collarChordFacesDropped": 0,
+        "bottomPush": null,
+        "topPush": {
+          "pushedVertexMoves": 1458,
+          "rounds": 3,
+          "maxPush_cm": 5.8,
+          "stuckVertices": 0
+        },
+        "bottomRelax": null,
+        "topRelax": {
+          "relaxedVertices": 3837,
+          "squashedVerticesLeft": 545
+        },
+        "smallShellVerticesCarried": 0,
+        "bottomResidual": {
+          "verticesInsideBody": 12,
+          "crossingsWithVisible": 0
+        },
+        "topResidual": {
+          "verticesInsideBody": 0,
+          "crossingsWithVisible": 0
+        }
+      },
+      "parts": {
+        "arm_right": 176,
+        "arm_left": 174,
+        "head": 240,
+        "shoe_right": 96,
+        "shoe_left": 99,
+        "inner": 3817,
+        "bottom": 236,
+        "top": 2878
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 10.9,
+        "crotch": 88.1,
+        "waistband": 102.3,
+        "hip": 92.7,
+        "chest": 129,
+        "armpit": 133.4,
+        "shoulder": 143.5,
+        "neck_base": 143.5,
+        "topHem": 111.1
+      },
+      "symmetry_mm": {
+        "mean": 0.09,
+        "max": 4.73
+      },
+      "weld": {
+        "before": 7795,
+        "after": 7716,
+        "triangles": 14761,
+        "refusedNonManifold": 0,
+        "seamSnapped": 273,
+        "mirrorPaired": 3114,
+        "surfaceSymmetrised": 1974,
+        "zeroAreaDropped": 0,
+        "nonManifoldDropped": 0,
+        "windingFixed": 0,
+        "windingDropped": 0
+      },
+      "sliderRange": "chest ±0.5, waist ±0.4, hip ±1, shoulders ±1, arms ±1, thighs ±1"
+    },
+    {
+      "file": "outfit35 (garment only)",
+      "id": "outfit35",
+      "status": "PASS",
+      "notes": [],
+      "garments": {
+        "top": "JACKET",
+        "bottom": "PANTS",
+        "label": "Biker jacket and pants"
+      },
+      "assembly": "garment-only",
+      "compose": {
+        "base": "outfit11",
+        "innerLayer": true,
+        "top": {
+          "source": "garment-outfit35",
+          "prealigned": true,
+          "sleeve": "long",
+          "armScale": 1.404,
+          "depthShift_cm": 0
+        },
+        "bottom": {
+          "source": "outfit11"
+        },
+        "vertices": 8185,
+        "triangles": 15617,
+        "cuffVerticesTightened": 0,
+        "sleeveVerticesFloored": 87,
+        "collarVerticesHugged": 0,
+        "collarVerticesCleared": 215,
+        "collarChordFacesDropped": 8,
+        "bottomPush": null,
+        "topPush": {
+          "pushedVertexMoves": 1053,
+          "rounds": 7,
+          "maxPush_cm": 6.4,
+          "stuckVertices": 0
+        },
+        "bottomRelax": null,
+        "topRelax": {
+          "relaxedVertices": 4555,
+          "squashedVerticesLeft": 745
+        },
+        "smallShellVerticesCarried": 0,
+        "bottomResidual": {
+          "verticesInsideBody": 12,
+          "crossingsWithVisible": 0
+        },
+        "topResidual": {
+          "verticesInsideBody": 0,
+          "crossingsWithVisible": 0
+        }
+      },
+      "parts": {
+        "arm_right": 176,
+        "arm_left": 174,
+        "head": 240,
+        "shoe_right": 96,
+        "shoe_left": 99,
+        "inner": 3817,
+        "bottom": 236,
+        "top": 3268
+      },
+      "landmarks_cm": {
+        "height": 175,
+        "ankle": 10.9,
+        "crotch": 88.1,
+        "waistband": 102.3,
+        "hip": 92.7,
+        "chest": 129,
+        "armpit": 133.4,
+        "shoulder": 143.5,
+        "neck_base": 143.5,
+        "topHem": 103.2
+      },
+      "symmetry_mm": {
+        "mean": 0.09,
+        "max": 3.15
+      },
+      "weld": {
+        "before": 8185,
+        "after": 8106,
+        "triangles": 15617,
+        "refusedNonManifold": 0,
+        "seamSnapped": 199,
+        "mirrorPaired": 3504,
+        "surfaceSymmetrised": 2127,
+        "zeroAreaDropped": 0,
+        "nonManifoldDropped": 0,
+        "windingFixed": 0,
+        "windingDropped": 0
+      },
+      "sliderRange": "chest ±0.05, waist ±0.4, hip ±1, shoulders ±1, arms ±1, thighs ±1"
     }
   ]
 }
