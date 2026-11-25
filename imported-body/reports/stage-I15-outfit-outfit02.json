@@ -8,16 +8,16 @@
     "triangles": 2840,
     "refusedNonManifold": 0,
     "seamSnapped": 50,
-    "mirrorPaired": 886,
-    "surfaceSymmetrised": 819,
+    "mirrorPaired": 885,
+    "surfaceSymmetrised": 818,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
     "windingFixed": 0,
     "windingDropped": 0
   },
   "symmetry_mm": {
-    "mean": 0.14,
-    "max": 7
+    "mean": 0.13,
+    "max": 6.86
   },
   "parts": [
     {
@@ -71,7 +71,7 @@
       "triangles": 436,
       "y_cm": [
         7.7,
-        92.2
+        92.4
       ]
     },
     {
@@ -79,7 +79,7 @@
       "vertices": 664,
       "triangles": 1262,
       "y_cm": [
-        90,
+        90.2,
         152.1
       ]
     }
@@ -87,26 +87,26 @@
   "landmarks_cm": {
     "height": 175,
     "ankle": 13.3,
-    "crotch": 77.4,
-    "waistband": 92.2,
-    "hip": 83.6,
+    "crotch": 77.2,
+    "waistband": 92.4,
+    "hip": 84,
     "chest": 128,
     "armpit": 132.4,
     "shoulder": 143.3,
     "neck_base": 141.7,
-    "topHem": 90
+    "topHem": 90.2
   },
   "fractions_of_H": {
     "height": 1,
     "ankle": 0.076,
-    "crotch": 0.442,
-    "waistband": 0.527,
-    "hip": 0.478,
+    "crotch": 0.441,
+    "waistband": 0.528,
+    "hip": 0.48,
     "chest": 0.731,
     "armpit": 0.756,
     "shoulder": 0.819,
     "neck_base": 0.81,
-    "topHem": 0.514
+    "topHem": 0.515
   },
   "note": "Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: исходная модель сделана одетой."
 }

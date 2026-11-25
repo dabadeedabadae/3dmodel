@@ -92,6 +92,18 @@ async function segment(image: RasterImage) {
   return { mask, quality: quality.status };
 }
 
+/** photo → raster and mask, once per file: the type suggestion (its outline, I-80) and the analysis share it */
+const segmented = new WeakMap<Blob, Promise<{ img: RasterImage; mask: Uint8Array; quality: 'ok' | 'suspicious' | 'empty' }>>();
+export function segmentPhoto(file: Blob) {
+  let p = segmented.get(file);
+  if (!p) {
+    p = toRaster(file).then(async (img) => ({ img, ...(await segment(img)) }));
+    p.catch(() => segmented.delete(file));
+    segmented.set(file, p);
+  }
+  return p;
+}
+
 /** texture (background in the base colour) and a dimmed preview with the points drawn */
 async function renderOutputs(img: RasterImage, mask: Uint8Array, rgb: [number, number, number], points: { x: number; y: number }[]) {
   const canvas = document.createElement('canvas');
@@ -120,8 +132,7 @@ async function renderOutputs(img: RasterImage, mask: Uint8Array, rgb: [number, n
 /** Top photo (front view, sleeves away from the body) → package for the figure's top: T-shirt or long-sleeved top. */
 export async function analyzeTShirtPhoto(file: Blob, category: 'tshirt' | 'top' = 'tshirt'): Promise<Analysis> {
   const t0 = performance.now();
-  const img = await toRaster(file);
-  const { mask, quality } = await segment(img);
+  const { img, mask, quality } = await segmentPhoto(file);
   const lm = estimateTShirtLandmarks(mask, img.width, img.height);
   const points = Object.fromEntries(Object.entries(lm.points).map(([k, p]) => [k, { x: p.x, y: p.y }])) as Record<PhotoPointName, { x: number; y: number }>;
   const anchors = anchorsFromLandmarks(points, mask, img.width, img.height);
@@ -158,8 +169,7 @@ export function withUserPoints(a: Analysis, points: Record<PhotoPointName, { x: 
 /** Trousers / jeans photo (front view, legs apart) → package for the figure's lower garment (I-53). */
 export async function analyzePantsPhoto(file: Blob): Promise<Analysis> {
   const t0 = performance.now();
-  const img = await toRaster(file);
-  const { mask, quality } = await segment(img);
+  const { img, mask, quality } = await segmentPhoto(file);
   const lm = estimatePantsLandmarks(mask, img.width, img.height);
   if (!lm.anchors) throw new Error(`Could not find the pant legs in the photo: ${lm.reasons.join('; ')}. Photograph the pants from the front with the legs apart.`);
   const color = estimateBaseColor(img, mask);

@@ -32,7 +32,7 @@
       "bottom": "PANTS"
     },
     "range": {
-      "chest": 1,
+      "chest": 0.81,
       "waist": 1,
       "hip": 1,
       "shoulders": 0.5,
@@ -43,8 +43,8 @@
   {
     "id": "figure-03",
     "url": "/models/figure-03.json",
-    "vertices": 1506,
-    "triangles": 2807,
+    "vertices": 1503,
+    "triangles": 2801,
     "label": "Shirt and pants",
     "garments": {
       "top": "SHIRT",
@@ -52,7 +52,7 @@
     },
     "range": {
       "chest": 1,
-      "waist": 0.72,
+      "waist": 0.51,
       "hip": 1,
       "shoulders": 1,
       "arms": 1,

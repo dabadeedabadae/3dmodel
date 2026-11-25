@@ -8,8 +8,9 @@
  */
 import { centerCropSquare, resizeRaster, softmax, toCHWFloat, type RasterImage } from './raster';
 import { suggestGarmentType, type TypeSuggestion } from './garmentType';
+import { shapeFacts } from './shape';
 
-export const TYPE_PROVIDER = 'mobilenetv2-12.onnx;imagenet→type map-v1';
+export const TYPE_PROVIDER = 'mobilenetv2-12.onnx;imagenet→type map-v1;outline-v1';
 
 type Ort = typeof import('onnxruntime-web/wasm');
 let modelPromise: Promise<{ ort: Ort; session: import('onnxruntime-web/wasm').InferenceSession; labels: string[] }> | null = null;
@@ -45,10 +46,14 @@ async function decode(file: Blob): Promise<RasterImage> {
 
 export async function suggestTypeFromPhoto(file: Blob): Promise<TypeSuggestion & { ms: number }> {
   const t0 = performance.now();
+  // the garment's outline (two legs, sleeves, a hem that widens) corrects the texture-driven classes (I-80);
+  // without a mask the classifier answers alone, as before
+  const outline = import('./analyze').then((m) => m.segmentPhoto(file))
+    .then((s) => (s.quality === 'empty' ? null : shapeFacts(s.mask, s.img.width, s.img.height))).catch(() => null);
   const [{ ort, session, labels }, img] = await Promise.all([loadModel(), decode(file)]);
   const square = centerCropSquare(resizeRaster(img, img.width, img.height)).image;
   const chw = toCHWFloat(resizeRaster(square, 224, 224), [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]);
   const out = await session.run({ input: new ort.Tensor('float32', chw, [1, 3, 224, 224]) });
   const probs = softmax(out[session.outputNames[0]!]!.data as Float32Array);
-  return { ...suggestGarmentType(probs, labels), ms: Math.round(performance.now() - t0) };
+  return { ...suggestGarmentType(probs, labels, await outline), ms: Math.round(performance.now() - t0) };
 }

@@ -11,10 +11,15 @@ import sharp from 'sharp';
 import { loadSession, float32Tensor } from '../src/providers/onnx';
 import { centerCropSquare, resizeRaster, softmax, toCHWFloat, type RasterImage } from '../src/image/raster';
 import { suggestGarmentType } from '../fitcast/frontend/lib/garment/garmentType';
+import { shapeFacts } from '../fitcast/frontend/lib/garment/shape';
+import { U2NetpSegmentationProvider } from '../src/providers/SegmentationProvider';
 
 const root = process.cwd();
 const labels = readFileSync(path.join(root, 'public/models/synset.txt'), 'utf8').split('\n').map((l) => l.trim()).filter(Boolean).map((l) => l.replace(/^n\d+\s+/, ''));
 const session = await loadSession(path.join(root, 'public/models/mobilenetv2-12.onnx'));
+const seg = new U2NetpSegmentationProvider(path.join(root, 'public/models/u2netp.onnx'));
+/** IB_NO_SHAPE=1: the classifier alone, as before I-80, to compare */
+const useShape = !process.env.IB_NO_SHAPE;
 
 /** expected types per file: fixture prefix, or catalog id */
 const EXPECT: Record<string, string[]> = {
@@ -40,7 +45,8 @@ for (const [set, dir] of sets) for (const f of readdirSync(path.join(root, dir))
   const sq = centerCropSquare(resizeRaster(img, Math.round(img.width * k), Math.round(img.height * k))).image;
   const chw = toCHWFloat(resizeRaster(sq, 224, 224), [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]);
   const out = await session.run({ input: float32Tensor(chw, [1, 3, 224, 224]) });
-  const s = suggestGarmentType(softmax(out['output']!.data as Float32Array), labels);
+  const shape = useShape ? await seg.segment(img).then((m) => shapeFacts(m.binary, img.width, img.height)) : null;
+  const s = suggestGarmentType(softmax(out['output']!.data as Float32Array), labels, shape);
   const top1 = !!s.type && want.includes(s.type);
   const offered = top1 || s.alternatives.some((t) => want.includes(t));
   const t = (tally[set] ??= { n: 0, top1: 0, offered: 0 });

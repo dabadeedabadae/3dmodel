@@ -7,17 +7,17 @@
     "after": 2188,
     "triangles": 4046,
     "refusedNonManifold": 0,
-    "seamSnapped": 40,
-    "mirrorPaired": 2188,
-    "surfaceSymmetrised": 885,
+    "seamSnapped": 0,
+    "mirrorPaired": 1650,
+    "surfaceSymmetrised": 781,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
     "windingFixed": 0,
     "windingDropped": 0
   },
   "symmetry_mm": {
-    "mean": 0.04,
-    "max": 3.02
+    "mean": 30.23,
+    "max": 386.42
   },
   "parts": [
     {
@@ -26,7 +26,7 @@
       "triangles": 498,
       "y_cm": [
         0,
-        13.4
+        13.3
       ]
     },
     {
@@ -34,7 +34,7 @@
       "vertices": 33,
       "triangles": 48,
       "y_cm": [
-        9.3,
+        9.2,
         10
       ]
     },
@@ -52,8 +52,8 @@
       "vertices": 251,
       "triangles": 464,
       "y_cm": [
-        8.6,
-        99.9
+        8.5,
+        99.7
       ]
     },
     {
@@ -61,25 +61,25 @@
       "vertices": 31,
       "triangles": 44,
       "y_cm": [
-        11.1,
+        11,
         11.7
       ]
     },
     {
       "kind": "top",
-      "vertices": 588,
-      "triangles": 1136,
+      "vertices": 585,
+      "triangles": 1128,
       "y_cm": [
-        86.6,
-        150.2
+        86.3,
+        149.8
       ]
     },
     {
       "kind": "head",
-      "vertices": 255,
-      "triangles": 510,
+      "vertices": 258,
+      "triangles": 518,
       "y_cm": [
-        151,
+        149.8,
         175
       ]
     },
@@ -88,53 +88,53 @@
       "vertices": 143,
       "triangles": 273,
       "y_cm": [
-        136.4,
+        135.8,
+        141.6
+      ]
+    },
+    {
+      "kind": "top",
+      "vertices": 16,
+      "triangles": 22,
+      "y_cm": [
+        97,
+        99.2
+      ]
+    },
+    {
+      "kind": "top",
+      "vertices": 16,
+      "triangles": 22,
+      "y_cm": [
+        108,
+        110.1
+      ]
+    },
+    {
+      "kind": "top",
+      "vertices": 16,
+      "triangles": 22,
+      "y_cm": [
+        118.1,
+        120.3
+      ]
+    },
+    {
+      "kind": "top",
+      "vertices": 16,
+      "triangles": 22,
+      "y_cm": [
+        129.6,
+        131.7
+      ]
+    },
+    {
+      "kind": "top",
+      "vertices": 16,
+      "triangles": 22,
+      "y_cm": [
+        139.9,
         141.8
-      ]
-    },
-    {
-      "kind": "top",
-      "vertices": 16,
-      "triangles": 22,
-      "y_cm": [
-        97.3,
-        99.4
-      ]
-    },
-    {
-      "kind": "top",
-      "vertices": 16,
-      "triangles": 22,
-      "y_cm": [
-        108.2,
-        110.4
-      ]
-    },
-    {
-      "kind": "top",
-      "vertices": 16,
-      "triangles": 22,
-      "y_cm": [
-        118.4,
-        120.6
-      ]
-    },
-    {
-      "kind": "top",
-      "vertices": 16,
-      "triangles": 22,
-      "y_cm": [
-        129.9,
-        132.1
-      ]
-    },
-    {
-      "kind": "top",
-      "vertices": 16,
-      "triangles": 22,
-      "y_cm": [
-        140.4,
-        142
       ]
     },
     {
@@ -143,7 +143,7 @@
       "triangles": 498,
       "y_cm": [
         0,
-        13.4
+        13.3
       ]
     },
     {
@@ -151,7 +151,7 @@
       "vertices": 33,
       "triangles": 48,
       "y_cm": [
-        9.3,
+        9.2,
         10
       ]
     },
@@ -169,7 +169,7 @@
       "vertices": 31,
       "triangles": 44,
       "y_cm": [
-        11.1,
+        11,
         11.7
       ]
     },
@@ -178,34 +178,34 @@
       "vertices": 143,
       "triangles": 273,
       "y_cm": [
-        136.4,
-        141.8
+        135.8,
+        141.6
       ]
     }
   ],
   "landmarks_cm": {
     "height": 175,
-    "ankle": 13.4,
-    "crotch": 76.2,
-    "waistband": 99.9,
-    "hip": 83.1,
-    "chest": 129.4,
-    "armpit": 133.8,
-    "shoulder": 141.8,
-    "neck_base": 151,
-    "topHem": 86.6
+    "ankle": 13.3,
+    "crotch": 76,
+    "waistband": 99.7,
+    "hip": 82.9,
+    "chest": 128.7,
+    "armpit": 133.1,
+    "shoulder": 141.6,
+    "neck_base": 149.8,
+    "topHem": 86.3
   },
   "fractions_of_H": {
     "height": 1,
     "ankle": 0.076,
-    "crotch": 0.436,
-    "waistband": 0.571,
-    "hip": 0.475,
-    "chest": 0.74,
-    "armpit": 0.765,
-    "shoulder": 0.81,
-    "neck_base": 0.863,
-    "topHem": 0.495
+    "crotch": 0.434,
+    "waistband": 0.57,
+    "hip": 0.474,
+    "chest": 0.735,
+    "armpit": 0.76,
+    "shoulder": 0.809,
+    "neck_base": 0.856,
+    "topHem": 0.493
   },
   "note": "Обхваты этой фигуры — обхваты ОДЕЖДЫ, а не тела: исходная модель сделана одетой."
 }

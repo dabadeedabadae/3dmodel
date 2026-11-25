@@ -3,21 +3,21 @@
   "source": "imported-body/out/layered-outfit03.json",
   "statureGiven_cm": 175,
   "weld": {
-    "before": 1513,
-    "after": 1506,
-    "triangles": 2807,
+    "before": 1510,
+    "after": 1503,
+    "triangles": 2801,
     "refusedNonManifold": 0,
-    "seamSnapped": 43,
-    "mirrorPaired": 912,
-    "surfaceSymmetrised": 724,
+    "seamSnapped": 40,
+    "mirrorPaired": 906,
+    "surfaceSymmetrised": 714,
     "zeroAreaDropped": 0,
     "nonManifoldDropped": 0,
     "windingFixed": 0,
     "windingDropped": 0
   },
   "symmetry_mm": {
-    "mean": 0.16,
-    "max": 6.9
+    "mean": 0.17,
+    "max": 6.06
   },
   "parts": [
     {
@@ -71,15 +71,15 @@
       "triangles": 464,
       "y_cm": [
         9.3,
-        100
+        100.2
       ]
     },
     {
       "kind": "top",
-      "vertices": 581,
-      "triangles": 1091,
+      "vertices": 578,
+      "triangles": 1085,
       "y_cm": [
-        87.3,
+        87.4,
         147.8
       ]
     },
@@ -88,8 +88,8 @@
       "vertices": 16,
       "triangles": 22,
       "y_cm": [
-        97.4,
-        99.5
+        97.6,
+        99.7
       ]
     },
     {
@@ -97,8 +97,8 @@
       "vertices": 16,
       "triangles": 22,
       "y_cm": [
-        107.9,
-        110
+        108.2,
+        110.2
       ]
     },
     {
@@ -106,8 +106,8 @@
       "vertices": 16,
       "triangles": 22,
       "y_cm": [
-        117.7,
-        119.7
+        118,
+        120.1
       ]
     },
     {
@@ -115,8 +115,8 @@
       "vertices": 16,
       "triangles": 22,
       "y_cm": [
-        128.7,
-        130.7
+        129.1,
+        131.1
       ]
     },
     {
@@ -124,29 +124,29 @@
       "vertices": 16,
       "triangles": 22,
       "y_cm": [
-        137,
-        138.7
+        136.8,
+        138.4
       ]
     }
   ],
   "landmarks_cm": {
     "height": 175,
     "ankle": 13.3,
-    "crotch": 77.1,
-    "waistband": 100,
-    "hip": 83.8,
+    "crotch": 77.3,
+    "waistband": 100.2,
+    "hip": 84,
     "chest": 128,
     "armpit": 132.4,
     "shoulder": 143.3,
     "neck_base": 141.7,
-    "topHem": 87.3
+    "topHem": 87.4
   },
   "fractions_of_H": {
     "height": 1,
     "ankle": 0.076,
-    "crotch": 0.441,
-    "waistband": 0.571,
-    "hip": 0.479,
+    "crotch": 0.442,
+    "waistband": 0.572,
+    "hip": 0.48,
     "chest": 0.731,
     "armpit": 0.756,
     "shoulder": 0.819,
