@@ -156,7 +156,8 @@ Score = Annotated[float, Field(ge=0, le=100)]
 
 
 class Factor(ContractModel):
-    """One style factor that moved the score: harmony, coherence, contrast, evening, freshness, wind."""
+    """One style factor that moved the score: harmony, coherence, contrast, evening, freshness, wind, patterns,
+    fit, rain, sleeve."""
     key: str
     points: float
     note: str = Field(min_length=1)
@@ -166,7 +167,8 @@ class ScoreBreakdown(ContractModel):
     weather: Score
     occasion: Score
     color: Score
-    # Optional: GOOD-only filtering makes fit constant, so weighting is pending.
+    #: average fit of the worn items: GOOD 100, LOOSE 70 (40 on a dressy occasion); TIGHT items are never worn.
+    #: Not a weighted term of the total: a loose item costs points through the `fit` factor.
     fit: Score | None = None
     #: personal taste shift in points (−TASTE_POINTS … +TASTE_POINTS); absent without a taste
     taste: Annotated[float, Field(ge=-10, le=10)] | None = None

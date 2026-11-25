@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T23:01:00.826Z",
+  "generatedAt": "2026-11-25T11:03:11.589Z",
   "bones": [
     {
       "name": "hips",
@@ -50,7 +50,7 @@
       "name": "upper_arm_left",
       "parent": "chest",
       "head": [
-        0.1854065957241136,
+        0.185406590396925,
         1.3050073196670167,
         0
       ]
@@ -59,7 +59,7 @@
       "name": "forearm_left",
       "parent": "upper_arm_left",
       "head": [
-        0.44557241752666926,
+        0.4455724144368999,
         1.3050073196670167,
         0
       ]
@@ -68,7 +68,7 @@
       "name": "hand_left",
       "parent": "forearm_left",
       "head": [
-        0.6809605420146958,
+        0.6809605409492581,
         1.3050073196670167,
         0
       ]
@@ -104,7 +104,7 @@
       "name": "upper_arm_right",
       "parent": "chest",
       "head": [
-        -0.1854065957241136,
+        -0.185406590396925,
         1.3050073196670167,
         0
       ]
@@ -113,7 +113,7 @@
       "name": "forearm_right",
       "parent": "upper_arm_right",
       "head": [
-        -0.44557241752666926,
+        -0.4455724144368999,
         1.3050073196670167,
         0
       ]
@@ -122,7 +122,7 @@
       "name": "hand_right",
       "parent": "forearm_right",
       "head": [
-        -0.6809605420146958,
+        -0.6809605409492581,
         1.3050073196670167,
         0
       ]
@@ -155,7 +155,7 @@
       ]
     }
   ],
-  "restPoseMaxDiff": 1.4901161193847656e-8,
+  "restPoseMaxDiff": 0,
   "verifiedShoulderDegrees": {
     "base": 62,
     "athletic": 60,

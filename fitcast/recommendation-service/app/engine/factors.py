@@ -10,12 +10,17 @@ so the base score stays what it was. The sum is limited to ±STYLE_POINTS.
 - contrast: the same chromatic colour on top and bottom looks like a uniform; a light top over a dark bottom (or the
   reverse) reads well;
 - evening: after 18:00 a going-out occasion favours a dark outfit;
-- freshness: items from outfits saved in the last week cost a little, so the feed does not repeat itself.
+- freshness: items from outfits saved in the last week cost a little, so the feed does not repeat itself;
+- patterns: two patterned garments in one outfit compete;
+- fit: an item tagged LOOSE costs a little on a relaxed occasion and more on a dressy one (TIGHT items are never
+  used); `fit_score` is the same thing as a 0–100 number for `breakdown.fit`;
+- rain: light shoes in rain or snow (they are only worn then when the wardrobe has no darker pair);
+- sleeve: a short sleeve with no layer over it costs in the cold and is a small plus in the heat.
 """
 from itertools import combinations
 
-from app.models.schemas import ColorName as C, EventType as E, WardrobeItem
-from .catalog import BOTTOM, DARK, GARMENTS, LIGHT_TONE, NEUTRAL, SHOES, TOP
+from app.models.schemas import ColorName as C, EventType as E, FitTag, Pattern, Precipitation, Sleeve, WardrobeItem
+from .catalog import BOTTOM, DARK, GARMENTS, LIGHT, LIGHT_TONE, NEUTRAL, OUTER, SHOES, TOP
 
 STYLE_POINTS = 12.0
 #: hue angle on the colour wheel, degrees
@@ -81,9 +86,59 @@ def freshness(worn: list[WardrobeItem], recent: frozenset):
     return -min(6.0, 3.0 * n), "worn this week"
 
 
+WET = {Precipitation.RAIN, Precipitation.SNOW, Precipitation.MIXED}
+#: from this formality on (business and up) a loose item costs double
+DRESSY = 3
+#: short sleeves with no layer: a minus below COLD_SLEEVE °C, a plus from HOT_SLEEVE °C
+COLD_SLEEVE, HOT_SLEEVE = 12.0, 25.0
+
+
+def patterns(clothes: list[WardrobeItem]):
+    if sum(1 for i in clothes if i.pattern == Pattern.PATTERN) >= 2:
+        return -5.0, "two patterns compete"
+    return None
+
+
+def fit(worn: list[WardrobeItem], formality: int):
+    loose = sum(1 for i in worn if i.fitTag == FitTag.LOOSE)
+    if not loose:
+        return None
+    per_item = 6.0 if formality >= DRESSY else 3.0
+    return -min(9.0, per_item * loose), "a loose piece" if loose == 1 else f"{loose} loose pieces"
+
+
+def fit_score(worn: list[WardrobeItem], formality: int) -> float:
+    """0–100 for `breakdown.fit`: the average over the items; GOOD is 100, LOOSE 70 (40 on a dressy occasion)."""
+    loose = 40.0 if formality >= DRESSY else 70.0
+    return round(sum(100.0 if i.fitTag == FitTag.GOOD else loose for i in worn) / len(worn), 1)
+
+
+def rain(worn: list[WardrobeItem], precipitation: Precipitation | None):
+    if precipitation not in WET:
+        return None
+    if any(GARMENTS[i.type].slot == SHOES and i.dominantColor in LIGHT for i in worn):
+        return -5.0, "light shoes in the " + ("snow" if precipitation == Precipitation.SNOW else "rain")
+    return None
+
+
+def sleeve(clothes: list[WardrobeItem], t: float | None):
+    if t is None or any(GARMENTS[i.type].slot == OUTER for i in clothes):
+        return None
+    if not any(GARMENTS[i.type].slot == TOP and i.sleeve == Sleeve.SHORT for i in clothes):
+        return None
+    if t < COLD_SLEEVE:
+        return -5.0, "short sleeves without a layer in the cold"
+    if t >= HOT_SLEEVE:
+        return 2.0, "short sleeves for the heat"
+    return None
+
+
 def style(worn: list[WardrobeItem], clothes: list[WardrobeItem], event: E, hour: int | None,
-          recent: frozenset) -> list[tuple[str, float, str]]:
+          recent: frozenset, t: float | None = None, precipitation: Precipitation | None = None,
+          formality: int = 0) -> list[tuple[str, float, str]]:
     """[(key, points, note)] for every factor that applies; the caller limits the total to ±STYLE_POINTS."""
     found = (("harmony", harmony(worn)), ("coherence", coherence(clothes)), ("contrast", contrast(worn)),
-             ("evening", evening(clothes, event, hour)), ("freshness", freshness(worn, recent)))
+             ("evening", evening(clothes, event, hour)), ("freshness", freshness(worn, recent)),
+             ("patterns", patterns(clothes)), ("fit", fit(worn, formality)), ("rain", rain(worn, precipitation)),
+             ("sleeve", sleeve(clothes, t)))
     return [(key, value[0], value[1]) for key, value in found if value is not None]

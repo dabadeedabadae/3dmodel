@@ -39,7 +39,8 @@ Service access control must be decided before deployment.
   SHORTS, SKIRT, DRESS, SHOES, ACCESSORY.
 - `pattern` (optional, I-77): solid | pattern; `secondaryColor` (optional): a palette color; `sleeve` (optional):
   short | long — read from the photo on the device.
-- `fitTag`: GOOD, TIGHT, LOOSE. All three are valid input; filtering is a later engine responsibility.
+- `fitTag`: GOOD, TIGHT, LOOSE. All three are valid input. TIGHT items are never worn (a warning says how many);
+  LOOSE items are worn at a cost.
 - `dominantColor`: black, white, gray, beige, brown, red, orange, yellow,
   green, blue, navy, purple, pink. Whitespace and case are normalized;
   grey is accepted as gray. HEX/RGB are not accepted in this MVP contract.
@@ -83,7 +84,9 @@ Illustrative shape only; the item IDs and scores below are synthetic, not calcul
 }
 ```
 
-Scores range from 0 to 100. `fit` is optional pending a scoring decision.
+Scores range from 0 to 100. `fit` is the average fit of the worn items (GOOD 100, LOOSE 70, or 40 on a
+business-or-dressier occasion); it is reported, not weighted into the total — a loose item costs points through
+the `fit` factor.
 Item IDs must come from the request and must not repeat inside an outfit.
 The future engine must enforce outfit completeness, uniqueness across outfits,
 and the requested limit; schemas alone cannot enforce these contextual rules.
@@ -148,9 +151,41 @@ python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8010
   outfits saved this week). Each outfit's `breakdown` gains `style` (±12 points) and `factors` (`key`, `points`,
   `note`: harmony, coherence, contrast, evening, freshness, wind — `app/engine/factors.py`); the response gains
   `tasteModel` (`examples`, `likes`, `prefers`, `avoids`) once a model was trained.
+- More factors in `breakdown.factors`: `patterns` (two patterned garments, −5), `fit` (a LOOSE item: −3, on a
+  business-or-dressier occasion −6, at most −9), `rain` (light shoes in rain or snow, −5: they are worn then only
+  when the wardrobe has no darker pair, with a warning), `sleeve` (short sleeves with no layer: −5 below +12 °C,
+  +2 from +25 °C). `patterns` and the cold half of `sleeve` replace the earlier −20 colour and −15 weather
+  penalties, so nothing is counted twice. This changes decision 3 above: LOOSE is no longer filtered out.
 - Invalid input: HTTP 422 with Pydantic validation details.
 
 Dependencies have bounded compatible ranges; a reproducible lock remains a deployment task.
+
+## Does the taste model predict real swipes?
+
+Not measured yet. The only check so far is a unit test with a made-up user whose taste is a fixed rule
+(`test_model_learns_a_hidden_taste_and_moves_the_ranking`); it shows the code can learn, not that it predicts
+people. The tooling for the real measurement is in place:
+
+1. Collect swipes: at least 5 people, 30 or more swipes each in `/looks`, on their own wardrobes.
+2. Export them from the database, from `fitcast/` (users become `u1`, `u2`, …; no e-mail or photo is exported):
+
+   ```sh
+   docker compose exec -T postgres psql -U fitcast -d fitcast -At < recommendation-service/scripts/export_swipes.sql > swipes.json
+   ```
+
+3. Evaluate, from `recommendation-service/`:
+
+   ```sh
+   python -m scripts.evaluate_taste swipes.json                  # 20 random 70 / 30 splits per user
+   python -m scripts.evaluate_taste swipes.json --chronological  # earlier swipes predict later ones
+   ```
+
+   It prints a Markdown table: held-out accuracy of the model, of the per-type and per-colour counting, of both
+   averaged (what the engine serves) and of "always like" (the share of likes — the bar to beat), per user and
+   overall.
+4. Paste that table here in place of this paragraph, whatever it shows.
+
+`swipes.json` holds people's wardrobes: keep it out of git.
 
 ## Next phase
 

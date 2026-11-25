@@ -137,3 +137,59 @@ def test_features_describe_the_outfit():
                   WardrobeItem.model_validate(item("JACKET", "black"))])
     assert f["pair:white+navy"] == 1 and f["layered"] == 1 and f["patterned"] == 1 and f["short-sleeve"] == 1
     assert f["all-neutral"] == 1 and "bright" not in f
+
+
+# --- task 1: patterns, fit, rain, sleeve ---
+
+def test_patterns_two_patterned_garments_cost_points():
+    busy_top, plain_top = item("SHIRT", "white", pattern="pattern"), item("SHIRT", "gray")
+    busy_bottom = item("PANTS", "gray", pattern="pattern")
+    r = ask([busy_top, plain_top, busy_bottom])
+    assert factor(find(r, busy_top, busy_bottom), "patterns").points < 0
+    assert factor(find(r, plain_top, busy_bottom), "patterns") is None
+    assert find(r, plain_top, busy_bottom).score > find(r, busy_top, busy_bottom).score
+
+
+def test_fit_loose_item_costs_points_and_fills_the_breakdown():
+    loose, good = item("SHIRT", "white") | {"fitTag": "LOOSE"}, item("SHIRT", "white")
+    pants = item("PANTS", "gray")
+    casual = ask([loose, good, pants])
+    assert find(casual, good, pants).breakdown.fit == 100 and factor(find(casual, good, pants), "fit") is None
+    worn_loose = find(casual, loose, pants)
+    assert worn_loose.breakdown.fit == 85 and factor(worn_loose, "fit").points == -3
+    assert find(casual, good, pants).score > worn_loose.score
+    # a dressy occasion is stricter about it
+    business = find(ask([loose, good, pants], event="BUSINESS"), loose, pants)
+    assert business.breakdown.fit == 70 and factor(business, "fit").points == -6
+
+
+def test_fit_tight_items_are_never_worn():
+    tight, pants = item("SHIRT", "white") | {"fitTag": "TIGHT"}, item("PANTS", "gray")
+    r = ask([tight, pants])
+    assert r.outfits == [] and any("too tight" in w for w in r.warnings)
+
+
+def test_rain_light_shoes_cost_points_and_lose_to_dark_ones():
+    top, jeans, jacket = item("SWEATER", "gray"), item("JEANS", "navy"), item("JACKET", "black")
+    white, black = item("SHOES", "white"), item("SHOES", "black")
+    only_light = ask([top, jeans, jacket, white], t=10.0, p="RAIN")
+    o = find(only_light, top, jeans, jacket, white)
+    assert factor(o, "rain").points < 0 and any("light for wet weather" in w for w in only_light.warnings)
+    assert factor(find(ask([top, jeans, jacket, white], t=10.0), top, jeans, jacket, white), "rain") is None
+    # with a dark pair in the wardrobe the light one is not worn in the rain at all
+    both = ask([top, jeans, jacket, white, black], t=10.0, p="SNOW")
+    assert all(UUID(white["id"]) not in o.items for o in both.outfits)
+    assert factor(find(both, top, jeans, jacket, black), "rain") is None
+
+
+def test_sleeve_short_without_a_layer_minus_in_the_cold_plus_in_the_heat():
+    short, long_ = item("TSHIRT", "gray", sleeve="short"), item("TSHIRT", "gray", sleeve="long")
+    jeans, jacket = item("JEANS", "gray"), item("JACKET", "black")
+    cold = ask([short, long_, jeans, jacket], t=8.0)
+    assert factor(find(cold, short, jeans), "sleeve").points < 0
+    assert factor(find(cold, long_, jeans), "sleeve") is None
+    assert factor(find(cold, short, jeans, jacket), "sleeve") is None  # a layer covers it
+    hot = ask([short, long_, jeans], t=28.0)
+    assert factor(find(hot, short, jeans), "sleeve").points > 0
+    assert find(hot, short, jeans).score > find(hot, long_, jeans).score
+    assert factor(find(ask([short, jeans], t=18.0), short, jeans), "sleeve") is None

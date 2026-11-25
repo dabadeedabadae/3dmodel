@@ -2,3 +2,6 @@
 __pycache__/
 .pytest_cache/
 *.pyc
+
+# exported wardrobes and swipes (scripts/export_swipes.sql)
+swipes*.json

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T23:01:02.892Z",
+  "generatedAt": "2026-11-25T11:03:15.879Z",
   "shirts": [
     "canonical-tee",
     "realistic-tee",
@@ -13,9 +13,9 @@
       "shape": "base",
       "shirt": "canonical-tee",
       "status": "ok",
-      "scale": 0.4667809127426323,
+      "scale": 0.46678089648006693,
       "pushed": 60,
-      "maxPush": 0.1605674809450346,
+      "maxPush": 0.16056746191661278,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -38,9 +38,9 @@
       "shape": "base",
       "shirt": "realistic-tee",
       "status": "ok",
-      "scale": 0.4667809127426323,
+      "scale": 0.46678089648006693,
       "pushed": 68,
-      "maxPush": 0.2010272172284476,
+      "maxPush": 0.2010272435787618,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -63,9 +63,9 @@
       "shape": "base",
       "shirt": "puma-print",
       "status": "ok",
-      "scale": 0.4667809127426323,
+      "scale": 0.46678089648006693,
       "pushed": 85,
-      "maxPush": 0.10565817987637424,
+      "maxPush": 0.10565815128788424,
       "fitAdjust": [
         "chestHalfWidth",
         "cuffRadius"
@@ -89,9 +89,9 @@
       "shape": "base",
       "shirt": "striped",
       "status": "ok",
-      "scale": 0.4667809127426323,
+      "scale": 0.46678089648006693,
       "pushed": 64,
-      "maxPush": 0.1335658920953039,
+      "maxPush": 0.1335658974365267,
       "fitAdjust": [
         "chestHalfWidth",
         "cuffRadius"
@@ -115,9 +115,9 @@
       "shape": "base",
       "shirt": "plain-grey",
       "status": "ok",
-      "scale": 0.4667809127426323,
+      "scale": 0.46678089648006693,
       "pushed": 65,
-      "maxPush": 0.06726216742746464,
+      "maxPush": 0.06726216910997979,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -140,9 +140,9 @@
       "shape": "base",
       "shirt": "navy-hard",
       "status": "ok",
-      "scale": 0.4667809127426323,
+      "scale": 0.46678089648006693,
       "pushed": 58,
-      "maxPush": 0.11405199719355408,
+      "maxPush": 0.11405200983713311,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -165,9 +165,9 @@
       "shape": "athletic",
       "shirt": "canonical-tee",
       "status": "ok",
-      "scale": 0.5369990212345678,
+      "scale": 0.5369989932505947,
       "pushed": 64,
-      "maxPush": 0.17822629830976822,
+      "maxPush": 0.17822635750118057,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -190,9 +190,9 @@
       "shape": "athletic",
       "shirt": "realistic-tee",
       "status": "ok",
-      "scale": 0.5369990212345678,
+      "scale": 0.5369989932505947,
       "pushed": 64,
-      "maxPush": 0.22364228981932413,
+      "maxPush": 0.22364232713212936,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -215,9 +215,9 @@
       "shape": "athletic",
       "shirt": "puma-print",
       "status": "ok",
-      "scale": 0.5369990212345678,
+      "scale": 0.5369989932505947,
       "pushed": 86,
-      "maxPush": 0.1029919740318378,
+      "maxPush": 0.10299195123747457,
       "fitAdjust": [
         "cuffRadius"
       ],
@@ -240,9 +240,9 @@
       "shape": "athletic",
       "shirt": "striped",
       "status": "ok",
-      "scale": 0.5369990212345678,
+      "scale": 0.5369989932505947,
       "pushed": 64,
-      "maxPush": 0.14972684426475408,
+      "maxPush": 0.14972681810074084,
       "fitAdjust": [
         "chestHalfWidth",
         "cuffRadius"
@@ -266,9 +266,9 @@
       "shape": "athletic",
       "shirt": "plain-grey",
       "status": "ok",
-      "scale": 0.5369990212345678,
+      "scale": 0.5369989932505947,
       "pushed": 62,
-      "maxPush": 0.0652843777656721,
+      "maxPush": 0.06528439589329764,
       "fitAdjust": [],
       "rings": [
         "hem:ok",
@@ -289,9 +289,9 @@
       "shape": "athletic",
       "shirt": "navy-hard",
       "status": "ok",
-      "scale": 0.5369990212345678,
+      "scale": 0.5369989932505947,
       "pushed": 50,
-      "maxPush": 0.11532053057770199,
+      "maxPush": 0.11532052165333943,
       "fitAdjust": [],
       "rings": [
         "hem:free",
@@ -314,7 +314,7 @@
       "status": "ok",
       "scale": 0.5187531507108488,
       "pushed": 67,
-      "maxPush": 0.17132840406588834,
+      "maxPush": 0.17132845008149744,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -339,7 +339,7 @@
       "status": "ok",
       "scale": 0.5187531507108488,
       "pushed": 60,
-      "maxPush": 0.21651177534831917,
+      "maxPush": 0.21651181947702172,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -364,7 +364,7 @@
       "status": "ok",
       "scale": 0.5187531507108488,
       "pushed": 106,
-      "maxPush": 0.10063068869793895,
+      "maxPush": 0.10063068909076914,
       "fitAdjust": [
         "cuffRadius"
       ],
@@ -389,7 +389,7 @@
       "status": "ok",
       "scale": 0.5187531507108488,
       "pushed": 68,
-      "maxPush": 0.14500860846872368,
+      "maxPush": 0.1450086603572161,
       "fitAdjust": [
         "chestHalfWidth",
         "cuffRadius"
@@ -415,7 +415,7 @@
       "status": "ok",
       "scale": 0.5187531507108488,
       "pushed": 85,
-      "maxPush": 0.056368430329515405,
+      "maxPush": 0.05636840896037753,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -440,7 +440,7 @@
       "status": "ok",
       "scale": 0.5187531507108488,
       "pushed": 61,
-      "maxPush": 0.11765699288552638,
+      "maxPush": 0.11765698780079688,
       "fitAdjust": [],
       "rings": [
         "hem:free",
@@ -463,7 +463,7 @@
       "status": "ok",
       "scale": 0.4354471665950995,
       "pushed": 50,
-      "maxPush": 0.18876907788469727,
+      "maxPush": 0.1887690782647802,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -492,7 +492,7 @@
       "status": "ok",
       "scale": 0.4354471665950995,
       "pushed": 52,
-      "maxPush": 0.2226127906066566,
+      "maxPush": 0.22261279158326255,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -521,7 +521,7 @@
       "status": "ok",
       "scale": 0.4354471665950995,
       "pushed": 76,
-      "maxPush": 0.1586813893039645,
+      "maxPush": 0.1586813959993397,
       "fitAdjust": [
         "chestHalfWidth",
         "cuffRadius"
@@ -551,7 +551,7 @@
       "status": "ok",
       "scale": 0.4354471665950995,
       "pushed": 65,
-      "maxPush": 0.1645351410713624,
+      "maxPush": 0.1645351397268345,
       "fitAdjust": [
         "chestHalfWidth",
         "cuffRadius"
@@ -581,7 +581,7 @@
       "status": "ok",
       "scale": 0.4354471665950995,
       "pushed": 61,
-      "maxPush": 0.13382407605777305,
+      "maxPush": 0.1338240829926071,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -610,7 +610,7 @@
       "status": "ok",
       "scale": 0.4354471665950995,
       "pushed": 52,
-      "maxPush": 0.18682820439400588,
+      "maxPush": 0.18682820797166855,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -637,9 +637,9 @@
       "shape": "tall",
       "shirt": "canonical-tee",
       "status": "ok",
-      "scale": 0.52850583661956,
+      "scale": 0.530026971582417,
       "pushed": 58,
-      "maxPush": 0.17611404851150828,
+      "maxPush": 0.17656278075388782,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -662,9 +662,9 @@
       "shape": "tall",
       "shirt": "realistic-tee",
       "status": "ok",
-      "scale": 0.52850583661956,
+      "scale": 0.530026971582417,
       "pushed": 64,
-      "maxPush": 0.22211570727563398,
+      "maxPush": 0.2227104281981388,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -687,9 +687,9 @@
       "shape": "tall",
       "shirt": "puma-print",
       "status": "ok",
-      "scale": 0.52850583661956,
+      "scale": 0.530026971582417,
       "pushed": 87,
-      "maxPush": 0.12295275369172276,
+      "maxPush": 0.12250867426136469,
       "fitAdjust": [
         "chestHalfWidth",
         "cuffRadius"
@@ -713,9 +713,9 @@
       "shape": "tall",
       "shirt": "striped",
       "status": "ok",
-      "scale": 0.52850583661956,
+      "scale": 0.530026971582417,
       "pushed": 64,
-      "maxPush": 0.1457386183365008,
+      "maxPush": 0.1463999517699645,
       "fitAdjust": [
         "chestHalfWidth",
         "cuffRadius"
@@ -739,9 +739,9 @@
       "shape": "tall",
       "shirt": "plain-grey",
       "status": "ok",
-      "scale": 0.52850583661956,
-      "pushed": 65,
-      "maxPush": 0.08381490320239074,
+      "scale": 0.530026971582417,
+      "pushed": 64,
+      "maxPush": 0.08261462672413655,
       "fitAdjust": [
         "chestHalfWidth"
       ],
@@ -764,9 +764,9 @@
       "shape": "tall",
       "shirt": "navy-hard",
       "status": "ok",
-      "scale": 0.52850583661956,
+      "scale": 0.530026971582417,
       "pushed": 54,
-      "maxPush": 0.13730822284610647,
+      "maxPush": 0.1361900284771633,
       "fitAdjust": [
         "chestHalfWidth"
       ],
