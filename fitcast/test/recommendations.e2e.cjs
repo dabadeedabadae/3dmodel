@@ -100,7 +100,7 @@ test('recommendations follow the occasion and the weather, feedback hides dislik
     assert.deepEqual(weather, { temperatureC: 8, precipitation: 'RAIN', description: 'Rain', windKph: null });
     assert.ok(Number.isInteger(hour) && hour >= 0 && hour <= 23, `hour ${hour}`);
     assert.ok(rec.outfits.length >= 1 && rec.outfits.length <= 5);
-    assert.ok(rec.warnings.some((w) => w.includes('too tight or too loose')), 'the TIGHT cardigan is skipped');
+    assert.ok(rec.warnings.some((w) => w.includes('too tight')), 'the TIGHT cardigan is skipped');
     for (const o of rec.outfits) {
       const names = o.items.map((i) => typeOf[i.id]);
       assert.ok(!names.includes('hoodie') && !names.includes('shorts') && !names.includes('cardigan'), names.join());

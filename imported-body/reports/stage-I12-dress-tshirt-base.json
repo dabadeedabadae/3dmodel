@@ -2,7 +2,7 @@
   "garment": "tshirt",
   "shape": "base",
   "method": "shrink-dress",
-  "ms": 49217,
+  "ms": 109072,
   "phases": {
     "standoff": 0.004,
     "shrinkFrames": 420,
@@ -33,14 +33,14 @@
     }
   },
   "settled": {
-    "hem_y": 0.7,
-    "collar_y": 1.39,
-    "hem_vs_hip_cm": -17.5,
-    "hem_vs_target_cm": 1.3,
-    "stretch_mean_pct": 9.23,
-    "stretch_max_pct": 411.3,
-    "edges_over_10pct": 2358,
-    "stretch_max_abs_mm": 71.4,
+    "hem_y": 0.697,
+    "collar_y": 1.397,
+    "hem_vs_hip_cm": -17.7,
+    "hem_vs_target_cm": 1.1,
+    "stretch_mean_pct": 9.2,
+    "stretch_max_pct": 424.4,
+    "edges_over_10pct": 2303,
+    "stretch_max_abs_mm": 71.2,
     "shortEdgesExcluded": 846
   },
   "fit": {
@@ -65,25 +65,25 @@
         "zone": "бёдра",
         "y": 0.874,
         "body_cm": 86.2,
-        "garment_cm": 114.7,
-        "ease_cm": 28.4,
+        "garment_cm": 114.5,
+        "ease_cm": 28.2,
         "verdict": "loose"
       }
     ],
     "clearance_mm": {
-      "min": -1.5,
-      "mean": 13.7,
-      "max": 116.3
+      "min": -1.4,
+      "mean": 13.8,
+      "max": 114.7
     }
   },
   "checks": {
     "nonFinite": 0,
-    "projectedOntoSkin": 20,
-    "verticesInsideBodyMesh": 20,
-    "insideShare_pct": 0.38,
-    "deepestPenetration_mm": 25.2,
-    "insideColliderApprox": 466,
-    "slipDuringFreeSettle_m": 0.0043,
+    "projectedOntoSkin": 15,
+    "verticesInsideBodyMesh": 15,
+    "insideShare_pct": 0.29,
+    "deepestPenetration_mm": 17.8,
+    "insideColliderApprox": 407,
+    "slipDuringFreeSettle_m": 0.0016,
     "heldWithoutPins": true
   }
 }

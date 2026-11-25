@@ -87,12 +87,12 @@ def test_gym_is_sporty(wardrobe):
         assert not types(o) & {"SHIRT", "BLAZER", "DRESS", "JEANS"}
 
 
-def test_tight_and_loose_items_are_skipped_with_a_warning(wardrobe):
+def test_tight_items_are_skipped_with_a_warning(wardrobe):
     wardrobe.append(item("SHIRT", "navy", "TIGHT"))
     res, outfits = run(wardrobe, "BUSINESS", 15)
     tight = wardrobe[-1]["id"]
     assert all(tight not in [i["id"] for i in o] for o in outfits)
-    assert any("too tight or too loose" in w for w in res.warnings)
+    assert any("too tight" in w for w in res.warnings)
 
 
 def test_two_bright_colors_score_lower_than_neutrals():
@@ -112,7 +112,7 @@ def test_outfits_are_valid_unique_and_diverse(wardrobe):
     for o, rec in zip(outfits, res.outfits):
         assert len({i["id"] for i in o}) == len(o)
         assert 0 <= rec.score <= 100
-        assert rec.breakdown.fit is None
+        assert rec.breakdown.fit == 100  # every item is tagged GOOD
         slots = types(o)
         assert ("DRESS" in slots) or (slots & {"SHIRT", "TSHIRT", "SWEATER", "HOODIE"} and slots & {"PANTS", "JEANS", "SHORTS"})
     tops = [next(i["id"] for i in o if i["type"] in ("SHIRT", "TSHIRT", "SWEATER", "HOODIE", "DRESS")) for o in outfits]

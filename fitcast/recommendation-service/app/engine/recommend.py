@@ -1,9 +1,11 @@
 """Outfit recommendation, rules v1.
 
-1. Only items tagged GOOD are used (README decision 3); TIGHT / LOOSE are skipped with a warning.
+1. Items tagged TIGHT are skipped with a warning; LOOSE ones are worn at a cost (the `fit` factor, 3 points per
+   item, 6 on a business-or-dressier occasion) and `breakdown.fit` reports it as 0–100.
 2. Hard rules remove items: types that do not belong to the occasion, forbidden colours (white for a wedding guest),
    weather (no shorts below 10 °C, no sweater / hoodie / cardigan / coat / jacket from 25 °C, no coat from 20 °C,
-   no light shoes in rain or snow).
+   no light shoes in rain or snow — unless the wardrobe has no darker pair: then the light ones are worn with a
+   warning and the `rain` factor, −5).
 3. Outfits are top + bottom or a dress, plus shoes and up to two layers (one of them, a cardigan under a jacket or
    coat, or a blazer under a coat — a casual jacket does not go over a blazer). Below 5 °C a jacket or a coat is required; if the wardrobe has none, nothing is recommended (hard weather
    constraints are never relaxed). Shoes are optional only when no suitable pair exists, and the response says so.
@@ -15,8 +17,9 @@
 6. Personal taste (I-77): the user's likes and dislikes, summed per garment type and colour by the API, shift each
    outfit by up to ±TASTE_POINTS. Outfits the user already judged (`exclude`) are not returned again.
 7. What the photo says (I-77): a patterned item brings its second colour into the colour count; two patterned
-   items in one outfit compete (−20 colour); a pattern costs a formal occasion 8 points per item; a short-sleeved
-   top without a layer below +12 °C costs 15 weather points, a long sleeve without a layer from +25 °C costs 10.
+   items in one outfit compete (the `patterns` factor, −5); a pattern costs a formal occasion 8 points per item; a
+   short-sleeved top without a layer below +12 °C costs 5 points and from +25 °C adds 2 (the `sleeve` factor); a
+   long sleeve without a layer from +25 °C costs 10 weather points.
 9. Style factors (I-79, factors.py): colour-wheel harmony, formality coherence, light / dark contrast, a dark
    outfit for an evening out, freshness (items saved this week cost a little); their sum, limited to ±12 points, is
    added to the total. Wind (I-79): from 20 km/h below +15 °C the outfit is scored for a temperature 2 °C lower
@@ -39,7 +42,7 @@ from dataclasses import dataclass
 
 from app.models.schemas import EventType, Factor, TasteModelInfo
 from .catalog import BOTTOM, BRIGHT, EVENTS, GARMENTS, LIGHT, NEUTRAL, ONE_PIECE, OUTER, SHOES, TOP, EventRules
-from .factors import STYLE_POINTS, style
+from .factors import STYLE_POINTS, fit_score, style
 from .learn import TasteModel, train
 
 
@@ -213,7 +216,8 @@ def evaluate(base: tuple, layers: tuple, shoes, rules: EventRules, t: float, p: 
     occasion = outfit_occasion(worn, rules)
     felt = feels_like(t, extra.wind)
     weather = weather_score(clothes, layers, felt, p)
-    factors = style(worn, clothes, extra.event, extra.hour, extra.recent) if extra.event is not None else []
+    factors = (style(worn, clothes, extra.event, extra.hour, extra.recent, t, p, rules.formality)
+               if extra.event is not None else [])
     if felt < t and not layers:
         weather = clamp(weather - 8)
         factors.append(("wind", 0.0, "windy: a layer would help"))
@@ -221,14 +225,11 @@ def evaluate(base: tuple, layers: tuple, shoes, rules: EventRules, t: float, p: 
         factors.append(("wind", 0.0, "a layer against the wind"))
     colors = [i.dominantColor for i in worn] + [i.secondaryColor for i in worn if i.secondaryColor is not None]
     color, phrase = color_score(colors, rules)
+    # two patterns and a short sleeve in the cold are style factors now (factors.py: patterns, sleeve)
     patterned = [i for i in clothes if i.pattern == Pattern.PATTERN]
-    if len(patterned) >= 2:
-        color, phrase = clamp(color - 20), "two patterns compete"
     if rules.formality >= 4:
         occasion = clamp(occasion - 8 * len(patterned))
     tops = [i for i in base if GARMENTS[i.type].slot == TOP]
-    if not layers and any(i.sleeve == Sleeve.SHORT for i in tops) and t < 12:
-        weather = clamp(weather - 15)
     if not layers and any(i.sleeve == Sleeve.LONG for i in tops) and t >= 25:
         weather = clamp(weather - 10)
     tp = taste_points(worn, taste)
@@ -329,10 +330,11 @@ def recommend(request: RecommendationRequest) -> RecommendationResponse:
     t, p = request.weather.temperatureC, request.weather.precipitation
     warnings: list[str] = []
 
-    good = [i for i in request.wardrobe if i.fitTag == FitTag.GOOD]
+    # LOOSE items are worn at a cost (the fit factor); TIGHT ones are not worn at all
+    good = [i for i in request.wardrobe if i.fitTag != FitTag.TIGHT]
     if len(good) < len(request.wardrobe):
         n = len(request.wardrobe) - len(good)
-        warnings.append(f"{n} item(s) tagged as too tight or too loose were not used.")
+        warnings.append(f"{n} item(s) tagged as too tight were not used.")
     avoid = set(request.avoidTypes)
     usable = [i for i in good if not hard_reject(i, rules, t, p) and i.type not in avoid]
     by_slot: dict[str, list[WardrobeItem]] = {}
@@ -357,10 +359,16 @@ def recommend(request: RecommendationRequest) -> RecommendationResponse:
         return RecommendationResponse(status=RecommendationStatus.NO_VALID_OUTFITS, outfits=[], warnings=warnings)
 
     shoes_options: list = by_slot.get(SHOES, [])
+    if not shoes_options and p in WET:
+        # only light pairs in wet weather: better worn than no shoes at all, at a cost (the rain factor)
+        light = [i for i in good if GARMENTS[i.type].slot == SHOES and i.type not in avoid
+                 and not hard_reject(i, rules, t, Precipitation.NONE)]
+        light.sort(key=lambda i: (-item_occasion(i, rules), str(i.id)))
+        shoes_options = light[:PER_SLOT]
+        if shoes_options:
+            warnings.append("Your shoes are light for wet weather; a darker pair would suit it better.")
     if not shoes_options:
-        had_shoes = any(GARMENTS[i.type].slot == SHOES for i in good)
-        warnings.append("Your shoes are too light for wet weather, so outfits are shown without shoes."
-                        if had_shoes and p in WET else "Add shoes to your wardrobe to get complete outfits.")
+        warnings.append("Add shoes to your wardrobe to get complete outfits.")
         shoes_options = [None]
 
     # the taste model is trained on every swipe whose items are still in the wardrobe
@@ -407,7 +415,8 @@ def recommend(request: RecommendationRequest) -> RecommendationResponse:
         OutfitRecommendation(
             items=[i.id for i in worn], score=total,
             breakdown=ScoreBreakdown(
-                occasion=round(occ, 1), weather=round(wea, 1), color=round(col, 1), fit=None, taste=tp,
+                occasion=round(occ, 1), weather=round(wea, 1), color=round(col, 1),
+                fit=fit_score(worn, rules.formality), taste=tp,
                 style=max(-STYLE_POINTS, min(STYLE_POINTS, sum(x[1] for x in factors))) if factors else None,
                 factors=[Factor(key=k, points=pts, note=note) for k, pts, note in factors]),
             explanation=explanation(rules, t, p, base, layers, shoes, phrase, cold),
