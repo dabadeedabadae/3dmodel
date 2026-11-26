@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { IBM_Plex_Mono, Source_Serif_4, VT323 } from 'next/font/google';
 import AppShell from './components/AppShell';
+import { THEME_SCRIPT } from './components/theme-script';
 import './globals.css';
 
 const pixel = VT323({
@@ -27,7 +28,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${pixel.variable} ${mono.variable} ${serif.variable}`}>
+    <html lang="en" data-theme="light" suppressHydrationWarning className={`${pixel.variable} ${mono.variable} ${serif.variable}`}>
+      <head>
+        {/* sets data-theme before the first paint, so there is no white flash in the dark theme */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
         <AppShell>{children}</AppShell>
       </body>

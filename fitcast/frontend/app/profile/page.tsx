@@ -21,7 +21,7 @@ export default function ProfilePage() {
       <section className="profile-stats" aria-label="My wardrobe"><article className="profile-panel"><span>WARDROBE ITEMS</span><strong>{profile._count?.wardrobeItems ?? '—'}</strong><p>Your saved items</p></article><Link href="/events#saved-outfits" className="profile-stat-link" aria-label="Saved outfits: open the list"><article className="profile-panel"><span>SAVED OUTFITS</span><strong>{profile._count?.savedOutfits ?? '—'}</strong><p>Looks from your wardrobe · open →</p></article></Link><Link href="/fitting" className="profile-panel profile-model-link"><span>3D MODEL</span><h2>Your next outfit</h2><p>Try clothes on the 3D model</p><b>Open the model ↗</b></Link></section>
       {!profile._count && <p className="account-note">Stats are temporarily unavailable.</p>}
       <Wardrobe onCountChange={setCount} onAuthExpired={expired} />
-      <div className="account-bottom"><span>You can change your name, city, bio and password in Settings.</span><button className="profile-logout" onClick={() => { clearToken(); router.replace('/login'); }}>Sign out ↗</button></div>
+      <div className="account-bottom"><span></span><button className="profile-logout" onClick={() => { clearToken(); router.replace('/login'); }}>Sign out ↗</button></div>
     </>}
   </main>;
 }

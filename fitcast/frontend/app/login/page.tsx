@@ -4,6 +4,7 @@ import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { login, saveToken } from '../../lib/api';
+import PasswordInput from '../components/PasswordInput';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -48,9 +49,8 @@ export default function LoginPage() {
           </div>
           <div className="field">
             <label htmlFor="password">Password</label>
-            <input
+            <PasswordInput
               id="password"
-              type="password"
               autoComplete="current-password"
               required
               value={password}
