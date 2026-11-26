@@ -4,6 +4,7 @@ import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { register, saveToken, updateProfile } from '../../lib/api';
+import PasswordInput from '../components/PasswordInput';
 
 /*
  * Sign-up is a chain of steps on top of the existing API, without new endpoints:
@@ -133,9 +134,8 @@ export default function RegisterPage() {
               </div>
               <div className="field">
                 <label htmlFor="password">Password (at least 8 characters)</label>
-                <input
+                <PasswordInput
                   id="password"
-                  type="password"
                   autoComplete="new-password"
                   required
                   minLength={8}
@@ -146,9 +146,8 @@ export default function RegisterPage() {
               </div>
               <div className="field">
                 <label htmlFor="confirm">Repeat the password</label>
-                <input
+                <PasswordInput
                   id="confirm"
-                  type="password"
                   autoComplete="new-password"
                   required
                   disabled={accountCreated}

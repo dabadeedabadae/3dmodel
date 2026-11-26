@@ -5,6 +5,7 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ApiError, ProfileChanges, UserProfile, changePassword, clearToken, updateProfile } from '../../../lib/api';
 import { useProfile } from '../use-profile';
+import PasswordInput from '../../components/PasswordInput';
 
 const fields = (user: UserProfile): ProfileChanges => ({ name: user.name ?? '', city: user.city ?? '', bio: user.bio ?? '' });
 export default function SettingsPage() {
@@ -64,9 +65,9 @@ export default function SettingsPage() {
       </fieldset>{error && <p className="error" role="alert">{error}</p>}{success && <p className="profile-success" role="status">✓ {success}</p>}<div className="profile-save-row"><button className="primary" disabled={saving || !dirty}>{saving ? 'Saving…' : 'Save changes'}</button><button type="button" className="profile-reset" disabled={saving || !dirty} onClick={() => { setForm(fields(profile)); setError(''); setSuccess(''); }}>Discard</button></div></form></section> :
       <section className="profile-panel profile-form-panel"><div className="profile-section-title"><h2>Change password</h2><p>You'll need your current password to change it.</p></div><form onSubmit={savePassword}><fieldset disabled={changing} className="profile-fieldset">
         <input className="settings-username" type="text" name="username" autoComplete="username" value={profile.email} readOnly tabIndex={-1} aria-label="Account email" />
-        <div className="field"><label htmlFor="current-password">Current password</label><input id="current-password" type="password" autoComplete="current-password" required value={passwords.current} onChange={(event) => { setPasswords({ ...passwords, current: event.target.value }); setPasswordError(''); }} /></div>
-        <div className="field"><label htmlFor="new-password">New password</label><input id="new-password" type="password" autoComplete="new-password" minLength={8} maxLength={72} required value={passwords.next} onChange={(event) => { setPasswords({ ...passwords, next: event.target.value }); setPasswordError(''); }} /><small>At least 8 characters, no more than 72 bytes. Must differ from your current password.</small></div>
-        <div className="field"><label htmlFor="confirm-password">Confirm new password</label><input id="confirm-password" type="password" autoComplete="new-password" minLength={8} maxLength={72} required value={passwords.confirm} onChange={(event) => { setPasswords({ ...passwords, confirm: event.target.value }); setPasswordError(''); }} /></div>
+        <div className="field"><label htmlFor="current-password">Current password</label><PasswordInput id="current-password"autoComplete="current-password" required value={passwords.current} onChange={(event) => { setPasswords({ ...passwords, current: event.target.value }); setPasswordError(''); }} /></div>
+        <div className="field"><label htmlFor="new-password">New password</label><PasswordInput id="new-password"autoComplete="new-password" minLength={8} maxLength={72} required value={passwords.next} onChange={(event) => { setPasswords({ ...passwords, next: event.target.value }); setPasswordError(''); }} /><small>At least 8 characters, no more than 72 bytes. Must differ from your current password.</small></div>
+        <div className="field"><label htmlFor="confirm-password">Confirm new password</label><PasswordInput id="confirm-password"autoComplete="new-password" minLength={8} maxLength={72} required value={passwords.confirm} onChange={(event) => { setPasswords({ ...passwords, confirm: event.target.value }); setPasswordError(''); }} /></div>
       </fieldset><div className="settings-security-note">Changing your password signs you out on all devices. You'll need to sign in again.</div>{passwordError && <p className="error" role="alert">{passwordError}</p>}<div className="profile-save-row"><button className="primary" disabled={changing}>{changing ? 'Changing…' : 'Change password'}</button></div></form></section>}
     </div>}
   </main>;
